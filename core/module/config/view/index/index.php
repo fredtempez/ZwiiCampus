@@ -23,20 +23,20 @@
 
 <div class="tab">
     <?php echo template::button('configLocaleButton', [
-        'value' => 'Localisation',
+        'value' => 'Identité - Etiquettes',
         'class' => 'buttonTab'
     ]); ?>
     <?php echo template::button('configSetupButton', [
-        'value' => 'Configuration',
+        'value' => 'Configuration - Outils',
         'class' => 'buttonTab'
     ]); ?>
     <?php echo template::button('configSocialButton', [
-        'value' => 'Référencement',
+        'value' => 'Réseaux sociaux',
         'class' => 'buttonTab'
     ]); ?>
 
     <?php echo template::button('configConnectButton', [
-        'value' => 'Connexion',
+        'value' => 'Sécurité',
         'class' => 'buttonTab'
     ]); ?>
 
