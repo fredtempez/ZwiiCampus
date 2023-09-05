@@ -1,0 +1,67 @@
+/**
+ * This file is part of Zwii.
+ *
+ * For full copyright and license information, please see the LICENSE
+ * file that was distributed with this source code.
+ *
+ * @author Rémi Jean <remi.jean@outlook.com>
+ * @copyright Copyright (C) 2008-2018, Rémi Jean
+ * @author Frédéric Tempez <frederic.tempez@outlook.com>
+ * @copyright Copyright (C) 2018-2023, Frédéric Tempez
+ * @license CC Attribution-NonCommercial-NoDerivatives 4.0 International
+ * @link http://zwiicms.fr/
+ */
+
+
+/** NE PAS EFFACER
+* admin.css
+*/
+
+#setupContainer {
+    display: block;
+}
+
+
+.buttonNotice {
+    border: 2px solid red !important;
+    border-radius: 2px;
+}
+
+/* Style the tab */
+.tab {
+    margin-top: 1.8em;
+    overflow: hidden;
+    text-align: center;
+}
+
+.tab~.tabContent {
+    margin-top: -10px;
+}
+
+.buttonTab {
+    display: inline-block;
+    transition: 0.3s;
+    border-radius: 10px 10px 0px 0px;
+    width: 160px;
+    margin: 0 1px;
+}
+
+.buttonTab:hover {
+    filter: saturate(200%);
+}
+
+.activeButton {
+    background-color: #00BFFF;
+}
+
+.greenInfo, .redInfo {
+font-weight: bold;
+}
+
+.greenInfo {
+    color: green;
+}
+
+.redInfo {
+    color: red;
+}
