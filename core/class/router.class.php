@@ -546,7 +546,7 @@ class core extends common
 					and $this->getUser('password') !== $this->getInput('ZWII_USER_PASSWORD')
 				) or ($this->getData(['page', $this->getUrl(0), 'disable']) === true
 					and $this->getUser('password') === $this->getInput('ZWII_USER_PASSWORD')
-					and $this->getUser('group') < self::GROUP_EDITOR
+					and $this->getUser('group') < self::GROUP_TEACHER
 				)
 			) {
 				$access = false;

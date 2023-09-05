@@ -22,13 +22,13 @@ class form extends common
 	const DATADIRECTORY = ''; // Contenu localisé inclus par défaut (page.json et module.json)
 
 	public static $actions = [
-		'config' => self::GROUP_EDITOR,
-		'option' => self::GROUP_EDITOR,
-		'data' => self::GROUP_EDITOR,
-		'delete' => self::GROUP_EDITOR,
-		'deleteall' => self::GROUP_EDITOR,
+		'config' => self::GROUP_TEACHER,
+		'option' => self::GROUP_TEACHER,
+		'data' => self::GROUP_TEACHER,
+		'delete' => self::GROUP_TEACHER,
+		'deleteall' => self::GROUP_TEACHER,
 		'index' => self::GROUP_VISITOR,
-		'export2csv' => self::GROUP_EDITOR,
+		'export2csv' => self::GROUP_TEACHER,
 	];
 
 	public static $data = [];

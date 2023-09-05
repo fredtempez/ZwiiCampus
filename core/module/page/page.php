@@ -18,12 +18,12 @@ class page extends common
 {
 
 	public static $actions = [
-		'add' => self::GROUP_EDITOR,
-		'delete' => self::GROUP_EDITOR,
-		'edit' => self::GROUP_EDITOR,
-		'duplicate' => self::GROUP_EDITOR,
-		'jsEditor' => self::GROUP_EDITOR,
-		'cssEditor' => self::GROUP_EDITOR
+		'add' => self::GROUP_TEACHER,
+		'delete' => self::GROUP_TEACHER,
+		'edit' => self::GROUP_TEACHER,
+		'duplicate' => self::GROUP_TEACHER,
+		'jsEditor' => self::GROUP_TEACHER,
+		'cssEditor' => self::GROUP_TEACHER
 	];
 	public static $pagesNoParentId = [
 		'' => 'Aucune'
@@ -564,7 +564,7 @@ class page extends common
 			// Profils installés
 			// Profils disponibles
 			foreach ($this->getData(['profil']) as $profilId => $profilData) {
-				if ($profilId < self::GROUP_MEMBER) {
+				if ($profilId < self::GROUP_STUDENT) {
 					continue;
 				}
 				if ($profilId === self::GROUP_ADMIN) {

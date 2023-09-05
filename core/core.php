@@ -142,25 +142,25 @@ class common
 	public static $groups = [
 		self::GROUP_BANNED => 'Banni',
 		self::GROUP_VISITOR => 'Visiteur',
-		self::GROUP_MEMBER => 'Membre',
-		self::GROUP_EDITOR => 'Éditeur',
+		self::GROUP_STUDENT => 'Etudiant',
+		self::GROUP_TEACHER => 'Enseignant',
 		self::GROUP_ADMIN => 'Administrateur'
 	];
 	public static $groupEdits = [
 		self::GROUP_BANNED => 'Banni',
-		self::GROUP_MEMBER => 'Membre',
-		self::GROUP_EDITOR => 'Éditeur',
+		self::GROUP_STUDENT => 'Etudiant',
+		self::GROUP_TEACHER => 'Enseignant',
 		self::GROUP_ADMIN => 'Administrateur'
 	];
 	public static $groupNews = [
-		self::GROUP_MEMBER => 'Membre',
-		self::GROUP_EDITOR => 'Éditeur',
+		self::GROUP_STUDENT => 'Etudiant',
+		self::GROUP_TEACHER => 'Enseignant',
 		self::GROUP_ADMIN => 'Administrateur'
 	];
 	public static $groupPublics = [
 		self::GROUP_VISITOR => 'Visiteur',
-		self::GROUP_MEMBER => 'Membre',
-		self::GROUP_EDITOR => 'Éditeur',
+		self::GROUP_STUDENT => 'Etudiant',
+		self::GROUP_TEACHER => 'Enseignant',
 		self::GROUP_ADMIN => 'Administrateur'
 	];
 
@@ -170,7 +170,7 @@ class common
 	// Langue de l'interface sélectionnée
 	public static $i18nUI = 'fr_FR';
 	// Langues de contenu
-	public static $classesContent = 'fr_FR';
+	public static $classesContent = '';
 	public static $languages = [
 		'az_AZ' => 'Azərbaycan dili',
 		'bg_BG' => 'български език',

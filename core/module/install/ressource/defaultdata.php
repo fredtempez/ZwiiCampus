@@ -740,7 +740,7 @@ class init extends common
 				'parentPageId' => '',
 				'modulePosition' => 'bottom',
 				'position' => 2,
-				'group' => self::GROUP_MEMBER,
+				'group' => self::GROUP_STUDENT,
 				'profil' => 1,
 				'targetBlank' => false,
 				'title' => 'Page privée',

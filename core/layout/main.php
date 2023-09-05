@@ -32,7 +32,7 @@
 </head>
 <body>
 	<!-- Barre d'administration -->
-	<?php if ($this->getUser('group') > self::GROUP_MEMBER) : ?>
+	<?php if ($this->getUser('group') > self::GROUP_STUDENT) : ?>
 		<?php $layout->showBar(); ?>
 	<?php endif; ?>
 	<!-- Notifications -->
@@ -45,7 +45,7 @@
 			$this->getData(['theme', 'menu', 'position']) === 'top'
 			and $this->getData(['theme', 'menu', 'fixed']) === true
 			and $this->getUser('password') === $this->getInput('ZWII_USER_PASSWORD')
-			and $this->getUser('group') > self::GROUP_MEMBER
+			and $this->getUser('group') > self::GROUP_STUDENT
 		) {
 			echo '<nav id="navfixedconnected" >';
 		} else {
