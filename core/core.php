@@ -303,9 +303,9 @@ class common
 		// $this->input['_SESSION'] = $_SESSION;
 
 		// Déterminer la langue du contenu du site
-		if (isset($_SESSION['ZWII_CLASS'])) {
+		if (isset($_SESSION['ZWII_COURSE'])) {
 			// Déterminé par la session présente
-			self::$classesContent = $_SESSION['ZWII_CLASS'];
+			self::$classesContent = $_SESSION['ZWII_COURSE'];
 		}
 
 		// Instanciation de la classe des entrées / sorties

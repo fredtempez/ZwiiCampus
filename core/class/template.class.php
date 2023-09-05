@@ -494,8 +494,8 @@ class template
                 $lang = $langId;
                 break;
             case 'selected':
-                if (isset($_SESSION['ZWII_CLASS'])) {
-                    $lang = $_SESSION['ZWII_CLASS'];
+                if (isset($_SESSION['ZWII_COURSE'])) {
+                    $lang = $_SESSION['ZWII_COURSE'];
                 } else {
                     $lang = 'fr_FR';
                 }

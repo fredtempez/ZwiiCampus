@@ -120,24 +120,24 @@ class install extends common
 				self::$i18nUI = $_SESSION['ZWII_UI'];
 				self::$i18nUI = array_key_exists(self::$i18nUI, self::$languages) ? self::$i18nUI : 'fr_FR';
 				// par défaut le contenu est la langue d'installation
-				$_SESSION['ZWII_CLASS'] = self::$i18nUI;
+				$_SESSION['ZWII_COURSE'] = self::$i18nUI;
 
 				// Création du dossier de langue avec le marqueur de langue par défaut
-				if (!is_dir(self::DATA_DIR . $_SESSION['ZWII_CLASS'])) {
-					mkdir(self::DATA_DIR . $_SESSION['ZWII_CLASS']);
-					touch(self::DATA_DIR . $_SESSION['ZWII_CLASS'] . '/.default');
+				if (!is_dir(self::DATA_DIR . $_SESSION['ZWII_COURSE'])) {
+					mkdir(self::DATA_DIR . $_SESSION['ZWII_COURSE']);
+					touch(self::DATA_DIR . $_SESSION['ZWII_COURSE'] . '/.default');
 				}
 
 				// Installation du site de test
 				if (
 					$this->getInput('installDefaultData', helper::FILTER_BOOLEAN) === false
-					&& $_SESSION['ZWII_CLASS'] === 'fr_FR'
+					&& $_SESSION['ZWII_COURSE'] === 'fr_FR'
 				) {
 					$sample = true;
 				}
-				$this->initData('page', $_SESSION['ZWII_CLASS'], $sample);
-				$this->initData('module', $_SESSION['ZWII_CLASS'], $sample);
-				$this->initData('config', $_SESSION['ZWII_CLASS'], $sample);
+				$this->initData('page', $_SESSION['ZWII_COURSE'], $sample);
+				$this->initData('module', $_SESSION['ZWII_COURSE'], $sample);
+				$this->initData('config', $_SESSION['ZWII_COURSE'], $sample);
 
 				// Création de l'utilisateur si les données sont complétées.
 				// success retour de l'enregistrement des données
@@ -153,7 +153,7 @@ class install extends common
 						'signature' => 1,
 						'mail' => $userMail,
 						'password' => $this->getInput('installPassword', helper::FILTER_PASSWORD, true),
-						'language' => $_SESSION['ZWII_CLASS']
+						'language' => $_SESSION['ZWII_COURSE']
 					]
 				]);
 
@@ -172,7 +172,7 @@ class install extends common
 
 				// Nettoyage fr par défaut
 				if (
-					$_SESSION['ZWII_CLASS'] !== 'fr_FR'
+					$_SESSION['ZWII_COURSE'] !== 'fr_FR'
 				) {
 					if (is_dir(self::DATA_DIR . 'fr_FR'))
 						$this->deleteDir(self::DATA_DIR . 'fr_FR');

@@ -1231,8 +1231,8 @@ class layout extends common
     public function showi18n($lang)
     {
         if (
-            (isset($_SESSION['ZWII_CLASS'])
-                and $_SESSION['ZWII_CLASS'] === $lang
+            (isset($_SESSION['ZWII_COURSE'])
+                and $_SESSION['ZWII_COURSE'] === $lang
             )
         ) {
             $select = ' class="i18nFlagSelected" ';
