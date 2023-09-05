@@ -41,7 +41,7 @@ class maintenance extends common
 					? ''
 					: $this->getData(['page', $this->getData(['config', 'page302']), 'title']),
 				//'content' => $this->getdata(['page',$this->getData(['config','page302']),'content']),
-				'content' => $this->getPage($this->getData(['config', 'page302']), self::$i18nContent),
+				'content' => $this->getPage($this->getData(['config', 'page302']), self::$classesContent),
 				'view' => 'index'
 			]);
 		} else {

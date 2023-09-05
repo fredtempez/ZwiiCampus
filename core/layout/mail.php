@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="<?php echo substr(self::$i18nContent, 0, 2);?>">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr_FR">
 <head>
 	<meta charset="UTF-8">
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8">

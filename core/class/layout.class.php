@@ -913,7 +913,7 @@ class layout extends common
                     if (is_dir(self::DATA_DIR . $key)) {
                         $c++;
                         $location = helper::baseUrl() . 'language/content/' . $key;
-                        $leftItem .= '<option name="' . $key . '" value="' . $location . '" ' . ($key === self::$i18nContent ? 'selected' : '') . '>' . $value . '</option>';
+                        $leftItem .= '<option name="' . $key . '" value="' . $location . '" ' . ($key === self::$classesContent ? 'selected' : '') . '>' . $value . '</option>';
                     }
                 }
                 if ($c > 1) {
