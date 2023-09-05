@@ -532,7 +532,7 @@ class language extends common
 		) {
 
 			// Stocker la sélection
-			$_SESSION['ZWII_CONTENT'] = $lang;
+			$_SESSION['ZWII_CLASS'] = $lang;
 		}
 
 		// Valeurs en sortie

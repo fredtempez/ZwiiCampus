@@ -303,20 +303,10 @@ class common
 		// $this->input['_SESSION'] = $_SESSION;
 
 		// Déterminer la langue du contenu du site
-		if (isset($_SESSION['ZWII_CONTENT'])) {
+		if (isset($_SESSION['ZWII_CLASS'])) {
 			// Déterminé par la session présente
-			self::$classesContent = $_SESSION['ZWII_CONTENT'];
-		} else {
-			// Détermine la langue par défaut
-			foreach (self::$languages as $key => $value) {
-				if (file_exists(self::DATA_DIR . $key . '/.default')) {
-					self::$classesContent = $key;
-					$_SESSION['ZWII_CONTENT'] = $key;
-					break;
-				}
-			}
+			self::$classesContent = $_SESSION['ZWII_CLASS'];
 		}
-		\setlocale(LC_ALL, self::$classesContent . '.UTF8');
 
 		// Instanciation de la classe des entrées / sorties
 		$this->jsonDB(self::$classesContent);
