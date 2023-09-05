@@ -227,7 +227,6 @@ class common
 		'core' => '',
 		'font' => '',
 		'module' => '',
-		'locale' => '',
 		'page' => '',
 		'theme' => '',
 		'user' => '',
@@ -399,7 +398,7 @@ class common
 			if ($url = $_SERVER['QUERY_STRING']) {
 				$this->url = $url;
 			} else {
-				$this->url = $this->getData(['locale', 'homePageId']);
+				$this->url = $this->getData(['config', 'homePageId']);
 			}
 		}
 
@@ -642,8 +641,7 @@ class common
 		// Localisation
 		if (
 			$module === 'page' ||
-			$module === 'module' ||
-			$module === 'locale'
+			$module === 'module'
 		) {
 			// Création des sous-dossiers localisés
 			if (!file_exists(self::DATA_DIR . $lang)) {
@@ -661,13 +659,6 @@ class common
 				}
 				// Version en langue étrangère ou fr_FR sans site de test
 			} else {
-				// En_EN par défaut si le contenu localisé n'est pas traduit
-				$langDefault = array_key_exists($lang, init::$defaultDataI18n) === true ? $lang : 'default';
-				// Charger les données de cette langue 
-				$this->setData([$module, init::$defaultDataI18n[$langDefault][$module]]);
-				// Créer la page d'accueil, une seule page dans cette configuration
-				$pageId = init::$defaultDataI18n[$langDefault]['locale']['homePageId'];
-				$content = init::$defaultDataI18n[$langDefault]['html'];
 				$this->setPage($pageId, $content, $lang);
 				//file_put_contents(self::DATA_DIR . $lang . '/content/' . init::$defaultDataI18n[$langDefault]['page'][$pageId]['content'], $content);
 			}
@@ -997,8 +988,7 @@ class common
 		// Sauf pour les pages et les modules
 		if (
 			$id === 'page' ||
-			$id === 'module' ||
-			$id === 'locale'
+			$id === 'module' 
 		) {
 			$folder = self::DATA_DIR . $lang . '/';
 		} else {
@@ -1059,7 +1049,7 @@ class common
 			// Page désactivée, traiter les sous-pages sans prendre en compte la page parente.
 			if ($this->getData(['page', $parentPageId, 'disable']) !== true) {
 				// Cas de la page d'accueil ne pas dupliquer l'URL
-				$pageId = ($parentPageId !== $this->getData(['locale', 'homePageId'])) ? $parentPageId : '';
+				$pageId = ($parentPageId !== $this->getData(['config', 'homePageId'])) ? $parentPageId : '';
 				$sitemap->addUrl('/' . $pageId, $datetime);
 			}
 			// Articles du blog
@@ -1080,7 +1070,7 @@ class common
 					continue;
 				}
 				// Cas de la page d'accueil ne pas dupliquer l'URL
-				$pageId = ($childKey !== $this->getData(['locale', 'homePageId'])) ? $childKey : '';
+				$pageId = ($childKey !== $this->getData(['config', 'homePageId'])) ? $childKey : '';
 				$sitemap->addUrl('/' . $childKey, $datetime);
 
 				// La sous-page est un blog
@@ -1237,11 +1227,11 @@ class common
 			// Expéditeur
 			$host = str_replace('www.', '', $_SERVER['HTTP_HOST']);
 			$from = $from ? $from : 'no-reply@' . $host;
-			$mail->setFrom($from, html_entity_decode($this->getData(['locale', 'title'])));
+			$mail->setFrom($from, html_entity_decode($this->getData(['config', 'title'])));
 
 			// répondre à
 			if (is_null($replyTo)) {
-				$mail->addReplyTo($from, html_entity_decode($this->getData(['locale', 'title'])));
+				$mail->addReplyTo($from, html_entity_decode($this->getData(['config', 'title'])));
 			} else {
 				$mail->addReplyTo($replyTo);
 			}

@@ -26,7 +26,7 @@ class language extends common
 		// Ajouter une langue de contenu
 		'edit' => self::GROUP_ADMIN,
 		// Éditer une langue de l'UI
-		'locale' => self::GROUP_ADMIN,
+		'config' => self::GROUP_ADMIN,
 		// Éditer une langue de contenu
 		'delete' => self::GROUP_ADMIN,
 		// Effacer une langue de contenu ou de l'interface
@@ -332,7 +332,7 @@ class language extends common
 			// Création du contenu
 			$this->initData('page', $lang);
 			$this->initData('module', $lang);
-			$this->initData('locale', $lang);
+			$this->initData('config', $lang);
 
 
 			// Valeurs en sortie
@@ -387,7 +387,7 @@ class language extends common
 
 			// Sauvegarder les locales
 			$data = [
-				'locale' => [
+				'config' => [
 					'homePageId' => $this->getInput('localeHomePageId', helper::FILTER_ID, true),
 					'page404' => $this->getInput('localePage404'),
 					'page403' => $this->getInput('localePage403'),
@@ -414,7 +414,7 @@ class language extends common
 			// Sauvegarde hors méthodes si la langue n'est pas celle de l'UI
 			if ($lang === self::$i18nContent) {
 				// Enregistrer les données par lecture directe du formulaire
-				$this->setData(['locale', $data['locale']]);
+				$this->setData(['config', $data['config']]);
 			} else {
 				// Sauver sur le disque
 				file_put_contents(self::DATA_DIR . $lang . '/locale.json', json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT), LOCK_EX);
@@ -433,7 +433,7 @@ class language extends common
 
 		// La locale est-elle celle de la langue de l'UI ?
 		if ($lang === self::$i18nContent) {
-			self::$locales[$lang]['locale'] = $this->getData(['locale']);
+			self::$locales[$lang]['config'] = $this->getData(['config']);
 		} else {
 			// Lire les locales sans passer par les méthodes
 			self::$locales[$lang] = json_decode(file_get_contents(self::DATA_DIR . $lang . '/locale.json'), true);
@@ -464,7 +464,7 @@ class language extends common
 		// Valeurs en sortie
 		$this->addOutput([
 			'title' => helper::translate('Paramètres de la localisation') . '&nbsp;' . template::flag($lang, '20 %'),
-			'view' => 'locale'
+			'view' => 'config'
 		]);
 	}
 
@@ -588,7 +588,7 @@ class language extends common
 				]);
 			}
 			switch ($target) {
-				case 'locale':
+				case 'config':
 					$success = false;
 					// Effacement d'une site dans une langue
 					if (is_dir(self::DATA_DIR . $lang) === true) {

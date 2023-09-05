@@ -84,7 +84,7 @@
 					<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
 						<tr>
 							<td style="border-bottom: 1px solid #EBEEF2; padding: 20px; font-family: 'Open Sans', sans-serif; font-size: 19px; line-height: 24px; text-align: center; color: #212223;">
-								<?php echo $this->getData(['locale', 'title']); ?>
+								<?php echo $this->getData(['config', 'title']); ?>
 							</td>
 						</tr>
 					</table>
@@ -119,7 +119,7 @@
 								<?php
 								}
 								else{
-									echo $this->getData(['locale', 'title']);
+									echo $this->getData(['config', 'title']);
 								} ?>
 								</a>
 							</td>

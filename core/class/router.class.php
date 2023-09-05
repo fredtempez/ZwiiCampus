@@ -534,7 +534,7 @@ class core extends common
 			) {
 				$access = true;
 			} else {
-				if ($this->getUrl(0) === $this->getData(['locale', 'homePageId'])) {
+				if ($this->getUrl(0) === $this->getData(['config', 'homePageId'])) {
 					$access = 'login';
 				} else {
 					$access = false;
@@ -857,10 +857,10 @@ class core extends common
 				]);
 			} else {
 				if (
-					$this->getData(['locale', 'page403']) !== 'none'
-					and $this->getData(['page', $this->getData(['locale', 'page403'])])
+					$this->getData(['config', 'page403']) !== 'none'
+					and $this->getData(['page', $this->getData(['config', 'page403'])])
 				) {
-					header('Location:' . helper::baseUrl() . $this->getData(['locale', 'page403']));
+					header('Location:' . helper::baseUrl() . $this->getData(['config', 'page403']));
 				} else {
 					$this->addOutput([
 						'title' => 'Accès interdit',
@@ -871,10 +871,10 @@ class core extends common
 		} elseif ($this->output['content'] === '') {
 			http_response_code(404);
 			if (
-				$this->getData(['locale', 'page404']) !== 'none'
-				and $this->getData(['page', $this->getData(['locale', 'page404'])])
+				$this->getData(['config', 'page404']) !== 'none'
+				and $this->getData(['page', $this->getData(['config', 'page404'])])
 			) {
-				header('Location:' . helper::baseUrl() . $this->getData(['locale', 'page404']));
+				header('Location:' . helper::baseUrl() . $this->getData(['config', 'page404']));
 			} else {
 				$this->addOutput([
 					'title' => 'Page indisponible',
@@ -886,17 +886,17 @@ class core extends common
 		if ($this->output['metaTitle'] === '') {
 			if ($this->output['title']) {
 				$this->addOutput([
-					'metaTitle' => strip_tags($this->output['title']) . ' - ' . $this->getData(['locale', 'title'])
+					'metaTitle' => strip_tags($this->output['title']) . ' - ' . $this->getData(['config', 'title'])
 				]);
 			} else {
 				$this->addOutput([
-					'metaTitle' => $this->getData(['locale', 'title'])
+					'metaTitle' => $this->getData(['config', 'title'])
 				]);
 			}
 		}
 		if ($this->output['metaDescription'] === '') {
 			$this->addOutput([
-				'metaDescription' => $this->getData(['locale', 'metaDescription'])
+				'metaDescription' => $this->getData(['config', 'metaDescription'])
 			]);
 		}
 		switch ($this->output['display']) {

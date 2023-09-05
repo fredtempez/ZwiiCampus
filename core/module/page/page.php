@@ -211,7 +211,7 @@ class page extends common
 			]);
 		}
 		// Impossible de supprimer la page d'accueil
-		elseif ($page === $this->getData(['locale', 'homePageId'])) {
+		elseif ($page === $this->getData(['config', 'homePageId'])) {
 			// Valeurs en sortie
 			$this->addOutput([
 				'redirect' => helper::baseUrl() . 'config',
@@ -219,7 +219,7 @@ class page extends common
 			]);
 		}
 		// Impossible de supprimer la page affectée
-		elseif ($page === $this->getData(['locale', 'searchPageId'])) {
+		elseif ($page === $this->getData(['config', 'searchPageId'])) {
 			// Valeurs en sortie
 			$this->addOutput([
 				'redirect' => helper::baseUrl() . 'config',
@@ -227,7 +227,7 @@ class page extends common
 			]);
 		}
 		// Impossible de supprimer la page  affectée
-		elseif ($page === $this->getData(['locale', 'legalPageId'])) {
+		elseif ($page === $this->getData(['config', 'legalPageId'])) {
 			// Valeurs en sortie
 			$this->addOutput([
 				'redirect' => helper::baseUrl() . 'config',
@@ -235,7 +235,7 @@ class page extends common
 			]);
 		}
 		// Impossible de supprimer la page affectée
-		elseif ($page === $this->getData(['locale', 'page404'])) {
+		elseif ($page === $this->getData(['config', 'page404'])) {
 			// Valeurs en sortie
 			$this->addOutput([
 				'redirect' => helper::baseUrl() . 'config',
@@ -243,7 +243,7 @@ class page extends common
 			]);
 		}
 		// Impossible de supprimer la page affectée
-		elseif ($page === $this->getData(['locale', 'page403'])) {
+		elseif ($page === $this->getData(['config', 'page403'])) {
 			// Valeurs en sortie
 			$this->addOutput([
 				'redirect' => helper::baseUrl() . 'config',
@@ -251,7 +251,7 @@ class page extends common
 			]);
 		}
 		// Impossible de supprimer la page affectée
-		elseif ($page === $this->getData(['locale', 'page302'])) {
+		elseif ($page === $this->getData(['config', 'page302'])) {
 			// Valeurs en sortie
 			$this->addOutput([
 				'redirect' => helper::baseUrl() . 'config',
@@ -358,8 +358,8 @@ class page extends common
 							}
 						}
 						// Si la page correspond à la page d'accueil, change l'id dans la configuration du site
-						if ($this->getData(['locale', 'homePageId']) === $this->getUrl(2)) {
-							$this->setData(['locale', 'homePageId', $pageId]);
+						if ($this->getData(['config', 'homePageId']) === $this->getUrl(2)) {
+							$this->setData(['config', 'homePageId', $pageId]);
 						}
 					}
 					// Supprime les données du module en cas de changement de module
@@ -374,20 +374,20 @@ class page extends common
 						}
 					}
 					// Traitement des pages spéciales affectées dans la config :
-					if ($this->getUrl(2) === $this->getData(['locale', 'legalPageId'])) {
-						$this->setData(['locale', 'legalPageId', $pageId]);
+					if ($this->getUrl(2) === $this->getData(['config', 'legalPageId'])) {
+						$this->setData(['config', 'legalPageId', $pageId]);
 					}
-					if ($this->getUrl(2) === $this->getData(['locale', 'searchPageId'])) {
-						$this->setData(['locale', 'searchPageId', $pageId]);
+					if ($this->getUrl(2) === $this->getData(['config', 'searchPageId'])) {
+						$this->setData(['config', 'searchPageId', $pageId]);
 					}
-					if ($this->getUrl(2) === $this->getData(['locale', 'page404'])) {
-						$this->setData(['locale', 'page404', $pageId]);
+					if ($this->getUrl(2) === $this->getData(['config', 'page404'])) {
+						$this->setData(['config', 'page404', $pageId]);
 					}
-					if ($this->getUrl(2) === $this->getData(['locale', 'page403'])) {
-						$this->setData(['locale', 'page403', $pageId]);
+					if ($this->getUrl(2) === $this->getData(['config', 'page403'])) {
+						$this->setData(['config', 'page403', $pageId]);
 					}
-					if ($this->getUrl(2) === $this->getData(['locale', 'page302'])) {
-						$this->setData(['locale', 'page302', $pageId]);
+					if ($this->getUrl(2) === $this->getData(['config', 'page302'])) {
+						$this->setData(['config', 'page302', $pageId]);
 					}
 					// Si la page est une page enfant, actualise les positions des autres enfants du parent, sinon actualise les pages sans parents
 					$lastPosition = 1;

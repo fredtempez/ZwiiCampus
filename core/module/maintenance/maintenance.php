@@ -32,16 +32,16 @@ class maintenance extends common
 		}
 		// Page perso définie et existante
 		if (
-			$this->getData(['locale', 'page302']) !== 'none'
-			and $this->getData(['page', $this->getData(['locale', 'page302'])])
+			$this->getData(['config', 'page302']) !== 'none'
+			and $this->getData(['page', $this->getData(['config', 'page302'])])
 		) {
 			$this->addOutput([
 				'display' => self::DISPLAY_LAYOUT_LIGHT,
-				'title' => $this->getData(['page', $this->getData(['locale', 'page302']), 'hideTitle'])
+				'title' => $this->getData(['page', $this->getData(['config', 'page302']), 'hideTitle'])
 					? ''
-					: $this->getData(['page', $this->getData(['locale', 'page302']), 'title']),
-				//'content' => $this->getdata(['page',$this->getData(['locale','page302']),'content']),
-				'content' => $this->getPage($this->getData(['locale', 'page302']), self::$i18nContent),
+					: $this->getData(['page', $this->getData(['config', 'page302']), 'title']),
+				//'content' => $this->getdata(['page',$this->getData(['config','page302']),'content']),
+				'content' => $this->getPage($this->getData(['config', 'page302']), self::$i18nContent),
 				'view' => 'index'
 			]);
 		} else {

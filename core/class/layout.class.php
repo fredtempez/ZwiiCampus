@@ -29,23 +29,23 @@ class layout extends common
         $item .= template::ico('cancel');
         $item .= '</div>';
         // Texte de la popup
-        $item .= '<h3>' . $this->getData(['locale', 'cookies', 'titleLabel']) . '</h3>';
-        $item .= '<p>' . $this->getData(['locale', 'cookies', 'mainLabel']) . '</p>';
+        $item .= '<h3>' . $this->getData(['config', 'cookies', 'titleLabel']) . '</h3>';
+        $item .= '<p>' . $this->getData(['config', 'cookies', 'mainLabel']) . '</p>';
         // Formulaire de réponse
         if (
-            $this->getData(['locale', 'homePageId']) === $this->getUrl(0)
+            $this->getData(['config', 'homePageId']) === $this->getUrl(0)
         ) {
             $item .= '<form method="POST" action="' . helper::baseUrl(false) . '" id="cookieForm">';
         } else {
             $item .= '<form method="POST" action="' . helper::baseUrl(true) . $this->getUrl() . '" id="cookieForm">';
         }
         $item .= '<br><br>';
-        $item .= '<input type="submit" id="cookieConsentConfirm" value="' . $this->getData(['locale', 'cookies', 'buttonValidLabel']) . '">';
+        $item .= '<input type="submit" id="cookieConsentConfirm" value="' . $this->getData(['config', 'cookies', 'buttonValidLabel']) . '">';
         $item .= '</form>';
         // mentions légales si la page est définie
-        $legalPage = $this->getData(['locale', 'legalPageId']);
+        $legalPage = $this->getData(['config', 'legalPageId']);
         if ($legalPage !== 'none') {
-            $item .= '<p><a href="' . helper::baseUrl() . $legalPage . '">' . $this->getData(['locale', 'cookies', 'linkLegalLabel']) . '</a></p>';
+            $item .= '<p><a href="' . helper::baseUrl() . $legalPage . '">' . $this->getData(['config', 'cookies', 'linkLegalLabel']) . '</a></p>';
         }
         $item .= '</div>';
         echo $item;
@@ -288,7 +288,7 @@ class layout extends common
         // Affichage de motorisé par
         $items .= '<span id="footerDisplayCopyright" ';
         $items .= $this->getData(['theme', 'footer', 'displayCopyright']) === false ? 'class="displayNone"' : '';
-        $label = empty($this->getData(['locale', 'poweredPageLabel'])) ? 'Motorisé par' : $this->getData(['locale', 'poweredPageLabel']);
+        $label = empty($this->getData(['config', 'poweredPageLabel'])) ? 'Motorisé par' : $this->getData(['config', 'poweredPageLabel']);
         $items .= '><wbr>&nbsp;' . $label . '&nbsp;</span>';
         // Toujours afficher le nom du CMS
         $items .= '<span id="footerZwiiCMS">';
@@ -302,29 +302,29 @@ class layout extends common
         // Affichage du sitemap
         $items .= '<span id="footerDisplaySiteMap"';
         $items .= $this->getData(['theme', 'footer', 'displaySiteMap']) === false ? ' class="displayNone"' : '';
-        $label = ($this->getData(['locale', 'sitemapPageLabel']) === 'none') ? 'Plan du site' : $this->getData(['locale', 'sitemapPageLabel']);
+        $label = ($this->getData(['config', 'sitemapPageLabel']) === 'none') ? 'Plan du site' : $this->getData(['config', 'sitemapPageLabel']);
         $items .= '><wbr>&nbsp;|&nbsp;<a href="' . helper::baseUrl() . 'sitemap"  >' . $label . '</a>';
         $items .= '</span>';
         // Affichage du module de recherche
         $items .= '<span id="footerDisplaySearch"';
         $items .= $this->getData(['theme', 'footer', 'displaySearch']) === false ? ' class="displayNone" >' : '>';
-        $label = empty($this->getData(['locale', 'searchPageLabel'])) ? 'Rechercher' : $this->getData(['locale', 'searchPageLabel']);
-        if ($this->getData(['locale', 'searchPageId']) !== 'none') {
-            $items .= '<wbr>&nbsp;|&nbsp;<a href="' . helper::baseUrl() . $this->getData(['locale', 'searchPageId']) . '"  >' . $label . '</a>';
+        $label = empty($this->getData(['config', 'searchPageLabel'])) ? 'Rechercher' : $this->getData(['config', 'searchPageLabel']);
+        if ($this->getData(['config', 'searchPageId']) !== 'none') {
+            $items .= '<wbr>&nbsp;|&nbsp;<a href="' . helper::baseUrl() . $this->getData(['config', 'searchPageId']) . '"  >' . $label . '</a>';
         }
         $items .= '</span>';
         // Affichage des mentions légales
         $items .= '<span id="footerDisplayLegal"';
         $items .= $this->getData(['theme', 'footer', 'displayLegal']) === false ? ' class="displayNone" >' : '>';
-        $label = empty($this->getData(['locale', 'legalPageLabel'])) ? 'Mentions Légales' : $this->getData(['locale', 'legalPageLabel']);
-        if ($this->getData(['locale', 'legalPageId']) !== 'none') {
-            $items .= '<wbr>&nbsp;|&nbsp;<a href="' . helper::baseUrl() . $this->getData(['locale', 'legalPageId']) . '"  >' . $label . '</a>';
+        $label = empty($this->getData(['config', 'legalPageLabel'])) ? 'Mentions Légales' : $this->getData(['config', 'legalPageLabel']);
+        if ($this->getData(['config', 'legalPageId']) !== 'none') {
+            $items .= '<wbr>&nbsp;|&nbsp;<a href="' . helper::baseUrl() . $this->getData(['config', 'legalPageId']) . '"  >' . $label . '</a>';
         }
         $items .= '</span>';
         // Affichage de la gestion des cookies
         $items .= '<span id="footerDisplayCookie"';
         $items .= ($this->getData(['config', 'cookieConsent']) === true && $this->getData(['theme', 'footer', 'displayCookie']) === true) ? '>' : ' class="displayNone" >';
-        $label = empty($this->getData(['locale', 'cookies', 'cookiesFooterText'])) ? 'Cookies' : $this->getData(['locale', 'cookies', 'cookiesFooterText']);
+        $label = empty($this->getData(['config', 'cookies', 'cookiesFooterText'])) ? 'Cookies' : $this->getData(['config', 'cookies', 'cookiesFooterText']);
         $items .= '<wbr>&nbsp;|&nbsp;<a href="javascript:void(0)" id="footerLinkCookie">' . $label . '</a>';
         $items .= '</span>';
         // Affichage du lien de connexion
@@ -586,10 +586,10 @@ class layout extends common
                     and $this->getUser('group') < self::GROUP_EDITOR
                 )
             ) {
-                $pageUrl = ($this->getData(['locale', 'homePageId']) === $this->getUrl(0)) ? helper::baseUrl(false) : helper::baseUrl() . $this->getUrl(0);
+                $pageUrl = ($this->getData(['config', 'homePageId']) === $this->getUrl(0)) ? helper::baseUrl(false) : helper::baseUrl() . $this->getUrl(0);
                 $items .= '<a href="' . $pageUrl . '">';
             } else {
-                $pageUrl = ($this->getData(['locale', 'homePageId']) === $parentPageId) ? helper::baseUrl(false) : helper::baseUrl() . $parentPageId;
+                $pageUrl = ($this->getData(['config', 'homePageId']) === $parentPageId) ? helper::baseUrl(false) : helper::baseUrl() . $parentPageId;
                 $items .= '<a class="' . $active . '" href="' . $pageUrl . '"' . $targetBlank . '>';
             }
 
@@ -652,10 +652,10 @@ class layout extends common
                         and $this->getUser('group') < self::GROUP_EDITOR
                     )
                 ) {
-                    $pageUrl = ($this->getData(['locale', 'homePageId']) === $this->getUrl(0)) ? helper::baseUrl(false) : helper::baseUrl() . $this->getUrl(0);
+                    $pageUrl = ($this->getData(['config', 'homePageId']) === $this->getUrl(0)) ? helper::baseUrl(false) : helper::baseUrl() . $this->getUrl(0);
                     $items .= '<a href="' . $pageUrl . '">';
                 } else {
-                    $pageUrl = ($this->getData(['locale', 'homePageId']) === $childKey) ? helper::baseUrl(false) : helper::baseUrl() . $childKey;
+                    $pageUrl = ($this->getData(['config', 'homePageId']) === $childKey) ? helper::baseUrl(false) : helper::baseUrl() . $childKey;
                     $items .= '<a class="' . $active . ' ' . $parentPageId . '" href="' . $pageUrl . '"' . $targetBlank . '>';
                 }
 
@@ -802,7 +802,7 @@ class layout extends common
         echo '<title>' . $this->core->output['metaTitle'] . '</title>';
         echo '<meta property="og:title" content="' . $this->core->output['metaTitle'] . '" />';
         if (
-            $this->getData(['locale', 'homePageId']) === $this->getUrl(0)
+            $this->getData(['config', 'homePageId']) === $this->getUrl(0)
         ) {
             echo '<link rel="canonical" href="' . helper::baseUrl(false) . '" />';
         } else {

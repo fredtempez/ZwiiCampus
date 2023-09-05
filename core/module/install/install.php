@@ -137,7 +137,7 @@ class install extends common
 				}
 				$this->initData('page', $_SESSION['ZWII_CONTENT'], $sample);
 				$this->initData('module', $_SESSION['ZWII_CONTENT'], $sample);
-				$this->initData('locale', $_SESSION['ZWII_CONTENT'], $sample);
+				$this->initData('config', $_SESSION['ZWII_CONTENT'], $sample);
 
 				// Création de l'utilisateur si les données sont complétées.
 				// success retour de l'enregistrement des données

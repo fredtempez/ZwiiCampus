@@ -418,8 +418,8 @@ class theme extends common
 				]);
 
 				// Sauvegarder la configuration localisée
-				$this->setData(['locale', 'legalPageId', $this->getInput('configLegalPageId')]);
-				$this->setData(['locale', 'searchPageId', $this->getInput('configSearchPageId')]);
+				$this->setData(['config', 'legalPageId', $this->getInput('configLegalPageId')]);
+				$this->setData(['config', 'searchPageId', $this->getInput('configSearchPageId')]);
 
 				// Valeurs en sortie
 				$this->addOutput([
