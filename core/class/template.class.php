@@ -486,7 +486,7 @@ class template
      */
     public static function flag($langId, $size = 'auto')
     {
-        $lang = 'fr_FR';
+        $lang = 'home';
         switch ($langId) {
             case '':
                 break;
@@ -496,8 +496,6 @@ class template
             case 'selected':
                 if (isset($_SESSION['ZWII_COURSE'])) {
                     $lang = $_SESSION['ZWII_COURSE'];
-                } else {
-                    $lang = 'fr_FR';
                 }
         }
         return '<img class="flag" src="' . helper::baseUrl(false) . 'core/vendor/i18n/png/' . $lang . '.png"

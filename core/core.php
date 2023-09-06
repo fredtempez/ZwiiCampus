@@ -310,6 +310,8 @@ class common
 		// Instanciation de la classe des entrées / sorties
 		$this->jsonDB(self::$courseContent);
 
+		echo self::$courseContent;
+
 		// Installation fraîche, initialisation des modules
 		if ($this->user === []) {
 			foreach ($this->dataFiles as $stageId => $item) {

@@ -119,10 +119,8 @@ class install extends common
 				// Validation de la langue transmise
 				self::$i18nUI = $_SESSION['ZWII_UI'];
 				self::$i18nUI = array_key_exists(self::$i18nUI, self::$languages) ? self::$i18nUI : 'fr_FR';
-				// par défaut le contenu est la langue d'installation
-				$_SESSION['ZWII_COURSE'] = self::$i18nUI;
 
-				// Création du dossier de langue avec le marqueur de langue par défaut
+				// Création du dossier de cours avec le marqueur de langue par défaut
 				if (!is_dir(self::DATA_DIR . $_SESSION['ZWII_COURSE'])) {
 					mkdir(self::DATA_DIR . $_SESSION['ZWII_COURSE']);
 					touch(self::DATA_DIR . $_SESSION['ZWII_COURSE'] . '/.default');

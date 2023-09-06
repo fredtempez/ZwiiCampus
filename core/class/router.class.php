@@ -502,6 +502,7 @@ class core extends common
 		}
 
 		// Pour éviter une 404 sur une langue étrangère, bascule dans la langue correcte.
+		/*
 		if (is_null($this->getData(['page', $this->getUrl(0)]))) {
 			foreach (self::$languages as $key => $value) {
 				if (
@@ -520,6 +521,7 @@ class core extends common
 				}
 			}
 		}
+		*/
 
 		// Check l'accès à la page
 		$access = null;
