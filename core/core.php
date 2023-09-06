@@ -529,15 +529,15 @@ class common
 	 * @param string langue
 	 * @return string contenu de la page
 	 */
-	public function getPage($page, $lang)
+	public function getPage($page, $course)
 	{
 
 		// Le nom de la ressource et le fichier de contenu sont définis :
 		if (
 			$this->getData(['page', $page, 'content']) !== ''
-			&& file_exists(self::DATA_DIR . $lang . '/content/' . $this->getData(['page', $page, 'content']))
+			&& file_exists(self::DATA_DIR . $course . '/content/' . $this->getData(['page', $page, 'content']))
 		) {
-			return file_get_contents(self::DATA_DIR . $lang . '/content/' . $this->getData(['page', $page, 'content']));
+			return file_get_contents(self::DATA_DIR . $course . '/content/' . $this->getData(['page', $page, 'content']));
 		} else {
 			return 'Aucun contenu trouvé.';
 		}
@@ -549,10 +549,10 @@ class common
 	 * @param string contenu de la page
 	 * @return int nombre d'octets écrits ou erreur
 	 */
-	public function setPage($page, $value, $lang)
+	public function setPage($page, $value, $course)
 	{
 
-		return file_put_contents(self::DATA_DIR . $lang . '/content/' . $page . '.html', $value);
+		return file_put_contents(self::DATA_DIR . $course . '/content/' . $page . '.html', $value);
 	}
 
 
@@ -562,14 +562,14 @@ class common
 	 * @param string pageId
 	 * @return bool statut de l'effacement
 	 */
-	public function deletePage($page, $lang)
+	public function deletePage($page, $course)
 	{
 
-		return unlink(self::DATA_DIR . $lang . '/content/' . $this->getData(['page', $page, 'content']));
+		return unlink(self::DATA_DIR . $course . '/content/' . $this->getData(['page', $page, 'content']));
 	}
 
 
-	public function jsonDB($lang)
+	public function jsonDB($course)
 	{
 		// Instanciation de la classe des entrées / sorties
 		// Récupère les descripteurs
@@ -577,7 +577,7 @@ class common
 			// Constructeur  JsonDB;
 			$this->dataFiles[$keys] = new \Prowebcraft\JsonDb([
 				'name' => $keys . '.json',
-				'dir' => $this->dataPath($keys, $lang),
+				'dir' => $this->dataPath($keys, $course),
 				'backup' => file_exists('site/data/.backup')
 			]);
 		}
@@ -586,43 +586,35 @@ class common
 	/**
 	 * Initialisation des données
 	 * @param string $module : nom du module à générer
-	 * @param string $lang la langue à créer
-	 * @param bool $sampleSite créer un site exemple en FR
+	 * @param string $course le dossier à créer, nom du cours
 	 * choix valides :  core config user theme page module
 	 */
-	public function initData($module, $lang, $sampleSite = false)
+	public function initData($module, $course)
 	{
 		// Tableau avec les données vierges
 		require_once('core/module/install/ressource/defaultdata.php');
 
-		if (!file_exists(self::DATA_DIR . $lang)) {
-			mkdir(self::DATA_DIR . $lang, 0755);
+		if (!file_exists(self::DATA_DIR . $course)) {
+			mkdir(self::DATA_DIR . $course, 0755);
 		}
 
-		// Localisation
 		if (
 			$module === 'page' ||
 			$module === 'module'
 		) {
 			// Création des sous-dossiers localisés
-			if (!file_exists(self::DATA_DIR . $lang)) {
-				mkdir(self::DATA_DIR . $lang, 0755);
+			if (!file_exists(self::DATA_DIR . $course)) {
+				mkdir(self::DATA_DIR . $course, 0755);
 			}
-			if (!file_exists(self::DATA_DIR . $lang . '/content')) {
-				mkdir(self::DATA_DIR . $lang . '/content', 0755);
+			if (!file_exists(self::DATA_DIR . $course . '/content')) {
+				mkdir(self::DATA_DIR . $course . '/content', 0755);
 			}
-			// Site en français avec site exemple
-			if ($lang == 'fr_FR' && $sampleSite === true) {
-				$this->setData([$module, init::$siteTemplate[$module]]);
-				// Création des pages
-				foreach (init::$siteContent as $key => $value) {
-					$this->setPage($key, $value, 'fr_FR');
-				}
-				// Version en langue étrangère ou fr_FR sans site de test
-			} else {
-				$this->setPage($pageId, $content, $lang);
-				//file_put_contents(self::DATA_DIR . $lang . '/content/' . init::$defaultDataI18n[$langDefault]['page'][$pageId]['content'], $content);
+			$this->setData([$module, init::$siteTemplate[$module]]);
+			// Création des pages
+			foreach (init::$siteContent as $key => $value) {
+				$this->setPage($key, $value, $course);
 			}
+			//file_put_contents(self::DATA_DIR . $course . '/content/' . init::$defaultDataI18n[$courseDefault]['page'][$pageId]['content'], $content);
 		} else {
 			// Installation des données des autres modules cad theme profil font config, admin et core
 			$this->setData([$module, init::$defaultData[$module]]);
@@ -941,17 +933,17 @@ class common
 	/**
 	 * Retourne une chemin localisé pour l'enregistrement des données
 	 * @param $stageId nom du module
-	 * @param $lang langue des pages
+	 * @param $course langue des pages
 	 * @return string du dossier à créer
 	 */
-	public function dataPath($id, $lang)
+	public function dataPath($id, $course)
 	{
 		// Sauf pour les pages et les modules
 		if (
 			$id === 'page' ||
 			$id === 'module' 
 		) {
-			$folder = self::DATA_DIR . $lang . '/';
+			$folder = self::DATA_DIR . $course . '/';
 		} else {
 			$folder = self::DATA_DIR;
 		}

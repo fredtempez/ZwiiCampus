@@ -127,18 +127,6 @@ class install extends common
 					mkdir(self::DATA_DIR . $_SESSION['ZWII_COURSE']);
 					touch(self::DATA_DIR . $_SESSION['ZWII_COURSE'] . '/.default');
 				}
-
-				// Installation du site de test
-				if (
-					$this->getInput('installDefaultData', helper::FILTER_BOOLEAN) === false
-					&& $_SESSION['ZWII_COURSE'] === 'fr_FR'
-				) {
-					$sample = true;
-				}
-				$this->initData('page', $_SESSION['ZWII_COURSE'], $sample);
-				$this->initData('module', $_SESSION['ZWII_COURSE'], $sample);
-				$this->initData('config', $_SESSION['ZWII_COURSE'], $sample);
-
 				// Création de l'utilisateur si les données sont complétées.
 				// success retour de l'enregistrement des données
 				$this->setData([
@@ -169,14 +157,6 @@ class install extends common
 					null,
 					'localhost'
 				);
-
-				// Nettoyage fr par défaut
-				if (
-					$_SESSION['ZWII_COURSE'] !== 'fr_FR'
-				) {
-					if (is_dir(self::DATA_DIR . 'fr_FR'))
-						$this->deleteDir(self::DATA_DIR . 'fr_FR');
-				}
 
 				// Sauvegarder la configuration du Proxy
 				$this->setData(['config', 'proxyType', $this->getInput('installProxyType')]);
