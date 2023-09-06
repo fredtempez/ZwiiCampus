@@ -537,18 +537,6 @@ class layout extends common
         }
         // Retourne les items du menu
         echo '<ul class="navMain" id="menuLeft">' . $itemsLeft . '</ul><ul class="navMain" id="menuRight">' . $itemsRight;
-        // Drapeau les langues
-        foreach (self::$languages as $key => $value) {
-            if (is_dir(self::DATA_DIR . $key)) {
-                $t[] = $this->showi18n($key);
-            }
-        }
-        // Pas de drapeau si la langue est unique
-        if (count($t) > 1) {
-            foreach ($t as $key) {
-                echo $key;
-            }
-        }
         echo '</ul>';
     }
 
