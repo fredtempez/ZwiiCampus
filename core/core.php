@@ -26,10 +26,9 @@ class common
 	const DISPLAY_LAYOUT_LIGHT = 5;
 	const GROUP_BANNED = -1;
 	const GROUP_VISITOR = 0;
-	const GROUP_MEMBER = 1;
-	const GROUP_EDITOR = 2;
+	const GROUP_STUDENT = 1;
+	const GROUP_TEACHER = 2;
 	// Groupe MODERATOR, compatibilité avec les anciens modules :
-	const GROUP_MODERATOR = 2;
 	const GROUP_ADMIN = 3;
 	const SIGNATURE_ID = 1;
 	const SIGNATURE_PSEUDO = 2;
@@ -170,7 +169,7 @@ class common
 	// Langue de l'interface sélectionnée
 	public static $i18nUI = 'fr_FR';
 	// Langues de contenu
-	public static $classesContent = '';
+	public static $courseContent = 'home';
 	public static $languages = [
 		'de' => 'Deutsch',
 		'en_EN' => 'English',
@@ -302,23 +301,23 @@ class common
 		// Extraction de la sesion
 		// $this->input['_SESSION'] = $_SESSION;
 
-		// Déterminer la langue du contenu du site
+		// Déterminer le contenu du site
 		if (isset($_SESSION['ZWII_COURSE'])) {
 			// Déterminé par la session présente
-			self::$classesContent = $_SESSION['ZWII_COURSE'];
+			self::$courseContent = $_SESSION['ZWII_COURSE'];
 		}
 
 		// Instanciation de la classe des entrées / sorties
-		$this->jsonDB(self::$classesContent);
+		$this->jsonDB(self::$courseContent);
 
 		// Installation fraîche, initialisation des modules
 		if ($this->user === []) {
 			foreach ($this->dataFiles as $stageId => $item) {
-				$folder = $this->dataPath($stageId, self::$classesContent);
+				$folder = $this->dataPath($stageId, self::$courseContent);
 				if (
 					file_exists($folder . $stageId . '.json') === false
 				) {
-					$this->initData($stageId, self::$classesContent);
+					$this->initData($stageId, self::$courseContent);
 					common::$coreNotices[] = $stageId;
 				}
 			}
