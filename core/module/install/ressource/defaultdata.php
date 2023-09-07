@@ -951,4 +951,5 @@ class init extends common
 			'content' => '<h2 style="text-align: center;">Oups ! La page demandée est introuvable...</h2><p style="text-align: center;">Personnalisez cette page à votre convenance sans qu\'elle apparaisse dans les menus.<p>'
 		]
 	];
+
 }
