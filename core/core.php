@@ -141,24 +141,24 @@ class common
 	public static $groups = [
 		self::GROUP_BANNED => 'Banni',
 		self::GROUP_VISITOR => 'Visiteur',
-		self::GROUP_STUDENT => 'Etudiant',
+		self::GROUP_STUDENT => 'Apprenant',
 		self::GROUP_TEACHER => 'Enseignant',
 		self::GROUP_ADMIN => 'Administrateur'
 	];
 	public static $groupEdits = [
 		self::GROUP_BANNED => 'Banni',
-		self::GROUP_STUDENT => 'Etudiant',
+		self::GROUP_STUDENT => 'Apprenant',
 		self::GROUP_TEACHER => 'Enseignant',
 		self::GROUP_ADMIN => 'Administrateur'
 	];
 	public static $groupNews = [
-		self::GROUP_STUDENT => 'Etudiant',
+		self::GROUP_STUDENT => 'Apprenant',
 		self::GROUP_TEACHER => 'Enseignant',
 		self::GROUP_ADMIN => 'Administrateur'
 	];
 	public static $groupPublics = [
 		self::GROUP_VISITOR => 'Visiteur',
-		self::GROUP_STUDENT => 'Etudiant',
+		self::GROUP_STUDENT => 'Apprenant',
 		self::GROUP_TEACHER => 'Enseignant',
 		self::GROUP_ADMIN => 'Administrateur'
 	];
