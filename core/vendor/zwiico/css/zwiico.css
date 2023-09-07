@@ -1,11 +1,12 @@
+@charset "UTF-8";
 @font-face {
   font-family: 'zwiico';
-  src: url('../font/zwiico.eot?3985133');
-  src: url('../font/zwiico.eot?3985133#iefix') format('embedded-opentype'),
-       url('../font/zwiico.woff2?3985133') format('woff2'),
-       url('../font/zwiico.woff?3985133') format('woff'),
-       url('../font/zwiico.ttf?3985133') format('truetype'),
-       url('../font/zwiico.svg?3985133#zwiico') format('svg');
+  src: url('../font/zwiico.eot?17976195');
+  src: url('../font/zwiico.eot?17976195#iefix') format('embedded-opentype'),
+       url('../font/zwiico.woff2?17976195') format('woff2'),
+       url('../font/zwiico.woff?17976195') format('woff'),
+       url('../font/zwiico.ttf?17976195') format('truetype'),
+       url('../font/zwiico.svg?17976195#zwiico') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -15,7 +16,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: 'zwiico';
-    src: url('../font/zwiico.svg?3985133#zwiico') format('svg');
+    src: url('../font/zwiico.svg?17976195#zwiico') format('svg');
   }
 }
 */
@@ -103,6 +104,7 @@
 .zwiico-up-dir:before { content: '\e82c'; } /* '' */
 .zwiico-right-dir:before { content: '\e82d'; } /* '' */
 .zwiico-chart-line:before { content: '\e82e'; } /* '' */
+.zwiico-book:before { content: '\e82f'; } /* '' */
 .zwiico-spin:before { content: '\e831'; } /* '' */
 .zwiico-twitter:before { content: '\f099'; } /* '' */
 .zwiico-facebook:before { content: '\f09a'; } /* '' */

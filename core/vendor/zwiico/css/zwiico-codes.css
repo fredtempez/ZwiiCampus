@@ -1,7 +1,6 @@
+@charset "UTF-8";
 
 .zwiico-plus-circled:before { content: '\2191'; } /* '↑' */
-.zwiico-logout:before { content: '\e800'; } /* '' */
-.zwiico-graduation-cap:before { content: '\e800'; } /* '' */
 .zwiico-plus:before { content: '\e801'; } /* '' */
 .zwiico-cancel:before { content: '\e802'; } /* '' */
 .zwiico-help:before { content: '\e803'; } /* '' */
@@ -48,6 +47,7 @@
 .zwiico-up-dir:before { content: '\e82c'; } /* '' */
 .zwiico-right-dir:before { content: '\e82d'; } /* '' */
 .zwiico-chart-line:before { content: '\e82e'; } /* '' */
+.zwiico-book:before { content: '\e82f'; } /* '' */
 .zwiico-spin:before { content: '\e831'; } /* '' */
 .zwiico-twitter:before { content: '\f099'; } /* '' */
 .zwiico-facebook:before { content: '\f09a'; } /* '' */
@@ -75,3 +75,4 @@
 .zwiico-pinterest:before { content: '\f231'; } /* '' */
 .zwiico-reddit:before { content: '\f281'; } /* '' */
 .zwiico-shopping-basket:before { content: '\f291'; } /* '' */
+.zwiico-logout:before { content: '🎓'; } /* '\1f393' */
