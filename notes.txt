@@ -1,0 +1,22 @@
+course/id/tracking.json
+fichier plat contenant :
+userid, page, TS début, TS fin 
+
+course/content.json
+BDD contenant les informations sur le cours
+- courseId identifiant du cours
+- enrolmentKey clé d'inscription, si non vide
+- accessStatus
+    - 0 le cours est ouvert
+    - 1 le cours est fermé
+    - 2 le cours est ouvert entre les dates 
+    - dateOpened
+    - dateClosed
+
+course/enrolment.json
+Détermine la liste des inscrits
+- userid
+- userGroup
+- userProfil
+- lastPageId derrière page visitée
+- lastDate date de la dernière vue
