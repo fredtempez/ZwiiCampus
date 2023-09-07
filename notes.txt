@@ -20,3 +20,8 @@ Détermine la liste des inscrits
 - userProfil
 - lastPageId derrière page visitée
 - lastDate date de la dernière vue
+
+
+Modules : 
+autoinscription devient enrolment à mettre à jour
+créer un module qui affiche les cours avec leur status
