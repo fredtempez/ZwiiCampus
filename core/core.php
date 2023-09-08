@@ -62,31 +62,32 @@ class common
 
 	public static $actions = [];
 	public static $coreModuleIds = [
-		"config",
-		"dashboard",
-		"install",
-		"language",
-		"maintenance",
-		"page",
-		"plugin",
-		"sitemap",
-		"theme",
-		"user"
+		'config',
+		'course',
+		'dashboard',
+		'install',
+		'language',
+		'maintenance',
+		'page',
+		'plugin',
+		'sitemap',
+		'theme',
+		'user'
 	];
 	public static $concurrentAccess = [
-		"config",
-		"edit",
-		"language",
-		"plugin",
-		"theme",
-		"user"
+		'config',
+		'edit',
+		'language',
+		'plugin',
+		'theme',
+		'user'
 	];
 	/*
 						 Cette variable est supprimée du test dans le routeur.
 						 public static $accessExclude = [
 							 'login',
 							 'logout',
-							 "maintenance",
+							 'maintenance',
 						 ];
 						 */
 	private $data = [];
@@ -433,9 +434,9 @@ class common
 					'verify_peer' => false,
 					'verify_peer_name' => false,
 				),
-				"ssl" => array(
-					"verify_peer" => false,
-					"verify_peer_name" => false
+				'ssl' => array(
+					'verify_peer' => false,
+					'verify_peer_name' => false
 				)
 			);
 			stream_context_set_default($context);
@@ -709,7 +710,7 @@ class common
 		foreach ($pages as $pageId => $pagePosition) {
 			if (
 				// Page parent
-				$this->getData(['page', $pageId, 'parentPageId']) === ""
+				$this->getData(['page', $pageId, 'parentPageId']) === ''
 				// Ignore les pages dont l'utilisateur n'a pas accès
 				and ($this->getData(['page', $pageId, 'group']) === self::GROUP_VISITOR
 					or ($this->getUser('password') === $this->getInput('ZWII_USER_PASSWORD')
@@ -1016,7 +1017,7 @@ class common
 		// Actualise la liste des pages pour TinyMCE
 		$this->tinyMcePages();
 
-		//require_once "core/vendor/sitemap/SitemapGenerator.php";	
+		//require_once 'core/vendor/sitemap/SitemapGenerator.php';	
 
 		$timezone = $this->getData(['config', 'timezone']);
 		$outputDir = getcwd();
@@ -1061,7 +1062,7 @@ class common
 				foreach ($this->getData(['module', $parentPageId, 'posts']) as $articleId => $article) {
 					if ($this->getData(['module', $parentPageId, 'posts', $articleId, 'state']) === true) {
 						$date = $this->getData(['module', $parentPageId, 'posts', $articleId, 'publishedOn']);
-						$sitemap->addUrl('/' . $parentPageId . '/' . $articleId, new DateTime("@{$date}", new DateTimeZone($timezone)));
+						$sitemap->addUrl('/' . $parentPageId . '/' . $articleId, new DateTime('@{$date}', new DateTimeZone($timezone)));
 					}
 				}
 			}
@@ -1082,7 +1083,7 @@ class common
 					foreach ($this->getData(['module', $childKey, 'posts']) as $articleId => $article) {
 						if ($this->getData(['module', $childKey, 'posts', $articleId, 'state']) === true) {
 							$date = $this->getData(['module', $childKey, 'posts', $articleId, 'publishedOn']);
-							$sitemap->addUrl('/' . $childKey . '/' . $articleId, new DateTime("@{$date}", new DateTimeZone($timezone)));
+							$sitemap->addUrl('/' . $childKey . '/' . $articleId, new DateTime('@{$date}', new DateTimeZone($timezone)));
 						}
 					}
 				}
@@ -1362,7 +1363,7 @@ class common
 			if (!$file->isDir()) {
 				$filePath = $file->getRealPath();
 				$relativePath = substr($filePath, strlen(realpath($folder)) + 1);
-				$zip->addFile($filePath, str_replace("\\", "/", $relativePath));
+				$zip->addFile($filePath, str_replace('\\', '/', $relativePath));
 			}
 		}
 		$zip->close();
