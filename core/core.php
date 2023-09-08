@@ -82,13 +82,13 @@ class common
 		"user"
 	];
 	/*
-					  Cette variable est supprimée du test dans le routeur.
-					  public static $accessExclude = [
-						  'login',
-						  'logout',
-						  "maintenance",
-					  ];
-					  */
+						 Cette variable est supprimée du test dans le routeur.
+						 public static $accessExclude = [
+							 'login',
+							 'logout',
+							 "maintenance",
+						 ];
+						 */
 	private $data = [];
 	private $hierarchy = [
 		'all' => [],
@@ -325,7 +325,6 @@ class common
 			// Déterminé par la session présente
 			self::$courseContent = $_SESSION['ZWII_COURSE'];
 		}
-
 		// Instanciation de la classe des entrées / sorties
 		// Les fichiers de configuration
 		foreach ($this->configFiles as $module => $value) {
@@ -342,19 +341,22 @@ class common
 		}
 
 		// Installation fraîche, initialisation de la configuration inexistante
+		// Nécessaire pour le constructeur
 		if ($this->user === []) {
 			// Charge la configuration
 			foreach ($this->configFiles as $stageId => $item) {
 				if (file_exists(self::DATA_DIR . $stageId . '.json') === false) {
-					$this->loadConfig($stageId);	
+					$this->saveConfig($stageId);
 				}
 			}
 			// Charge le site d'accueil
-			foreach ($this->courseFiles as $stageId => $item) {
-				if (
-					file_exists(self::DATA_DIR . self::$courseContent . '/' . $stageId . '.json') === false
-				) {
-					$this->loadCourse($stageId, self::$courseContent);
+			if (self::$courseContent === 'home') {
+				foreach ($this->courseFiles as $stageId => $item) {
+					if (
+						file_exists(self::DATA_DIR . self::$courseContent . '/' . $stageId . '.json') === false
+					) {
+						$this->saveCourse($stageId, self::$courseContent);
+					}
 				}
 			}
 		}
@@ -600,7 +602,6 @@ class common
 	 */
 	public function deletePage($page, $course)
 	{
-
 		return unlink(self::DATA_DIR . $course . '/content/' . $this->getData(['page', $page, 'content']));
 	}
 
@@ -611,7 +612,7 @@ class common
 		// Constructeur  JsonDB;
 		$this->dataFiles[$module] = new \Prowebcraft\JsonDb([
 			'name' => $module . '.json',
-			'dir' => self::DATA_DIR . $path,
+			'dir' => self::DATA_DIR . $path . '/',
 			'backup' => file_exists('site/data/.backup')
 		]);
 	}
@@ -623,14 +624,16 @@ class common
 	 * Données valides : page ou module
 	 */
 
-	public function loadCourse($module, $path = 'home')
+	public function saveCourse($module, $path)
 	{
 		// Pas d'initialsiation des données de cours pour l'accueil
-		if ($path === 'home' && 
-		($module === 'enrolment' || $module === 'course')) {
+		if (
+			$path === 'home' &&
+			($module === 'enrolment' || $module === 'course')
+		) {
 			return;
 		}
-		
+
 		// Tableau avec les données vierges
 		require_once('core/module/install/ressource/defaultdata.php');
 
@@ -658,7 +661,7 @@ class common
 	 * @param string $module : if du module à générer
 	 * choix valides :  core config user theme page module
 	 */
-	public function loadConfig($module)
+	public function saveConfig($module)
 	{
 		// Tableau avec les données vierges
 		require_once('core/module/install/ressource/defaultdata.php');
