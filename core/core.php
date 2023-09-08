@@ -346,15 +346,15 @@ class common
 			// Charge la configuration
 			foreach ($this->configFiles as $stageId => $item) {
 				if (file_exists(self::DATA_DIR . $stageId . '.json') === false) {
-					$this->loadConfig($stageId);
-					common::$coreNotices[] = $stageId;
+					$this->loadConfig($stageId);	
 				}
 			}
 			// Charge le site d'accueil
 			foreach ($this->courseFiles as $stageId => $item) {
-				if (file_exists(self::DATA_DIR . self::$courseContent . '/' . $stageId . '.json') === false) {
+				if (
+					file_exists(self::DATA_DIR . self::$courseContent . '/' . $stageId . '.json') === false
+				) {
 					$this->loadCourse($stageId, self::$courseContent);
-					common::$coreNotices[] = $stageId;
 				}
 			}
 		}
@@ -650,7 +650,7 @@ class common
 				$this->setPage($key, $value, $path);
 			}
 		}
-
+		common::$coreNotices[] = $module;
 
 	}
 	/**
@@ -664,7 +664,7 @@ class common
 		require_once('core/module/install/ressource/defaultdata.php');
 		// Installation des données des autres modules cad theme profil font config, admin et core
 		$this->setData([$module, init::$defaultData[$module]]);
-
+		common::$coreNotices[] = $module;
 	}
 
 
