@@ -893,10 +893,9 @@ class layout extends common
         if ($this->getUser('password') === $this->getInput('ZWII_USER_PASSWORD')) {
             // Items de gauche
             $leftItems = '';
-            // Sélecteur de langues
+            // Sélecteur de cours
             if ($this->getUser('group') >= self::GROUP_TEACHER) {
                 $c = 0;
-                $leftItem = '';
                 foreach (self::$languages as $key => $value) {
                     if (is_dir(self::DATA_DIR . $key)) {
                         $c++;
@@ -910,6 +909,11 @@ class layout extends common
                     $leftItems .= '</select></li>';
                 }
             }
+            // Bouton Gérer les cours
+            $leftItems .= '<li>' . template::ico('cubes', [
+                'href' => helper::baseUrl() . 'course',
+                'help' => 'Cours'
+            ]) . '</li>';
             // Liste des pages
             if ($this->getUser('group') >= self::GROUP_TEACHER) {
                 $leftItems .= '<li><select id="barSelectPage">';
