@@ -2,7 +2,7 @@ course/id/tracking.json
 fichier plat contenant :
 userid, page, TS début, TS fin 
 
-course/content.json
+course/course.json
 BDD contenant les informations sur le cours
 - courseId identifiant du cours
 - enrolmentKey clé d'inscription, si non vide

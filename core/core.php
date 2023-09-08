@@ -82,13 +82,13 @@ class common
 		"user"
 	];
 	/*
-	   Cette variable est supprimée du test dans le routeur.
-	   public static $accessExclude = [
-		   'login',
-		   'logout',
-		   "maintenance",
-	   ];
-	   */
+					  Cette variable est supprimée du test dans le routeur.
+					  public static $accessExclude = [
+						  'login',
+						  'logout',
+						  "maintenance",
+					  ];
+					  */
 	private $data = [];
 	private $hierarchy = [
 		'all' => [],
@@ -205,6 +205,25 @@ class common
 		'profil' => '',
 	];
 
+	private $configFiles = [
+		'admin' => '',
+		'blacklist' => '',
+		'config' => '',
+		'core' => '',
+		'font' => '',
+		'theme' => '',
+		'user' => '',
+		'language' => '',
+		'profil' => '',
+	];
+
+	private $courseFiles = [
+		'page' => '',
+		'module' => '',
+		'course' => '',
+		'enrolment' => '',
+	];
+
 	public static $fontsWebSafe = [
 		'arial' => [
 			'name' => 'Arial',
@@ -270,19 +289,19 @@ class common
 
 	// Boutons de navigation dans la page
 	public static $navIconTemplate = [
-        'open' => [
-            'left' => 'left-open',
-            'right' => 'right-open',
-        ],
-        'dir' => [
-            'left' => 'left',
-            'right' => 'right-dir',
-        ],
-        'big' => [
-            'left' => 'left-big',
-            'right' => 'right-big',
-        ],
-    ];
+		'open' => [
+			'left' => 'left-open',
+			'right' => 'right-open',
+		],
+		'dir' => [
+			'left' => 'left',
+			'right' => 'right-dir',
+		],
+		'big' => [
+			'left' => 'left-big',
+			'right' => 'right-big',
+		],
+	];
 
 	/**
 	 * Constructeur commun
@@ -308,16 +327,33 @@ class common
 		}
 
 		// Instanciation de la classe des entrées / sorties
-		$this->jsonDB(self::$courseContent);
+		// Les fichiers de configuration
+		foreach ($this->configFiles as $module => $value) {
+			$this->initDB($module);
+		}
+		// Les fichiers de la page d'accueil
+		if (self::$courseContent === 'home') {
+			$this->initDB('page', self::$courseContent);
+			$this->initDB('module', self::$courseContent);
+		} else {
+			foreach ($this->courseFiles as $module => $value) {
+				$this->initDB($module, self::$courseContent);
+			}
+		}
 
-		// Installation fraîche, initialisation des modules
+		// Installation fraîche, initialisation de la configuration inexistante
 		if ($this->user === []) {
-			foreach ($this->dataFiles as $stageId => $item) {
-				$folder = $this->dataPath($stageId, self::$courseContent);
-				if (
-					file_exists($folder . $stageId . '.json') === false
-				) {
-					$this->initData($stageId, self::$courseContent);
+			// Charge la configuration
+			foreach ($this->configFiles as $stageId => $item) {
+				if (file_exists(self::DATA_DIR . $stageId . '.json') === false) {
+					$this->loadConfig($stageId);
+					common::$coreNotices[] = $stageId;
+				}
+			}
+			// Charge le site d'accueil
+			foreach ($this->courseFiles as $stageId => $item) {
+				if (file_exists(self::DATA_DIR . self::$courseContent . '/' . $stageId . '.json') === false) {
+					$this->loadCourse($stageId, self::$courseContent);
 					common::$coreNotices[] = $stageId;
 				}
 			}
@@ -549,10 +585,10 @@ class common
 	 * @param string contenu de la page
 	 * @return int nombre d'octets écrits ou erreur
 	 */
-	public function setPage($page, $value, $course)
+	public function setPage($page, $value, $path)
 	{
 
-		return file_put_contents(self::DATA_DIR . $course . '/content/' . $page . '.html', $value);
+		return file_put_contents(self::DATA_DIR . $path . '/content/' . $page . '.html', $value);
 	}
 
 
@@ -569,56 +605,65 @@ class common
 	}
 
 
-	public function jsonDB($course)
+	public function initDB($module, $path = '')
 	{
 		// Instanciation de la classe des entrées / sorties
-		// Récupère les descripteurs
-		foreach ($this->dataFiles as $keys => $value) {
-			// Constructeur  JsonDB;
-			$this->dataFiles[$keys] = new \Prowebcraft\JsonDb([
-				'name' => $keys . '.json',
-				'dir' => $this->dataPath($keys, $course),
-				'backup' => file_exists('site/data/.backup')
-			]);
-		}
+		// Constructeur  JsonDB;
+		$this->dataFiles[$module] = new \Prowebcraft\JsonDb([
+			'name' => $module . '.json',
+			'dir' => self::DATA_DIR . $path,
+			'backup' => file_exists('site/data/.backup')
+		]);
 	}
 
 	/**
-	 * Initialisation des données
-	 * @param string $module : nom du module à générer
-	 * @param string $course le dossier à créer, nom du cours
-	 * choix valides :  core config user theme page module
+	 * Initialisation des données sur un cours ou la page d'accueil
+	 * @param string $course : id du module à générer
+	 * @param string $path : le dossier à créer
+	 * Données valides : page ou module
 	 */
-	public function initData($module, $course)
+
+	public function loadCourse($module, $path = 'home')
 	{
+		// Pas d'initialsiation des données de cours pour l'accueil
+		if ($path === 'home' && 
+		($module === 'enrolment' || $module === 'course')) {
+			return;
+		}
+		
 		// Tableau avec les données vierges
 		require_once('core/module/install/ressource/defaultdata.php');
 
-		if (!file_exists(self::DATA_DIR . $course)) {
-			mkdir(self::DATA_DIR . $course, 0755);
+		// L'arborescence
+		if (!file_exists(self::DATA_DIR . $path)) {
+			mkdir(self::DATA_DIR . $path, 0755);
+		}
+		if (!file_exists(self::DATA_DIR . $path . '/content')) {
+			mkdir(self::DATA_DIR . $path . '/content', 0755);
+		}
+		// Les données par défaut
+		$this->setData([$module, init::$siteTemplate[$module]]);
+
+		// Création des pages
+		if ($module === 'page') {
+			foreach (init::$siteContent as $key => $value) {
+				$this->setPage($key, $value, $path);
+			}
 		}
 
-		if (
-			$module === 'page' ||
-			$module === 'module'
-		) {
-			// Création des sous-dossiers localisés
-			if (!file_exists(self::DATA_DIR . $course)) {
-				mkdir(self::DATA_DIR . $course, 0755);
-			}
-			if (!file_exists(self::DATA_DIR . $course . '/content')) {
-				mkdir(self::DATA_DIR . $course . '/content', 0755);
-			}
-			$this->setData([$module, init::$siteTemplate[$module]]);
-			// Création des pages
-			foreach (init::$siteContent as $key => $value) {
-				$this->setPage($key, $value, $course);
-			}
-			//file_put_contents(self::DATA_DIR . $course . '/content/' . init::$defaultDataI18n[$courseDefault]['page'][$pageId]['content'], $content);
-		} else {
-			// Installation des données des autres modules cad theme profil font config, admin et core
-			$this->setData([$module, init::$defaultData[$module]]);
-		}
+
+	}
+	/**
+	 * Initialisation des données
+	 * @param string $module : if du module à générer
+	 * choix valides :  core config user theme page module
+	 */
+	public function loadConfig($module)
+	{
+		// Tableau avec les données vierges
+		require_once('core/module/install/ressource/defaultdata.php');
+		// Installation des données des autres modules cad theme profil font config, admin et core
+		$this->setData([$module, init::$defaultData[$module]]);
 
 	}
 
@@ -941,7 +986,7 @@ class common
 		// Sauf pour les pages et les modules
 		if (
 			$id === 'page' ||
-			$id === 'module' 
+			$id === 'module'
 		) {
 			$folder = self::DATA_DIR . $course . '/';
 		} else {

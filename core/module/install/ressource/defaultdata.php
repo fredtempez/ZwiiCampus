@@ -877,6 +877,9 @@ class init extends common
 				]
 			]
 		],
+		'course' => [],
+		'enrolment' => [],
+		
 	];
 
 	public static $siteContent = [
