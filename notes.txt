@@ -5,13 +5,17 @@ userid, page, TS début, TS fin
 course/course.json
 BDD contenant les informations sur le cours
 - courseId identifiant du cours
-- enrolmentKey clé d'inscription, si non vide
-- accessStatus
+- access
     - 0 le cours est ouvert
     - 1 le cours est fermé
     - 2 le cours est ouvert entre les dates 
-    - dateOpened
-    - dateClosed
+    - openingDate
+    - closingDate
+- enrolment
+    - 0 l'accès est libre
+    - 1 l'accès s'effectue avec une clé d'inscription
+    - 2 l'accès se fait avec inscription par un enseignant 
+- enrolmentKey clé d'inscription, si non vide
 
 course/enrolment.json
 Détermine la liste des inscrits
