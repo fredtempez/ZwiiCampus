@@ -5,16 +5,21 @@ userid, page, TS début, TS fin
 course/course.json
 BDD contenant les informations sur le cours
 - courseId identifiant du cours
+- title
+- mentor enseignant responsable
+- description
 - access
     - 0 le cours est ouvert
-    - 1 le cours est fermé
-    - 2 le cours est ouvert entre les dates 
+    - 1 le cours est ouvert entre les dates
+    - 2 le cours est fermé
+
     - openingDate
     - closingDate
 - enrolment
-    - 0 l'accès est libre
-    - 1 l'accès s'effectue avec une clé d'inscription
-    - 2 l'accès se fait avec inscription par un enseignant 
+    - 0 accès est anonyme
+    - 1 accès libre
+    - 2 accès avec clé
+    - 3 manuel, le prof inscrits
 - enrolmentKey clé d'inscription, si non vide
 
 course/enrolment.json

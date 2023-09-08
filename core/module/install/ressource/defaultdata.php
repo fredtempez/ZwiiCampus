@@ -666,7 +666,8 @@ class init extends common
 				'permanent' => true,
 				'comment' => 'Contrôle total',
 			]
-		]
+			],
+		'course' => []
 	];
 	public static $siteTemplate = [
 		'page' => [
@@ -877,9 +878,6 @@ class init extends common
 				]
 			]
 		],
-		'course' => [],
-		'enrolment' => [],
-		
 	];
 
 	public static $siteContent = [
