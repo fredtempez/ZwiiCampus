@@ -1,12 +1,12 @@
 @charset "UTF-8";
 @font-face {
   font-family: 'zwiico';
-  src: url('../font/zwiico.eot?17976195');
-  src: url('../font/zwiico.eot?17976195#iefix') format('embedded-opentype'),
-       url('../font/zwiico.woff2?17976195') format('woff2'),
-       url('../font/zwiico.woff?17976195') format('woff'),
-       url('../font/zwiico.ttf?17976195') format('truetype'),
-       url('../font/zwiico.svg?17976195#zwiico') format('svg');
+  src: url('../font/zwiico.eot?8645815');
+  src: url('../font/zwiico.eot?8645815#iefix') format('embedded-opentype'),
+       url('../font/zwiico.woff2?8645815') format('woff2'),
+       url('../font/zwiico.woff?8645815') format('woff'),
+       url('../font/zwiico.ttf?8645815') format('truetype'),
+       url('../font/zwiico.svg?8645815#zwiico') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -16,7 +16,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: 'zwiico';
-    src: url('../font/zwiico.svg?17976195#zwiico') format('svg');
+    src: url('../font/zwiico.svg?8645815#zwiico') format('svg');
   }
 }
 */
@@ -56,8 +56,6 @@
 }
 
 .zwiico-plus-circled:before { content: '\2191'; } /* '↑' */
-.zwiico-logout:before { content: '\e800'; } /* '' */
-.zwiico-graduation-cap:before { content: '\e800'; } /* '' */
 .zwiico-plus:before { content: '\e801'; } /* '' */
 .zwiico-cancel:before { content: '\e802'; } /* '' */
 .zwiico-help:before { content: '\e803'; } /* '' */
@@ -123,6 +121,7 @@
 .zwiico-instagram:before { content: '\f16d'; } /* '' */
 .zwiico-box:before { content: '\f187'; } /* '' */
 .zwiico-vimeo:before { content: '\f194'; } /* '' */
+.zwiico-cube:before { content: '\f1b2'; } /* '' */
 .zwiico-cubes:before { content: '\f1b3'; } /* '' */
 .zwiico-steam:before { content: '\f1b6'; } /* '' */
 .zwiico-file-archive:before { content: '\f1c6'; } /* '' */
@@ -132,3 +131,4 @@
 .zwiico-pinterest:before { content: '\f231'; } /* '' */
 .zwiico-reddit:before { content: '\f281'; } /* '' */
 .zwiico-shopping-basket:before { content: '\f291'; } /* '' */
+.zwiico-logout:before { content: '🎓'; } /* '\1f393' */
