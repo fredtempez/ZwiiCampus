@@ -58,7 +58,8 @@ class course extends common
                 uniqid(),
                 [
                     'title' => $this->getInput('courseAddTitle',helper::FILTER_STRING_SHORT, true),
-                    'mentor' => $this->getInput('courseAddMentor'),
+                    'shortTitle' => $this->getInput('courseAddShortTitle',helper::FILTER_STRING_SHORT, true),
+                    'author' => $this->getInput('courseAddAuthor'),
                     'description' => $this->getInput('courseAddDescription', helper::FILTER_STRING_SHORT, true),
                     'access'  => $this->getInput('courseAddAccess'),
                     'openingDate'  => $this->getInput('courseOpeningDate', helper::FILTER_DATETIME),

@@ -18,14 +18,21 @@
                 <?php echo helper::translate('Paramètres'); ?>
             </h4>
             <div class="row">
-                <div class="col8">
+                <div class="col12">
                     <?php echo template::text('courseAddTitle', [
                         'label' => 'Titre'
                     ]); ?>
                 </div>
-                <div class="col4">
-                    <?php echo template::select('courseAddAccess', $module::$courseTeachers, [
-                        'label' => 'Mentor'
+            </div>
+            <div class="row">
+                <div class="col7">
+                    <?php echo template::text('courseAddShortTitle', [
+                        'label' => 'Titre court'
+                    ]); ?>
+                </div>
+                <div class="col5">
+                    <?php echo template::select('courseAddAuthor', $module::$courseTeachers, [
+                        'label' => 'Auteur'
                     ]); ?>
                 </div>
             </div>
@@ -66,7 +73,7 @@
                         'label' => 'Clé'
                     ]); ?>
                 </div>
+            </div>
         </div>
     </div>
-</div>
-<?php echo template::formClose(); ?>
+    <?php echo template::formClose(); ?>
