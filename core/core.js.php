@@ -527,7 +527,7 @@ $(document).ready(function () {
     /**
      * Sélection d'une langue du site
      */
-    $("select#barSelectLanguage").on("change", function () {
+    $("select#barSelectCourse").on("change", function () {
         // La langue courante ne déclenche pas de chargement
         var langSelected = $(this).val();
         var langSelected = langSelected.split("/");
@@ -542,7 +542,7 @@ $(document).ready(function () {
             langSelected[6] !== langSession
         ) {
             //$(location).attr("href", langUrl);
-            var select = document.getElementById("barSelectLanguage");
+            var select = document.getElementById("barSelectCourse");
             var selectedOption = select.options[select.selectedIndex];
             if (selectedOption.value !== "") {
                 window.location = selectedOption.value;            }

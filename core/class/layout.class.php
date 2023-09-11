@@ -895,19 +895,12 @@ class layout extends common
             $leftItems = '';
             // Sélecteur de cours
             if ($this->getUser('group') >= self::GROUP_TEACHER) {
-                $c = 0;
-                foreach (self::$languages as $key => $value) {
-                    if (is_dir(self::DATA_DIR . $key)) {
-                        $c++;
-                        $location = helper::baseUrl() . 'language/content/' . $key;
-                        $leftItem .= '<option name="' . $key . '" value="' . $location . '" ' . ($key === self::$courseContent ? 'selected' : '') . '>' . $value . '</option>';
-                    }
+                $leftItems .= '<li><select id="barSelectCourse" >';
+                $leftItems .= '<option name="' . helper::translate('Accueil') . '" value="' . helper::baseUrl() . 'course/swap/home" ' . ('home' === self::$courseContent ? 'selected' : '') . '>' . helper::translate('Accueil') . '</option>';
+                foreach ($this->getData(['course']) as $key => $value) {
+                    $leftItems .= '<option name="' . $value['shortTitle'] . '" value="' . helper::baseUrl() . 'course/swap/' . $key . '" ' . ($key === self::$courseContent ? 'selected' : '') . '>' . $value['shortTitle'] . '</option>';
                 }
-                if ($c > 1) {
-                    $leftItems .= '<li><select id="barSelectLanguage" >';
-                    $leftItems .= $leftItem;
-                    $leftItems .= '</select></li>';
-                }
+                $leftItems .= '</select></li>';
             }
             // Bouton Gérer les cours
             $leftItems .= '<li>' . template::ico('cubes', [
@@ -1216,26 +1209,6 @@ class layout extends common
                 }
             }
         }
-    }
-    /**
-     * Affiche le cadre avec les drapeaux sélectionnés
-     */
-    public function showi18n($lang)
-    {
-        if (
-            (isset($_SESSION['ZWII_COURSE'])
-                and $_SESSION['ZWII_COURSE'] === $lang
-            )
-        ) {
-            $select = ' class="i18nFlagSelected" ';
-        } else {
-            $select = ' class="i18nFlag" ';
-        }
-
-        $items = '<li>';
-        $items .= '<a href="' . helper::baseUrl() . 'language/content/' . $lang . '"><img ' . $select . ' alt="' . self::$languages[$lang] . '" src="' . helper::baseUrl(false) . 'core/vendor/i18n/png/' . $lang . '.png"/></a>';
-        $items .= '</li>';
-        return $items;
     }
 
     // Affiche une icône de navigation

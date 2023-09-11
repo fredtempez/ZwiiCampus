@@ -19,6 +19,8 @@ class course extends common
     public static $actions = [
         'index' => self::GROUP_TEACHER,
         'add' => self::GROUP_ADMIN,
+        // 
+        'swap' => self::GROUP_VISITOR,
     ];
 
     public static $courseAccess = [
@@ -90,5 +92,28 @@ class course extends common
             'view' => 'add'
         ]);
     }
+
+    	/*
+	 * Traitement du changement de langue
+	 * Fonction utilisée par le noyau
+	 */
+	public function swap()
+	{
+		// Cours sélectionnée
+		$courseId = $this->getUrl(2);
+
+		if (
+			is_dir(self::DATA_DIR . $courseId) &&
+			$this->getData(['course', $courseId])
+		) {
+			// Stocker la sélection
+			$_SESSION['ZWII_COURSE'] = $courseId;
+		}
+
+		// Valeurs en sortie
+		$this->addOutput([
+			'redirect' => helper::baseUrl()
+		]);
+	}
 
 }

@@ -30,7 +30,6 @@ class language extends common
 		// Éditer une langue de contenu
 		'delete' => self::GROUP_ADMIN,
 		// Effacer une langue de contenu ou de l'interface
-		'content' => self::GROUP_VISITOR,
 		'update' => self::GROUP_ADMIN,
 		'default' => self::GROUP_ADMIN
 	];
@@ -511,34 +510,6 @@ class language extends common
 		}
 	}
 
-	/*
-	 * Traitement du changement de langue
-	 * Fonction utilisée par le noyau
-	 */
-	public function content()
-	{
-		// Langue sélectionnée
-		$lang = $this->getUrl(2);
-		/**
-		 * Changement de la langue si
-		 * différe de la langue active
-		 * déjà initialisée
-		 * fait partie des langues installées
-		 */
 
-		if (
-			is_dir(self::DATA_DIR . $lang) &&
-			array_key_exists($lang, self::$languages) === true
-		) {
-
-			// Stocker la sélection
-			$_SESSION['ZWII_COURSE'] = $lang;
-		}
-
-		// Valeurs en sortie
-		$this->addOutput([
-			'redirect' => helper::baseUrl()
-		]);
-	}
 
 }
