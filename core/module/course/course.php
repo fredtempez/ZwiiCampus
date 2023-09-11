@@ -47,6 +47,9 @@ class course extends common
         ]);
     }
 
+    /**
+     * Ajoute un nouveau cours
+     */
     public function add()
     {
 
@@ -55,33 +58,42 @@ class course extends common
             $this->getUser('permission', __CLASS__, __FUNCTION__) === true &&
             $this->isPost()
         ) {
+            $courseId = uniqid();
             $this->setData([
                 'course',
-                uniqid(),
+                $courseId,
                 [
-                    'title' => $this->getInput('courseAddTitle',helper::FILTER_STRING_SHORT, true),
-                    'shortTitle' => $this->getInput('courseAddShortTitle',helper::FILTER_STRING_SHORT, true),
+                    'title' => $this->getInput('courseAddTitle', helper::FILTER_STRING_SHORT, true),
+                    'shortTitle' => $this->getInput('courseAddShortTitle', helper::FILTER_STRING_SHORT, true),
                     'author' => $this->getInput('courseAddAuthor'),
                     'description' => $this->getInput('courseAddDescription', helper::FILTER_STRING_SHORT, true),
-                    'access'  => $this->getInput('courseAddAccess'),
-                    'openingDate'  => $this->getInput('courseOpeningDate', helper::FILTER_DATETIME),
-                    'closingDate'  => $this->getInput('courseClosingDate', helper::FILTER_DATETIME),
+                    'access' => $this->getInput('courseAddAccess'),
+                    'openingDate' => $this->getInput('courseOpeningDate', helper::FILTER_DATETIME),
+                    'closingDate' => $this->getInput('courseClosingDate', helper::FILTER_DATETIME),
                     'enrolment' => $this->getInput('courseAddEnrolment'),
                     'enrolmentKey' => $this->getInput('courseAddEnrolmentKey'),
                 ]
             ]);
 
-			// Valeurs en sortie
-			$this->addOutput([
-				'redirect' => helper::baseUrl() . 'course',
-				'notification' => helper::translate('Cours créé'),
-				'state' =>  true
-			]);
+            // Créer la structure de données
+            mkdir(self::DATA_DIR . $courseId);
+            // BDD des inscrits
+            file_put_contents(self::DATA_DIR . $courseId . '/enrolment.json', json_encode(array()));
+
+
+
+            // Valeurs en sortie
+            $this->addOutput([
+                'redirect' => helper::baseUrl() . 'course',
+                'notification' => helper::translate('Cours créé'),
+                'state' => true
+            ]);
         }
 
+        // Liste des enseignants pour le sélecteur d'auteurs
         $teachers = $this->getData(['user']);
         foreach ($teachers as $teacherId => $teacherInfo) {
-            if ( $teacherInfo["group"] >= 2 ) {
+            if ($teacherInfo["group"] >= 2) {
                 self::$courseTeachers[$teacherId] = $teacherInfo["firstname"] . ' ' . $teacherInfo["lastname"];
             }
         }
@@ -93,27 +105,28 @@ class course extends common
         ]);
     }
 
-    	/*
-	 * Traitement du changement de langue
-	 * Fonction utilisée par le noyau
-	 */
-	public function swap()
-	{
-		// Cours sélectionnée
-		$courseId = $this->getUrl(2);
+    /*
+     * Traitement du changement de langue
+     * Fonction utilisée par le noyau
+     */
+    public function swap()
+    {
+        // Cours sélectionnée
+        $courseId = $this->getUrl(2);
+        if (
+            // home n'est pas présent dans la base de donénes des cours
+            $courseId === 'home' ||
+            ( is_dir(self::DATA_DIR . $courseId) &&
+                $this->getData(['course', $courseId]))
+        ) {
+            // Stocker la sélection
+            $_SESSION['ZWII_COURSE'] = $courseId;
+        }
 
-		if (
-			is_dir(self::DATA_DIR . $courseId) &&
-			$this->getData(['course', $courseId])
-		) {
-			// Stocker la sélection
-			$_SESSION['ZWII_COURSE'] = $courseId;
-		}
-
-		// Valeurs en sortie
-		$this->addOutput([
-			'redirect' => helper::baseUrl()
-		]);
-	}
+        // Valeurs en sortie
+        $this->addOutput([
+            'redirect' => helper::baseUrl()
+        ]);
+    }
 
 }

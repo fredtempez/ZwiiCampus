@@ -83,13 +83,13 @@ class common
 		'user'
 	];
 	/*
-						 Cette variable est supprimée du test dans le routeur.
-						 public static $accessExclude = [
-							 'login',
-							 'logout',
-							 'maintenance',
-						 ];
-						 */
+									 Cette variable est supprimée du test dans le routeur.
+									 public static $accessExclude = [
+										 'login',
+										 'logout',
+										 'maintenance',
+									 ];
+									 */
 	private $data = [];
 	private $hierarchy = [
 		'all' => [],
@@ -223,8 +223,6 @@ class common
 	private $courseFiles = [
 		'page' => '',
 		'module' => '',
-		'course' => '',
-		'enrolment' => '',
 	];
 
 	public static $fontsWebSafe = [
@@ -333,15 +331,11 @@ class common
 		foreach ($this->configFiles as $module => $value) {
 			$this->initDB($module);
 		}
-		// Les fichiers de la page d'accueil
-		if (self::$courseContent === 'home') {
-			$this->initDB('page', self::$courseContent);
-			$this->initDB('module', self::$courseContent);
-		} else {
-			foreach ($this->courseFiles as $module => $value) {
-				$this->initDB($module, self::$courseContent);
-			}
+		// Les fichiers des cours
+		foreach ($this->courseFiles as $module => $value) {
+			$this->initDB($module, self::$courseContent);
 		}
+
 
 		// Installation fraîche, initialisation de la configuration inexistante
 		// Nécessaire pour le constructeur
@@ -353,15 +347,15 @@ class common
 				}
 			}
 			// Charge le site d'accueil
-			if (self::$courseContent === 'home') {
-				foreach ($this->courseFiles as $stageId => $item) {
-					if (
-						file_exists(self::DATA_DIR . self::$courseContent . '/' . $stageId . '.json') === false
-					) {
-						$this->saveCourse($stageId, self::$courseContent);
-					}
+			//if (self::$courseContent === 'home') {
+			foreach ($this->courseFiles as $stageId => $item) {
+				if (
+					file_exists(self::DATA_DIR . self::$courseContent . '/' . $stageId . '.json') === false
+				) {
+					$this->saveCourse($stageId);
 				}
 			}
+			//}
 		}
 
 		// Récupère un utilisateur connecté
@@ -627,35 +621,34 @@ class common
 	 * Données valides : page ou module
 	 */
 
-	public function saveCourse($module, $path)
+	public function saveCourse($module)
 	{
-		// Pas d'initialsiation des données de cours pour l'accueil
-		if (
-			$path === 'home' &&
-			($module === 'enrolment' || $module === 'course')
-		) {
-			return;
-		}
 
 		// Tableau avec les données vierges
 		require_once('core/module/install/ressource/defaultdata.php');
 
 		// L'arborescence
-		if (!file_exists(self::DATA_DIR . $path)) {
-			mkdir(self::DATA_DIR . $path, 0755);
+		if (!file_exists(self::DATA_DIR . self::$courseContent)) {
+			mkdir(self::DATA_DIR . self::$courseContent, 0755);
 		}
-		if (!file_exists(self::DATA_DIR . $path . '/content')) {
-			mkdir(self::DATA_DIR . $path . '/content', 0755);
+		if (!file_exists(self::DATA_DIR . self::$courseContent . '/content')) {
+			mkdir(self::DATA_DIR . self::$courseContent . '/content', 0755);
 		}
-		// Les données par défaut
-		$this->setData([$module, init::$siteTemplate[$module]]);
-
-		// Création des pages
+		
+		/*
+		* Le site d'accueil, home ne dispose pas des mêmes modèles
+		*/
+		$template = self::$courseContent === 'home' ? init::$siteTemplate :init:: $courseDefault;
+		// Création de page ou de module
+		$this->setData([$module, $template[$module]]);
+		// Création des pages 
 		if ($module === 'page') {
-			foreach (init::$siteContent as $key => $value) {
-				$this->setPage($key, $value, $path);
+			$content = self::$courseContent === 'home' ? init::$siteContent : init::$courseContent;
+			foreach ($content as $key => $value) {
+				$this->setPage($key, $value, self::$courseContent);
 			}
 		}
+
 		common::$coreNotices[] = $module;
 
 	}

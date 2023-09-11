@@ -896,9 +896,9 @@ class layout extends common
             // Sélecteur de cours
             if ($this->getUser('group') >= self::GROUP_TEACHER) {
                 $leftItems .= '<li><select id="barSelectCourse" >';
-                $leftItems .= '<option name="' . helper::translate('Accueil') . '" value="' . helper::baseUrl() . 'course/swap/home" ' . ('home' === self::$courseContent ? 'selected' : '') . '>' . helper::translate('Accueil') . '</option>';
+                $leftItems .= '<option name="' . helper::translate('Accueil') . '" value="' . helper::baseUrl(true) . 'course/swap/home" ' . ('home' === self::$courseContent ? 'selected' : '') . '>' . helper::translate('Accueil') . '</option>';
                 foreach ($this->getData(['course']) as $key => $value) {
-                    $leftItems .= '<option name="' . $value['shortTitle'] . '" value="' . helper::baseUrl() . 'course/swap/' . $key . '" ' . ($key === self::$courseContent ? 'selected' : '') . '>' . $value['shortTitle'] . '</option>';
+                    $leftItems .= '<option name="' . $value['shortTitle'] . '" value="' .  helper::baseUrl(true) . 'course/swap/' . $key . '" ' . ($key === self::$courseContent ? 'selected' : '') . '>' . $value['shortTitle'] . '</option>';
                 }
                 $leftItems .= '</select></li>';
             }

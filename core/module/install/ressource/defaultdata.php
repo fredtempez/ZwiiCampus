@@ -666,9 +666,10 @@ class init extends common
 				'permanent' => true,
 				'comment' => 'Contrôle total',
 			]
-			],
+		],
 		'course' => []
 	];
+
 	public static $siteTemplate = [
 		'page' => [
 			'accueil' => [
@@ -693,6 +694,9 @@ class init extends common
 				'block' => '12',
 				'barLeft' => '',
 				'barRight' => '',
+				'navLeft' => 'none',
+				'navRight' => 'none',
+				'navTemplate' => 'dir',
 				'displayMenu' => 'none',
 				'hideMenuSide' => false,
 				'hideMenuChildren' => false,
@@ -721,6 +725,9 @@ class init extends common
 				'block' => '12',
 				'barLeft' => '',
 				'barRight' => '',
+				'navLeft' => 'none',
+				'navRight' => 'none',
+				'navTemplate' => 'dir',
 				'displayMenu' => 'none',
 				'hideMenuSide' => false,
 				'hideMenuChildren' => false,
@@ -749,6 +756,9 @@ class init extends common
 				'block' => '12',
 				'barLeft' => '',
 				'barRight' => '',
+				'navLeft' => 'none',
+				'navRight' => 'none',
+				'navTemplate' => 'dir',
 				'displayMenu' => 'none',
 				'hideMenuSide' => false,
 				'hideMenuHead' => false,
@@ -778,6 +788,9 @@ class init extends common
 				'block' => '12',
 				'barLeft' => '',
 				'barRight' => '',
+				'navLeft' => 'none',
+				'navRight' => 'none',
+				'navTemplate' => 'dir',
 				'displayMenu' => 'none',
 				'hideMenuSide' => true,
 				'hideMenuHead' => true,
@@ -807,6 +820,9 @@ class init extends common
 				'block' => '12',
 				'barLeft' => '',
 				'barRight' => '',
+				'navLeft' => 'none',
+				'navRight' => 'none',
+				'navTemplate' => 'dir',
 				'displayMenu' => 'none',
 				'hideMenuSide' => false,
 				'hideMenuChildren' => false,
@@ -835,6 +851,9 @@ class init extends common
 				'block' => '12',
 				'barLeft' => '',
 				'barRight' => '',
+				'navLeft' => 'none',
+				'navRight' => 'none',
+				'navTemplate' => 'dir',
 				'displayMenu' => 'none',
 				'hideMenuSide' => false,
 				'hideMenuChildren' => false,
@@ -951,6 +970,50 @@ class init extends common
 		'erreur404' => [
 			'content' => '<h2 style="text-align: center;">Oups ! La page demandée est introuvable...</h2><p style="text-align: center;">Personnalisez cette page à votre convenance sans qu\'elle apparaisse dans les menus.<p>'
 		]
+	];
+
+	public static $courseDefault = [
+		'page' => [
+			'accueil' => [
+				'typeMenu' => 'text',
+				'iconUrl' => '',
+				'disable' => false,
+				'content' => 'accueil.html',
+				'hideTitle' => false,
+				'homePageId' => true,
+				'breadCrumb' => false,
+				'metaDescription' => '',
+				'metaTitle' => '',
+				'moduleId' => '',
+				'modulePosition' => 'bottom',
+				'parentPageId' => '',
+				'position' => 1,
+				'group' => self::GROUP_VISITOR,
+				'profil' => 0,
+				'targetBlank' => false,
+				'title' => 'Accueil',
+				'shortTitle' => 'Accueil',
+				'block' => '12',
+				'barLeft' => '',
+				'barRight' => '',
+				'navLeft' => 'none',
+				'navRight' => 'none',
+				'navTemplate' => 'dir',
+				'displayMenu' => 'none',
+				'hideMenuSide' => false,
+				'hideMenuChildren' => false,
+				'extraPosition' => false,
+				'css' => '',
+				'js' => ''
+			],
+		],
+		'module' => []
+	];
+
+	public static $courseContent = [
+		'accueil' => [
+			'content' => '<h2>Bienvenue sur votre nouveau Cours !</h2>'
+		],
 	];
 
 }
