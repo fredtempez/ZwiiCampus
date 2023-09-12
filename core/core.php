@@ -352,7 +352,7 @@ class common
 				if (
 					file_exists(self::DATA_DIR . self::$courseContent . '/' . $stageId . '.json') === false
 				) {
-					$this->saveCourse($stageId);
+					$this->initData($stageId);
 				}
 			}
 			//}
@@ -621,7 +621,7 @@ class common
 	 * Données valides : page ou module
 	 */
 
-	public function saveCourse($module)
+	public function initData($module)
 	{
 
 		// Tableau avec les données vierges
