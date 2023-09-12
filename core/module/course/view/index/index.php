@@ -14,3 +14,4 @@
         ]); ?>
     </div>
 </div>
+<?php echo template::table([3 , 3, 4, 1, 1], $module::$courses, ['Titre court', 'Auteur', 'Description', '', '']); ?>

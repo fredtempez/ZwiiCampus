@@ -51,13 +51,13 @@
                 </div>
                 <div class="col4">
                     <?php echo template::date('courseOpeningDate', [
-                        'type' => 'date',
+                        'type' => 'datetime-local',
                         'label' => 'Ouverture',
                     ]); ?>
                 </div>
                 <div class="col4">
                     <?php echo template::date('courseClosingDate', [
-                        'type' => 'date',
+                        'type' => 'datetime-local',
                         'label' => 'Fermeture',
                     ]); ?>
                 </div>
