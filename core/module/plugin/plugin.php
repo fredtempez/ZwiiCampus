@@ -808,15 +808,6 @@ class plugin extends common
 		}
 		// Bouton d'importation des données d'un module spécifique
 		if (count(explode('/', $this->getUrl())) === 6) {
-			// Action interdite
-			if ($this->checkCSRF()) {
-				// Valeurs en sortie
-				$this->addOutput([
-					'redirect' => helper::baseUrl() . 'plugin',
-					'state' => false,
-					'notification' => helper::translate('Action interdite')
-				]);
-			}
 
 			// Traitement
 
