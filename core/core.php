@@ -170,7 +170,7 @@ class common
 	// Langue de l'interface sélectionnée
 	public static $i18nUI = 'fr_FR';
 	// Langues de contenu
-	public static $courseContent = 'home';
+	public static $siteContent = 'home';
 	public static $languages = [
 		'de' => 'Deutsch',
 		'en_EN' => 'English',
@@ -220,7 +220,7 @@ class common
 		'profil' => '',
 	];
 
-	private $courseFiles = [
+	private $contentFiles = [
 		'page' => '',
 		'module' => '',
 	];
@@ -324,7 +324,7 @@ class common
 		// Déterminer le contenu du site
 		if (isset($_SESSION['ZWII_COURSE'])) {
 			// Déterminé par la session présente
-			self::$courseContent = $_SESSION['ZWII_COURSE'];
+			self::$siteContent = $_SESSION['ZWII_COURSE'];
 		}
 		// Instanciation de la classe des entrées / sorties
 		// Les fichiers de configuration
@@ -332,8 +332,8 @@ class common
 			$this->initDB($module);
 		}
 		// Les fichiers des cours
-		foreach ($this->courseFiles as $module => $value) {
-			$this->initDB($module, self::$courseContent);
+		foreach ($this->contentFiles as $module => $value) {
+			$this->initDB($module, self::$siteContent);
 		}
 
 
@@ -347,10 +347,10 @@ class common
 				}
 			}
 			// Charge le site d'accueil
-			//if (self::$courseContent === 'home') {
-			foreach ($this->courseFiles as $stageId => $item) {
+			//if (self::$siteContent === 'home') {
+			foreach ($this->contentFiles as $stageId => $item) {
 				if (
-					file_exists(self::DATA_DIR . self::$courseContent . '/' . $stageId . '.json') === false
+					file_exists(self::DATA_DIR . self::$siteContent . '/' . $stageId . '.json') === false
 				) {
 					$this->initData($stageId);
 				}
@@ -628,24 +628,24 @@ class common
 		require_once('core/module/install/ressource/defaultdata.php');
 
 		// L'arborescence
-		if (!file_exists(self::DATA_DIR . self::$courseContent)) {
-			mkdir(self::DATA_DIR . self::$courseContent, 0755);
+		if (!file_exists(self::DATA_DIR . self::$siteContent)) {
+			mkdir(self::DATA_DIR . self::$siteContent, 0755);
 		}
-		if (!file_exists(self::DATA_DIR . self::$courseContent . '/content')) {
-			mkdir(self::DATA_DIR . self::$courseContent . '/content', 0755);
+		if (!file_exists(self::DATA_DIR . self::$siteContent . '/content')) {
+			mkdir(self::DATA_DIR . self::$siteContent . '/content', 0755);
 		}
 		
 		/*
 		* Le site d'accueil, home ne dispose pas des mêmes modèles
 		*/
-		$template = self::$courseContent === 'home' ? init::$siteTemplate :init:: $courseDefault;
+		$template = self::$siteContent === 'home' ? init::$siteTemplate :init:: $courseDefault;
 		// Création de page ou de module
 		$this->setData([$module, $template[$module]]);
 		// Création des pages 
 		if ($module === 'page') {
-			$content = self::$courseContent === 'home' ? init::$siteContent : init::$courseContent;
+			$content = self::$siteContent === 'home' ? init::$siteContent : init::$courseContent;
 			foreach ($content as $key => $value) {
-				$this->setPage($key, $value, self::$courseContent);
+				$this->setPage($key, $value, self::$siteContent);
 			}
 		}
 

@@ -531,19 +531,19 @@ class plugin extends common
 								$infoModules[$pagesInfos[$keyi18n][$keyPage]['moduleId']]['version'],
 								template::flag($keyi18n, '20px') . '&nbsp<a href ="' . helper::baseUrl() . $keyPage . '" target="_blank">' . $pagesInfos[$keyi18n][$keyPage]['title'] . ' (' . $keyPage . ')</a>',
 								template::button('dataExport' . $keyPage, [
-									'href' => helper::baseUrl() . $this->getUrl(0) . '/dataExport/filemanager/' . self::$courseContent . '/' . $pagesInfos[$keyi18n][$keyPage]['moduleId'] . '/' . $keyPage,
+									'href' => helper::baseUrl() . $this->getUrl(0) . '/dataExport/filemanager/' . self::$siteContent . '/' . $pagesInfos[$keyi18n][$keyPage]['moduleId'] . '/' . $keyPage,
 									// appel de fonction vaut exécution, utiliser un paramètre
 									'value' => template::ico('download-cloud'),
 									'help' => 'Sauvegarder les données du module dans le gestionnaire de fichiers'
 								]),
 								template::button('dataExport' . $keyPage, [
-									'href' => helper::baseUrl() . $this->getUrl(0) . '/dataExport/download/' . self::$courseContent . '/' . $pagesInfos[$keyi18n][$keyPage]['moduleId'] . '/' . $keyPage,
+									'href' => helper::baseUrl() . $this->getUrl(0) . '/dataExport/download/' . self::$siteContent . '/' . $pagesInfos[$keyi18n][$keyPage]['moduleId'] . '/' . $keyPage,
 									// appel de fonction vaut exécution, utiliser un paramètre
 									'value' => template::ico('download'),
 									'help' => 'Sauvegarder et télécharger les données du module'
 								]),
 								template::button('dataDelete' . $keyPage, [
-									'href' => helper::baseUrl() . $this->getUrl(0) . '/dataDelete/' . self::$courseContent . '/' . $pagesInfos[$keyi18n][$keyPage]['moduleId'] . '/' . $keyPage,
+									'href' => helper::baseUrl() . $this->getUrl(0) . '/dataDelete/' . self::$siteContent . '/' . $pagesInfos[$keyi18n][$keyPage]['moduleId'] . '/' . $keyPage,
 									// appel de fonction vaut exécution, utiliser un paramètre
 									'value' => template::ico('trash'),
 									'class' => 'buttonRed dataDelete',
