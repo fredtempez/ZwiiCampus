@@ -494,8 +494,8 @@ class template
                 $lang = $langId;
                 break;
             case 'selected':
-                if (isset($_SESSION['ZWII_COURSE'])) {
-                    $lang = $_SESSION['ZWII_COURSE'];
+                if (isset($_SESSION['ZWII_SITE_CONTENT'])) {
+                    $lang = $_SESSION['ZWII_SITE_CONTENT'];
                 }
         }
         return '<img class="flag" src="' . helper::baseUrl(false) . 'core/vendor/i18n/png/' . $lang . '.png"

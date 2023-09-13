@@ -322,9 +322,9 @@ class common
 		// $this->input['_SESSION'] = $_SESSION;
 
 		// Déterminer le contenu du site
-		if (isset($_SESSION['ZWII_COURSE'])) {
+		if (isset($_SESSION['ZWII_SITE_CONTENT'])) {
 			// Déterminé par la session présente
-			self::$siteContent = $_SESSION['ZWII_COURSE'];
+			self::$siteContent = $_SESSION['ZWII_SITE_CONTENT'];
 		}
 		// Instanciation de la classe des entrées / sorties
 		// Les fichiers de configuration

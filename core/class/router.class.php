@@ -514,7 +514,7 @@ class core extends common
 						is_array($pagesId['page']) &&
 						array_key_exists($this->getUrl(0), $pagesId['page'])
 					) {
-						$_SESSION['ZWII_COURSE'] = $key;
+						$_SESSION['ZWII_SITE_CONTENT'] = $key;
 						header('Refresh:0; url=' . helper::baseUrl() . $this->getUrl(0));
 						exit();
 					}

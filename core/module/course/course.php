@@ -219,7 +219,7 @@ class course extends common
                 $this->getData(['course', $courseId]))
         ) {
             // Stocker la sélection
-            $_SESSION['ZWII_COURSE'] = $courseId;
+            $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
         }
 
         // Valeurs en sortie

@@ -121,9 +121,9 @@ class install extends common
 				self::$i18nUI = array_key_exists(self::$i18nUI, self::$languages) ? self::$i18nUI : 'fr_FR';
 
 				// Création du dossier de cours avec le marqueur de langue par défaut
-				if (!is_dir(self::DATA_DIR . $_SESSION['ZWII_COURSE'])) {
-					mkdir(self::DATA_DIR . $_SESSION['ZWII_COURSE']);
-					touch(self::DATA_DIR . $_SESSION['ZWII_COURSE'] . '/.default');
+				if (!is_dir(self::DATA_DIR . $_SESSION['ZWII_SITE_CONTENT'])) {
+					mkdir(self::DATA_DIR . $_SESSION['ZWII_SITE_CONTENT']);
+					touch(self::DATA_DIR . $_SESSION['ZWII_SITE_CONTENT'] . '/.default');
 				}
 				// Création de l'utilisateur si les données sont complétées.
 				// success retour de l'enregistrement des données
@@ -139,7 +139,7 @@ class install extends common
 						'signature' => 1,
 						'mail' => $userMail,
 						'password' => $this->getInput('installPassword', helper::FILTER_PASSWORD, true),
-						'language' => $_SESSION['ZWII_COURSE']
+						'language' => $_SESSION['ZWII_SITE_CONTENT']
 					]
 				]);
 
