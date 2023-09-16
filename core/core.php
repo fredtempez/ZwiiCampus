@@ -205,6 +205,7 @@ class common
 		'user' => '',
 		'language' => '',
 		'profil' => '',
+		'enrolment'  => '',
 	];
 
 	private $configFiles = [
@@ -218,6 +219,7 @@ class common
 		'user' => '',
 		'language' => '',
 		'profil' => '',
+		'enrolment'  => '',
 	];
 
 	private $contentFiles = [
@@ -347,7 +349,6 @@ class common
 				}
 			}
 			// Charge le site d'accueil
-			//if (self::$siteContent === 'home') {
 			foreach ($this->contentFiles as $stageId => $item) {
 				if (
 					file_exists(self::DATA_DIR . self::$siteContent . '/' . $stageId . '.json') === false
@@ -355,7 +356,7 @@ class common
 					$this->initData($stageId);
 				}
 			}
-			//}
+
 		}
 
 		// Récupère un utilisateur connecté
@@ -825,7 +826,6 @@ class common
 			usleep(10000);
 		}
 	}
-
 
 	/**
 	 * Accède à une valeur des variables http (ordre de recherche en l'absence de type : _COOKIE, _POST)

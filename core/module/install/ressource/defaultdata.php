@@ -667,7 +667,8 @@ class init extends common
 				'comment' => 'Contrôle total',
 			]
 		],
-		'course' => []
+		'course' => [],
+		'enrolment' => []
 	];
 
 	public static $siteTemplate = [

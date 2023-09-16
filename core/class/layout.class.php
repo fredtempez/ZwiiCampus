@@ -898,15 +898,17 @@ class layout extends common
                 $leftItems .= '<li><select id="barSelectCourse" >';
                 $leftItems .= '<option name="' . helper::translate('Accueil') . '" value="' . helper::baseUrl(true) . 'course/swap/home" ' . ('home' === self::$siteContent ? 'selected' : '') . '>' . helper::translate('Accueil') . '</option>';
                 foreach ($this->getData(['course']) as $key => $value) {
-                    $leftItems .= '<option name="' . $value['shortTitle'] . '" value="' .  helper::baseUrl(true) . 'course/swap/' . $key . '" ' . ($key === self::$siteContent ? 'selected' : '') . '>' . $value['shortTitle'] . '</option>';
+                    $leftItems .= '<option name="' . $value['shortTitle'] . '" value="' . helper::baseUrl(true) . 'course/swap/' . $key . '" ' . ($key === self::$siteContent ? 'selected' : '') . '>' . $value['shortTitle'] . '</option>';
                 }
                 $leftItems .= '</select></li>';
             }
             // Bouton Gérer les cours
-            $leftItems .= '<li>' . template::ico('cubes', [
-                'href' => helper::baseUrl() . 'course',
-                'help' => 'Cours'
-            ]) . '</li>';
+            if ($this->getUser('group') >= self::GROUP_ADMIN) {
+                $leftItems .= '<li>' . template::ico('cubes', [
+                    'href' => helper::baseUrl() . 'course',
+                    'help' => 'Cours'
+                ]) . '</li>';
+            }
             // Liste des pages
             if ($this->getUser('group') >= self::GROUP_TEACHER) {
                 $leftItems .= '<li><select id="barSelectPage">';

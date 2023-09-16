@@ -44,7 +44,7 @@ class course extends common
     public function index()
     {
         $courseIdShortTitle = helper::arrayColumn($this->getData(['course']), 'shortTitle');
-        ksort( $courseIdShortTitle);
+        ksort($courseIdShortTitle);
         foreach ($courseIdShortTitle as $courseId => $courseTitle) {
             self::$courses[] = [
                 $courseTitle,
@@ -64,6 +64,7 @@ class course extends common
 
             ];
         }
+        //var_dump($this->getCourseHierarchy(1, 1));
         // Valeurs en sortie
         $this->addOutput([
             'title' => helper::translate('Cours'),
@@ -83,13 +84,14 @@ class course extends common
             $this->isPost()
         ) {
             $courseId = uniqid();
+            $author = $this->getInput('courseAddAuthor');
             $this->setData([
                 'course',
                 $courseId,
                 [
                     'title' => $this->getInput('courseAddTitle', helper::FILTER_STRING_SHORT, true),
                     'shortTitle' => $this->getInput('courseAddShortTitle', helper::FILTER_STRING_SHORT, true),
-                    'author' => $this->getInput('courseAddAuthor'),
+                    'author' => $author,
                     'description' => $this->getInput('courseAddDescription', helper::FILTER_STRING_SHORT, true),
                     'access' => $this->getInput('courseAddAccess'),
                     'openingDate' => $this->getInput('courseOpeningDate', helper::FILTER_DATETIME),
@@ -101,8 +103,16 @@ class course extends common
 
             // Créer la structure de données
             mkdir(self::DATA_DIR . $courseId);
+
             // BDD des inscrits
-            file_put_contents(self::DATA_DIR . $courseId . '/enrolment.json', json_encode(array()));
+            $this->setData([
+                'enrolment',
+                $courseId,
+                [
+                    'teacher' => $author,
+                    'students' => []
+                ]
+            ]);
 
             // Valeurs en sortie
             $this->addOutput([
@@ -127,29 +137,35 @@ class course extends common
         ]);
     }
 
-    public function delete() {
+    public function delete()
+    {
 
         if (
-			$this->getUser('permission', __CLASS__, __FUNCTION__) !== true ||
+            $this->getUser('permission', __CLASS__, __FUNCTION__) !== true ||
             // Le cours n'existe pas
-			$this->getData(['course', $this->getUrl(2)]) === null
-			// Groupe insuffisant
-			and ($this->getUrl('group') < self::GROUP_TEACHER)
-		) {
-			// Valeurs en sortie
-			$this->addOutput([
-				'access' => false
-			]);
-			// Suppression
-		} else {
-			$this->deleteData(['course', $this->getUrl(2)]);
-			// Valeurs en sortie
-			$this->addOutput([
-				'redirect' => helper::baseUrl() . 'course',
-				'notification' => helper::translate('Cours supprimé'),
-				'state' => true
-			]);
-		}
+            $this->getData(['course', $this->getUrl(2)]) === null
+            // Groupe insuffisant
+            and ($this->getUrl('group') < self::GROUP_TEACHER)
+        ) {
+            // Valeurs en sortie
+            $this->addOutput([
+                'access' => false
+            ]);
+            // Suppression
+        } else {
+            $this->deleteData(['course', $this->getUrl(2)]);
+            $this->deleteData(['enrolment', $this->getUrl(2)]);
+            if (is_dir(self::DATA_DIR . $this->getUrl(2))) {
+                $this->deleteDir(self::DATA_DIR . $this->getUrl(2));
+            }
+
+            // Valeurs en sortie
+            $this->addOutput([
+                'redirect' => helper::baseUrl() . 'course',
+                'notification' => helper::translate('Cours supprimé'),
+                'state' => true
+            ]);
+        }
 
     }
 
@@ -165,19 +181,31 @@ class course extends common
             $this->isPost()
         ) {
             $courseId = $this->getUrl(2);
+            $author = $this->getInput('courseAddAuthor');
             $this->setData([
                 'course',
                 $courseId,
                 [
                     'title' => $this->getInput('courseEditTitle', helper::FILTER_STRING_SHORT, true),
                     'shortTitle' => $this->getInput('courseEditShortTitle', helper::FILTER_STRING_SHORT, true),
-                    'author' => $this->getInput('courseEditAuthor'),
+                    'author' =>$author,
                     'description' => $this->getInput('courseEditDescription', helper::FILTER_STRING_SHORT, true),
-                    'access' => $this->getInput('courseEditAccess'),
+                    'access' => $this->getInput('courseEditAccess', helper::FILTER_INT),
                     'openingDate' => $this->getInput('courseOpeningDate', helper::FILTER_DATETIME),
                     'closingDate' => $this->getInput('courseClosingDate', helper::FILTER_DATETIME),
-                    'enrolment' => $this->getInput('courseEditEnrolment'),
+                    'enrolment' => $this->getInput('courseEditEnrolment', helper::FILTER_INT),
                     'enrolmentKey' => $this->getInput('courseEditEnrolmentKey'),
+                ]
+            ]);
+
+            // BDD des inscrits
+            $students = is_null($this->getData(['enrolment', $courseId, 'students'])) ? [] : $this->getData([ 'enrolment', $courseId, 'students']);
+            $this->setData([
+                'enrolment',
+                $courseId,
+                [
+                    'teacher' => $author,
+                    'students' => $students
                 ]
             ]);
 
@@ -226,6 +254,36 @@ class course extends common
         $this->addOutput([
             'redirect' => helper::baseUrl()
         ]);
+    }
+
+    /**
+     * Retourne un tableau des cours 
+     * @param string $access
+     *      - 0 le cours est ouvert
+     *      - 1 le cours est ouvert entre les dates
+     *      - 2 le cours est fermé
+     * @param string $enrolment 
+     *     - 0 accès est anonyme
+     *     - 1 accès libre
+     *     - 2 accès avec clé
+     *     - 3 manuel, le prof inscrits
+     */
+    public function getCourseHierarchy($access = null, $enrolment = null)
+    {
+        $courses = $this->getData(['course']);
+        $response = [];
+        foreach ($courses as $courseId => $courseValues) {
+            $response[] = ($access === $courseValues['access'] || $access === null)
+                ? $courseId : '';
+            $response[] = ($enrolment === $courseValues['enrolment'] || $enrolment === null)
+                ? $courseId : '';
+        }
+        $response = array_unique($response);
+        $response = array_filter($response, function ($value) {
+            // Supprime les éléments vides (null, "", 0, false, etc.)
+            return !empty($value);
+        });
+        return $response;
     }
 
 }
