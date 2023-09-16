@@ -188,7 +188,7 @@ class course extends common
                 [
                     'title' => $this->getInput('courseEditTitle', helper::FILTER_STRING_SHORT, true),
                     'shortTitle' => $this->getInput('courseEditShortTitle', helper::FILTER_STRING_SHORT, true),
-                    'author' =>$author,
+                    'author' => $author,
                     'description' => $this->getInput('courseEditDescription', helper::FILTER_STRING_SHORT, true),
                     'access' => $this->getInput('courseEditAccess', helper::FILTER_INT),
                     'openingDate' => $this->getInput('courseOpeningDate', helper::FILTER_DATETIME),
@@ -254,36 +254,6 @@ class course extends common
         $this->addOutput([
             'redirect' => helper::baseUrl()
         ]);
-    }
-
-    /**
-     * Retourne un tableau des cours 
-     * @param string $access
-     *      - 0 le cours est ouvert
-     *      - 1 le cours est ouvert entre les dates
-     *      - 2 le cours est fermé
-     * @param string $enrolment 
-     *     - 0 accès est anonyme
-     *     - 1 accès libre
-     *     - 2 accès avec clé
-     *     - 3 manuel, le prof inscrits
-     */
-    public function getCourseHierarchy($access = null, $enrolment = null)
-    {
-        $courses = $this->getData(['course']);
-        $response = [];
-        foreach ($courses as $courseId => $courseValues) {
-            $response[] = ($access === $courseValues['access'] || $access === null)
-                ? $courseId : '';
-            $response[] = ($enrolment === $courseValues['enrolment'] || $enrolment === null)
-                ? $courseId : '';
-        }
-        $response = array_unique($response);
-        $response = array_filter($response, function ($value) {
-            // Supprime les éléments vides (null, "", 0, false, etc.)
-            return !empty($value);
-        });
-        return $response;
     }
 
 }

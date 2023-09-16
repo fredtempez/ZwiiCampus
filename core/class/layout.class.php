@@ -894,13 +894,21 @@ class layout extends common
             // Items de gauche
             $leftItems = '';
             // Sélecteur de cours
+            /**
+             * Les admins voient tous les cours
+             * Les enseignants les cours dont ils sont auteurs
+             * Les étudiants les cours dans lesquels ils sont inscrits
+             */
             if ($this->getUser('group') >= self::GROUP_TEACHER) {
-                $leftItems .= '<li><select id="barSelectCourse" >';
-                $leftItems .= '<option name="' . helper::translate('Accueil') . '" value="' . helper::baseUrl(true) . 'course/swap/home" ' . ('home' === self::$siteContent ? 'selected' : '') . '>' . helper::translate('Accueil') . '</option>';
-                foreach ($this->getData(['course']) as $key => $value) {
-                    $leftItems .= '<option name="' . $value['shortTitle'] . '" value="' . helper::baseUrl(true) . 'course/swap/' . $key . '" ' . ($key === self::$siteContent ? 'selected' : '') . '>' . $value['shortTitle'] . '</option>';
+                var_dump($this->getCoursesByUser($this->getUser('id'), $this->getUser('group')));
+                if ($this->getCoursesByUser($this->getUser('id'), $this->getUser('group'))) {
+                    $leftItems .= '<li><select id="barSelectCourse" >';
+                    $leftItems .= '<option name="' . helper::translate('Accueil') . '" value="' . helper::baseUrl(true) . 'course/swap/home" ' . ('home' === self::$siteContent ? 'selected' : '') . '>' . helper::translate('Accueil') . '</option>';
+                    foreach ($this->getCoursesByUser($this->getUser('id'), $this->getUser('group')) as $key => $value) {
+                        $leftItems .= '<option name="' . $value['shortTitle'] . '" value="' . helper::baseUrl(true) . 'course/swap/' . $key . '" ' . ($key === self::$siteContent ? 'selected' : '') . '>' . $value['shortTitle'] . '</option>';
+                    }
+                    $leftItems .= '</select></li>';
                 }
-                $leftItems .= '</select></li>';
             }
             // Bouton Gérer les cours
             if ($this->getUser('group') >= self::GROUP_ADMIN) {

@@ -83,13 +83,13 @@ class common
 		'user'
 	];
 	/*
-									 Cette variable est supprimée du test dans le routeur.
-									 public static $accessExclude = [
-										 'login',
-										 'logout',
-										 'maintenance',
-									 ];
-									 */
+										   Cette variable est supprimée du test dans le routeur.
+										   public static $accessExclude = [
+											   'login',
+											   'logout',
+											   'maintenance',
+										   ];
+										   */
 	private $data = [];
 	private $hierarchy = [
 		'all' => [],
@@ -205,7 +205,7 @@ class common
 		'user' => '',
 		'language' => '',
 		'profil' => '',
-		'enrolment'  => '',
+		'enrolment' => '',
 	];
 
 	private $configFiles = [
@@ -219,7 +219,7 @@ class common
 		'user' => '',
 		'language' => '',
 		'profil' => '',
-		'enrolment'  => '',
+		'enrolment' => '',
 	];
 
 	private $contentFiles = [
@@ -635,11 +635,11 @@ class common
 		if (!file_exists(self::DATA_DIR . self::$siteContent . '/content')) {
 			mkdir(self::DATA_DIR . self::$siteContent . '/content', 0755);
 		}
-		
+
 		/*
-		* Le site d'accueil, home ne dispose pas des mêmes modèles
-		*/
-		$template = self::$siteContent === 'home' ? init::$siteTemplate :init:: $courseDefault;
+		 * Le site d'accueil, home ne dispose pas des mêmes modèles
+		 */
+		$template = self::$siteContent === 'home' ? init::$siteTemplate : init::$courseDefault;
 		// Création de page ou de module
 		$this->setData([$module, $template[$module]]);
 		// Création des pages 
@@ -1380,4 +1380,71 @@ class common
 			file_put_contents(self::DATA_DIR . 'journal.log', $dataLog, FILE_APPEND);
 		}
 	}
+
+	// Fonctions pour la gestion des cours
+
+
+	/**
+	 * Retourne un tableau de tous les cours selon les autorisations
+	 * @param string $access
+	 *      - 0 le cours est ouvert
+	 *      - 1 le cours est ouvert entre les dates
+	 *      - 2 le cours est fermé
+	 * @param string $enrolment 
+	 *     - 0 accès est anonyme
+	 *     - 1 accès libre
+	 *     - 2 accès avec clé
+	 *     - 3 manuel, le prof inscrits
+	 */
+	public function getCourses($access = null, $enrolment = null)
+	{
+		$courses = $this->getData(['course']);
+		$response = [];
+		foreach ($courses as $courseId => $courseValues) {
+			$response[] = ($access === $courseValues['access'] || $access === null)
+				? $courseId : '';
+			$response[] = ($enrolment === $courseValues['enrolment'] || $enrolment === null)
+				? $courseId : '';
+		}
+		$response = array_unique($response);
+		$response = array_filter($response, function ($value) {
+			// Supprime les éléments vides (null, "", 0, false, etc.)
+			return !empty($value);
+		});
+		return $response;
+	}
+
+	/**
+	 * Retourne les cours d'un utilisateur
+	 * @param string $userId identifiant
+	 * @param string $serStatus teacher ou student ou admin
+	 */
+	public function getCoursesByUser($userId, $userStatus)
+	{
+		$c = $this->getData([('course')]);
+		switch ($userStatus) {
+			case self::GROUP_ADMIN:
+				return $c;
+			case self::GROUP_TEACHER:
+				foreach ($c as $courseId => $value) {
+					var_dump( $this->getData(['enrolment', $courseId, 'teacher']));
+					if ($this->getData(['enrolment', $courseId, 'teacher']) !== $userId) {
+						unset($c[$courseId]);
+					}
+				}
+				return $c;
+			case self::GROUP_STUDENT:
+				foreach ($c as $courseId => $value) {
+					$students = $this->getData(['enrolment', $courseId, 'students']);
+					if (in_array($userId, $students) === false) {
+						unset($c[$courseId]);
+					}
+				}
+				return $c;
+			default:
+				return null;
+		}
+
+	}
+
 }
