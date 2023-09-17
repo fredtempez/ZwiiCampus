@@ -1427,7 +1427,6 @@ class common
 				return $c;
 			case self::GROUP_TEACHER:
 				foreach ($c as $courseId => $value) {
-					var_dump( $this->getData(['enrolment', $courseId, 'teacher']));
 					if ($this->getData(['enrolment', $courseId, 'teacher']) !== $userId) {
 						unset($c[$courseId]);
 					}

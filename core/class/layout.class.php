@@ -900,7 +900,6 @@ class layout extends common
              * Les étudiants les cours dans lesquels ils sont inscrits
              */
             if ($this->getUser('group') >= self::GROUP_TEACHER) {
-                var_dump($this->getCoursesByUser($this->getUser('id'), $this->getUser('group')));
                 if ($this->getCoursesByUser($this->getUser('id'), $this->getUser('group'))) {
                     $leftItems .= '<li><select id="barSelectCourse" >';
                     $leftItems .= '<option name="' . helper::translate('Accueil') . '" value="' . helper::baseUrl(true) . 'course/swap/home" ' . ('home' === self::$siteContent ? 'selected' : '') . '>' . helper::translate('Accueil') . '</option>';

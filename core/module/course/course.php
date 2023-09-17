@@ -41,6 +41,10 @@ class course extends common
 
     public static $courses = [];
 
+    const COURSE_ACCESS_OPEN = 0;
+    const COURSE_ACCESS_DATE = 0;
+    const COURSE_ACCESS_CLOSE = 0;
+
     public function index()
     {
         $courseIdShortTitle = helper::arrayColumn($this->getData(['course']), 'shortTitle');
@@ -199,7 +203,7 @@ class course extends common
             ]);
 
             // BDD des inscrits
-            $students = is_null($this->getData(['enrolment', $courseId, 'students'])) ? [] : $this->getData([ 'enrolment', $courseId, 'students']);
+            $students = is_null($this->getData(['enrolment', $courseId, 'students'])) ? [] : $this->getData(['enrolment', $courseId, 'students']);
             $this->setData([
                 'enrolment',
                 $courseId,
@@ -240,9 +244,28 @@ class course extends common
     {
         // Cours sélectionnée
         $courseId = $this->getUrl(2);
+
+        // Modalité d'ouverture du cours
+        // L'utilisateur n'est pas admin
+        if ($this->getUser('group') < self::GROUP_ADMIN) {
+            if (
+                // le cours est fermé
+                $this->getData(['course', $courseId, 'access']) === self::COURSE_ACCESS_CLOSE
+                ||
+                    // Le cours ets ouvert entre deux dates
+                ($this->getData(['course', $courseId, 'access']) &&
+                    ($this->getData(['course', $courseId, 'openingDate']) >= time() ||
+                        $this->getData(['course', $courseId, 'clodingDate']) <= time())
+                )
+            ) {
+                return;
+            }
+        }
+
         if (
             // home n'est pas présent dans la base de donénes des cours
             $courseId === 'home' ||
+                // Contrôle la validité du cours demandé
             (is_dir(self::DATA_DIR . $courseId) &&
                 $this->getData(['course', $courseId]))
         ) {
