@@ -25,25 +25,23 @@ class course extends common
     ];
 
     public static $courseAccess = [
-        0 => 'Ouvert',
-        1 => 'Période d\'ouverture',
-        2 => 'Fermé',
+        self::COURSE_ACCESS_OPEN => 'Ouvert',
+        self::COURSE_ACCESS_DATE => 'Période d\'ouverture',
+        self::COURSE_ACCESS_CLOSE => 'Fermé',
     ];
 
     public static $courseEnrolment = [
-        0 => 'Anonyme',
-        1 => 'Auto-inscrition libre',
-        2 => 'Auto-inscription avec clé',
-        3 => 'Manuelle'
+        self::COURSE_ENROLMENT_GUEST => 'Anonyme',
+        self::COURSE_ENROLMENT_SELF => 'Auto-inscrition libre',
+        self::COURSE_ENROLMENT_SELF_KEY => 'Auto-inscription avec clé',
+        self::COURSE_ENROLMENT_MANUAL => 'Manuelle'
     ];
 
     public static $courseTeachers = [];
 
     public static $courses = [];
 
-    const COURSE_ACCESS_OPEN = 0;
-    const COURSE_ACCESS_DATE = 0;
-    const COURSE_ACCESS_CLOSE = 0;
+
 
     public function index()
     {
@@ -244,23 +242,6 @@ class course extends common
     {
         // Cours sélectionnée
         $courseId = $this->getUrl(2);
-
-        // Modalité d'ouverture du cours
-        // L'utilisateur n'est pas admin
-        if ($this->getUser('group') < self::GROUP_ADMIN) {
-            if (
-                // le cours est fermé
-                $this->getData(['course', $courseId, 'access']) === self::COURSE_ACCESS_CLOSE
-                ||
-                    // Le cours ets ouvert entre deux dates
-                ($this->getData(['course', $courseId, 'access']) &&
-                    ($this->getData(['course', $courseId, 'openingDate']) >= time() ||
-                        $this->getData(['course', $courseId, 'clodingDate']) <= time())
-                )
-            ) {
-                return;
-            }
-        }
 
         if (
             // home n'est pas présent dans la base de donénes des cours

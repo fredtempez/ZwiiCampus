@@ -50,7 +50,7 @@ class common
 	const ACCESS_TIMER = 1800;
 
 	// Numéro de version
-	const ZWII_VERSION = '0.0.01';
+	const ZWII_VERSION = '1.0.00';
 
 	// URL autoupdate
 	const ZWII_UPDATE_URL = 'https://forge.chapril.org/ZwiiCMS-Team/update/raw/branch/master/';
@@ -58,6 +58,18 @@ class common
 
 	// Valeurs possibles multiple de 10, 10 autorise 9 profils, 100 autorise 99 profils
 	const MAX_PROFILS = 10;
+
+	// Constantes pour les cours
+
+	// Modalités d'ouverture
+	const COURSE_ACCESS_OPEN = 0;
+	const COURSE_ACCESS_DATE = 1;
+	const COURSE_ACCESS_CLOSE = 2;
+	// Modalités d'inscription
+	const COURSE_ENROLMENT_GUEST = 0;
+	const COURSE_ENROLMENT_SELF = 1; // Ouvert à tous les membres
+	const COURSE_ENROLMENT_SELF_KEY = 2; // Ouvert à tous les membres disposant de la clé
+	const COURSE_ENROLMENT_MANUAL = 3;
 
 
 	public static $actions = [];
@@ -83,13 +95,13 @@ class common
 		'user'
 	];
 	/*
-										   Cette variable est supprimée du test dans le routeur.
-										   public static $accessExclude = [
-											   'login',
-											   'logout',
-											   'maintenance',
-										   ];
-										   */
+																Cette variable est supprimée du test dans le routeur.
+																public static $accessExclude = [
+																	'login',
+																	'logout',
+																	'maintenance',
+																];
+																*/
 	private $data = [];
 	private $hierarchy = [
 		'all' => [],
@@ -1443,7 +1455,74 @@ class common
 			default:
 				return null;
 		}
+	}
 
+	/**
+	 * Autorise l'accès à un cours
+	 * @param @return bool le user a le droit d'entrée dans le cours
+	 * @param string $userId identifiant de l'utilisateur
+	 * @param string $courseId identifiant du cours sollicité
+	 */
+	public function courseUserEnrolment($courseId, $userId)
+	{
+		// Modalité d'ouverture du cours
+		// L'utilisateur n'est pas admin
+		switch ($this->getData(['user', $userId, 'group'])) {
+			case self::GROUP_ADMIN:
+				return true;
+			case self::GROUP_TEACHER:
+				return ($userId === $this->getData(['enrolment', $courseId, 'teacher']));
+			case self::GROUP_STUDENT:
+				return (
+					// Le cours est-il ouvert ?
+					$this->courseAccess($courseId) &&
+					// L'étudiant est isncrits ?
+					array_search($userId, $this->getData(['enrolment', $courseId, 'students']))
+				);
+			case self::GROUP_VISITOR:
+				// Le cours est-il ouvert ?
+				return (
+					$this->courseAccess($courseId) &&
+					$this->getData(['course', $courseId, 'enrolment']) === self::COURSE_ENROLMENT_GUEST
+				);
+			default:
+				return false;
+		}
+		if ($this->getData(['user', $userId, 'group']) < self::GROUP_ADMIN) {
+			if (
+				// le cours est fermé
+				$this->getData(['course', $courseId, 'access']) === self::COURSE_ACCESS_CLOSE
+				||
+					// Le cours ets ouvert entre deux dates
+				($this->getData(['course', $courseId, 'access']) &&
+					($this->getData(['course', $courseId, 'openingDate']) >= time() ||
+						$this->getData(['course', $courseId, 'clodingDate']) <= time())
+				)
+			) {
+				return;
+			}
+		}
+	}
+
+	/**
+	 * Autorise l'accès à un cours
+	 * @param @return bool le user a le droit d'entrée dans le cours
+	 * @param string $courseId identifiant du cours sollicité
+	 */
+	public function courseAccess($courseId)
+	{
+		$access = $this->getData(['course', $courseId, 'access']);
+		switch ($access) {
+			case self::COURSE_ACCESS_OPEN:
+				return true;
+			case self::COURSE_ACCESS_DATE:
+				return (
+					time() >= $this->getData(['course', $courseId, 'openingDate']) &&
+					time() <= $this->getData(['course', $courseId, 'closingDate'])
+				);
+			case self::COURSE_ACCESS_CLOSE:
+				return false;
+		}
 	}
 
 }
