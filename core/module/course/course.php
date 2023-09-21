@@ -22,6 +22,7 @@ class course extends common
         'add' => self::GROUP_ADMIN,
         'delete' => self::GROUP_ADMIN,
         'swap' => self::GROUP_VISITOR,
+        'change' => self::GROUP_VISITOR,
     ];
 
     public static $courseAccess = [
@@ -95,10 +96,10 @@ class course extends common
                     'shortTitle' => $this->getInput('courseAddShortTitle', helper::FILTER_STRING_SHORT, true),
                     'author' => $author,
                     'description' => $this->getInput('courseAddDescription', helper::FILTER_STRING_SHORT, true),
-                    'access' => $this->getInput('courseAddAccess'),
+                    'access' => $this->getInput('courseAddAccess', helper::FILTER_INT),
                     'openingDate' => $this->getInput('courseOpeningDate', helper::FILTER_DATETIME),
                     'closingDate' => $this->getInput('courseClosingDate', helper::FILTER_DATETIME),
-                    'enrolment' => $this->getInput('courseAddEnrolment'),
+                    'enrolment' => $this->getInput('courseAddEnrolment', helper::FILTER_INT),
                     'enrolmentKey' => $this->getInput('courseAddEnrolmentKey'),
                 ]
             ]);
@@ -239,6 +240,30 @@ class course extends common
     }
 
     /*
+     * Affiche un écran de connexion à un cours 
+     */
+
+    public function change()
+    {
+        // Soumission du formulaire
+        if (
+            $this->isPost() ||
+            $this->getUrl(2) === 'home'
+            
+        ) {
+            $this->swap();
+        }
+
+        // Valeurs en sortie
+        $this->addOutput([
+            'title' => sprintf(helper::translate('Accéder au cours %s'), $this->getData(['course', $this->getUrl(2), 'shortTitle' ])),
+            'view' => 'change',
+            'display' => self::DISPLAY_LAYOUT_LIGHT,
+        ]);
+
+    }
+
+    /*
      * Traitement du changement de langue
      * Fonction utilisée par le noyau
      */
@@ -248,7 +273,7 @@ class course extends common
         $courseId = $this->getUrl(2);
 
         if (
-            // home n'est pas présent dans la base de donénes des cours
+            // home n'est pas présent dans la base de données des cours
             $courseId === 'home' ||
                 // Contrôle la validité du cours demandé
             (is_dir(self::DATA_DIR . $courseId) &&
@@ -263,5 +288,7 @@ class course extends common
             'redirect' => helper::baseUrl()
         ]);
     }
+
+
 
 }
