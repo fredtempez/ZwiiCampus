@@ -27,7 +27,7 @@ class form extends common
 		'data' => self::GROUP_TEACHER,
 		'delete' => self::GROUP_TEACHER,
 		'deleteall' => self::GROUP_TEACHER,
-		'index' => self::GROUP_VISITOR,
+		'index' => self::GROUP_STUDENT,
 		'export2csv' => self::GROUP_TEACHER,
 	];
 

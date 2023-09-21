@@ -527,7 +527,7 @@ class core extends common
 		$access = null;
 		if ($this->getData(['page', $this->getUrl(0)]) !== null) {
 			if (
-				$this->getData(['page', $this->getUrl(0), 'group']) === self::GROUP_VISITOR
+				$this->getData(['page', $this->getUrl(0), 'group']) === self::GROUP_STUDENT
 				or ($this->getUser('password') === $this->getInput('ZWII_USER_PASSWORD')
 					// and $this->getUser('group') >= $this->getData(['page', $this->getUrl(0), 'group'])
 					// Modification qui tient compte du profil de la page
@@ -705,7 +705,7 @@ class core extends common
 					$output = $module->output;
 					// Check le groupe de l'utilisateur
 					if (
-						($module::$actions[$action] === self::GROUP_VISITOR
+						($module::$actions[$action] === self::GROUP_STUDENT
 							or ($this->getUser('password') === $this->getInput('ZWII_USER_PASSWORD')
 								and $this->getUser('group') >= $module::$actions[$action]
 								and $this->getUser('permission', $moduleId, $action)

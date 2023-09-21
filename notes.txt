@@ -22,13 +22,10 @@ BDD contenant les informations sur le cours
     - 3 manuel, le prof inscrits
 - enrolmentKey clé d'inscription, si non vide
 
-data/course/enrolment.json
+data/enrolment.json
 Détermine la liste des inscrits
 - userid
-- userGroup
-- userProfil
-- lastPageId derrière page visitée
-- lastDate date de la dernière vue
-
-Règle de gestion : 
+    - lastPageId derrière page visitée
+    - lastDate date de la dernière vue
+Le profil Zwii détermine le rôle de l'utilisateur
 

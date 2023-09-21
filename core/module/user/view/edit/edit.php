@@ -116,8 +116,8 @@
 				</div>
 				<div class="col6">
 					<div class="userEditGroupProfil displayNone"
-						id="userEditGroupProfil<?php echo self::GROUP_STUDENT; ?>">
-						<?php echo template::select('userEditProfil' . self::GROUP_STUDENT, $module::$userProfils[self::GROUP_STUDENT], [
+						id="userEditGroupProfil<?php echo self::GROUP_TUTOR; ?>">
+						<?php echo template::select('userEditProfil' . self::GROUP_TUTOR, $module::$userProfils[self::GROUP_TUTOR], [
 							'label' => 'Profil',
 							'selected' => $this->getData(['user', $this->getUrl(2), 'profil']),
 							'disabled' => $this->getUser('group') !== self::GROUP_ADMIN,
@@ -135,10 +135,10 @@
 			</div>
 			<div class="row">
 				<div class="col12">
-					<div id="userCommentProfil<?php echo self::GROUP_STUDENT; ?>"
+					<div id="userCommentProfil<?php echo self::GROUP_TUTOR; ?>"
 						class="col12  userCommentProfil">
-						<?php echo template::textarea('userEditProfilComment' . self::GROUP_STUDENT, [
-							"value" => implode("\n", $module::$userProfilsComments[self::GROUP_STUDENT]),
+						<?php echo template::textarea('userEditProfilComment' . self::GROUP_TUTOR, [
+							"value" => implode("\n", $module::$userProfilsComments[self::GROUP_TUTOR]),
 							'disabled' => $this->getUser('group') !== self::GROUP_ADMIN,
 						]);
 						?>

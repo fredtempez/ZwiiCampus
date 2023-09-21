@@ -345,7 +345,7 @@ class layout extends common
         }
         // Affichage de la barre de membre simple
         if (
-            $this->getUser('group') >= self::GROUP_STUDENT && $this->getUser('group') < self::GROUP_ADMIN
+            $this->getUser('group') >= self::GROUP_TUTOR && $this->getUser('group') < self::GROUP_ADMIN
             && $this->getData(['theme', 'footer', 'memberBar']) === true
         ) {
             $items .= '<span id="footerDisplayMemberAccount"';
@@ -506,11 +506,11 @@ class layout extends common
         }
         // Commandes pour les membres simples
         if (
-            $this->getUser('group') >= self::GROUP_STUDENT && $this->getUser('group') < self::GROUP_ADMIN
+            $this->getUser('group') >= self::GROUP_TUTOR && $this->getUser('group') < self::GROUP_ADMIN
             && $this->getData(['theme', 'menu', 'memberBar']) === true
         ) {
             if (
-                $this->getUser('group') >= self::GROUP_STUDENT &&
+                $this->getUser('group') >= self::GROUP_TUTOR &&
                 $this->getUser('permission', 'filemanager') === true
             ) {
                 $itemsRight .= '<li>' . template::ico('folder', [

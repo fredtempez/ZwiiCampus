@@ -21,8 +21,8 @@ class course extends common
         'edit' => self::GROUP_ADMIN,
         'add' => self::GROUP_ADMIN,
         'delete' => self::GROUP_ADMIN,
-        'swap' => self::GROUP_VISITOR,
-        'change' => self::GROUP_VISITOR,
+        'swap' => self::GROUP_STUDENT,
+        'change' => self::GROUP_STUDENT,
     ];
 
     public static $courseAccess = [
@@ -42,6 +42,7 @@ class course extends common
 
     public static $courses = [];
 
+    public static $changeMessages = [];
 
 
     public function index()
@@ -115,10 +116,7 @@ class course extends common
             $this->setData([
                 'enrolment',
                 $courseId,
-                [
-                    'teacher' => $author,
-                    'students' => []
-                ]
+                []
             ]);
 
             // Valeurs en sortie
@@ -205,17 +203,6 @@ class course extends common
                 ]
             ]);
 
-            // BDD des inscrits
-            $students = is_null($this->getData(['enrolment', $courseId, 'students'])) ? [] : $this->getData(['enrolment', $courseId, 'students']);
-            $this->setData([
-                'enrolment',
-                $courseId,
-                [
-                    'teacher' => $author,
-                    'students' => $students
-                ]
-            ]);
-
             // Valeurs en sortie
             $this->addOutput([
                 'redirect' => helper::baseUrl() . 'course',
@@ -249,14 +236,21 @@ class course extends common
         if (
             $this->isPost() ||
             $this->getUrl(2) === 'home'
-            
+
         ) {
             $this->swap();
         }
 
+        // Bouton de connexion ou d'inscription
+        // C'est un prof ou un admin
+        self::$changeMessages = $this->getUser('group') >= self::GROUP_TEACHER 
+                                ? 'Se connecter'
+                                // C'est un étudiant ou un visiteur
+                                : '';
+
         // Valeurs en sortie
         $this->addOutput([
-            'title' => sprintf(helper::translate('Accéder au cours %s'), $this->getData(['course', $this->getUrl(2), 'shortTitle' ])),
+            'title' => sprintf(helper::translate('Accéder au cours %s'), $this->getData(['course', $this->getUrl(2), 'shortTitle'])),
             'view' => 'change',
             'display' => self::DISPLAY_LAYOUT_LIGHT,
         ]);

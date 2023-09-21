@@ -25,8 +25,8 @@ class common
 	const DISPLAY_LAYOUT_MAIN = 4;
 	const DISPLAY_LAYOUT_LIGHT = 5;
 	const GROUP_BANNED = -1;
-	const GROUP_VISITOR = 0;
-	const GROUP_STUDENT = 1;
+	const GROUP_STUDENT = 0;
+	const GROUP_TUTOR = 1;
 	const GROUP_TEACHER = 2;
 	// Groupe MODERATOR, compatibilité avec les anciens modules :
 	const GROUP_ADMIN = 3;
@@ -94,14 +94,6 @@ class common
 		'theme',
 		'user'
 	];
-	/*
-																Cette variable est supprimée du test dans le routeur.
-																public static $accessExclude = [
-																	'login',
-																	'logout',
-																	'maintenance',
-																];
-																*/
 	private $data = [];
 	private $hierarchy = [
 		'all' => [],
@@ -153,25 +145,25 @@ class common
 	];
 	public static $groups = [
 		self::GROUP_BANNED => 'Banni',
-		self::GROUP_VISITOR => 'Visiteur',
 		self::GROUP_STUDENT => 'Apprenant',
+		self::GROUP_TUTOR => 'Tuteur',
 		self::GROUP_TEACHER => 'Enseignant',
 		self::GROUP_ADMIN => 'Administrateur'
 	];
 	public static $groupEdits = [
 		self::GROUP_BANNED => 'Banni',
-		self::GROUP_STUDENT => 'Apprenant',
+		self::GROUP_TUTOR => 'Tuteur',
 		self::GROUP_TEACHER => 'Enseignant',
 		self::GROUP_ADMIN => 'Administrateur'
 	];
 	public static $groupNews = [
-		self::GROUP_STUDENT => 'Apprenant',
+		self::GROUP_TUTOR => 'Tuteur',
 		self::GROUP_TEACHER => 'Enseignant',
 		self::GROUP_ADMIN => 'Administrateur'
 	];
 	public static $groupPublics = [
-		self::GROUP_VISITOR => 'Visiteur',
 		self::GROUP_STUDENT => 'Apprenant',
+		self::GROUP_TUTOR => 'Tuteur',
 		self::GROUP_TEACHER => 'Enseignant',
 		self::GROUP_ADMIN => 'Administrateur'
 	];
@@ -453,7 +445,6 @@ class common
 
 		// Mise à jour des données core
 		include('core/include/update.inc.php');
-
 	}
 
 
@@ -720,7 +711,7 @@ class common
 				// Page parent
 				$this->getData(['page', $pageId, 'parentPageId']) === ''
 				// Ignore les pages dont l'utilisateur n'a pas accès
-				and ($this->getData(['page', $pageId, 'group']) === self::GROUP_VISITOR
+				and ($this->getData(['page', $pageId, 'group']) === self::GROUP_STUDENT
 					or ($this->getUser('password') === $this->getInput('ZWII_USER_PASSWORD')
 						//and $this->getUser('group') >= $this->getData(['page', $pageId, 'group'])
 						// Modification qui tient compte du profil de la page
@@ -745,8 +736,8 @@ class common
 				$parentId = $this->getData(['page', $pageId, 'parentPageId'])
 				// Ignore les pages dont l'utilisateur n'a pas accès
 				and (
-					($this->getData(['page', $pageId, 'group']) === self::GROUP_VISITOR
-						and $this->getData(['page', $parentId, 'group']) === self::GROUP_VISITOR
+					($this->getData(['page', $pageId, 'group']) === self::GROUP_STUDENT
+						and $this->getData(['page', $parentId, 'group']) === self::GROUP_STUDENT
 					)
 					or ($this->getUser('password') === $this->getInput('ZWII_USER_PASSWORD')
 						//and $this->getUser('group') >= $this->getData(['page', $parentId, 'group'])
@@ -1439,11 +1430,12 @@ class common
 				return $c;
 			case self::GROUP_TEACHER:
 				foreach ($c as $courseId => $value) {
-					if ($this->getData(['enrolment', $courseId, 'teacher']) !== $userId) {
+					if ($this->getData(['enrolment', $courseId]) !== $userId) {
 						unset($c[$courseId]);
 					}
 				}
 				return $c;
+			case self::GROUP_TUTOR:
 			case self::GROUP_STUDENT:
 				foreach ($c as $courseId => $value) {
 					$students = $this->getData(['enrolment', $courseId, 'students']);
@@ -1463,45 +1455,31 @@ class common
 	 * @param string $userId identifiant de l'utilisateur
 	 * @param string $courseId identifiant du cours sollicité
 	 */
-	public function courseUserEnrolment($courseId, $userId)
+	public function courseUserEnrolment($courseId, $userId = null)
 	{
-		// Modalité d'ouverture du cours
-		// L'utilisateur n'est pas admin
-		switch ($this->getData(['user', $userId, 'group'])) {
+		$group = $userId ? $this->getData(['user', $userId, 'group']) : false;
+		switch ($group) {
 			case self::GROUP_ADMIN:
-				return true;
+				$r = true;
+				break;
 			case self::GROUP_TEACHER:
-				return ($userId === $this->getData(['enrolment', $courseId, 'teacher']));
+				$r = in_array($userId, array_keys($this->getData(['enrolment', $courseId])));
+				break;
+			case self::GROUP_TUTOR:
 			case self::GROUP_STUDENT:
-				return (
-					// Le cours est-il ouvert ?
-					$this->courseIsAvailable($courseId) &&
-					// L'étudiant est inscrit ?
-					array_search($userId, $this->getData(['enrolment', $courseId, 'students']))
-				);
-			case self::GROUP_VISITOR:
-				// Le cours est-il ouvert ?
-				return (
-					$this->courseIsAvailable($courseId) &&
-					$this->getData(['course', $courseId, 'enrolment']) === self::COURSE_ENROLMENT_GUEST
-				);
+				$r = $this->courseIsAvailable($courseId) &&
+					(in_array($userId, array_keys($this->getData(['enrolment', $courseId]))) ||
+					$this->getData(['course', $courseId, 'enrolment']) <= self::COURSE_ENROLMENT_SELF);
+				break;
+			// Visiteur non connecté
+			case false:
+				$r = $this->courseIsAvailable($courseId) &&
+					$this->getData(['course', $courseId, 'enrolment']) === self::COURSE_ENROLMENT_GUEST;
+				break;
 			default:
-				return false;
+				$r = false;
 		}
-		if ($this->getData(['user', $userId, 'group']) < self::GROUP_ADMIN) {
-			if (
-				// le cours est fermé
-				$this->getData(['course', $courseId, 'access']) === self::COURSE_ACCESS_CLOSE
-				||
-					// Le cours ets ouvert entre deux dates
-				($this->getData(['course', $courseId, 'access']) &&
-					($this->getData(['course', $courseId, 'openingDate']) >= time() ||
-						$this->getData(['course', $courseId, 'clodingDate']) <= time())
-				)
-			) {
-				return;
-			}
-		}
+		return $r;
 	}
 
 	/**

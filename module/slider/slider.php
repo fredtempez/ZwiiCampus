@@ -24,7 +24,7 @@ class slider extends common
 		'theme' => self::GROUP_MODERATOR,
 		'delete' => self::GROUP_MODERATOR,
 		'dirs' => self::GROUP_MODERATOR,
-		'index' => self::GROUP_VISITOR
+		'index' => self::GROUP_STUDENT
 	];
 
 	const VERSION = '6.0';

@@ -53,7 +53,7 @@ class gallery extends common
 		'add' => self::GROUP_TEACHER,
 		'theme' => self::GROUP_TEACHER,
 		'option' => self::GROUP_TEACHER,
-		'index' => self::GROUP_VISITOR
+		'index' => self::GROUP_STUDENT
 	];
 
 	public static $sort = [
