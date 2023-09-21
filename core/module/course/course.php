@@ -105,6 +105,10 @@ class course extends common
 
             // Créer la structure de données
             mkdir(self::DATA_DIR . $courseId);
+            $this->initDB('page', $courseId);
+            $this->initDB('module', $courseId);
+            $this->initData('page', $courseId);
+            $this->initData('module', $courseId);
 
             // BDD des inscrits
             $this->setData([

@@ -365,7 +365,7 @@ class common
 				if (
 					file_exists(self::DATA_DIR . self::$siteContent . '/' . $stageId . '.json') === false
 				) {
-					$this->initData($stageId);
+					$this->initData($stageId, self::$siteContent);
 				}
 			}
 
@@ -634,31 +634,31 @@ class common
 	 * Données valides : page ou module
 	 */
 
-	public function initData($module)
+	public function initData($module, $path)
 	{
 
 		// Tableau avec les données vierges
 		require_once('core/module/install/ressource/defaultdata.php');
 
 		// L'arborescence
-		if (!file_exists(self::DATA_DIR . self::$siteContent)) {
-			mkdir(self::DATA_DIR . self::$siteContent, 0755);
+		if (!file_exists(self::DATA_DIR . $path)) {
+			mkdir(self::DATA_DIR . $path, 0755);
 		}
-		if (!file_exists(self::DATA_DIR . self::$siteContent . '/content')) {
-			mkdir(self::DATA_DIR . self::$siteContent . '/content', 0755);
+		if (!file_exists(self::DATA_DIR . $path . '/content')) {
+			mkdir(self::DATA_DIR . $path . '/content', 0755);
 		}
 
 		/*
 		 * Le site d'accueil, home ne dispose pas des mêmes modèles
 		 */
-		$template = self::$siteContent === 'home' ? init::$siteTemplate : init::$courseDefault;
+		$template = $path === 'home' ? init::$siteTemplate : init::$courseDefault;
 		// Création de page ou de module
 		$this->setData([$module, $template[$module]]);
 		// Création des pages 
 		if ($module === 'page') {
-			$content = self::$siteContent === 'home' ? init::$siteContent : init::$courseContent;
+			$content = $path === 'home' ? init::$siteContent : init::$courseContent;
 			foreach ($content as $key => $value) {
-				$this->setPage($key, $value, self::$siteContent);
+				$this->setPage($key, $value, $path);
 			}
 		}
 
