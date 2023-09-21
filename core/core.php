@@ -1475,14 +1475,14 @@ class common
 			case self::GROUP_STUDENT:
 				return (
 					// Le cours est-il ouvert ?
-					$this->courseAccess($courseId) &&
-					// L'étudiant est isncrits ?
+					$this->courseIsAvailable($courseId) &&
+					// L'étudiant est inscrit ?
 					array_search($userId, $this->getData(['enrolment', $courseId, 'students']))
 				);
 			case self::GROUP_VISITOR:
 				// Le cours est-il ouvert ?
 				return (
-					$this->courseAccess($courseId) &&
+					$this->courseIsAvailable($courseId) &&
 					$this->getData(['course', $courseId, 'enrolment']) === self::COURSE_ENROLMENT_GUEST
 				);
 			default:
@@ -1509,7 +1509,7 @@ class common
 	 * @param @return bool le user a le droit d'entrée dans le cours
 	 * @param string $courseId identifiant du cours sollicité
 	 */
-	public function courseAccess($courseId)
+	public function courseIsAvailable($courseId)
 	{
 		$access = $this->getData(['course', $courseId, 'access']);
 		switch ($access) {
