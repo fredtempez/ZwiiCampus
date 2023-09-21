@@ -91,13 +91,13 @@
 				<div class="col6">
 					<?php echo template::select('userAddGroup', self::$groupNews, [
 						'label' => 'Groupe',
-						'selected' => self::GROUP_TUTOR
+						'selected' => self::GROUP_STUDENT
 					]); ?>
 				</div>
 				<div class="col6">
 					<div class="userAddGroupProfil displayNone"
-						id="userAddGroupProfil<?php echo self::GROUP_TUTOR; ?>">
-						<?php echo template::select('userAddProfil' . self::GROUP_TUTOR, $module::$userProfils[self::GROUP_TUTOR], [
+						id="userAddGroupProfil<?php echo self::GROUP_STUDENT; ?>">
+						<?php echo template::select('userAddProfil' . self::GROUP_STUDENT, $module::$userProfils[self::GROUP_STUDENT], [
 							'label' => 'Profil',
 						]); ?>
 					</div>
@@ -110,9 +110,9 @@
 				</div>
 			</div>
 			<div class="row">
-				<div id="userCommentProfil<?php echo self::GROUP_TUTOR; ?>" class="col12 displayNone userCommentProfil">
-					<?php echo template::textarea('useraddProfilComment' . self::GROUP_TUTOR, [
-						"value" => implode("\n",$module::$userProfilsComments[self::GROUP_TUTOR])
+				<div id="userCommentProfil<?php echo self::GROUP_STUDENT; ?>" class="col12 displayNone userCommentProfil">
+					<?php echo template::textarea('useraddProfilComment' . self::GROUP_STUDENT, [
+						"value" => implode("\n",$module::$userProfilsComments[self::GROUP_STUDENT])
 					]);
 					?>
 				</div>

@@ -21,8 +21,8 @@ class course extends common
         'edit' => self::GROUP_ADMIN,
         'add' => self::GROUP_ADMIN,
         'delete' => self::GROUP_ADMIN,
-        'swap' => self::GROUP_STUDENT,
-        'change' => self::GROUP_STUDENT,
+        'swap' => self::GROUP_VISITOR,
+        'change' => self::GROUP_VISITOR,
     ];
 
     public static $courseAccess = [

@@ -155,7 +155,7 @@ class page extends common
 					'parentPageId' => '',
 					'modulePosition' => 'bottom',
 					'position' => 0,
-					'group' => self::GROUP_STUDENT,
+					'group' => self::GROUP_VISITOR,
 					'targetBlank' => false,
 					'title' => $pageTitle,
 					'shortTitle' => $pageTitle,
@@ -564,7 +564,7 @@ class page extends common
 			// Profils installés
 			// Profils disponibles
 			foreach ($this->getData(['profil']) as $profilId => $profilData) {
-				if ($profilId < self::GROUP_TUTOR) {
+				if ($profilId < self::GROUP_STUDENT) {
 					continue;
 				}
 				if ($profilId === self::GROUP_ADMIN) {

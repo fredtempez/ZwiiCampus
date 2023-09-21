@@ -16,7 +16,7 @@
 class sitemap extends common
 {
     public static $actions = [
-        'index' => self::GROUP_STUDENT
+        'index' => self::GROUP_VISITOR
     ];
 
     public static $siteMap = '';

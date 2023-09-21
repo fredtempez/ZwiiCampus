@@ -25,7 +25,7 @@ class search extends common
 	const DATADIRECTORY = self::DATA_DIR . 'search/';
 
 	public static $actions = [
-		'index' => self::GROUP_STUDENT,
+		'index' => self::GROUP_VISITOR,
 		'config' => self::GROUP_TEACHER
 	];
 

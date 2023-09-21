@@ -22,11 +22,11 @@ class user extends common
 		'import' => self::GROUP_ADMIN,
 		'index' => self::GROUP_ADMIN,
 		'template' => self::GROUP_ADMIN,
-		'edit' => self::GROUP_TUTOR,
-		'logout' => self::GROUP_TUTOR,
-		'forgot' => self::GROUP_STUDENT,
-		'login' => self::GROUP_STUDENT,
-		'reset' => self::GROUP_STUDENT,
+		'edit' => self::GROUP_STUDENT,
+		'logout' => self::GROUP_STUDENT,
+		'forgot' => self::GROUP_VISITOR,
+		'login' => self::GROUP_VISITOR,
+		'reset' => self::GROUP_VISITOR,
 		'profil' => self::GROUP_ADMIN,
 		'profilEdit' => self::GROUP_ADMIN,
 		'profilAdd' => self::GROUP_ADMIN,
@@ -65,7 +65,7 @@ class user extends common
 	];
 
 	public static $groupProfils = [
-		self::GROUP_TUTOR => 'Membre',
+		self::GROUP_STUDENT => 'Membre',
 		self::GROUP_TEACHER => 'Éditeur'
 	];
 
@@ -162,7 +162,7 @@ class user extends common
 
 		// Profils disponibles
 		foreach ($this->getData(['profil']) as $profilId => $profilData) {
-			if ($profilId < self::GROUP_TUTOR) {
+			if ($profilId < self::GROUP_STUDENT) {
 				continue;
 			}
 			if ($profilId === self::GROUP_ADMIN) {
@@ -242,7 +242,7 @@ class user extends common
 				and (
 						// Impossible de s'auto-éditer
 					($this->getUser('id') === $this->getUrl(2)
-						and $this->getUrl('group') <= self::GROUP_STUDENT
+						and $this->getUrl('group') <= self::GROUP_VISITOR
 					)
 					// Impossible d'éditer un autre utilisateur
 					or ($this->getUrl('group') < self::GROUP_TEACHER)
@@ -354,7 +354,7 @@ class user extends common
 
 				// Profils disponibles
 				foreach ($this->getData(['profil']) as $profilId => $profilData) {
-					if ($profilId < self::GROUP_TUTOR) {
+					if ($profilId < self::GROUP_STUDENT) {
 						continue;
 					}
 					if ($profilId === self::GROUP_ADMIN) {
@@ -473,7 +473,7 @@ class user extends common
 			// Membres sans permissions spécifiques
 			if (
 				$groupId == self::GROUP_BANNED ||
-				$groupId == self::GROUP_STUDENT ||
+				$groupId == self::GROUP_VISITOR ||
 				$groupId == self::GROUP_ADMIN
 			) {
 				self::$userGroups[$groupId] = [
@@ -492,7 +492,7 @@ class user extends common
 					])
 				];
 			} elseif (
-				$groupId == self::GROUP_TUTOR ||
+				$groupId == self::GROUP_STUDENT ||
 				$groupId == self::GROUP_TEACHER
 			) {
 				// Enumérer les sous groupes MEMBER et MODERATOR
@@ -871,7 +871,7 @@ class user extends common
 					($this->getData(['user', $userId, 'connectTimeout']) + $this->getData(['config', 'connect', 'timeout'])) < time()
 					and $this->getData(['user', $userId, 'connectFail']) < $this->getData(['config', 'connect', 'attempt'])
 					and password_verify(html_entity_decode($this->getInput('userLoginPassword', helper::FILTER_STRING_SHORT, true)), $this->getData(['user', $userId, 'password']))
-					and $this->getData(['user', $userId, 'group']) >= self::GROUP_TUTOR
+					and $this->getData(['user', $userId, 'group']) >= self::GROUP_STUDENT
 					and $captcha === true
 				) {
 					// RAZ

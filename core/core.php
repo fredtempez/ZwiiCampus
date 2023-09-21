@@ -25,8 +25,8 @@ class common
 	const DISPLAY_LAYOUT_MAIN = 4;
 	const DISPLAY_LAYOUT_LIGHT = 5;
 	const GROUP_BANNED = -1;
-	const GROUP_STUDENT = 0;
-	const GROUP_TUTOR = 1;
+	const GROUP_VISITOR = 0;
+	const GROUP_STUDENT = 1;
 	const GROUP_TEACHER = 2;
 	// Groupe MODERATOR, compatibilité avec les anciens modules :
 	const GROUP_ADMIN = 3;
@@ -145,25 +145,25 @@ class common
 	];
 	public static $groups = [
 		self::GROUP_BANNED => 'Banni',
-		self::GROUP_STUDENT => 'Apprenant',
-		self::GROUP_TUTOR => 'Tuteur',
+		self::GROUP_VISITOR => 'Visiteur',
+		self::GROUP_STUDENT => 'Etudiant',
 		self::GROUP_TEACHER => 'Enseignant',
 		self::GROUP_ADMIN => 'Administrateur'
 	];
 	public static $groupEdits = [
 		self::GROUP_BANNED => 'Banni',
-		self::GROUP_TUTOR => 'Tuteur',
+		self::GROUP_STUDENT => 'Etudiant',
 		self::GROUP_TEACHER => 'Enseignant',
 		self::GROUP_ADMIN => 'Administrateur'
 	];
 	public static $groupNews = [
-		self::GROUP_TUTOR => 'Tuteur',
+		self::GROUP_STUDENT => 'Etudiant',
 		self::GROUP_TEACHER => 'Enseignant',
 		self::GROUP_ADMIN => 'Administrateur'
 	];
 	public static $groupPublics = [
-		self::GROUP_STUDENT => 'Apprenant',
-		self::GROUP_TUTOR => 'Tuteur',
+		self::GROUP_VISITOR => 'Visiteur',
+		self::GROUP_STUDENT => 'Etudiant',
 		self::GROUP_TEACHER => 'Enseignant',
 		self::GROUP_ADMIN => 'Administrateur'
 	];
@@ -711,7 +711,7 @@ class common
 				// Page parent
 				$this->getData(['page', $pageId, 'parentPageId']) === ''
 				// Ignore les pages dont l'utilisateur n'a pas accès
-				and ($this->getData(['page', $pageId, 'group']) === self::GROUP_STUDENT
+				and ($this->getData(['page', $pageId, 'group']) === self::GROUP_VISITOR
 					or ($this->getUser('password') === $this->getInput('ZWII_USER_PASSWORD')
 						//and $this->getUser('group') >= $this->getData(['page', $pageId, 'group'])
 						// Modification qui tient compte du profil de la page
@@ -736,8 +736,8 @@ class common
 				$parentId = $this->getData(['page', $pageId, 'parentPageId'])
 				// Ignore les pages dont l'utilisateur n'a pas accès
 				and (
-					($this->getData(['page', $pageId, 'group']) === self::GROUP_STUDENT
-						and $this->getData(['page', $parentId, 'group']) === self::GROUP_STUDENT
+					($this->getData(['page', $pageId, 'group']) === self::GROUP_VISITOR
+						and $this->getData(['page', $parentId, 'group']) === self::GROUP_VISITOR
 					)
 					or ($this->getUser('password') === $this->getInput('ZWII_USER_PASSWORD')
 						//and $this->getUser('group') >= $this->getData(['page', $parentId, 'group'])
@@ -1435,8 +1435,8 @@ class common
 					}
 				}
 				return $c;
-			case self::GROUP_TUTOR:
 			case self::GROUP_STUDENT:
+			case self::GROUP_VISITOR:
 				foreach ($c as $courseId => $value) {
 					$students = $this->getData(['enrolment', $courseId, 'students']);
 					if (in_array($userId, $students) === false) {
@@ -1465,13 +1465,13 @@ class common
 			case self::GROUP_TEACHER:
 				$r = in_array($userId, array_keys($this->getData(['enrolment', $courseId])));
 				break;
-			case self::GROUP_TUTOR:
 			case self::GROUP_STUDENT:
 				$r = $this->courseIsAvailable($courseId) &&
 					(in_array($userId, array_keys($this->getData(['enrolment', $courseId]))) ||
 					$this->getData(['course', $courseId, 'enrolment']) <= self::COURSE_ENROLMENT_SELF);
 				break;
 			// Visiteur non connecté
+			case self::GROUP_VISITOR:
 			case false:
 				$r = $this->courseIsAvailable($courseId) &&
 					$this->getData(['course', $courseId, 'enrolment']) === self::COURSE_ENROLMENT_GUEST;

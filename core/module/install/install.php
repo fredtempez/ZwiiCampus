@@ -18,8 +18,8 @@ class install extends common
 {
 
 	public static $actions = [
-		'index' => self::GROUP_STUDENT,
-		"postinstall" => self::GROUP_STUDENT,
+		'index' => self::GROUP_VISITOR,
+		"postinstall" => self::GROUP_VISITOR,
 		'steps' => self::GROUP_ADMIN,
 		'update' => self::GROUP_ADMIN
 	];

@@ -22,7 +22,7 @@ class redirection extends common
 
 	public static $actions = [
 		'config' => self::GROUP_TEACHER,
-		'index' => self::GROUP_STUDENT
+		'index' => self::GROUP_VISITOR
 	];
 
 

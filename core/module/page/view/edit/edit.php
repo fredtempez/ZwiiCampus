@@ -389,8 +389,8 @@
 						</div>
 						<div class="col6">
 							<div class="pageEditGroupProfil displayNone"
-								id="pageEditGroupProfil<?php echo self::GROUP_TUTOR; ?>">
-								<?php echo template::select('pageEditProfil' . self::GROUP_TUTOR, $module::$userProfils[self::GROUP_TUTOR], [
+								id="pageEditGroupProfil<?php echo self::GROUP_STUDENT; ?>">
+								<?php echo template::select('pageEditProfil' . self::GROUP_STUDENT, $module::$userProfils[self::GROUP_STUDENT], [
 									'label' => 'Profil minimal pour accéder à la page',
 									'selected' => $this->getData(['page', $this->getUrl(2), 'profil']),
 									'help' => 'Les profils de niveau supérieur accèdent à la page.',

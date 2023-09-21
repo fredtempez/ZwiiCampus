@@ -36,8 +36,8 @@ class blog extends common
 		'option' => self::GROUP_TEACHER,
 		'delete' => self::GROUP_TEACHER,
 		'edit' => self::GROUP_TEACHER,
-		'index' => self::GROUP_STUDENT,
-		'rss' => self::GROUP_STUDENT
+		'index' => self::GROUP_VISITOR,
+		'rss' => self::GROUP_VISITOR
 	];
 
 	public static $articles = [];
