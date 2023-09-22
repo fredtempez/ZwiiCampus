@@ -366,12 +366,13 @@ class helper
 	public static function checkNewVersion($channel)
 	{
 		$version = helper::getOnlineVersion($channel);
+		$update = false;
 		if (!empty($version)) {
-			return ((version_compare(common::ZWII_VERSION, $version)) === -1);
-		} else {
-			return false;
+			$update = version_compare(common::ZWII_VERSION, $version) === -1;	
 		}
+		return $update;
 	}
+	
 
 
 	/**
