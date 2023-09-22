@@ -17,18 +17,18 @@
 class form extends common
 {
 
-	const VERSION = '4.0';
+	const VERSION = '4.1';
 	const REALNAME = 'Formulaire';
 	const DATADIRECTORY = ''; // Contenu localisé inclus par défaut (page.json et module.json)
 
 	public static $actions = [
-		'config' => self::GROUP_TEACHER,
-		'option' => self::GROUP_TEACHER,
-		'data' => self::GROUP_TEACHER,
-		'delete' => self::GROUP_TEACHER,
-		'deleteall' => self::GROUP_TEACHER,
+		'config' => self::GROUP_EDITOR,
+		'option' => self::GROUP_EDITOR,
+		'data' => self::GROUP_EDITOR,
+		'delete' => self::GROUP_EDITOR,
+		'deleteall' => self::GROUP_EDITOR,
 		'index' => self::GROUP_VISITOR,
-		'export2csv' => self::GROUP_TEACHER,
+		'export2csv' => self::GROUP_EDITOR,
 	];
 
 	public static $data = [];
@@ -395,7 +395,6 @@ class form extends common
 
 		// Soumission du formulaire
 		if (
-			$this->getUser('permission', __CLASS__, __FUNCTION__) === true &&
 			$this->isPost()
 		) {
 			// Check la captcha

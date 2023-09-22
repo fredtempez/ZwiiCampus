@@ -16,7 +16,7 @@
 class blog extends common
 {
 
-	const VERSION = '7.0';
+	const VERSION = '7.1';
 	const REALNAME = 'Blog';
 	const DELETE = true;
 	const UPDATE = '0.0';
@@ -27,15 +27,15 @@ class blog extends common
 	const EDIT_ALL = 'all';
 
 	public static $actions = [
-		'add' => self::GROUP_TEACHER,
-		'comment' => self::GROUP_TEACHER,
-		'commentApprove' => self::GROUP_TEACHER,
-		'commentDelete' => self::GROUP_TEACHER,
-		'commentDeleteAll' => self::GROUP_TEACHER,
-		'config' => self::GROUP_TEACHER,
-		'option' => self::GROUP_TEACHER,
-		'delete' => self::GROUP_TEACHER,
-		'edit' => self::GROUP_TEACHER,
+		'add' => self::GROUP_EDITOR,
+		'comment' => self::GROUP_EDITOR,
+		'commentApprove' => self::GROUP_EDITOR,
+		'commentDelete' => self::GROUP_EDITOR,
+		'commentDeleteAll' => self::GROUP_EDITOR,
+		'config' => self::GROUP_EDITOR,
+		'option' => self::GROUP_EDITOR,
+		'delete' => self::GROUP_EDITOR,
+		'edit' => self::GROUP_EDITOR,
 		'index' => self::GROUP_VISITOR,
 		'rss' => self::GROUP_VISITOR
 	];
@@ -697,7 +697,7 @@ class blog extends common
 			ksort(self::$users);
 			foreach (self::$users as $userId => &$userFirstname) {
 				// Les membres ne sont pas éditeurs, les exclure de la liste
-				if ($this->getData(['user', $userId, 'group']) < self::GROUP_TEACHER) {
+				if ($this->getData(['user', $userId, 'group']) < self::GROUP_EDITOR) {
 					unset(self::$users[$userId]);
 				}
 				$userFirstname = $userFirstname . ' ' . $this->getData(['user', $userId, 'lastname']) . ' (' . self::$groupEdits[$this->getData(['user', $userId, 'group'])] . ')';
@@ -740,7 +740,6 @@ class blog extends common
 			else {
 				// Soumission du formulaire
 				if (
-					$this->getUser('permission', __CLASS__, __FUNCTION__) === true &&
 					$this->isPost()
 				) {
 					// Check la captcha
