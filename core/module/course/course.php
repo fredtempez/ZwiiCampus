@@ -150,7 +150,7 @@ class course extends common
             // Le cours n'existe pas
             $this->getData(['course', $this->getUrl(2)]) === null
             // Groupe insuffisant
-            and ($this->getUrl('group') < self::GROUP_TEACHER)
+            and ($this->getUrl('group') < self::GROUP_EDITOR)
         ) {
             // Valeurs en sortie
             $this->addOutput([
@@ -243,7 +243,7 @@ class course extends common
 
         // Bouton de connexion ou d'inscription
         // C'est un prof ou un admin
-        self::$changeMessages = $this->getUser('group') >= self::GROUP_TEACHER 
+        self::$changeMessages = $this->getUser('group') >= self::GROUP_EDITOR 
                                 ? 'Se connecter'
                                 // C'est un étudiant ou un visiteur
                                 : '';

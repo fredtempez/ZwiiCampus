@@ -389,16 +389,16 @@
 						</div>
 						<div class="col6">
 							<div class="pageEditGroupProfil displayNone"
-								id="pageEditGroupProfil<?php echo self::GROUP_STUDENT; ?>">
-								<?php echo template::select('pageEditProfil' . self::GROUP_STUDENT, $module::$userProfils[self::GROUP_STUDENT], [
+								id="pageEditGroupProfil<?php echo self::GROUP_MEMBER; ?>">
+								<?php echo template::select('pageEditProfil' . self::GROUP_MEMBER, $module::$userProfils[self::GROUP_MEMBER], [
 									'label' => 'Profil minimal pour accéder à la page',
 									'selected' => $this->getData(['page', $this->getUrl(2), 'profil']),
 									'help' => 'Les profils de niveau supérieur accèdent à la page.',
 								]); ?>
 							</div>
 							<div class="pageEditGroupProfil displayNone"
-								id="pageEditGroupProfil<?php echo self::GROUP_TEACHER; ?>">
-								<?php echo template::select('pageEditProfil' . self::GROUP_TEACHER, $module::$userProfils[self::GROUP_TEACHER], [
+								id="pageEditGroupProfil<?php echo self::GROUP_EDITOR; ?>">
+								<?php echo template::select('pageEditProfil' . self::GROUP_EDITOR, $module::$userProfils[self::GROUP_EDITOR], [
 									'label' => 'Profil minimal pour accéder à la page',
 									'selected' => $this->getData(['page', $this->getUrl(2), 'profil']),
 									'help' => 'Les profils de niveau supérieur accèdent à la page.',

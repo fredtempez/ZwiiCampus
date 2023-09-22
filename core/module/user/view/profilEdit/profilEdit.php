@@ -63,7 +63,7 @@
         </div>
     </div>
 </div>
-<?php if ($this->getUrl(2) >= self::GROUP_TEACHER): ?>
+<?php if ($this->getUrl(2) >= self::GROUP_EDITOR): ?>
     <div class="row">
         <div class="col12">
             <div class="block">

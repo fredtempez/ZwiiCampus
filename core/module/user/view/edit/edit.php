@@ -29,7 +29,7 @@
 				<div class="col6">
 					<?php echo template::text('userEditFirstname', [
 						'autocomplete' => 'off',
-						'disabled' => $this->getUser('group') > self::GROUP_TEACHER ? false : true,
+						'disabled' => $this->getUser('group') > self::GROUP_EDITOR ? false : true,
 						'label' => 'Prénom',
 						'value' => $this->getData(['user', $this->getUrl(2), 'firstname'])
 					]); ?>
@@ -37,7 +37,7 @@
 				<div class="col6">
 					<?php echo template::text('userEditLastname', [
 						'autocomplete' => 'off',
-						'disabled' => $this->getUser('group') > self::GROUP_TEACHER  ? false : true,
+						'disabled' => $this->getUser('group') > self::GROUP_EDITOR  ? false : true,
 						'label' => 'Nom',
 						'value' => $this->getData(['user', $this->getUrl(2), 'lastname'])
 					]); ?>
@@ -116,16 +116,16 @@
 				</div>
 				<div class="col6">
 					<div class="userEditGroupProfil displayNone"
-						id="userEditGroupProfil<?php echo self::GROUP_STUDENT; ?>">
-						<?php echo template::select('userEditProfil' . self::GROUP_STUDENT, $module::$userProfils[self::GROUP_STUDENT], [
+						id="userEditGroupProfil<?php echo self::GROUP_MEMBER; ?>">
+						<?php echo template::select('userEditProfil' . self::GROUP_MEMBER, $module::$userProfils[self::GROUP_MEMBER], [
 							'label' => 'Profil',
 							'selected' => $this->getData(['user', $this->getUrl(2), 'profil']),
 							'disabled' => $this->getUser('group') !== self::GROUP_ADMIN,
 						]); ?>
 					</div>
 					<div class="userEditGroupProfil displayNone"
-						id="userEditGroupProfil<?php echo self::GROUP_TEACHER; ?>">
-						<?php echo template::select('userEditProfil' . self::GROUP_TEACHER, $module::$userProfils[self::GROUP_TEACHER], [
+						id="userEditGroupProfil<?php echo self::GROUP_EDITOR; ?>">
+						<?php echo template::select('userEditProfil' . self::GROUP_EDITOR, $module::$userProfils[self::GROUP_EDITOR], [
 							'label' => 'Profil',
 							'selected' => $this->getData(['user', $this->getUrl(2), 'profil']),
 							'disabled' => $this->getUser('group') !== self::GROUP_ADMIN,
@@ -135,18 +135,18 @@
 			</div>
 			<div class="row">
 				<div class="col12">
-					<div id="userCommentProfil<?php echo self::GROUP_STUDENT; ?>"
+					<div id="userCommentProfil<?php echo self::GROUP_MEMBER; ?>"
 						class="col12  userCommentProfil">
-						<?php echo template::textarea('userEditProfilComment' . self::GROUP_STUDENT, [
-							"value" => implode("\n", $module::$userProfilsComments[self::GROUP_STUDENT]),
+						<?php echo template::textarea('userEditProfilComment' . self::GROUP_MEMBER, [
+							"value" => implode("\n", $module::$userProfilsComments[self::GROUP_MEMBER]),
 							'disabled' => $this->getUser('group') !== self::GROUP_ADMIN,
 						]);
 						?>
 					</div>
-					<div id="userCommentProfil<?php echo self::GROUP_TEACHER; ?>"
+					<div id="userCommentProfil<?php echo self::GROUP_EDITOR; ?>"
 						class="col12  userCommentProfil">
-						<?php echo template::textarea('userEditProfilComment' . self::GROUP_TEACHER, [
-							"value" => implode("\n", $module::$userProfilsComments[self::GROUP_TEACHER]),
+						<?php echo template::textarea('userEditProfilComment' . self::GROUP_EDITOR, [
+							"value" => implode("\n", $module::$userProfilsComments[self::GROUP_EDITOR]),
 							'disabled' => $this->getUser('group') !== self::GROUP_ADMIN,
 						]);
 						?>

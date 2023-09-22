@@ -22,8 +22,8 @@ class user extends common
 		'import' => self::GROUP_ADMIN,
 		'index' => self::GROUP_ADMIN,
 		'template' => self::GROUP_ADMIN,
-		'edit' => self::GROUP_STUDENT,
-		'logout' => self::GROUP_STUDENT,
+		'edit' => self::GROUP_MEMBER,
+		'logout' => self::GROUP_MEMBER,
 		'forgot' => self::GROUP_VISITOR,
 		'login' => self::GROUP_VISITOR,
 		'reset' => self::GROUP_VISITOR,
@@ -65,8 +65,8 @@ class user extends common
 	];
 
 	public static $groupProfils = [
-		self::GROUP_STUDENT => 'Membre',
-		self::GROUP_TEACHER => 'Éditeur'
+		self::GROUP_MEMBER => 'Membre',
+		self::GROUP_EDITOR => 'Éditeur'
 	];
 
 	public static $listModules = [];
@@ -162,7 +162,7 @@ class user extends common
 
 		// Profils disponibles
 		foreach ($this->getData(['profil']) as $profilId => $profilData) {
-			if ($profilId < self::GROUP_STUDENT) {
+			if ($profilId < self::GROUP_MEMBER) {
 				continue;
 			}
 			if ($profilId === self::GROUP_ADMIN) {
@@ -195,7 +195,7 @@ class user extends common
 			// L'utilisateur n'existe pas
 			$this->getData(['user', $this->getUrl(2)]) === null
 			// Groupe insuffisant
-			and ($this->getUrl('group') < self::GROUP_TEACHER)
+			and ($this->getUrl('group') < self::GROUP_EDITOR)
 		) {
 			// Valeurs en sortie
 			$this->addOutput([
@@ -245,7 +245,7 @@ class user extends common
 						and $this->getUrl('group') <= self::GROUP_VISITOR
 					)
 					// Impossible d'éditer un autre utilisateur
-					or ($this->getUrl('group') < self::GROUP_TEACHER)
+					or ($this->getUrl('group') < self::GROUP_EDITOR)
 				)
 			) {
 				// Valeurs en sortie
@@ -354,7 +354,7 @@ class user extends common
 
 				// Profils disponibles
 				foreach ($this->getData(['profil']) as $profilId => $profilData) {
-					if ($profilId < self::GROUP_STUDENT) {
+					if ($profilId < self::GROUP_MEMBER) {
 						continue;
 					}
 					if ($profilId === self::GROUP_ADMIN) {
@@ -492,8 +492,8 @@ class user extends common
 					])
 				];
 			} elseif (
-				$groupId == self::GROUP_STUDENT ||
-				$groupId == self::GROUP_TEACHER
+				$groupId == self::GROUP_MEMBER ||
+				$groupId == self::GROUP_EDITOR
 			) {
 				// Enumérer les sous groupes MEMBER et MODERATOR
 				foreach ($groupData as $profilId => $profilData) {
@@ -871,7 +871,7 @@ class user extends common
 					($this->getData(['user', $userId, 'connectTimeout']) + $this->getData(['config', 'connect', 'timeout'])) < time()
 					and $this->getData(['user', $userId, 'connectFail']) < $this->getData(['config', 'connect', 'attempt'])
 					and password_verify(html_entity_decode($this->getInput('userLoginPassword', helper::FILTER_STRING_SHORT, true)), $this->getData(['user', $userId, 'password']))
-					and $this->getData(['user', $userId, 'group']) >= self::GROUP_STUDENT
+					and $this->getData(['user', $userId, 'group']) >= self::GROUP_MEMBER
 					and $captcha === true
 				) {
 					// RAZ

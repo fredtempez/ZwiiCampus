@@ -345,7 +345,7 @@ class layout extends common
         }
         // Affichage de la barre de membre simple
         if (
-            $this->getUser('group') >= self::GROUP_STUDENT && $this->getUser('group') < self::GROUP_ADMIN
+            $this->getUser('group') >= self::GROUP_MEMBER && $this->getUser('group') < self::GROUP_ADMIN
             && $this->getData(['theme', 'footer', 'memberBar']) === true
         ) {
             $items .= '<span id="footerDisplayMemberAccount"';
@@ -506,11 +506,11 @@ class layout extends common
         }
         // Commandes pour les membres simples
         if (
-            $this->getUser('group') >= self::GROUP_STUDENT && $this->getUser('group') < self::GROUP_ADMIN
+            $this->getUser('group') >= self::GROUP_MEMBER && $this->getUser('group') < self::GROUP_ADMIN
             && $this->getData(['theme', 'menu', 'memberBar']) === true
         ) {
             if (
-                $this->getUser('group') >= self::GROUP_STUDENT &&
+                $this->getUser('group') >= self::GROUP_MEMBER &&
                 $this->getUser('permission', 'filemanager') === true
             ) {
                 $itemsRight .= '<li>' . template::ico('folder', [
@@ -571,7 +571,7 @@ class layout extends common
                     and $this->getUser('password') !== $this->getInput('ZWII_USER_PASSWORD')
                 ) or ($this->getData(['page', $parentPageId, 'disable']) === true
                     and $this->getUser('password') === $this->getInput('ZWII_USER_PASSWORD')
-                    and $this->getUser('group') < self::GROUP_TEACHER
+                    and $this->getUser('group') < self::GROUP_EDITOR
                 )
             ) {
                 $pageUrl = ($this->getData(['config', 'homePageId']) === $this->getUrl(0)) ? helper::baseUrl(false) : helper::baseUrl() . $this->getUrl(0);
@@ -637,7 +637,7 @@ class layout extends common
                         and $this->getUser('password') !== $this->getInput('ZWII_USER_PASSWORD')
                     ) or ($this->getData(['page', $childKey, 'disable']) === true
                         and $this->getUser('password') === $this->getInput('ZWII_USER_PASSWORD')
-                        and $this->getUser('group') < self::GROUP_TEACHER
+                        and $this->getUser('group') < self::GROUP_EDITOR
                     )
                 ) {
                     $pageUrl = ($this->getData(['config', 'homePageId']) === $this->getUrl(0)) ? helper::baseUrl(false) : helper::baseUrl() . $this->getUrl(0);
@@ -899,7 +899,7 @@ class layout extends common
              * Les enseignants les cours dont ils sont auteurs
              * Les étudiants les cours dans lesquels ils sont inscrits
              */
-            if ($this->getUser('group') >= self::GROUP_TEACHER) {
+            if ($this->getUser('group') >= self::GROUP_EDITOR) {
                 if ($this->getCoursesByUser($this->getUser('id'), $this->getUser('group'))) {
                     $leftItems .= '<li><select id="barSelectCourse" >';
                     $leftItems .= '<option name="' . helper::translate('Accueil') . '" value="' . helper::baseUrl(true) . 'course/swap/home" ' . ('home' === self::$siteContent ? 'selected' : '') . '>' . helper::translate('Accueil') . '</option>';
@@ -917,7 +917,7 @@ class layout extends common
                 ]) . '</li>';
             }
             // Liste des pages
-            if ($this->getUser('group') >= self::GROUP_TEACHER) {
+            if ($this->getUser('group') >= self::GROUP_EDITOR) {
                 $leftItems .= '<li><select id="barSelectPage">';
                 $leftItems .= '<option value="">' . helper::translate('Pages du site') . '</option>';
                 $leftItems .= '<optgroup label="' . helper::translate('Pages orphelines') . '">';
@@ -1030,7 +1030,7 @@ class layout extends common
             // Items de droite
             $rightItems = '';
             if (
-                $this->getUser('group') >= self::GROUP_TEACHER
+                $this->getUser('group') >= self::GROUP_EDITOR
                 && $this->getUser(
                     'permission',
                     'filemanager'
@@ -1090,7 +1090,7 @@ class layout extends common
                 }
             }
             if (
-                $this->getUser('group') >= self::GROUP_TEACHER
+                $this->getUser('group') >= self::GROUP_EDITOR
                 && $this->getUser('permission', 'user', 'edit')
 
             ) {
@@ -1177,7 +1177,7 @@ class layout extends common
         $vars .= 'var baseUrlQs = ' . json_encode(helper::baseUrl()) . ';';
         if (
             $this->getUser('password') === $this->getInput('ZWII_USER_PASSWORD')
-            and $this->getUser('group') >= self::GROUP_TEACHER
+            and $this->getUser('group') >= self::GROUP_EDITOR
         ) {
             $vars .= 'var privateKey = ' . json_encode(md5_file(self::DATA_DIR . 'core.json')) . ';';
         }

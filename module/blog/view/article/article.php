@@ -29,7 +29,7 @@
 				or (
 					// Groupe
 					($this->getData(['module',  $this->getUrl(0), 'posts',  $this->getUrl(1), 'editConsent']) === self::GROUP_ADMIN
-						or $this->getData(['module',  $this->getUrl(0), 'posts',  $this->getUrl(1), 'editConsent']) === self::GROUP_TEACHER)
+						or $this->getData(['module',  $this->getUrl(0), 'posts',  $this->getUrl(1), 'editConsent']) === self::GROUP_EDITOR)
 					and $this->getUser('group') >=  $this->getData(['module', $this->getUrl(0), 'posts', $this->getUrl(1), 'editConsent'])
 				)
 				or (
