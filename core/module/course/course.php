@@ -22,7 +22,6 @@ class course extends common
         'add' => self::GROUP_ADMIN,
         'delete' => self::GROUP_ADMIN,
         'swap' => self::GROUP_VISITOR,
-        'change' => self::GROUP_VISITOR,
     ];
 
     public static $courseAccess = [
@@ -42,7 +41,7 @@ class course extends common
 
     public static $courses = [];
 
-    public static $changeMessages = [];
+    public static $swapMessage = '';
 
 
     public function index()
@@ -243,10 +242,10 @@ class course extends common
 
         // Bouton de connexion ou d'inscription
         // C'est un prof ou un admin
-        self::$changeMessages = $this->getUser('group') >= self::GROUP_EDITOR 
-                                ? 'Se connecter'
-                                // C'est un étudiant ou un visiteur
-                                : '';
+        self::$changeMessages = $this->getUser('group') >= self::GROUP_EDITOR
+            ? 'Se connecter'
+            // C'est un étudiant ou un visiteur
+            : '';
 
         // Valeurs en sortie
         $this->addOutput([
@@ -266,21 +265,70 @@ class course extends common
         // Cours sélectionnée
         $courseId = $this->getUrl(2);
 
-        if (
-            // home n'est pas présent dans la base de données des cours
-            $courseId === 'home' ||
-                // Contrôle la validité du cours demandé
-            (is_dir(self::DATA_DIR . $courseId) &&
-                $this->getData(['course', $courseId]))
-        ) {
-            // Stocker la sélection
+        // Le cours est disponible ?
+        if ($courseId === 'home') {
             $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
+            // Valeurs en sortie
+            $this->addOutput([
+                'redirect' => helper::baseUrl(),
+            ]);
+        } elseif ($this->courseIsAvailable($courseId) === false) {
+            $message = 'Ce cours est fermé.';
+            if ($this->getData(['course', $courseId, 'access']) === self::COURSE_ACCESS_DATE) {
+                $from = helper::dateUTF8('%m %B %Y', $this->getData(['course', $courseId, 'openingDate'])) . helper::translate(' à ') . helper::dateUTF8('%H:%M', $this->getData(['course', $courseId, 'openingDate']));
+                $to = helper::dateUTF8('%m %B %Y', $this->getData(['course', $courseId, 'closingDate'])) . helper::translate(' à ') . helper::dateUTF8('%H:%M', $this->getData(['course', $courseId, 'closingDate']));
+                $message = sprintf(helper::translate('Ce cours ouvre le <br>%s <br> et ferme le %s'), $from, $to);
+            }
+            // Valeurs en sortie
+            $this->addOutput([
+                'redirect' => helper::baseUrl(),
+                'notification' => helper::translate($message),
+                'state' => false,
+            ]);
         }
 
-        // Valeurs en sortie
-        $this->addOutput([
-            'redirect' => helper::baseUrl()
-        ]);
+        // Soumission du formulaire
+        if (
+            $this->isPost()
+        ) {
+            if (
+                // Contrôle la validité du cours demandé
+                (is_dir(self::DATA_DIR . $courseId) &&
+                    $this->getData(['course', $courseId]))
+            ) {
+                // Stocker la sélection
+                $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
+            }
+            // Valeurs en sortie
+            $this->addOutput([
+                'redirect' => helper::baseUrl()
+            ]);
+        } else {
+
+            // Génération du message d'inscription
+            $userId = $this->getUser('id');
+            // L'étudiant est-il  inscrit
+            self::$swapMessage = 'Se connecter';
+            if ($this->courseUserEnrolment($courseId, $userId) === false) {
+                // Inscription libre                
+                if ($this->getData(['course', $courseId, 'enrolment']) <= self::COURSE_ENROLMENT_SELF) {
+                    self::$swapMessage = helper::translate('S\'inscrire');
+                }
+
+            }
+
+            // Valeurs en sortie
+            $this->addOutput([
+                'title' => sprintf(helper::translate('Accéder au cours %s'), $this->getData(['course', $this->getUrl(2), 'shortTitle'])),
+                'view' => 'swap',
+                'display' => self::DISPLAY_LAYOUT_LIGHT,
+            ]);
+        }
+
+
+
+
+
     }
 
 

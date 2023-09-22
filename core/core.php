@@ -1466,15 +1466,13 @@ class common
 				$r = in_array($userId, array_keys($this->getData(['enrolment', $courseId])));
 				break;
 			case self::GROUP_MEMBER:
-				$r = $this->courseIsAvailable($courseId) &&
-					(in_array($userId, array_keys($this->getData(['enrolment', $courseId]))) ||
-					$this->getData(['course', $courseId, 'enrolment']) <= self::COURSE_ENROLMENT_SELF);
+				$r = in_array($userId, array_keys($this->getData(['enrolment', $courseId]))) &&
+					$this->getData(['course', $courseId, 'enrolment']) <= self::COURSE_ENROLMENT_SELF;
 				break;
 			// Visiteur non connecté
 			case self::GROUP_VISITOR:
 			case false:
-				$r = $this->courseIsAvailable($courseId) &&
-					$this->getData(['course', $courseId, 'enrolment']) === self::COURSE_ENROLMENT_GUEST;
+				$r = $this->getData(['course', $courseId, 'enrolment']) === self::COURSE_ENROLMENT_GUEST;
 				break;
 			default:
 				$r = false;
@@ -1489,6 +1487,9 @@ class common
 	 */
 	public function courseIsAvailable($courseId)
 	{
+		if ($courseId === 'home') {
+			return true;
+		}
 		$access = $this->getData(['course', $courseId, 'access']);
 		switch ($access) {
 			case self::COURSE_ACCESS_OPEN:
