@@ -41,7 +41,7 @@ class course extends common
 
     public static $courses = [];
 
-    public static $swapMessage = '';
+    public static $swapMessage = [];
 
 
     public function index()
@@ -264,7 +264,7 @@ class course extends common
     {
         // Cours sélectionnée
         $courseId = $this->getUrl(2);
-
+        $userId = $this->getUser('id');
         // Le cours est disponible ?
         if ($courseId === 'home') {
             $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
@@ -291,8 +291,14 @@ class course extends common
         if (
             $this->isPost()
         ) {
+            $enrolKey = $this->getInput('courseSwapEnrolmentKey');
+            if ($enrolKey) {
+                $this->setData(['enrolment', $courseId, $userId]);
+            }
+
+            // Vérifie la clé et inscrit l'utilisateur dans la base
             if (
-                // Contrôle la validité du cours demandé
+                    // Contrôle la validité du cours demandé
                 (is_dir(self::DATA_DIR . $courseId) &&
                     $this->getData(['course', $courseId]))
             ) {
@@ -306,15 +312,28 @@ class course extends common
         } else {
 
             // Génération du message d'inscription
-            $userId = $this->getUser('id');
             // L'étudiant est-il  inscrit
-            self::$swapMessage = 'Se connecter';
+            self::$swapMessage['submitLabel'] = 'Se connecter';
+            self::$swapMessage['enrolmentMessage'] = '';
+            self::$swapMessage['enrolmentKey'] = '';
             if ($this->courseUserEnrolment($courseId, $userId) === false) {
-                // Inscription libre                
-                if ($this->getData(['course', $courseId, 'enrolment']) <= self::COURSE_ENROLMENT_SELF) {
-                    self::$swapMessage = helper::translate('S\'inscrire');
+                switch ($this->getData(['course', $courseId, 'enrolment'])) {
+                    case self::COURSE_ENROLMENT_GUEST:
+                    case self::COURSE_ENROLMENT_SELF:
+                        self::$swapMessage['submitLabel'] = helper::translate('M\'inscrire');
+                        break;
+                    case self::COURSE_ENROLMENT_SELF_KEY:
+                        if ($userId) {
+                            self::$swapMessage['enrolmentKey'] = template::text('courseSwapEnrolmentKey', [
+                                'label' => helper::translate('Clé d\'inscription'),
+                            ]);
+                        }
+                        self::$swapMessage['enrolmentMessage'] = helper::translate('Connectez-vous pour accèder à ce cours.');
+                        break;
+                    case self::COURSE_ENROLMENT_MANUAL:
+                        self::$swapMessage['enrolmentMessage'] = helper::translate('L\'enseignant inscrit les étudiants dans le cours, vous ne pouvez pas vous inscrire vous-même.');
+                        break;
                 }
-
             }
 
             // Valeurs en sortie
