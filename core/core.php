@@ -1455,8 +1455,9 @@ class common
 	 * @param string $userId identifiant de l'utilisateur
 	 * @param string $courseId identifiant du cours sollicité
 	 */
-	public function courseUserEnrolment($courseId, $userId = null)
+	public function courseIsUserEnroled($courseId)
 	{
+		$userId = $this->getUser('id');
 		$group = $userId ? $this->getData(['user', $userId, 'group']) : false;
 		switch ($group) {
 			case self::GROUP_ADMIN:

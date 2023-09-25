@@ -316,7 +316,7 @@ class course extends common
             self::$swapMessage['submitLabel'] = 'Se connecter';
             self::$swapMessage['enrolmentMessage'] = '';
             self::$swapMessage['enrolmentKey'] = '';
-            if ($this->courseUserEnrolment($courseId, $userId) === false) {
+            if ($this->courseIsUserEnroled($courseId) === false) {
                 switch ($this->getData(['course', $courseId, 'enrolment'])) {
                     case self::COURSE_ENROLMENT_GUEST:
                     case self::COURSE_ENROLMENT_SELF:
@@ -335,7 +335,7 @@ class course extends common
                         break;
                 }
             }
-
+ 
             // Valeurs en sortie
             $this->addOutput([
                 'title' => sprintf(helper::translate('Accéder au cours %s'), $this->getData(['course', $this->getUrl(2), 'shortTitle'])),
