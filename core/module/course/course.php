@@ -262,17 +262,49 @@ class course extends common
      */
     public function swap()
     {
-        // Cours sélectionnée
         $courseId = $this->getUrl(2);
         $userId = $this->getUser('id');
+
+        // Soumission du formulaire
+        if (
+            $this->isPost()
+        ) {
+            if (
+                $this->courseIsAvailable($courseId)
+            ) {
+                // Inscrit l'étudiant
+                switch ($this->getData(['course', $courseId, 'enrolment'])) {
+                    case self::COURSE_ENROLMENT_SELF:
+                        $this->courseEnrolUser($courseId, $userId);
+                        break;
+                    case self::COURSE_ENROLMENT_SELF_KEY:
+                        if ($this->getInput('courseSwapEnrolmentKey') === $this->getData(['course', $courseId, 'enrolmentKey'])) {
+                            $this->courseEnrolUser($courseId, $userId);
+                        }
+                        break;
+                }
+
+                // Stocker la sélection
+                $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
+
+                // Valeurs en sortie
+                $this->addOutput([
+                    'redirect' => helper::baseUrl()
+                ]);
+            }
+        }
         // Le cours est disponible ?
-        if ($courseId === 'home') {
+        if (
+            $courseId === 'home' ||
+            $this->courseIsUserEnroled($courseId) === true
+        ) {
             $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
             // Valeurs en sortie
             $this->addOutput([
                 'redirect' => helper::baseUrl(),
             ]);
-        } elseif ($this->courseIsAvailable($courseId) === false) {
+            return;
+        } else {
             $message = 'Ce cours est fermé.';
             if ($this->getData(['course', $courseId, 'access']) === self::COURSE_ACCESS_DATE) {
                 $from = helper::dateUTF8('%m %B %Y', $this->getData(['course', $courseId, 'openingDate'])) . helper::translate(' à ') . helper::dateUTF8('%H:%M', $this->getData(['course', $courseId, 'openingDate']));
@@ -287,69 +319,108 @@ class course extends common
             ]);
         }
 
-        // Soumission du formulaire
-        if (
-            $this->isPost()
-        ) {
-            $enrolKey = $this->getInput('courseSwapEnrolmentKey');
-            if ($enrolKey) {
-                $this->setData(['enrolment', $courseId, $userId]);
-            }
-
-            // Vérifie la clé et inscrit l'utilisateur dans la base
-            if (
-                    // Contrôle la validité du cours demandé
-                (is_dir(self::DATA_DIR . $courseId) &&
-                    $this->getData(['course', $courseId]))
-            ) {
-                // Stocker la sélection
-                $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
-            }
-            // Valeurs en sortie
-            $this->addOutput([
-                'redirect' => helper::baseUrl()
-            ]);
-        } else {
-
-            // Génération du message d'inscription
-            // L'étudiant est-il  inscrit
-            self::$swapMessage['submitLabel'] = 'Se connecter';
-            self::$swapMessage['enrolmentMessage'] = '';
-            self::$swapMessage['enrolmentKey'] = '';
-            if ($this->courseIsUserEnroled($courseId) === false) {
-                switch ($this->getData(['course', $courseId, 'enrolment'])) {
-                    case self::COURSE_ENROLMENT_GUEST:
-                    case self::COURSE_ENROLMENT_SELF:
-                        self::$swapMessage['submitLabel'] = helper::translate('M\'inscrire');
-                        break;
-                    case self::COURSE_ENROLMENT_SELF_KEY:
-                        if ($userId) {
-                            self::$swapMessage['enrolmentKey'] = template::text('courseSwapEnrolmentKey', [
-                                'label' => helper::translate('Clé d\'inscription'),
-                            ]);
-                        }
+        // Génération du message d'inscription
+        // L'étudiant est-il  inscrit
+        self::$swapMessage['submitLabel'] = 'Se connecter';
+        self::$swapMessage['enrolmentMessage'] = '';
+        self::$swapMessage['enrolmentKey'] = '';
+        if ($this->courseIsUserEnroled($courseId) === false) {
+            switch ($this->getData(['course', $courseId, 'enrolment'])) {
+                case self::COURSE_ENROLMENT_GUEST:
+                case self::COURSE_ENROLMENT_SELF:
+                    self::$swapMessage['submitLabel'] = helper::translate('M\'inscrire');
+                    break;
+                case self::COURSE_ENROLMENT_SELF_KEY:
+                    if ($userId) {
+                        self::$swapMessage['enrolmentKey'] = template::text('courseSwapEnrolmentKey', [
+                            'label' => helper::translate('Clé d\'inscription'),
+                        ]);
+                    } else {
                         self::$swapMessage['enrolmentMessage'] = helper::translate('Connectez-vous pour accèder à ce cours.');
-                        break;
-                    case self::COURSE_ENROLMENT_MANUAL:
-                        self::$swapMessage['enrolmentMessage'] = helper::translate('L\'enseignant inscrit les étudiants dans le cours, vous ne pouvez pas vous inscrire vous-même.');
-                        break;
-                }
+                    }
+                    break;
+                case self::COURSE_ENROLMENT_MANUAL:
+                    self::$swapMessage['enrolmentMessage'] = helper::translate('L\'enseignant inscrit les étudiants dans le cours, vous ne pouvez pas vous inscrire vous-même.');
+                    break;
             }
- 
             // Valeurs en sortie
             $this->addOutput([
                 'title' => sprintf(helper::translate('Accéder au cours %s'), $this->getData(['course', $this->getUrl(2), 'shortTitle'])),
                 'view' => 'swap',
                 'display' => self::DISPLAY_LAYOUT_LIGHT,
             ]);
+            // l'étudiant est inscrit
         }
-
-
-
-
 
     }
 
+    /**
+     * Autorise l'accès à un cours
+     * @param @return bool le user a le droit d'entrée dans le cours
+     * @param string $userId identifiant de l'utilisateur
+     * @param string $courseId identifiant du cours sollicité
+     */
+    private function courseIsUserEnroled($courseId)
+    {
+        $userId = $this->getUser('id');
+        $group = $userId ? $this->getData(['user', $userId, 'group']) : false;
+        switch ($group) {
+            case self::GROUP_ADMIN:
+                $r = true;
+                break;
+            case self::GROUP_EDITOR:
+                $r = in_array($userId, array_keys($this->getData(['enrolment', $courseId])));
+                break;
+            case self::GROUP_MEMBER:
+                $r = in_array($userId, array_keys($this->getData(['enrolment', $courseId])));
+                break;
+            // Visiteur non connecté
+            case self::GROUP_VISITOR:
+            case false:
+                $r = $this->getData(['course', $courseId, 'enrolment']) === self::COURSE_ENROLMENT_GUEST;
+                break;
+            default:
+                $r = false;
+        }
+        return $r;
+    }
+
+    private function courseEnrolUser($courseId, $userId)
+    {
+        $this->setData([
+            'enrolment',
+            $courseId,
+            $userId,
+            [
+                'lastPageId' => '',
+                'lastVisit' => 0
+            ]
+        ]);
+    }
+
+    /**
+     * Autorise l'accès à un cours
+     * @param @return bool le user a le droit d'entrée dans le cours
+     * @param string $courseId identifiant du cours sollicité
+     */
+    private function courseIsAvailable($courseId)
+    {
+        if ($courseId === 'home') {
+            return true;
+        }
+        $access = $this->getData(['course', $courseId, 'access']);
+        switch ($access) {
+            case self::COURSE_ACCESS_OPEN:
+                return true;
+            case self::COURSE_ACCESS_DATE:
+                return (
+                    time() >= $this->getData(['course', $courseId, 'openingDate']) &&
+                    time() <= $this->getData(['course', $courseId, 'closingDate'])
+                );
+            case self::COURSE_ACCESS_CLOSE:
+                return false;
+        }
+    }
 
 
 }
