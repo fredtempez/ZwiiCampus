@@ -30,7 +30,7 @@
     <div class="col3 offset7">
         <?php echo template::submit('courseSwapSubmit', [
             'value' => $module::$swapMessage['submitLabel'],
-            'disabled' => !$this->courseIsAvailable($this->getUrl(2)),
+            'disabled' => !$module->courseIsAvailable($this->getUrl(2)),
             'ico' => ''
         ]); ?>
     </div>

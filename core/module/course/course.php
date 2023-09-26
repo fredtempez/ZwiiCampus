@@ -22,6 +22,7 @@ class course extends common
         'add' => self::GROUP_ADMIN,
         'delete' => self::GROUP_ADMIN,
         'swap' => self::GROUP_VISITOR,
+        'enrol' => self::GROUP_VISITOR,
     ];
 
     public static $courseAccess = [
@@ -263,6 +264,54 @@ class course extends common
     public function swap()
     {
         $courseId = $this->getUrl(2);
+        $message = '';
+        $redirect =  helper::baseUrl();
+        $state = true;
+        // Afficher le cous 
+        if (
+            // Sortir du cours et afficher l'accueil
+            $courseId === 'home'
+            // l'étudiant est inscrit dans le cours ET le cours est ouvert 
+            ||
+            (
+                $this->courseIsUserEnroled($courseId)
+                && $this->courseIsAvailable($courseId))
+
+        ) {
+            $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
+            $message = sprintf(helper::translate('Bienvenue dans le cours %s'), $this->getData(['course', $courseId, 'shortTitle']));
+        }
+        // Le cours est fermé
+        if ($this->courseIsAvailable($courseId) === false) {
+            // Génération du message
+            $message = 'Ce cours est fermé.';
+            if ($this->getData(['course', $courseId, 'access']) === self::COURSE_ACCESS_DATE) {
+                $from = helper::dateUTF8('%m %B %Y', $this->getData(['course', $courseId, 'openingDate'])) . helper::translate(' à ') . helper::dateUTF8('%H:%M', $this->getData(['course', $courseId, 'openingDate']));
+                $to = helper::dateUTF8('%m %B %Y', $this->getData(['course', $courseId, 'closingDate'])) . helper::translate(' à ') . helper::dateUTF8('%H:%M', $this->getData(['course', $courseId, 'closingDate']));
+                $message = sprintf(helper::translate('Ce cours ouvre le <br>%s <br> et ferme le %s'), $from, $to);
+                $state = false;
+            }
+        }
+        // le cours est ouvert mais l'étudiant n'est pas inscrit, on affiche la bannière
+        if ($this->courseIsAvailable($courseId) && $this->courseIsUserEnroled($courseId) === false ) {
+            $redirect = $redirect . 'course/enrol/' . $courseId;
+            $message = helper::translate('Veuillez vous inscrire');
+            $state = true;
+        }
+
+        // Valeurs en sortie
+        $this->addOutput([
+            'redirect' => $redirect,
+            'notification' => helper::translate($message),
+            'state' => $state,
+        ]);
+
+    }
+
+    // Génération du message d'inscription
+    public function enrol()
+    {
+        $courseId = $this->getUrl(2);
         $userId = $this->getUser('id');
 
         // Soumission du formulaire
@@ -293,33 +342,6 @@ class course extends common
                 ]);
             }
         }
-        // Le cours est disponible ?
-        if (
-            $courseId === 'home' ||
-            $this->courseIsUserEnroled($courseId) === true
-        ) {
-            $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
-            // Valeurs en sortie
-            $this->addOutput([
-                'redirect' => helper::baseUrl(),
-            ]);
-            return;
-        } else {
-            $message = 'Ce cours est fermé.';
-            if ($this->getData(['course', $courseId, 'access']) === self::COURSE_ACCESS_DATE) {
-                $from = helper::dateUTF8('%m %B %Y', $this->getData(['course', $courseId, 'openingDate'])) . helper::translate(' à ') . helper::dateUTF8('%H:%M', $this->getData(['course', $courseId, 'openingDate']));
-                $to = helper::dateUTF8('%m %B %Y', $this->getData(['course', $courseId, 'closingDate'])) . helper::translate(' à ') . helper::dateUTF8('%H:%M', $this->getData(['course', $courseId, 'closingDate']));
-                $message = sprintf(helper::translate('Ce cours ouvre le <br>%s <br> et ferme le %s'), $from, $to);
-            }
-            // Valeurs en sortie
-            $this->addOutput([
-                'redirect' => helper::baseUrl(),
-                'notification' => helper::translate($message),
-                'state' => false,
-            ]);
-        }
-
-        // Génération du message d'inscription
         // L'étudiant est-il  inscrit
         self::$swapMessage['submitLabel'] = 'Se connecter';
         self::$swapMessage['enrolmentMessage'] = '';
@@ -346,12 +368,10 @@ class course extends common
             // Valeurs en sortie
             $this->addOutput([
                 'title' => sprintf(helper::translate('Accéder au cours %s'), $this->getData(['course', $this->getUrl(2), 'shortTitle'])),
-                'view' => 'swap',
+                'view' => 'enrol',
                 'display' => self::DISPLAY_LAYOUT_LIGHT,
             ]);
-            // l'étudiant est inscrit
         }
-
     }
 
     /**
@@ -360,7 +380,7 @@ class course extends common
      * @param string $userId identifiant de l'utilisateur
      * @param string $courseId identifiant du cours sollicité
      */
-    private function courseIsUserEnroled($courseId)
+    public function courseIsUserEnroled($courseId)
     {
         $userId = $this->getUser('id');
         $group = $userId ? $this->getData(['user', $userId, 'group']) : false;
@@ -385,7 +405,7 @@ class course extends common
         return $r;
     }
 
-    private function courseEnrolUser($courseId, $userId)
+    public function courseEnrolUser($courseId, $userId)
     {
         $this->setData([
             'enrolment',
@@ -403,7 +423,7 @@ class course extends common
      * @param @return bool le user a le droit d'entrée dans le cours
      * @param string $courseId identifiant du cours sollicité
      */
-    private function courseIsAvailable($courseId)
+    public function courseIsAvailable($courseId)
     {
         if ($courseId === 'home') {
             return true;
