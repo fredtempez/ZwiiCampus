@@ -267,12 +267,16 @@ class course extends common
         $message = '';
         $redirect =  helper::baseUrl();
         $state = true;
-        // Afficher le cous 
+        // Afficher le cours
         if (
             // Sortir du cours et afficher l'accueil
             $courseId === 'home'
+        ) {
+            $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
+            $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
+        } 
+        elseif (
             // l'étudiant est inscrit dans le cours ET le cours est ouvert 
-            ||
             (
                 $this->courseIsUserEnroled($courseId)
                 && $this->courseIsAvailable($courseId))
@@ -282,7 +286,7 @@ class course extends common
             $message = sprintf(helper::translate('Bienvenue dans le cours %s'), $this->getData(['course', $courseId, 'shortTitle']));
         }
         // Le cours est fermé
-        if ($this->courseIsAvailable($courseId) === false) {
+        elseif ($this->courseIsAvailable($courseId) === false) {
             // Génération du message
             $message = 'Ce cours est fermé.';
             if ($this->getData(['course', $courseId, 'access']) === self::COURSE_ACCESS_DATE) {
@@ -293,7 +297,7 @@ class course extends common
             }
         }
         // le cours est ouvert mais l'étudiant n'est pas inscrit, on affiche la bannière
-        if ($this->courseIsAvailable($courseId) && $this->courseIsUserEnroled($courseId) === false ) {
+        elseif ($this->courseIsAvailable($courseId) && $this->courseIsUserEnroled($courseId) === false ) {
             $redirect = $redirect . 'course/enrol/' . $courseId;
             $message = helper::translate('Veuillez vous inscrire');
             $state = true;
@@ -383,7 +387,7 @@ class course extends common
     public function courseIsUserEnroled($courseId)
     {
         $userId = $this->getUser('id');
-        $group = $userId ? $this->getData(['user', $userId, 'group']) : false;
+        $group = $userId ? $this->getData(['user', $userId, 'group']) : null;
         switch ($group) {
             case self::GROUP_ADMIN:
                 $r = true;
@@ -392,11 +396,12 @@ class course extends common
                 $r = in_array($userId, array_keys($this->getData(['enrolment', $courseId])));
                 break;
             case self::GROUP_MEMBER:
+                var_dump( $group );
                 $r = in_array($userId, array_keys($this->getData(['enrolment', $courseId])));
                 break;
             // Visiteur non connecté
             case self::GROUP_VISITOR:
-            case false:
+            case null:
                 $r = $this->getData(['course', $courseId, 'enrolment']) === self::COURSE_ENROLMENT_GUEST;
                 break;
             default:
