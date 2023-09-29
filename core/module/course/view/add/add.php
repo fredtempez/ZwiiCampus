@@ -38,6 +38,14 @@
             </div>
             <div class="row">
                 <div class="col12">
+                <?php echo template::select('courseEditCategories', $module::$courseCategories, [
+                        'label' => 'Catégorie',
+                        'value' => $this->getdata(['course', $this->getUrl(2), 'category'])
+                    ]); ?>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col12">
                     <?php echo template::textarea('courseAddDescription', [
                         'label' => 'Description'
                     ]); ?>

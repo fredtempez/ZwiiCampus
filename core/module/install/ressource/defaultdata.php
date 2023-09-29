@@ -668,7 +668,10 @@ class init extends common
 			]
 		],
 		'course' => [],
-		'enrolment' => []
+		'enrolment' => [],
+		'categorie' => [
+			'Générale'
+		]
 	];
 
 	public static $siteTemplate = [

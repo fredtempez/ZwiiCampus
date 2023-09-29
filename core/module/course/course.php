@@ -40,6 +40,8 @@ class course extends common
 
     public static $courseTeachers = [];
 
+    public static $courseCategories = [];
+
     public static $courses = [];
 
     public static $swapMessage = [];
@@ -142,38 +144,7 @@ class course extends common
         ]);
     }
 
-    public function delete()
-    {
-
-        if (
-            $this->getUser('permission', __CLASS__, __FUNCTION__) !== true ||
-            // Le cours n'existe pas
-            $this->getData(['course', $this->getUrl(2)]) === null
-            // Groupe insuffisant
-            and ($this->getUrl('group') < self::GROUP_EDITOR)
-        ) {
-            // Valeurs en sortie
-            $this->addOutput([
-                'access' => false
-            ]);
-            // Suppression
-        } else {
-            $this->deleteData(['course', $this->getUrl(2)]);
-            $this->deleteData(['enrolment', $this->getUrl(2)]);
-            if (is_dir(self::DATA_DIR . $this->getUrl(2))) {
-                $this->deleteDir(self::DATA_DIR . $this->getUrl(2));
-            }
-
-            // Valeurs en sortie
-            $this->addOutput([
-                'redirect' => helper::baseUrl() . 'course',
-                'notification' => helper::translate('Cours supprimé'),
-                'state' => true
-            ]);
-        }
-
-    }
-
+    
     /**
      * Edite un cours
      */
@@ -218,6 +189,7 @@ class course extends common
                 self::$courseTeachers[$teacherId] = $teacherInfo["firstname"] . ' ' . $teacherInfo["lastname"];
             }
         }
+        self::$courseCategories = $this->getData(['categorie']);
 
         // Valeurs en sortie
         $this->addOutput([
@@ -225,6 +197,39 @@ class course extends common
             'view' => 'edit'
         ]);
     }
+
+    public function delete()
+    {
+
+        if (
+            $this->getUser('permission', __CLASS__, __FUNCTION__) !== true ||
+            // Le cours n'existe pas
+            $this->getData(['course', $this->getUrl(2)]) === null
+            // Groupe insuffisant
+            and ($this->getUrl('group') < self::GROUP_EDITOR)
+        ) {
+            // Valeurs en sortie
+            $this->addOutput([
+                'access' => false
+            ]);
+            // Suppression
+        } else {
+            $this->deleteData(['course', $this->getUrl(2)]);
+            $this->deleteData(['enrolment', $this->getUrl(2)]);
+            if (is_dir(self::DATA_DIR . $this->getUrl(2))) {
+                $this->deleteDir(self::DATA_DIR . $this->getUrl(2));
+            }
+
+            // Valeurs en sortie
+            $this->addOutput([
+                'redirect' => helper::baseUrl() . 'course',
+                'notification' => helper::translate('Cours supprimé'),
+                'state' => true
+            ]);
+        }
+
+    }
+
 
     /*
      * Affiche un écran de connexion à un cours 
