@@ -265,42 +265,39 @@ class course extends common
     {
         $courseId = $this->getUrl(2);
         $message = '';
-        $redirect =  helper::baseUrl();
+        $redirect = helper::baseUrl();
         $state = true;
-        // Afficher le cours
+
         if (
             // Sortir du cours et afficher l'accueil
             $courseId === 'home'
         ) {
             $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
-            $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
-        } 
+        }
+        // l'étudiant est inscrit dans le cours ET le cours est ouvert 
         elseif (
-            // l'étudiant est inscrit dans le cours ET le cours est ouvert 
-            (
-                $this->courseIsUserEnroled($courseId)
-                && $this->courseIsAvailable($courseId))
-
+            $this->courseIsUserEnroled($courseId)
+            && $this->courseIsAvailable($courseId)
         ) {
             $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
             $message = sprintf(helper::translate('Bienvenue dans le cours %s'), $this->getData(['course', $courseId, 'shortTitle']));
+        } 
+        // le cours est ouvert mais l'étudiant n'est pas inscrit, on affiche la fenêtre d'inscription
+        elseif ($this->courseIsAvailable($courseId) && $this->courseIsUserEnroled($courseId) === false) {
+            $redirect = $redirect . 'course/enrol/' . $courseId;
+            $message = helper::translate('Veuillez vous inscrire');
+            $state = true;
         }
         // Le cours est fermé
         elseif ($this->courseIsAvailable($courseId) === false) {
             // Génération du message
-            $message = 'Ce cours est fermé.';
+            $message = helper::translate('Ce cours est fermé');
+            $state = false;
             if ($this->getData(['course', $courseId, 'access']) === self::COURSE_ACCESS_DATE) {
                 $from = helper::dateUTF8('%m %B %Y', $this->getData(['course', $courseId, 'openingDate'])) . helper::translate(' à ') . helper::dateUTF8('%H:%M', $this->getData(['course', $courseId, 'openingDate']));
                 $to = helper::dateUTF8('%m %B %Y', $this->getData(['course', $courseId, 'closingDate'])) . helper::translate(' à ') . helper::dateUTF8('%H:%M', $this->getData(['course', $courseId, 'closingDate']));
                 $message = sprintf(helper::translate('Ce cours ouvre le <br>%s <br> et ferme le %s'), $from, $to);
-                $state = false;
             }
-        }
-        // le cours est ouvert mais l'étudiant n'est pas inscrit, on affiche la bannière
-        elseif ($this->courseIsAvailable($courseId) && $this->courseIsUserEnroled($courseId) === false ) {
-            $redirect = $redirect . 'course/enrol/' . $courseId;
-            $message = helper::translate('Veuillez vous inscrire');
-            $state = true;
         }
 
         // Valeurs en sortie
@@ -396,7 +393,7 @@ class course extends common
                 $r = in_array($userId, array_keys($this->getData(['enrolment', $courseId])));
                 break;
             case self::GROUP_MEMBER:
-                var_dump( $group );
+                var_dump($group);
                 $r = in_array($userId, array_keys($this->getData(['enrolment', $courseId])));
                 break;
             // Visiteur non connecté
