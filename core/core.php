@@ -210,7 +210,7 @@ class common
 		'language' => '',
 		'profil' => '',
 		'enrolment' => '',
-		'categorie' => '',
+		'category' => '',
 	];
 
 	private $configFiles = [
@@ -225,7 +225,7 @@ class common
 		'language' => '',
 		'profil' => '',
 		'enrolment' => '',
-		'categorie' => '',
+		'category' => '',
 	];
 
 	private $contentFiles = [

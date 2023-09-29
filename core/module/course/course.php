@@ -17,12 +17,14 @@ class course extends common
 {
 
     public static $actions = [
+        'swap' => self::GROUP_VISITOR,
+        'enrol' => self::GROUP_VISITOR,
         'index' => self::GROUP_ADMIN,
         'edit' => self::GROUP_ADMIN,
         'add' => self::GROUP_ADMIN,
         'delete' => self::GROUP_ADMIN,
-        'swap' => self::GROUP_VISITOR,
-        'enrol' => self::GROUP_VISITOR,
+        'category' => self::GROUP_ADMIN,
+        'categoryAdd' => self::GROUP_ADMIN,
     ];
 
     public static $courseAccess = [
@@ -70,7 +72,7 @@ class course extends common
 
             ];
         }
-        //var_dump($this->getCourseHierarchy(1, 1));
+
         // Valeurs en sortie
         $this->addOutput([
             'title' => helper::translate('Cours'),
@@ -137,6 +139,9 @@ class course extends common
             }
         }
 
+        // Liste des catégories de cours
+        self::$courseCategories = $this->getData(['category']);
+
         // Valeurs en sortie
         $this->addOutput([
             'title' => helper::translate('Ajouter un cours'),
@@ -144,7 +149,6 @@ class course extends common
         ]);
     }
 
-    
     /**
      * Edite un cours
      */
@@ -189,7 +193,9 @@ class course extends common
                 self::$courseTeachers[$teacherId] = $teacherInfo["firstname"] . ' ' . $teacherInfo["lastname"];
             }
         }
-        self::$courseCategories = $this->getData(['categorie']);
+
+        // Liste des catégories de cours
+        self::$courseCategories = $this->getData(['category']);
 
         // Valeurs en sortie
         $this->addOutput([
@@ -230,41 +236,22 @@ class course extends common
 
     }
 
-
-    /*
-     * Affiche un écran de connexion à un cours 
+    /**
+     * Liste les catégories d'un cours
      */
-
-    public function change()
+    public function category()
     {
-        // Soumission du formulaire
-        if (
-            $this->isPost() ||
-            $this->getUrl(2) === 'home'
-
-        ) {
-            $this->swap();
-        }
-
-        // Bouton de connexion ou d'inscription
-        // C'est un prof ou un admin
-        self::$changeMessages = $this->getUser('group') >= self::GROUP_EDITOR
-            ? 'Se connecter'
-            // C'est un étudiant ou un visiteur
-            : '';
-
+        self::$courseCategories = $this->getData(['category']);
+        var_dump(self::$courseCategories);
         // Valeurs en sortie
         $this->addOutput([
-            'title' => sprintf(helper::translate('Accéder au cours %s'), $this->getData(['course', $this->getUrl(2), 'shortTitle'])),
-            'view' => 'change',
-            'display' => self::DISPLAY_LAYOUT_LIGHT,
+            'title' => helper::translate('Catégorie'),
+            'view' => 'category'
         ]);
-
     }
 
     /*
      * Traitement du changement de langue
-     * Fonction utilisée par le noyau
      */
     public function swap()
     {
@@ -319,7 +306,7 @@ class course extends common
                         $state = true;
                     } else {
                         $message = helper::translate('Vous devez disposer d\'un compte pour accéder à ce cours');
-                        $state = false;              
+                        $state = false;
                     }
 
                     break;

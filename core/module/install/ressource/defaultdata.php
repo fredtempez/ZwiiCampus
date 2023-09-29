@@ -669,8 +669,8 @@ class init extends common
 		],
 		'course' => [],
 		'enrolment' => [],
-		'categorie' => [
-			'Générale'
+		'category' => [
+			'general' => 'Générale'
 		]
 	];
 
