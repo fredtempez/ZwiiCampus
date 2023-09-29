@@ -274,19 +274,13 @@ class course extends common
         ) {
             $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
         }
-        // l'étudiant est inscrit dans le cours ET le cours est ouvert 
+        // l'étudiant est inscrit dans le cours ET le cours est ouvert
         elseif (
             $this->courseIsUserEnroled($courseId)
             && $this->courseIsAvailable($courseId)
         ) {
             $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
             $message = sprintf(helper::translate('Bienvenue dans le cours %s'), $this->getData(['course', $courseId, 'shortTitle']));
-        } 
-        // le cours est ouvert mais l'étudiant n'est pas inscrit, on affiche la fenêtre d'inscription
-        elseif ($this->courseIsAvailable($courseId) && $this->courseIsUserEnroled($courseId) === false) {
-            $redirect = $redirect . 'course/enrol/' . $courseId;
-            $message = helper::translate('Veuillez vous inscrire');
-            $state = true;
         }
         // Le cours est fermé
         elseif ($this->courseIsAvailable($courseId) === false) {
@@ -297,6 +291,41 @@ class course extends common
                 $from = helper::dateUTF8('%m %B %Y', $this->getData(['course', $courseId, 'openingDate'])) . helper::translate(' à ') . helper::dateUTF8('%H:%M', $this->getData(['course', $courseId, 'openingDate']));
                 $to = helper::dateUTF8('%m %B %Y', $this->getData(['course', $courseId, 'closingDate'])) . helper::translate(' à ') . helper::dateUTF8('%H:%M', $this->getData(['course', $courseId, 'closingDate']));
                 $message = sprintf(helper::translate('Ce cours ouvre le <br>%s <br> et ferme le %s'), $from, $to);
+            }
+        }
+        // le cours est ouvert, l'étudiant n'est pas inscrit, l'accès au cours est anonyme
+        elseif (
+            $this->courseIsAvailable($courseId) &&
+            $this->courseIsUserEnroled($courseId) === false
+        ) {
+            // Gérer les modalités d'inscription
+            switch ($this->getData(['course', $courseId, 'enrolment'])) {
+                // Anonyme
+                case self::COURSE_ENROLMENT_GUEST:
+                    $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
+                    break;
+                // Auto avec ou sans clé
+                case self::COURSE_ENROLMENT_SELF:
+                case self::COURSE_ENROLMENT_SELF_KEY:
+                    //L'étudiant dispsoe d'un compte
+                    if ($this->getUser('id')) {
+                        $redirect = $redirect . 'course/enrol/' . $courseId;
+                        $message = helper::translate('Veuillez vous inscrire');
+                        $state = true;
+                    } else {
+                        $message = helper::translate('Vous devez disposer d\'un compte pour accéder à ce cours');
+                        $state = false;              
+                    }
+
+                    break;
+                // Par le prof
+                case self::COURSE_ENROLMENT_MANUAL:
+                    $message = helper::translate('L\'enseignant ne vous pas inscrit !');
+                    $state = false;
+                    break;
+                default:
+                    # code...
+                    break;
             }
         }
 
@@ -393,7 +422,6 @@ class course extends common
                 $r = in_array($userId, array_keys($this->getData(['enrolment', $courseId])));
                 break;
             case self::GROUP_MEMBER:
-                var_dump($group);
                 $r = in_array($userId, array_keys($this->getData(['enrolment', $courseId])));
                 break;
             // Visiteur non connecté
