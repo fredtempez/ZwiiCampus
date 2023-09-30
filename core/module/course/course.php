@@ -57,10 +57,15 @@ class course extends common
         ksort($courseIdShortTitle);
         foreach ($courseIdShortTitle as $courseId => $courseTitle) {
             $categorieUrl = helper::baseUrl(!helper::checkRewrite()) . 'course/swap/' . $courseId;
+            $authorId = $this->getData(['course', $courseId, 'author']);
+            $author = sprintf('%s %s', $this->getData(['user', $authorId, 'firstname']), $this->getData(['user', $authorId, 'lastname']));
+            $access = self::$courseAccess[$this->getData(['course', $courseId, 'access'])];
+            $enrolment = self::$courseEnrolment[$this->getData(['course', $courseId, 'enrolment'])];
+            $description = sprintf('%s<br />%s<br />%s<br />', $this->getData(['course', $courseId, 'description']), $access, $enrolment);
             self::$courses[] = [
                 $courseTitle,
-                $this->getData(['course', $courseId, 'author']),
-                $this->getData(['course', $courseId, 'description']),
+                $author,
+                $description,
                 '<a href="' . $categorieUrl . '" target="_blank">' . $categorieUrl . '</a>',
                 template::button('courseEdit' . $courseId, [
                     'href' => helper::baseUrl() . 'course/edit/' . $courseId,
@@ -311,7 +316,8 @@ class course extends common
         ) {
             $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
         }
-        // l'étudiant est inscrit dans le cours ET le cours est ouvert
+        // l'étudiant est inscrit dans le cours ET le cours est ouvert 
+        // ou un admin est connecté ou le prof du cours
         elseif (
             $this->courseIsUserEnroled($courseId)
             && $this->courseIsAvailable($courseId)
@@ -493,6 +499,9 @@ class course extends common
     public function courseIsAvailable($courseId)
     {
         if ($courseId === 'home') {
+            return true;
+        }
+        if ($this->getUser('group') === self::GROUP_ADMIN || $this->getUser('id') === $this->getData(['group', $courseId, 'author'])) {
             return true;
         }
         $access = $this->getData(['course', $courseId, 'access']);
