@@ -241,8 +241,25 @@ class course extends common
      */
     public function category()
     {
-        self::$courseCategories = $this->getData(['category']);
-        var_dump(self::$courseCategories);
+        $categories = $this->getData(['category']);
+        ksort($categories);
+        foreach ($categories as $categoryId => $categoryTitle) {
+            self::$courseCategories[] = [
+                $categoryId,
+                $categoryTitle,
+                template::button('courseEdit' . $categoryId, [
+                    'href' => helper::baseUrl() . 'course/categoryEdit/' . $categoryId,
+                    'value' => template::ico('pencil'),
+                    'help' => 'Éditer'
+                ]),
+                template::button('courseDelete' . $categoryId, [
+                    'class' => 'courseDelete buttonRed',
+                    'href' => helper::baseUrl() . 'course/categoryDelete/' . $categoryId,
+                    'value' => template::ico('trash'),
+                    'help' => 'Supprimer'
+                ])
+            ];
+        }
         // Valeurs en sortie
         $this->addOutput([
             'title' => helper::translate('Catégorie'),

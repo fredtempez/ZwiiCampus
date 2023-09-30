@@ -21,4 +21,8 @@
         ]); ?>
     </div>
 </div>
-<?php echo template::table([3 , 3, 4, 1, 1], $module::$courses, ['Titre court', 'Auteur', 'Description', '', '']); ?>
+<?php if($module::$courses): ?>
+	<?php echo template::table([3 , 3, 4, 1, 1], $module::$courses, ['Titre court', 'Auteur', 'Description', '', '']); ?>
+<?php else: ?>
+	<?php echo template::speech('Aucun Cours'); ?>
+<?php endif; ?>
