@@ -54,10 +54,12 @@ class course extends common
         $courseIdShortTitle = helper::arrayColumn($this->getData(['course']), 'shortTitle');
         ksort($courseIdShortTitle);
         foreach ($courseIdShortTitle as $courseId => $courseTitle) {
+            $categorieUrl = helper::baseUrl(!helper::checkRewrite()) . 'course/swap/' . $courseId ;
             self::$courses[] = [
                 $courseTitle,
                 $this->getData(['course', $courseId, 'author']),
                 $this->getData(['course', $courseId, 'description']),
+                '<a href="' . $categorieUrl .'" target="_blank">' . $categorieUrl . '</a>',
                 template::button('courseEdit' . $courseId, [
                     'href' => helper::baseUrl() . 'course/edit/' . $courseId,
                     'value' => template::ico('pencil'),

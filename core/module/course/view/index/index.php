@@ -22,7 +22,7 @@
     </div>
 </div>
 <?php if($module::$courses): ?>
-	<?php echo template::table([3 , 3, 4, 1, 1], $module::$courses, ['Titre court', 'Auteur', 'Description', '', '']); ?>
+	<?php echo template::table([2, 2, 2, 4, 1, 1], $module::$courses, ['Titre court', 'Auteur', 'Description', 'Lien direct', '', '']); ?>
 <?php else: ?>
 	<?php echo template::speech('Aucun Cours'); ?>
 <?php endif; ?>
