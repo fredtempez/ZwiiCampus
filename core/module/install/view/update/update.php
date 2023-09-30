@@ -1,6 +1,6 @@
 <div id="updateContainer">
 	<p><strong>
-			<?php echo helper::translate('Mise à jour de ZwiiCMS'); ?>
+			<?php echo helper::translate('Mise à jour de ZwiiLMS'); ?>
 			&nbsp;
 			<?php echo self::ZWII_VERSION; ?>
 			<?php echo helper::translate('vers ZwiiCMS'); ?>
