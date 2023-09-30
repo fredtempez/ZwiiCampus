@@ -48,18 +48,20 @@ class course extends common
 
     public static $swapMessage = [];
 
+    public static $pagesList = [];
+
 
     public function index()
     {
         $courseIdShortTitle = helper::arrayColumn($this->getData(['course']), 'shortTitle');
         ksort($courseIdShortTitle);
         foreach ($courseIdShortTitle as $courseId => $courseTitle) {
-            $categorieUrl = helper::baseUrl(!helper::checkRewrite()) . 'course/swap/' . $courseId ;
+            $categorieUrl = helper::baseUrl(!helper::checkRewrite()) . 'course/swap/' . $courseId;
             self::$courses[] = [
                 $courseTitle,
                 $this->getData(['course', $courseId, 'author']),
                 $this->getData(['course', $courseId, 'description']),
-                '<a href="' . $categorieUrl .'" target="_blank">' . $categorieUrl . '</a>',
+                '<a href="' . $categorieUrl . '" target="_blank">' . $categorieUrl . '</a>',
                 template::button('courseEdit' . $courseId, [
                     'href' => helper::baseUrl() . 'course/edit/' . $courseId,
                     'value' => template::ico('pencil'),
@@ -94,14 +96,15 @@ class course extends common
             $this->isPost()
         ) {
             $courseId = uniqid();
-            $author = $this->getInput('courseAddAuthor');
             $this->setData([
                 'course',
                 $courseId,
                 [
                     'title' => $this->getInput('courseAddTitle', helper::FILTER_STRING_SHORT, true),
                     'shortTitle' => $this->getInput('courseAddShortTitle', helper::FILTER_STRING_SHORT, true),
-                    'author' => $author,
+                    'author' => $this->getInput('courseAddAuthor'),
+                    'homePageId' => $this->getInput('courseAddHomePageId'),
+                    'category' => $this->getInput('courseAddCategories'),
                     'description' => $this->getInput('courseAddDescription', helper::FILTER_STRING_SHORT, true),
                     'access' => $this->getInput('courseAddAccess', helper::FILTER_INT),
                     'openingDate' => $this->getInput('courseOpeningDate', helper::FILTER_DATETIME),
@@ -144,6 +147,17 @@ class course extends common
         // Liste des catégories de cours
         self::$courseCategories = $this->getData(['category']);
 
+        // Liste des pages disponibles
+        self::$pagesList = $this->getData(['page']);
+        foreach (self::$pagesList as $page => $pageId) {
+            if (
+                $this->getData(['page', $page, 'block']) === 'bar' ||
+                $this->getData(['page', $page, 'disable']) === true
+            ) {
+                unset(self::$pagesList[$page]);
+            }
+        }
+
         // Valeurs en sortie
         $this->addOutput([
             'title' => helper::translate('Ajouter un cours'),
@@ -163,14 +177,15 @@ class course extends common
             $this->isPost()
         ) {
             $courseId = $this->getUrl(2);
-            $author = $this->getInput('courseAddAuthor');
             $this->setData([
                 'course',
                 $courseId,
                 [
                     'title' => $this->getInput('courseEditTitle', helper::FILTER_STRING_SHORT, true),
                     'shortTitle' => $this->getInput('courseEditShortTitle', helper::FILTER_STRING_SHORT, true),
-                    'author' => $author,
+                    'author' => $this->getInput('courseEditAuthor'),
+                    'homePageId' => $this->getInput('courseEditHomePageId'),
+                    'category' => $this->getInput('courseEditCategories'),
                     'description' => $this->getInput('courseEditDescription', helper::FILTER_STRING_SHORT, true),
                     'access' => $this->getInput('courseEditAccess', helper::FILTER_INT),
                     'openingDate' => $this->getInput('courseOpeningDate', helper::FILTER_DATETIME),
@@ -198,6 +213,17 @@ class course extends common
 
         // Liste des catégories de cours
         self::$courseCategories = $this->getData(['category']);
+
+        // Liste des pages disponibles
+        self::$pagesList = $this->getData(['page']);
+        foreach (self::$pagesList as $page => $pageId) {
+            if (
+                $this->getData(['page', $page, 'block']) === 'bar' ||
+                $this->getData(['page', $page, 'disable']) === true
+            ) {
+                unset(self::$pagesList[$page]);
+            }
+        }
 
         // Valeurs en sortie
         $this->addOutput([

@@ -33,7 +33,7 @@ class layout extends common
         $item .= '<p>' . $this->getData(['config', 'cookies', 'mainLabel']) . '</p>';
         // Formulaire de réponse
         if (
-            $this->getData(['config', 'homePageId']) === $this->getUrl(0)
+            $this->homePageId() === $this->getUrl(0)
         ) {
             $item .= '<form method="POST" action="' . helper::baseUrl(false) . '" id="cookieForm">';
         } else {
@@ -790,7 +790,7 @@ class layout extends common
         echo '<title>' . $this->core->output['metaTitle'] . '</title>';
         echo '<meta property="og:title" content="' . $this->core->output['metaTitle'] . '" />';
         if (
-            $this->getData(['config', 'homePageId']) === $this->getUrl(0)
+            $this->homePageId() === $this->getUrl(0)
         ) {
             echo '<link rel="canonical" href="' . helper::baseUrl(false) . '" />';
         } else {

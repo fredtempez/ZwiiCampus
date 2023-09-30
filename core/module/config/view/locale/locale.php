@@ -46,7 +46,7 @@
                     <div class="col4">
                         <?php echo template::select('configLocaleHomePageId', helper::arrayColumn($module::$pagesList, 'title', 'SORT_ASC'), [
                             'label' => 'Accueil',
-                            'selected' => $this->getData(['config', 'homePageId']),
+                            'selected' => $this->homePageId(),
                             'help' => 'La première page que vos visiteurs verront.'
                         ]); ?>
                     </div>

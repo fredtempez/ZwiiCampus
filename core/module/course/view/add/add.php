@@ -37,10 +37,14 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col12">
-                <?php echo template::select('courseEditCategories', $module::$courseCategories, [
+                <div class="col6">
+                    <?php echo template::select('courseaDDHomePageId', helper::arrayColumn($module::$pagesList, 'title', 'SORT_ASC'), [
+                        'label' => 'Accueil du cours',
+                    ]); ?>
+                </div>
+                <div class="col6">
+                    <?php echo template::select('courseaDDCategories', $module::$courseCategories, [
                         'label' => 'Catégorie',
-                        'value' => $this->getdata(['course', $this->getUrl(2), 'category'])
                     ]); ?>
                 </div>
             </div>

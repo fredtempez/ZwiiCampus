@@ -536,7 +536,7 @@ class core extends common
 			) {
 				$access = true;
 			} else {
-				if ($this->getUrl(0) === $this->getData(['config', 'homePageId'])) {
+				if ($this->getUrl(0) === $this->homePageId()) {
 					$access = 'login';
 				} else {
 					$access = false;

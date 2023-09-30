@@ -401,7 +401,7 @@ class common
 			if ($url = $_SERVER['QUERY_STRING']) {
 				$this->url = $url;
 			} else {
-				$this->url = $this->getData(['config', 'homePageId']);
+				$this->url = $this->homePageId();
 			}
 		}
 
@@ -1051,7 +1051,7 @@ class common
 			// Page désactivée, traiter les sous-pages sans prendre en compte la page parente.
 			if ($this->getData(['page', $parentPageId, 'disable']) !== true) {
 				// Cas de la page d'accueil ne pas dupliquer l'URL
-				$pageId = ($parentPageId !== $this->getData(['config', 'homePageId'])) ? $parentPageId : '';
+				$pageId = ($parentPageId !== $this->homePageId()) ? $parentPageId : '';
 				$sitemap->addUrl('/' . $pageId, $datetime);
 			}
 			// Articles du blog
@@ -1072,7 +1072,7 @@ class common
 					continue;
 				}
 				// Cas de la page d'accueil ne pas dupliquer l'URL
-				$pageId = ($childKey !== $this->getData(['config', 'homePageId'])) ? $childKey : '';
+				$pageId = ($childKey !== $this->homePageId()) ? $childKey : '';
 				$sitemap->addUrl('/' . $childKey, $datetime);
 
 				// La sous-page est un blog
@@ -1367,6 +1367,21 @@ class common
 			}
 		}
 		$zip->close();
+	}
+
+	/**
+	 * Retourne l'id de la page d'accueil
+	 * @return string pageId
+	 */
+	public function homePageId()
+	{
+		switch (self::$siteContent) {
+			case 'home':
+				return ($this->getData(['config', 'homePageId']));
+			default:
+				return ($this->getData(['course', self::$siteContent, 'homePageId']));
+		}
+
 	}
 
 

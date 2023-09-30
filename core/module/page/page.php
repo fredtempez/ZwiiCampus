@@ -211,7 +211,7 @@ class page extends common
 			]);
 		}
 		// Impossible de supprimer la page d'accueil
-		elseif ($page === $this->getData(['config', 'homePageId'])) {
+		elseif ($page === $this->homePageId()) {
 			// Valeurs en sortie
 			$this->addOutput([
 				'redirect' => helper::baseUrl() . 'config',

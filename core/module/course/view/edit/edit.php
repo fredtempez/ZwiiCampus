@@ -40,8 +40,14 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col12">
-                <?php echo template::select('courseEditCategories', $module::$courseCategories, [
+                <div class="col6">
+                    <?php echo template::select('courseEditHomePageId', helper::arrayColumn($module::$pagesList, 'title', 'SORT_ASC'), [
+                        'label' => 'Accueil du cours',
+                        'selected' => $this->getdata(['course', $this->getUrl(2), 'homePageId']),
+                    ]); ?>
+                </div>
+                <div class="col6">
+                    <?php echo template::select('courseEditCategories', $module::$courseCategories, [
                         'label' => 'Catégorie',
                         'value' => $this->getdata(['course', $this->getUrl(2), 'category'])
                     ]); ?>
@@ -66,7 +72,7 @@
                     <?php echo template::date('courseOpeningDate', [
                         'type' => 'datetime-local',
                         'label' => 'Ouverture',
-                        'value' => is_null($this->getdata(['course', $this->getUrl(2), 'openingDate'])) ? '' :floor($this->getdata(['course', $this->getUrl(2), 'openingDate']) / 60) * 60
+                        'value' => is_null($this->getdata(['course', $this->getUrl(2), 'openingDate'])) ? '' : floor($this->getdata(['course', $this->getUrl(2), 'openingDate']) / 60) * 60
                     ]); ?>
                 </div>
                 <div class="col4">
