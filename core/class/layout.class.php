@@ -292,7 +292,7 @@ class layout extends common
         $items .= '><wbr>&nbsp;' . $label . '&nbsp;</span>';
         // Toujours afficher le nom du CMS
         $items .= '<span id="footerZwiiCMS">';
-        $items .= '<a href="https://zwiicms.fr/" onclick="window.open(this.href);return false" >ZwiiCMS</a>';
+        $items .= '<a href="https://zwiicms.fr/" onclick="window.open(this.href);return false" >ZwiiLMS</a>';
         $items .= '</span>';
         // Affichage du numéro de version
         $items .= '<span id="footerDisplayVersion"';
