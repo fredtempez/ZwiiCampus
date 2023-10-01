@@ -326,11 +326,11 @@ class course extends common
             $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
             $message = sprintf(helper::translate('Bienvenue dans le cours %s'), $this->getData(['course', $courseId, 'shortTitle']));
             // Récupérer la dernière page visitée par cet utilisateur si elle existe
-            if ( $this->getData(['enrolment', $courseId, $userId, 'lastPageId' ]) ) {
-                $redirect .=  $this->getData(['enrolment', $courseId, $userId, 'lastPageId' ]);
+            if ($this->getData(['enrolment', $courseId, $userId, 'lastPageId'])) {
+                $redirect .= $this->getData(['enrolment', $courseId, $userId, 'lastPageId']);
             } else {
-              // Sinon la page d'accueil par défaut du module
-              $redirect .=  $this->getData(['course', $courseId, 'homePageId']);
+                // Sinon la page d'accueil par défaut du module
+                $redirect .= $this->getData(['course', $courseId, 'homePageId']);
             }
         }
         // Le cours est fermé
@@ -506,12 +506,18 @@ class course extends common
      */
     public function courseIsAvailable($courseId)
     {
+        // L'accès à l'accueil est toujours autorisé
         if ($courseId === 'home') {
             return true;
         }
-        if ($this->getUser('group') === self::GROUP_ADMIN || $this->getUser('id') === $this->getData(['group', $courseId, 'author'])) {
+        // Si un utilisateur connecté est admin aou auteur, c'est autorisé
+        if (
+            $this->getUser('password') === $this->getInput('ZWII_USER_PASSWORD') &&
+            $this->getUser('group') === self::GROUP_ADMIN || $this->getUser('id') === $this->getData(['group', $courseId, 'author'])
+        ) {
             return true;
         }
+        // Retourne le statut du cours dans les autres cas
         $access = $this->getData(['course', $courseId, 'access']);
         switch ($access) {
             case self::COURSE_ACCESS_OPEN:
