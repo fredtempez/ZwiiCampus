@@ -1379,11 +1379,11 @@ class common
 			case 'home':
 				return ($this->getData(['config', 'homePageId']));
 			default:
+
 				return ($this->getData(['course', self::$siteContent, 'homePageId']));
 		}
 
 	}
-
 
 	/**
 	 * Journalisation

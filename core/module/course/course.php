@@ -325,12 +325,12 @@ class course extends common
         ) {
             $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
             $message = sprintf(helper::translate('Bienvenue dans le cours %s'), $this->getData(['course', $courseId, 'shortTitle']));
-            // Récupérer la dernière page visitée
+            // Récupérer la dernière page visitée par cet utilisateur si elle existe
             if ( $this->getData(['enrolment', $courseId, $userId, 'lastPageId' ]) ) {
                 $redirect .=  $this->getData(['enrolment', $courseId, $userId, 'lastPageId' ]);
             } else {
-              // Sinon la page d'accueil
-              $redirect .=  $this->getData(['course', $courseId, "homePageId"]);
+              // Sinon la page d'accueil par défaut du module
+              $redirect .=  $this->getData(['course', $courseId, 'homePageId']);
             }
         }
         // Le cours est fermé

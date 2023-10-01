@@ -223,7 +223,7 @@ class core extends common
 
 			// Bannière
 
-			// Eléments communs
+			// Éléments communs
 			if ($this->getData(['theme', 'header', 'margin'])) {
 				if ($this->getData(['theme', 'menu', 'position']) === 'site-first') {
 					$css .= 'header{margin:0 20px}';
@@ -465,6 +465,15 @@ class core extends common
 			http_response_code(302);
 			header('Location:' . helper::baseUrl() . 'install');
 			exit();
+		}
+
+		// Sauvegarde la dernière page visitée par l'utilisateur connecté
+		if (
+			$this->getUser('id') &&
+			self::$siteContent != 'home' &&
+			in_array($this->getUrl(0), array_keys($this->getData(['page'])))
+		) {
+			$this->setData(['enrolment', self::$siteContent, $this->getUser('id'), 'lastPageId', $this->getUrl(0)]);
 		}
 
 		// Journalisation
