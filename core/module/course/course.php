@@ -306,6 +306,7 @@ class course extends common
     public function swap()
     {
         $courseId = $this->getUrl(2);
+        $userId = $this->getuser('id');
         $message = '';
         $redirect = helper::baseUrl();
         $state = true;
@@ -324,6 +325,13 @@ class course extends common
         ) {
             $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
             $message = sprintf(helper::translate('Bienvenue dans le cours %s'), $this->getData(['course', $courseId, 'shortTitle']));
+            // Récupérer la dernière page visitée
+            if ( $this->getData(['enrolment', $courseId, $userId, 'lastPageId' ]) ) {
+                $redirect .=  $this->getData(['enrolment', $courseId, $userId, 'lastPageId' ]);
+            } else {
+              // Sinon la page d'accueil
+              $redirect .=  $this->getData(['course', $courseId, "homePageId"]);
+            }
         }
         // Le cours est fermé
         elseif ($this->courseIsAvailable($courseId) === false) {
@@ -352,7 +360,7 @@ class course extends common
                 case self::COURSE_ENROLMENT_SELF_KEY:
                     //L'étudiant dispsoe d'un compte
                     if ($this->getUser('id')) {
-                        $redirect = $redirect . 'course/enrol/' . $courseId;
+                        $redirect .= 'course/enrol/' . $courseId;
                         $message = helper::translate('Veuillez vous inscrire');
                         $state = true;
                     } else {
@@ -363,7 +371,7 @@ class course extends common
                     break;
                 // Par le prof
                 case self::COURSE_ENROLMENT_MANUAL:
-                    $message = helper::translate('L\'enseignant ne vous pas inscrit !');
+                    $message = helper::translate('L\'enseignant ne vous a pas inscrit dans ce cours !');
                     $state = false;
                     break;
                 default:
@@ -431,7 +439,7 @@ class course extends common
                             'label' => helper::translate('Clé d\'inscription'),
                         ]);
                     } else {
-                        self::$swapMessage['enrolmentMessage'] = helper::translate('Connectez-vous pour accèder à ce cours.');
+                        self::$swapMessage['enrolmentMessage'] = helper::translate('Connectez-vous pour accéder à ce cours.');
                     }
                     break;
                 case self::COURSE_ENROLMENT_MANUAL:
