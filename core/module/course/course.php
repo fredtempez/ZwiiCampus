@@ -306,31 +306,35 @@ class course extends common
     public function swap()
     {
         $courseId = $this->getUrl(2);
-        $userId = $this->getuser('id');
+        $userId = $this->getUser('id');
         $message = '';
         $redirect = helper::baseUrl();
         $state = true;
 
         if (
             // Sortir du cours et afficher l'accueil
-            $courseId === 'home'
+            $courseId === 'home' ||
+                // Un admin ou l'auteur du cours demande l'accès
+            ( $userId &&
+              $this->getUser('group') === self::GROUP_ADMIN || $this->getUser('id') === $this->getData(['user', $courseId, 'author']))
         ) {
             $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
         }
         // l'étudiant est inscrit dans le cours ET le cours est ouvert 
         // ou un admin est connecté ou le prof du cours
         elseif (
-            $this->courseIsUserEnroled($courseId)
+            $userId
+            && $this->courseIsUserEnroled($courseId)
             && $this->courseIsAvailable($courseId)
         ) {
             $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
             $message = sprintf(helper::translate('Bienvenue dans le cours %s'), $this->getData(['course', $courseId, 'shortTitle']));
             // Récupérer la dernière page visitée par cet utilisateur si elle existe
-            if ($this->getData(['enrolment', $courseId, $userId, 'lastPageId'])) {
-                $redirect .= $this->getData(['enrolment', $courseId, $userId, 'lastPageId']);
-            } else {
+            if (empty($this->getData(['enrolment', $courseId, $userId, 'lastPageId']))) {
                 // Sinon la page d'accueil par défaut du module
-                $redirect .= $this->getData(['course', $courseId, 'homePageId']);
+                $redirect = $redirect . $this->getData(['course', $courseId, 'homePageId']);
+            } else {
+                $redirect = $redirect . $this->getData(['enrolment', $courseId, $userId, 'lastPageId']);
             }
         }
         // Le cours est fermé
@@ -360,7 +364,7 @@ class course extends common
                 case self::COURSE_ENROLMENT_SELF_KEY:
                     //L'étudiant dispsoe d'un compte
                     if ($this->getUser('id')) {
-                        $redirect .= 'course/enrol/' . $courseId;
+                        $redirect = $redirect . 'course/enrol/' . $courseId;
                         $message = helper::translate('Veuillez vous inscrire');
                         $state = true;
                     } else {
@@ -508,13 +512,6 @@ class course extends common
     {
         // L'accès à l'accueil est toujours autorisé
         if ($courseId === 'home') {
-            return true;
-        }
-        // Si un utilisateur connecté est admin aou auteur, c'est autorisé
-        if (
-            $this->getUser('password') === $this->getInput('ZWII_USER_PASSWORD') &&
-            $this->getUser('group') === self::GROUP_ADMIN || $this->getUser('id') === $this->getData(['group', $courseId, 'author'])
-        ) {
             return true;
         }
         // Retourne le statut du cours dans les autres cas

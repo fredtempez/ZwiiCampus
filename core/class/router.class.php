@@ -474,6 +474,7 @@ class core extends common
 			in_array($this->getUrl(0), array_keys($this->getData(['page'])))
 		) {
 			$this->setData(['enrolment', self::$siteContent, $this->getUser('id'), 'lastPageId', $this->getUrl(0)]);
+			$this->setData(['enrolment', self::$siteContent, $this->getUser('id'), 'lastDateVisited', time()]);
 		}
 
 		// Journalisation
