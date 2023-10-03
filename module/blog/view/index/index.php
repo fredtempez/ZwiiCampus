@@ -28,7 +28,7 @@
 							<?php echo template::ico('user'); ?>
 							<?php echo $module->signature($this->getData(['module', $this->getUrl(0), 'posts', $articleId, 'userId'])); ?>
 							<?php echo template::ico('calendar-empty'); ?>
-							<?php echo helper::dateUTF8($module::$dateFormat, $this->getData(['module', $this->getUrl(0), 'posts', $articleId, 'publishedOn'])) . ' - ' . helper::dateUTF8($module::$timeFormat, $this->getData(['module', $this->getUrl(0), 'posts', $articleId, 'publishedOn'])); ?>
+							<?php echo helper::dateUTF8($module::$dateFormat, $this->getData(['module', $this->getUrl(0), 'posts', $articleId, 'publishedOn']), self::$i18nUI) . ' - ' . helper::dateUTF8($module::$timeFormat, $this->getData(['module', $this->getUrl(0), 'posts', $articleId, 'publishedOn']), self::$i18nUI); ?>
 						</div>
 					</div>
 					<div class="row">
@@ -143,7 +143,7 @@
 								<?php echo template::ico('user'); ?>
 								<?php echo $module->signature($this->getData(['module', $this->getUrl(0), 'posts', $articleId, 'userId'])); ?>
 								<?php echo template::ico('calendar-empty'); ?>
-								<?php echo helper::dateUTF8($module::$dateFormat, $this->getData(['module', $this->getUrl(0), 'posts', $articleId, 'publishedOn'])) . ' - ' . helper::dateUTF8($module::$timeFormat, $this->getData(['module', $this->getUrl(0), 'posts', $articleId, 'publishedOn'])); ?>
+								<?php echo helper::dateUTF8($module::$dateFormat, $this->getData(['module', $this->getUrl(0), 'posts', $articleId, 'publishedOn']), self::$i18nUI) . ' - ' . helper::dateUTF8($module::$timeFormat, $this->getData(['module', $this->getUrl(0), 'posts', $articleId, 'publishedOn']), self::$i18nUI); ?>
 							</div>
 							<div class="blogContent">
 								<?php $lenght = $this->getData(['module', $this->getUrl(0), 'config', 'articlesLenght']) !== 0 ? $this->getData(['module', $this->getUrl(0), 'config', 'articlesLenght']) : 500 ?>

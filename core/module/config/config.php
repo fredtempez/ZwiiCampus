@@ -824,7 +824,7 @@ class config extends common
 				$d = $this->getData(['blacklist']);
 				$data = '';
 				foreach ($d as $key => $item) {
-					$data .= helper::dateUTF8('%Y %m %d', $item['lastFail']) . ' - ' . helper::dateUTF8('%H:%M', time());
+					$data .= helper::dateUTF8('%Y %m %d', $item['lastFail'], self::$i18nUI) . ' - ' . helper::dateUTF8('%H:%M', time(), self::$i18nUI);
 					$data .= $key . ';' . $item['ip'] . ';' . $item['connectFail'] . PHP_EOL;
 				}
 				file_put_contents($fileName, $data, FILE_APPEND);
