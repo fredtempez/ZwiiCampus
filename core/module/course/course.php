@@ -333,7 +333,7 @@ class course extends common
                 $redirect .= $this->getData(['course', $courseId, 'homePageId']);
             }
             if ($this->getData(['course', $courseId, 'access']) === self::COURSE_ACCESS_DATE) {
-                $to = helper::dateUTF8('%d/%m/%Y', $this->getData(['course', $courseId, 'closingDate'])) . helper::translate(' à ') . helper::dateUTF8('%H:%M', $this->getData(['course', $courseId, 'closingDate']));
+                $to = helper::dateUTF8('%d %B %Y', $this->getData(['course', $courseId, 'closingDate'])) . helper::translate(' à ') . helper::dateUTF8('%H:%M', $this->getData(['course', $courseId, 'closingDate']));
                 $message = sprintf(helper::translate('Ce cours ferme le %s'), $to);
             } else {
                 $message = sprintf(helper::translate('Bienvenue dans le cours %s'), $this->getData(['course', $courseId, 'shortTitle']));
