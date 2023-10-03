@@ -68,8 +68,8 @@ $(document).ready(function () {
 
     var configLayout = getCookie("configLayout");
     if (configLayout == null) {
-        configLayout = "setup";
-        setCookie("configLayout", "setup");
+        configLayout = "locale";
+        setCookie("configLayout", "locale");
     }
     $("#localeContainer").hide();
     $("#socialContainer").hide();
