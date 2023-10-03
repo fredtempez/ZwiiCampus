@@ -390,7 +390,7 @@ class common
 		}
 		// Stocker le cookie de langue pour l'éditeur de texte
 		setcookie('ZWII_UI', self::$i18nUI, time() + 3600, helper::baseUrl(false, false), '', false, false);
-		\setlocale(LC_ALL, self::$i18nUI);
+		setlocale(LC_ALL, self::$i18nUI);
 		// Construit la liste des pages parents/enfants
 		if ($this->hierarchy['all'] === []) {
 			$this->buildHierarchy();
@@ -447,6 +447,7 @@ class common
 
 		// Mise à jour des données core
 		include('core/include/update.inc.php');
+		var_dump( system('locale -a') );
 
 	}
 
