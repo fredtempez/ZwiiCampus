@@ -391,6 +391,7 @@ class common
 		// Stocker le cookie de langue pour l'éditeur de texte
 		setcookie('ZWII_UI', self::$i18nUI, time() + 3600, helper::baseUrl(false, false), '', false, false);
 		setlocale(LC_ALL, self::$i18nUI);
+		
 		// Construit la liste des pages parents/enfants
 		if ($this->hierarchy['all'] === []) {
 			$this->buildHierarchy();
@@ -1392,7 +1393,7 @@ class common
 	public function saveLog($message = '')
 	{
 		// Journalisation
-		$dataLog = helper::dateUTF8('%Y %m %d', time()) . ' - ' . helper::dateUTF8('%H:%M', time());
+		$dataLog = helper::dateUTF8('%Y %m %d', time(),  self::$i18nUI) . ' - ' . helper::dateUTF8('%H:%M', time(), self::$i18nUI);
 		$dataLog .= helper::getIp($this->getData(['config', 'connect', 'anonymousIp'])) . ';';
 		$dataLog .= empty($this->getUser('id')) ? 'visitor;' : $this->getUser('id') . ';';
 		$dataLog .= $message ? $this->getUrl() . ';' . $message : $this->getUrl();
