@@ -50,7 +50,7 @@ class common
 	const ACCESS_TIMER = 1800;
 
 	// Numéro de version
-	const ZWII_VERSION = '1.0.07';
+	const ZWII_VERSION = '1.0.08';
 
 	// URL autoupdate
 	const ZWII_UPDATE_URL = 'https://forge.chapril.org/ZwiiCMS-Team/update/raw/branch/master/lms/';
@@ -390,6 +390,7 @@ class common
 		}
 		// Stocker le cookie de langue pour l'éditeur de texte
 		setcookie('ZWII_UI', self::$i18nUI, time() + 3600, helper::baseUrl(false, false), '', false, false);
+		\setlocale(LC_ALL, self::$i18nUI . '.UTF8');
 
 		// Construit la liste des pages parents/enfants
 		if ($this->hierarchy['all'] === []) {

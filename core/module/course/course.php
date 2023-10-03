@@ -344,8 +344,8 @@ class course extends common
             $message = helper::translate('Ce cours est fermé');
             $state = false;
             if ($this->getData(['course', $courseId, 'access']) === self::COURSE_ACCESS_DATE) {
-                $from = helper::dateUTF8('%d/%m/%Y', $this->getData(['course', $courseId, 'openingDate'])) . helper::translate(' à ') . helper::dateUTF8('%H:%M', $this->getData(['course', $courseId, 'openingDate']));
-                $to = helper::dateUTF8('%d/%m/%Y', $this->getData(['course', $courseId, 'closingDate'])) . helper::translate(' à ') . helper::dateUTF8('%H:%M', $this->getData(['course', $courseId, 'closingDate']));
+                $from = helper::dateUTF8('%d %B %Y', $this->getData(['course', $courseId, 'openingDate'])) . helper::translate(' à ') . helper::dateUTF8('%H:%M', $this->getData(['course', $courseId, 'openingDate']));
+                $to = helper::dateUTF8('%d %B %Y', $this->getData(['course', $courseId, 'closingDate'])) . helper::translate(' à ') . helper::dateUTF8('%H:%M', $this->getData(['course', $courseId, 'closingDate']));
                 $message = sprintf(helper::translate('Ce cours ouvre le <br>%s <br> et ferme le %s'), $from, $to);
             }
         }
