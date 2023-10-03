@@ -153,6 +153,7 @@ class course extends common
         self::$courseCategories = $this->getData(['category']);
 
         // Liste des pages disponibles
+        $this->initDB('page', $this->getUrl(2));
         self::$pagesList = $this->getData(['page']);
         foreach (self::$pagesList as $page => $pageId) {
             if (
@@ -220,6 +221,7 @@ class course extends common
         self::$courseCategories = $this->getData(['category']);
 
         // Liste des pages disponibles
+        $this->initDB('page', $this->getUrl(2));
         self::$pagesList = $this->getData(['page']);
         foreach (self::$pagesList as $page => $pageId) {
             if (
