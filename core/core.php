@@ -447,7 +447,6 @@ class common
 
 		// Mise à jour des données core
 		include('core/include/update.inc.php');
-		var_dump( system('locale -a') );
 
 	}
 
