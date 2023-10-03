@@ -3,7 +3,7 @@
 			<?php echo helper::translate('Mise à jour de ZwiiLMS'); ?>
 			&nbsp;
 			<?php echo self::ZWII_VERSION; ?>
-			<?php echo helper::translate('vers ZwiiCMS'); ?>
+			<?php echo helper::translate('vers ZwiiLMS'); ?>
 			&nbsp;
 			<?php echo $module::$newVersion; ?>.
 		</strong></p>
