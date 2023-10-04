@@ -27,6 +27,7 @@ class course extends common
         'categoryAdd' => self::GROUP_ADMIN,
         'categoryDelete' => self::GROUP_ADMIN,
         'user' => self::GROUP_ADMIN,
+        'userAdd' => self::GROUP_ADMIN,
     ];
 
     public static $courseAccess = [
@@ -45,6 +46,8 @@ class course extends common
     public static $courseTeachers = [];
 
     public static $courseCategories = [];
+
+    public static $courseUsers = [];
 
     public static $courses = [];
 
@@ -69,6 +72,11 @@ class course extends common
                 $author,
                 $description,
                 '<a href="' . $categorieUrl . '" target="_blank">' . $categorieUrl . '</a>',
+                template::button('categoryUser' . $courseId, [
+                    'href' => helper::baseUrl() . 'course/user/' . $courseId,
+                    'value' => template::ico('users'),
+                    'help' => 'Inscrits'
+                ]),
                 template::button('courseEdit' . $courseId, [
                     'href' => helper::baseUrl() . 'course/edit/' . $courseId,
                     'value' => template::ico('pencil'),
@@ -295,7 +303,7 @@ class course extends common
         }
         // Valeurs en sortie
         $this->addOutput([
-            'title' => helper::translate('Catégorie'),
+            'title' => helper::translate('Catégorie de cours'),
             'view' => 'category'
         ]);
     }
@@ -348,6 +356,41 @@ class course extends common
             'redirect' => helper::baseUrl() . 'course/category',
             'notification' => $message,
             'state' => $state
+        ]);
+    }
+
+    public function user()
+    {
+        $users = $this->getData(['enrolment', $this->getUrl(2)]);
+        ksort($users);
+        foreach ($users as $userId => $userValue) {
+            self::$courseUsers[] = [
+                $userId,
+                $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
+                $userValue['lastPageId'],
+                helper::dateUTF8('%d %B %Y - %H:%M',$userValue['lastDateVisited']),
+                template::button('courseDelete' . $userId, [
+                    'class' => 'categoryDelete buttonRed',
+                    'href' => helper::baseUrl() . 'course/categoryDelete/' . $userId,
+                    'value' => template::ico('trash'),
+                    'help' => 'Supprimer'
+                ])
+            ];
+        }
+
+        // Valeurs en sortie
+        $this->addOutput([
+            'title' => helper::translate('Inscrits'),
+            'view' => 'user'
+        ]);
+    }
+
+    public function userAdd()
+    {
+        // Valeurs en sortie
+        $this->addOutput([
+            'title' => helper::translate('Inscrire'),
+            'view' => 'userAdd'
         ]);
     }
 
