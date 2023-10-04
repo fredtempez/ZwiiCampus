@@ -94,8 +94,8 @@ tinymce.init({
 	content_css: [
 		baseUrl + "core/layout/common.css",
 		baseUrl + "core/vendor/tinymce/content.css",
-		baseUrl + "site/data/home/theme.css",
-		baseUrl + "site/data/home/custom.css"
+		baseUrl + "site/data/" + getCookie('ZWII_SITE_CONTENT') === null ? "home" : getCookie('ZWII_SITE_CONTENT') + "theme.css",
+		baseUrl + "site/data/custom.css"
 	],
 	// Classe à ajouter à la balise body dans l'iframe
 	body_class: "editorWysiwyg",
