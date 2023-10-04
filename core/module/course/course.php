@@ -126,7 +126,7 @@ class course extends common
                     'title' => $this->getInput('courseAddTitle', helper::FILTER_STRING_SHORT, true),
                     'shortTitle' => $this->getInput('courseAddShortTitle', helper::FILTER_STRING_SHORT, true),
                     'author' => $this->getInput('courseAddAuthor'),
-                    'homePageId' => $this->getInput('courseAddHomePageId'),
+                    'homePageId' => 'accueil',
                     'category' => $this->getInput('courseAddCategories'),
                     'description' => $this->getInput('courseAddDescription', helper::FILTER_STRING_SHORT, true),
                     'access' => $this->getInput('courseAddAccess', helper::FILTER_INT),
