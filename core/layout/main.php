@@ -14,7 +14,7 @@
 	<?php $layout->showVendor(); ?>
 	<?php $layout->showFonts(); ?>
 	<link rel="stylesheet" href="<?php echo helper::baseUrl(false); ?>core/layout/common.css?<?php echo md5_file('core/layout/common.css'); ?>">
-	<link rel="stylesheet" href="<?php echo helper::baseUrl(false) . self::DATA_DIR; ?>theme.css?<?php echo md5_file(self::DATA_DIR . 'theme.css'); ?>">
+	<link rel="stylesheet" href="<?php echo helper::baseUrl(false) . self::DATA_DIR . self::$siteContent; ?>/theme.css?<?php echo md5_file(self::DATA_DIR .  self::$siteContent . '/theme.css'); ?>">
 	<link rel="stylesheet" href="<?php echo helper::baseUrl(false) . self::DATA_DIR; ?>custom.css?<?php echo md5_file(self::DATA_DIR . 'custom.css'); ?>">
 	<!-- Détection RSS -->
 	<?php if (($this->getData(['page', $this->getUrl(0), 'moduleId']) === 'blog'

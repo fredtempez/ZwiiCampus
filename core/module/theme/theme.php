@@ -1043,8 +1043,8 @@ class theme extends common
 					// Archive de thème ?
 					if (
 						file_exists(self::TEMP_DIR . $tempFolder . '/site/data/custom.css')
-						and file_exists(self::TEMP_DIR . $tempFolder . '/site/data/theme.css')
-						and file_exists(self::TEMP_DIR . $tempFolder . '/site/data/theme.json')
+						and file_exists(self::TEMP_DIR . $tempFolder . '/site/data/' . self::$siteContent . '/theme.css')
+						and file_exists(self::TEMP_DIR . $tempFolder . '/site/data/' . self::$siteContent . '/theme.json')
 					) {
 						$modele = 'theme';
 					}
@@ -1064,9 +1064,9 @@ class theme extends common
 							// Un remplacement nécessite la régénération de la feuille de style
 							if (
 								$c > 0
-								and file_exists(self::DATA_DIR . 'theme.css')
+								and file_exists(self::DATA_DIR .  self::$siteContent . 'theme.css')
 							) {
-								unlink(self::DATA_DIR . 'theme.css');
+								unlink(self::DATA_DIR .  self::$siteContent . 'theme.css');
 							}
 						}
 						if ($modele = 'admin') {
@@ -1192,7 +1192,7 @@ class theme extends common
 					break;
 				case 'theme':
 					$zip->addFile(self::DATA_DIR . 'theme.json', self::DATA_DIR . 'theme.json');
-					$zip->addFile(self::DATA_DIR . 'theme.css', self::DATA_DIR . 'theme.css');
+					$zip->addFile(self::DATA_DIR .  self::$siteContent . 'theme.css', self::DATA_DIR .  self::$siteContent . 'theme.css');
 					$zip->addFile(self::DATA_DIR . 'custom.css', self::DATA_DIR . 'custom.css');
 					// Traite l'image dans le body
 					if ($this->getData(['theme', 'body', 'image']) !== '') {

@@ -915,6 +915,10 @@ class layout extends common
                     'href' => helper::baseUrl() . 'course',
                     'help' => 'Cours'
                 ]) . '</li>';
+                $leftItems .= '<li>' . template::ico('brush', [
+                    'help' => 'Thème',
+                    'href' => helper::baseUrl() . 'theme'
+                ]) . '</li>';
             }
             // Liste des pages
             if ($this->getUser('group') >= self::GROUP_EDITOR) {
@@ -1043,10 +1047,6 @@ class layout extends common
                 ]) . '</li>';
             }
             if ($this->getUser('group') >= self::GROUP_ADMIN) {
-                $rightItems .= '<li>' . template::ico('brush', [
-                    'help' => 'Thème',
-                    'href' => helper::baseUrl() . 'theme'
-                ]) . '</li>';
                 $rightItems .= '<li>' . template::ico('puzzle', [
                     'help' => 'Modules',
                     'href' => helper::baseUrl() . 'plugin'

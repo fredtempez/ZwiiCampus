@@ -65,9 +65,9 @@ class core extends common
 			chmod(self::DATA_DIR . 'custom.css', 0755);
 		}
 		// Crée le fichier de personnalisation
-		if (file_exists(self::DATA_DIR . 'theme.css') === false) {
-			file_put_contents(self::DATA_DIR . 'theme.css', '');
-			chmod(self::DATA_DIR . 'theme.css', 0755);
+		if (file_exists(self::DATA_DIR . self::$siteContent . '/theme.css') === false) {
+			file_put_contents(self::DATA_DIR . self::$siteContent . '/theme.css', '');
+			chmod(self::DATA_DIR . self::$siteContent . '/theme.css', 0755);
 		}
 		// Crée le fichier de personnalisation de l'administration
 		if (file_exists(self::DATA_DIR . 'admin.css') === false) {
@@ -76,7 +76,7 @@ class core extends common
 		}
 
 		// Check la version rafraichissement du theme
-		$cssVersion = preg_split('/\*+/', file_get_contents(self::DATA_DIR . 'theme.css'));
+		$cssVersion = preg_split('/\*+/', file_get_contents(self::DATA_DIR . self::$siteContent . '/theme.css'));
 		if (empty($cssVersion[1]) or $cssVersion[1] !== md5(json_encode($this->getData(['theme'])))) {
 			// Version
 			$css = '/*' . md5(json_encode($this->getData(['theme']))) . '*/';
@@ -318,7 +318,7 @@ class core extends common
 			file_put_contents(self::DATA_DIR . 'font/font.html', $fontFile);
 
 			// Enregistre la personnalisation
-			file_put_contents(self::DATA_DIR . 'theme.css', $css);
+			file_put_contents(self::DATA_DIR . self::$siteContent . '/theme.css', $css);
 
 			// Effacer le cache pour tenir compte de la couleur de fond TinyMCE
 			header("Expires: Tue, 01 Jan 2000 00:00:00 GMT");

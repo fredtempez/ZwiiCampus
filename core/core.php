@@ -220,7 +220,6 @@ class common
 		'course' => '',
 		'core' => '',
 		'font' => '',
-		'theme' => '',
 		'user' => '',
 		'language' => '',
 		'profil' => '',
@@ -231,6 +230,7 @@ class common
 	private $contentFiles = [
 		'page' => '',
 		'module' => '',
+		'theme' => '',
 	];
 
 	public static $fontsWebSafe = [

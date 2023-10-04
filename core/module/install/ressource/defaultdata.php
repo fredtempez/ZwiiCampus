@@ -175,116 +175,6 @@ class init extends common
 			]
 		],
 		'user' => [],
-		'theme' => [
-			'body' => [
-				'backgroundColor' => 'rgba(236, 239, 241, 1)',
-				'image' => '',
-				'imageAttachment' => 'scroll',
-				'imageRepeat' => 'no-repeat',
-				'imagePosition' => 'top center',
-				'imageSize' => 'auto',
-				'toTopbackgroundColor' => 'rgba(33, 34, 35, .8)',
-				'toTopColor' => 'rgba(255, 255, 255, 1)'
-			],
-			'footer' => [
-				'backgroundColor' => 'rgba(255, 255, 255, 1)',
-				'font' => 'georgia',
-				'fontSize' => '.8em',
-				'fontWeight' => 'normal',
-				'height' => '5px',
-				'loginLink' => true,
-				'margin' => true,
-				'position' => 'site',
-				'textColor' => 'rgba(33, 34, 35, 1)',
-				'copyrightPosition' => 'right',
-				'copyrightAlign' => 'right',
-				'text' => '<p>Pied de page personnalisé</p>',
-				'textPosition' => 'left',
-				'textAlign' => 'left',
-				'textTransform' => 'none',
-				'socialsPosition' => 'center',
-				'socialsAlign' => 'center',
-				'displayVersion' => true,
-				'displaySiteMap' => true,
-				'displayCopyright' => false,
-				'displayCookie' => false,
-				'displayLegal' => false,
-				'displaySearch' => false,
-				'memberBar' => true,
-				'template' => '3'
-			],
-			'header' => [
-				'backgroundColor' => 'rgba(32, 59, 82, 1)',
-				'font' => 'arial',
-				'fontSize' => '2em',
-				'fontWeight' => 'normal',
-				'height' => '150px',
-				'image' => 'banniere960.jpg',
-				'imagePosition' => 'center center',
-				'imageRepeat' => 'no-repeat',
-				'margin' => false,
-				'position' => 'site',
-				'textAlign' => 'center',
-				'textColor' => 'rgba(255, 255, 255, 1)',
-				'textHide' => false,
-				'textTransform' => 'none',
-				'linkHomePage' => true,
-				'imageContainer' => 'auto',
-				'tinyHidden' => true,
-				'feature' => 'wallpaper',
-				'featureContent' => '<p>Bannière vide</p>',
-				'width' => 'container'
-			],
-			'menu' => [
-				'backgroundColor' => 'rgba(32, 59, 82, 1)',
-				'backgroundColorSub' => 'rgba(32, 59, 82, 1)',
-				'font' => 'arial',
-				'fontSize' => '1em',
-				'fontWeight' => 'normal',
-				'height' => '15px 10px',
-				'loginLink' => false,
-				'margin' => false,
-				'position' => 'site-second',
-				'textAlign' => 'left',
-				'textColor' => 'rgba(255, 255, 255, 1)',
-				'textTransform' => 'none',
-				'fixed' => false,
-				'activeColorAuto' => true,
-				'activeColor' => 'rgba(255, 255, 255, 1)',
-				'activeTextColor' => 'rgba(255, 255, 255, 1)',
-				'radius' => '0px',
-				'memberBar' => false,
-				'burgerLogo' => '',
-				'burgerContent' => 'title',
-				'width' => 'container'
-			],
-			'site' => [
-				'backgroundColor' => 'rgba(255, 255, 255, 1)',
-				'radius' => '0px',
-				'shadow' => '0px 0px 0px',
-				'width' => '960px'
-			],
-			'block' => [
-				'backgroundColor' => 'rgba(236, 239, 241, 1)',
-				'borderColor' => 'rgba(236, 239, 241, 1)'
-			],
-			'text' => [
-				'font' => 'georgia',
-				'fontSize' => '13px',
-				'textColor' => 'rgba(33, 34, 35, 1)',
-				'linkColor' => 'rgba(74, 105, 189, 1)'
-			],
-			'title' => [
-				'font' => 'arial',
-				'fontWeight' => 'normal',
-				'textColor' => 'rgba(74, 105, 189, 1)',
-				'textTransform' => 'none'
-			],
-			'button' => [
-				'backgroundColor' => 'rgba(32, 59, 82, 1)'
-			],
-			'version' => 0
-		],
 		'admin' => [
 			'backgroundColor' => 'rgba(255, 255, 255, 1)',
 			'fontText' => 'georgia',
@@ -865,6 +755,116 @@ class init extends common
 				'js' => ''
 			]
 		],
+		'theme' => [
+			'body' => [
+				'backgroundColor' => 'rgba(236, 239, 241, 1)',
+				'image' => '',
+				'imageAttachment' => 'scroll',
+				'imageRepeat' => 'no-repeat',
+				'imagePosition' => 'top center',
+				'imageSize' => 'auto',
+				'toTopbackgroundColor' => 'rgba(33, 34, 35, .8)',
+				'toTopColor' => 'rgba(255, 255, 255, 1)'
+			],
+			'footer' => [
+				'backgroundColor' => 'rgba(255, 255, 255, 1)',
+				'font' => 'georgia',
+				'fontSize' => '.8em',
+				'fontWeight' => 'normal',
+				'height' => '5px',
+				'loginLink' => true,
+				'margin' => true,
+				'position' => 'site',
+				'textColor' => 'rgba(33, 34, 35, 1)',
+				'copyrightPosition' => 'right',
+				'copyrightAlign' => 'right',
+				'text' => '<p>Pied de page personnalisé</p>',
+				'textPosition' => 'left',
+				'textAlign' => 'left',
+				'textTransform' => 'none',
+				'socialsPosition' => 'center',
+				'socialsAlign' => 'center',
+				'displayVersion' => true,
+				'displaySiteMap' => true,
+				'displayCopyright' => false,
+				'displayCookie' => false,
+				'displayLegal' => false,
+				'displaySearch' => false,
+				'memberBar' => true,
+				'template' => '3'
+			],
+			'header' => [
+				'backgroundColor' => 'rgba(32, 59, 82, 1)',
+				'font' => 'arial',
+				'fontSize' => '2em',
+				'fontWeight' => 'normal',
+				'height' => '150px',
+				'image' => 'banniere960.jpg',
+				'imagePosition' => 'center center',
+				'imageRepeat' => 'no-repeat',
+				'margin' => false,
+				'position' => 'site',
+				'textAlign' => 'center',
+				'textColor' => 'rgba(255, 255, 255, 1)',
+				'textHide' => false,
+				'textTransform' => 'none',
+				'linkHomePage' => true,
+				'imageContainer' => 'auto',
+				'tinyHidden' => true,
+				'feature' => 'wallpaper',
+				'featureContent' => '<p>Bannière vide</p>',
+				'width' => 'container'
+			],
+			'menu' => [
+				'backgroundColor' => 'rgba(32, 59, 82, 1)',
+				'backgroundColorSub' => 'rgba(32, 59, 82, 1)',
+				'font' => 'arial',
+				'fontSize' => '1em',
+				'fontWeight' => 'normal',
+				'height' => '15px 10px',
+				'loginLink' => false,
+				'margin' => false,
+				'position' => 'site-second',
+				'textAlign' => 'left',
+				'textColor' => 'rgba(255, 255, 255, 1)',
+				'textTransform' => 'none',
+				'fixed' => false,
+				'activeColorAuto' => true,
+				'activeColor' => 'rgba(255, 255, 255, 1)',
+				'activeTextColor' => 'rgba(255, 255, 255, 1)',
+				'radius' => '0px',
+				'memberBar' => false,
+				'burgerLogo' => '',
+				'burgerContent' => 'title',
+				'width' => 'container'
+			],
+			'site' => [
+				'backgroundColor' => 'rgba(255, 255, 255, 1)',
+				'radius' => '0px',
+				'shadow' => '0px 0px 0px',
+				'width' => '960px'
+			],
+			'block' => [
+				'backgroundColor' => 'rgba(236, 239, 241, 1)',
+				'borderColor' => 'rgba(236, 239, 241, 1)'
+			],
+			'text' => [
+				'font' => 'georgia',
+				'fontSize' => '13px',
+				'textColor' => 'rgba(33, 34, 35, 1)',
+				'linkColor' => 'rgba(74, 105, 189, 1)'
+			],
+			'title' => [
+				'font' => 'arial',
+				'fontWeight' => 'normal',
+				'textColor' => 'rgba(74, 105, 189, 1)',
+				'textTransform' => 'none'
+			],
+			'button' => [
+				'backgroundColor' => 'rgba(32, 59, 82, 1)'
+			],
+			'version' => 0
+		],
 		'module' => [
 			'contact' => [
 				'config' => [
@@ -1009,7 +1009,118 @@ class init extends common
 				'js' => ''
 			],
 		],
-		'module' => []
+		'theme' => [
+			'body' => [
+				'backgroundColor' => 'rgba(236, 239, 241, 1)',
+				'image' => '',
+				'imageAttachment' => 'scroll',
+				'imageRepeat' => 'no-repeat',
+				'imagePosition' => 'top center',
+				'imageSize' => 'auto',
+				'toTopbackgroundColor' => 'rgba(33, 34, 35, .8)',
+				'toTopColor' => 'rgba(255, 255, 255, 1)'
+			],
+			'footer' => [
+				'backgroundColor' => 'rgba(255, 255, 255, 1)',
+				'font' => 'georgia',
+				'fontSize' => '.8em',
+				'fontWeight' => 'normal',
+				'height' => '5px',
+				'loginLink' => true,
+				'margin' => true,
+				'position' => 'site',
+				'textColor' => 'rgba(33, 34, 35, 1)',
+				'copyrightPosition' => 'right',
+				'copyrightAlign' => 'right',
+				'text' => '<p>Pied de page personnalisé</p>',
+				'textPosition' => 'left',
+				'textAlign' => 'left',
+				'textTransform' => 'none',
+				'socialsPosition' => 'center',
+				'socialsAlign' => 'center',
+				'displayVersion' => true,
+				'displaySiteMap' => true,
+				'displayCopyright' => false,
+				'displayCookie' => false,
+				'displayLegal' => false,
+				'displaySearch' => false,
+				'memberBar' => true,
+				'template' => '3'
+			],
+			'header' => [
+				'backgroundColor' => 'rgba(32, 59, 82, 1)',
+				'font' => 'arial',
+				'fontSize' => '2em',
+				'fontWeight' => 'normal',
+				'height' => '150px',
+				'image' => 'banniere960.jpg',
+				'imagePosition' => 'center center',
+				'imageRepeat' => 'no-repeat',
+				'margin' => false,
+				'position' => 'site',
+				'textAlign' => 'center',
+				'textColor' => 'rgba(255, 255, 255, 1)',
+				'textHide' => false,
+				'textTransform' => 'none',
+				'linkHomePage' => true,
+				'imageContainer' => 'auto',
+				'tinyHidden' => true,
+				'feature' => 'wallpaper',
+				'featureContent' => '<p>Bannière vide</p>',
+				'width' => 'container'
+			],
+			'menu' => [
+				'backgroundColor' => 'rgba(32, 59, 82, 1)',
+				'backgroundColorSub' => 'rgba(32, 59, 82, 1)',
+				'font' => 'arial',
+				'fontSize' => '1em',
+				'fontWeight' => 'normal',
+				'height' => '15px 10px',
+				'loginLink' => false,
+				'margin' => false,
+				'position' => 'site-second',
+				'textAlign' => 'left',
+				'textColor' => 'rgba(255, 255, 255, 1)',
+				'textTransform' => 'none',
+				'fixed' => false,
+				'activeColorAuto' => true,
+				'activeColor' => 'rgba(255, 255, 255, 1)',
+				'activeTextColor' => 'rgba(255, 255, 255, 1)',
+				'radius' => '0px',
+				'memberBar' => false,
+				'burgerLogo' => '',
+				'burgerContent' => 'title',
+				'width' => 'container'
+			],
+			'site' => [
+				'backgroundColor' => 'rgba(255, 255, 255, 1)',
+				'radius' => '0px',
+				'shadow' => '0px 0px 0px',
+				'width' => '960px'
+			],
+			'block' => [
+				'backgroundColor' => 'rgba(236, 239, 241, 1)',
+				'borderColor' => 'rgba(236, 239, 241, 1)'
+			],
+			'text' => [
+				'font' => 'georgia',
+				'fontSize' => '13px',
+				'textColor' => 'rgba(33, 34, 35, 1)',
+				'linkColor' => 'rgba(74, 105, 189, 1)'
+			],
+			'title' => [
+				'font' => 'arial',
+				'fontWeight' => 'normal',
+				'textColor' => 'rgba(74, 105, 189, 1)',
+				'textTransform' => 'none'
+			],
+			'button' => [
+				'backgroundColor' => 'rgba(32, 59, 82, 1)'
+			],
+			'version' => 0
+		],
+		'module' => [
+		],
 	];
 
 	public static $courseContent = [
