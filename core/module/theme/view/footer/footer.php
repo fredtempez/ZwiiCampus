@@ -103,7 +103,7 @@
                     ]); ?>
                 </div>
                 <div class="col3">
-                    <?php echo template::checkbox('themefooterDisplaySiteMap', true, 'Plan du site', [
+                    <?php echo template::checkbox('themefooterDisplaySiteMap', true, 'Plan du cours', [
                         'checked' => $this->getData(['theme', 'footer', 'displaySiteMap'])
                     ]); ?>
                 </div>

@@ -129,8 +129,8 @@
                 <div class="row">
                     <div class="col4 offset2">
                         <?php echo template::text('configLocaleSitemapPageLabel', [
-                            'label' => 'Plan du site',
-                            'placeholder' => 'Plan du site',
+                            'label' => 'Plan du cours',
+                            'placeholder' => 'Plan du cours',
                             'value' => $this->getData(['config', 'sitemapPageLabel']),
                         ]); ?>
                     </div>

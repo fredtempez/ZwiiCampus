@@ -302,7 +302,7 @@ class layout extends common
         // Affichage du sitemap
         $items .= '<span id="footerDisplaySiteMap"';
         $items .= $this->getData(['theme', 'footer', 'displaySiteMap']) === false ? ' class="displayNone"' : '';
-        $label = ($this->getData(['config', 'sitemapPageLabel']) === 'none') ? 'Plan du site' : $this->getData(['config', 'sitemapPageLabel']);
+        $label = ($this->getData(['config', 'sitemapPageLabel']) === 'none') ? 'Plan du cours' : $this->getData(['config', 'sitemapPageLabel']);
         $items .= '><wbr>&nbsp;|&nbsp;<a href="' . helper::baseUrl() . 'sitemap"  >' . $label . '</a>';
         $items .= '</span>';
         // Affichage du module de recherche

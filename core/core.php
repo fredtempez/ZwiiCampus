@@ -816,7 +816,7 @@ class common
 			'value' => $rewrite . 'search'
 		];
 		$children[] = [
-			'title' => 'Plan du site',
+			'title' => 'Plan du cours',
 			'value' => $rewrite . 'sitemap'
 		];
 		$parents[] = [

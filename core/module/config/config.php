@@ -468,7 +468,7 @@ class config extends common
 					'poweredPageLabel' => empty($this->getInput('configLocalePoweredPageLabel', helper::FILTER_STRING_SHORT)) ? 'Motorisé par' : $this->getInput('configLocalePoweredPageLabel', helper::FILTER_STRING_SHORT),
 					'searchPageLabel' => empty($this->getInput('configLocaleSearchPageLabel', helper::FILTER_STRING_SHORT)) ? 'Rechercher' : $this->getInput('configLocaleSearchPageLabel', helper::FILTER_STRING_SHORT),
 					'legalPageLabel' => empty($this->getInput('configLocaleLegalPageLabel', helper::FILTER_STRING_SHORT)) ? 'Mentions légales' : $this->getInput('configLocaleLegalPageLabel', helper::FILTER_STRING_SHORT),
-					'sitemapPageLabel' => empty($this->getInput('configLocaleSitemapPageLabel', helper::FILTER_STRING_SHORT)) ? 'Plan du site' : $this->getInput('configLocaleSitemapPageLabel', helper::FILTER_STRING_SHORT),
+					'sitemapPageLabel' => empty($this->getInput('configLocaleSitemapPageLabel', helper::FILTER_STRING_SHORT)) ? 'Plan du cours' : $this->getInput('configLocaleSitemapPageLabel', helper::FILTER_STRING_SHORT),
 					'metaDescription' => $this->getInput('configLocaleMetaDescription', helper::FILTER_STRING_LONG, true),
 					'title' => $this->getInput('configLocaleTitle', helper::FILTER_STRING_SHORT, true),
 					'cookies' => [
