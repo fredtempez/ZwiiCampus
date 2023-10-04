@@ -9,7 +9,7 @@
     <div class="col1 offset10">
         <?php echo template::button('courseCategoryModulesAdd', [
             'class' => 'buttonGreen',
-            'href' => helper::baseUrl() . 'courseCategoryadd',
+            'href' => helper::baseUrl() . 'course/categoryAdd',
             'value' => template::ico('plus')
         ]); ?>
     </div>

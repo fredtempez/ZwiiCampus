@@ -25,6 +25,8 @@ class course extends common
         'delete' => self::GROUP_ADMIN,
         'category' => self::GROUP_ADMIN,
         'categoryAdd' => self::GROUP_ADMIN,
+        'categoryDelete' => self::GROUP_ADMIN,
+        'user' => self::GROUP_ADMIN,
     ];
 
     public static $courseAccess = [
@@ -249,7 +251,7 @@ class course extends common
         } else {
             // Active l'accueil
             $_SESSION['ZWII_SITE_CONTENT'] = 'home';
-            
+
             // ET efface la structure
             if (is_dir(self::DATA_DIR . $courseId)) {
                 $success = $this->deleteDir(self::DATA_DIR . $courseId);
@@ -278,13 +280,13 @@ class course extends common
             self::$courseCategories[] = [
                 $categoryId,
                 $categoryTitle,
-                template::button('courseEdit' . $categoryId, [
+                template::button('categoryEdit' . $categoryId, [
                     'href' => helper::baseUrl() . 'course/categoryEdit/' . $categoryId,
                     'value' => template::ico('pencil'),
                     'help' => 'Éditer'
                 ]),
                 template::button('courseDelete' . $categoryId, [
-                    'class' => 'courseDelete buttonRed',
+                    'class' => 'categoryDelete buttonRed',
                     'href' => helper::baseUrl() . 'course/categoryDelete/' . $categoryId,
                     'value' => template::ico('trash'),
                     'help' => 'Supprimer'
@@ -295,6 +297,57 @@ class course extends common
         $this->addOutput([
             'title' => helper::translate('Catégorie'),
             'view' => 'category'
+        ]);
+    }
+
+    public function categoryAdd()
+    {
+
+        // Soumission du formulaire
+        if (
+            $this->getUser('permission', __CLASS__, __FUNCTION__) === true &&
+            $this->isPost()
+        ) {
+            $categoryId = $this->getInput('categoryAddTitle', helper::FILTER_ID, true);
+            $this->setData([
+                'category',
+                $categoryId,
+                $this->getInput('categoryAddTitle', helper::FILTER_STRING_SHORT, true)
+            ]);
+            // Valeurs en sortie
+            $this->addOutput([
+                'redirect' => helper::baseUrl() . 'course/category',
+                'notification' => helper::translate('Catégorie créée'),
+                'state' => true
+            ]);
+        }
+
+        // Valeurs en sortie
+        $this->addOutput([
+            'title' => helper::translate('Ajouter une catégorie'),
+            'view' => 'categoryAdd'
+        ]);
+    }
+
+    public function categoryDelete()
+    {
+
+        $categories = helper::arrayColumn($this->getData(['course']), 'category', 'SORT_ASC');
+        $courseId = $this->getUrl(2);
+        $message = helper::translate('Une catégorie affectée ne peut pas être effacée');
+        $state = false;
+        if (in_array($courseId, $categories) === false) {
+            $this->deleteData(['category', $this->getUrl(2)]);
+            // Valeurs en sortie
+            $message = helper::translate('Catégorie effacée');
+            $state = true;
+        }
+
+        // Valeurs en sortie
+        $this->addOutput([
+            'redirect' => helper::baseUrl() . 'course/category',
+            'notification' => $message,
+            'state' => $state
         ]);
     }
 
