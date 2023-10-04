@@ -247,7 +247,10 @@ class course extends common
             ]);
             // Suppression
         } else {
+            // Active l'accueil
             self::$siteContent = 'home';
+            
+            // ET efface la structure
             if (is_dir(self::DATA_DIR . $courseId)) {
                 $success = $this->deleteDir(self::DATA_DIR . $courseId);
                 $this->deleteData(['course', $courseId]);
