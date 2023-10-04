@@ -247,15 +247,11 @@ class course extends common
             ]);
             // Suppression
         } else {
+            self::$siteContent = 'home';
             if (is_dir(self::DATA_DIR . $courseId)) {
                 $success = $this->deleteDir(self::DATA_DIR . $courseId);
                 $this->deleteData(['course', $courseId]);
                 $this->deleteData(['enrolment', $courseId]);
-            }
-
-            // Activer le site d'accueil
-            if ($success) {
-                self::$siteContent = 'home';
             }
 
             // Valeurs en sortie
