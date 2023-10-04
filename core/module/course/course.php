@@ -248,7 +248,7 @@ class course extends common
             // Suppression
         } else {
             // Active l'accueil
-            self::$siteContent = 'home';
+            $_SESSION['ZWII_SITE_CONTENT'] = 'home';
             
             // ET efface la structure
             if (is_dir(self::DATA_DIR . $courseId)) {
