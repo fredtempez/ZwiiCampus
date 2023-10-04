@@ -48,7 +48,7 @@ class course extends common
 
     public static $swapMessage = [];
 
-    public static $pagesList = ['accueil'=> 'Accueil'];
+    public static $pagesList = ['accueil' => 'Accueil'];
 
 
     public function index()
@@ -101,6 +101,24 @@ class course extends common
             $this->isPost()
         ) {
             $courseId = uniqid();
+            // Créer la structure de données
+            mkdir(self::DATA_DIR . $courseId);
+
+            $this->initDB('page', $courseId);
+            $this->initDB('module', $courseId);
+            $this->initDB('theme', $courseId);
+            $this->initData('page', $courseId);
+            $this->initData('module', $courseId);
+            $this->initData('theme', $courseId);
+
+            // BDD des inscrits
+            $this->setData([
+                'enrolment',
+                $courseId,
+                []
+            ]);
+
+
             $this->setData([
                 'course',
                 $courseId,
@@ -117,20 +135,6 @@ class course extends common
                     'enrolment' => $this->getInput('courseAddEnrolment', helper::FILTER_INT),
                     'enrolmentKey' => $this->getInput('courseAddEnrolmentKey'),
                 ]
-            ]);
-
-            // Créer la structure de données
-            mkdir(self::DATA_DIR . $courseId);
-            $this->initDB('page', $courseId);
-            $this->initDB('module', $courseId);
-            $this->initData('page', $courseId);
-            $this->initData('module', $courseId);
-
-            // BDD des inscrits
-            $this->setData([
-                'enrolment',
-                $courseId,
-                []
             ]);
 
             // Valeurs en sortie
@@ -229,11 +233,11 @@ class course extends common
 
     public function delete()
     {
-
+        $courseId = $this->getUrl(2);
         if (
             $this->getUser('permission', __CLASS__, __FUNCTION__) !== true ||
             // Le cours n'existe pas
-            $this->getData(['course', $this->getUrl(2)]) === null
+            $this->getData(['course', $courseId]) === null
             // Groupe insuffisant
             and ($this->getUrl('group') < self::GROUP_EDITOR)
         ) {
@@ -243,17 +247,22 @@ class course extends common
             ]);
             // Suppression
         } else {
-            $this->deleteData(['course', $this->getUrl(2)]);
-            $this->deleteData(['enrolment', $this->getUrl(2)]);
-            if (is_dir(self::DATA_DIR . $this->getUrl(2))) {
-                $this->deleteDir(self::DATA_DIR . $this->getUrl(2));
+            if (is_dir(self::DATA_DIR . $courseId)) {
+                $success = $this->deleteDir(self::DATA_DIR . $courseId);
+                $this->deleteData(['course', $courseId]);
+                $this->deleteData(['enrolment', $courseId]);
+            }
+
+            // Activer le site d'accueil
+            if ($success) {
+                self::$siteContent = 'home';
             }
 
             // Valeurs en sortie
             $this->addOutput([
                 'redirect' => helper::baseUrl() . 'course',
-                'notification' => helper::translate('Cours supprimé'),
-                'state' => true
+                'notification' => $success ? helper::translate('Cours supprimé') : helper::translate('Erreur de suppression'),
+                'state' => $success
             ]);
         }
 
@@ -326,7 +335,7 @@ class course extends common
             } else {
                 $message = sprintf(helper::translate('Bienvenue dans le cours %s'), $this->getData(['course', $courseId, 'shortTitle']));
             }
-             $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
+            $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
         }
         // Le cours est fermé
         elseif ($this->courseIsAvailable($courseId) === false) {
