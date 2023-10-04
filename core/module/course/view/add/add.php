@@ -38,7 +38,7 @@
             </div>
             <div class="row">
                 <div class="col6">
-                    <?php echo template::select('courseaDDHomePageId', helper::arrayColumn($module::$pagesList, 'title', 'SORT_ASC'), [
+                    <?php echo template::select('courseaDDHomePageId', $module::$pagesList, [
                         'label' => 'Accueil du cours',
                     ]); ?>
                 </div>

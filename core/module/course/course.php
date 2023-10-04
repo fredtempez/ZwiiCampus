@@ -48,7 +48,7 @@ class course extends common
 
     public static $swapMessage = [];
 
-    public static $pagesList = [];
+    public static $pagesList = ['accueil'=> 'Accueil'];
 
 
     public function index()
@@ -151,18 +151,6 @@ class course extends common
 
         // Liste des catégories de cours
         self::$courseCategories = $this->getData(['category']);
-
-        // Liste des pages disponibles
-        $this->initDB('page', $this->getUrl(2));
-        self::$pagesList = $this->getData(['page']);
-        foreach (self::$pagesList as $page => $pageId) {
-            if (
-                $this->getData(['page', $page, 'block']) === 'bar' ||
-                $this->getData(['page', $page, 'disable']) === true
-            ) {
-                unset(self::$pagesList[$page]);
-            }
-        }
 
         // Valeurs en sortie
         $this->addOutput([
