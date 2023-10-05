@@ -1057,11 +1057,13 @@ class user extends common
 						and array_key_exists('nom', $item)
 						and array_key_exists('groupe', $item)
 						and array_key_exists('email', $item)
+						and array_key_exists('passe', $item)
 						and $item['nom']
 						and $item['prenom']
 						and $item['id']
 						and $item['email']
 						and $item['groupe']
+						and $item['passe']
 					) {
 						// Validation du groupe
 						$item['groupe'] = (int) $item['groupe'];
@@ -1098,7 +1100,7 @@ class user extends common
 									'pseudo' => $item['prenom'],
 									'signature' => 1,
 									// Pseudo
-									'password' => uniqid(),
+									'password' => helper::filter($item['passe'],helper::FILTER_PASSWORD),
 									// A modifier à la première connexion
 									"connectFail" => null,
 									"connectTimeout" => null,
