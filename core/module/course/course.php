@@ -40,7 +40,7 @@ class course extends common
         self::COURSE_ENROLMENT_GUEST => 'Anonyme',
         self::COURSE_ENROLMENT_SELF => 'Auto-inscrition libre',
         self::COURSE_ENROLMENT_SELF_KEY => 'Auto-inscription avec clé',
-        self::COURSE_ENROLMENT_MANUAL => 'Manuelle'
+        //self::COURSE_ENROLMENT_MANUAL => 'Manuelle'
     ];
 
     public static $courseTeachers = [];
