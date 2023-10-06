@@ -368,7 +368,7 @@ class course extends common
                 $userId,
                 $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
                 $userValue['lastPageId'],
-                helper::dateUTF8('%d %B %Y - %H:%M',$userValue['lastDateVisited']),
+                helper::dateUTF8('%d %B %Y - %H:%M', $userValue['lastDateVisited']),
                 template::button('courseDelete' . $userId, [
                     'class' => 'categoryDelete buttonRed',
                     'href' => helper::baseUrl() . 'course/categoryDelete/' . $userId,
@@ -456,7 +456,6 @@ class course extends common
                     break;
                 // Auto avec ou sans clé
                 case self::COURSE_ENROLMENT_SELF:
-                    $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
                     $redirect .= 'course/enrol/' . $courseId;
                     $message = helper::translate('Veuillez vous inscrire');
                     break;
@@ -508,16 +507,17 @@ class course extends common
                 switch ($this->getData(['course', $courseId, 'enrolment'])) {
                     case self::COURSE_ENROLMENT_SELF:
                         $this->courseEnrolUser($courseId, $userId);
+                        // Stocker la sélection
+                        $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
                         break;
                     case self::COURSE_ENROLMENT_SELF_KEY:
                         if ($this->getInput('courseSwapEnrolmentKey') === $this->getData(['course', $courseId, 'enrolmentKey'])) {
                             $this->courseEnrolUser($courseId, $userId);
+                            // Stocker la sélection
+                            $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
                         }
                         break;
                 }
-
-                // Stocker la sélection
-                $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
 
                 // Valeurs en sortie
                 $this->addOutput([
@@ -526,22 +526,26 @@ class course extends common
             }
         }
         // L'étudiant est-il  inscrit
-        self::$swapMessage['submitLabel'] = 'Se connecter';
+        self::$swapMessage['submitLabel'] = helper::translate('M\'inscrire');
         self::$swapMessage['enrolmentMessage'] = '';
         self::$swapMessage['enrolmentKey'] = '';
         if ($this->courseIsUserEnroled($courseId) === false) {
             switch ($this->getData(['course', $courseId, 'enrolment'])) {
-                case self::COURSE_ENROLMENT_GUEST:
                 case self::COURSE_ENROLMENT_SELF:
-                    self::$swapMessage['submitLabel'] = helper::translate('M\'inscrire');
+                    if ($userId == '') {
+                        self::$swapMessage['enrolmentMessage'] = helper::translate('Connectez-vous pour accéder à ce cours.');
+                        self::$swapMessage['submitLabel'] = helper::translate('Connexion');
+                    }
                     break;
                 case self::COURSE_ENROLMENT_SELF_KEY:
-                    if ($userId) {
+                    if ($userId == '') {
+                        self::$swapMessage['enrolmentMessage'] = helper::translate('Connectez-vous pour accéder à ce cours.');
+                        self::$swapMessage['submitLabel'] = helper::translate('Connexion');
+                    } else {
+                        self::$swapMessage['submitLabel'] = helper::translate('Connexion');
                         self::$swapMessage['enrolmentKey'] = template::text('courseSwapEnrolmentKey', [
                             'label' => helper::translate('Clé d\'inscription'),
                         ]);
-                    } else {
-                        self::$swapMessage['enrolmentMessage'] = helper::translate('Connectez-vous pour accéder à ce cours.');
                     }
                     break;
                 case self::COURSE_ENROLMENT_MANUAL:
