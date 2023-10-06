@@ -535,87 +535,95 @@ class user extends common
 		if (
 			$this->getUser('permission', __CLASS__, __FUNCTION__) === true &&
 			$this->isPost()
-		) {
+			) {
 
-			// Effacer les données du numéro de profil ancien
-			$group = $this->getInput('profilEditGroup', helper::FILTER_STRING_SHORT, true);
-			// Les profils 1 sont désactivés dans le formulaire
-			$profil = empty($this->getInput('profilEditProfil')) ?  '1' : $this->getInput('profilEditProfil') ;
-			$oldProfil = $this->getInput('profilEditOldProfil', helper::FILTER_STRING_SHORT);
-			if ($profil !== $profil) {
-				$this->deleteData(['profil', $group, $oldProfil]);
-			}
-
-			// Données du formulaire
-			$data = [
-				'name' => $this->getInput('profilEditName', helper::FILTER_STRING_SHORT, true),
-				'readonly' => false,
-				'permanent' => $group === '1' ? true : false,
-				'comment' => $this->getInput('profilEditComment', helper::FILTER_STRING_SHORT, true),
-				'filemanager' => $this->getInput('profilEditFileManager', helper::FILTER_BOOLEAN),
-				'file' => [
-					'download' => $this->getInput('profilEditDownload', helper::FILTER_BOOLEAN),
-					'edit' => $this->getInput('profilEditEdit', helper::FILTER_BOOLEAN),
-					'create' => $this->getInput('profilEditCreate', helper::FILTER_BOOLEAN),
-					'rename' => $this->getInput('profilEditRename', helper::FILTER_BOOLEAN),
-					'upload' => $this->getInput('profilEditUpload', helper::FILTER_BOOLEAN),
-					'delete' => $this->getInput('profilEditDelete', helper::FILTER_BOOLEAN),
-					'preview' => $this->getInput('profilEditPreview', helper::FILTER_BOOLEAN),
-					'duplicate' => $this->getInput('profilEditDuplicate', helper::FILTER_BOOLEAN),
-					'extract' => $this->getInput('profilEditExtract', helper::FILTER_BOOLEAN),
-					'copycut' => $this->getInput('profilEditCopycut', helper::FILTER_BOOLEAN),
-					'chmod' => $this->getInput('profilEditChmod', helper::FILTER_BOOLEAN),
-				],
-				'folder' => [
-					'create' => $this->getInput('profilEditFolderCreate', helper::FILTER_BOOLEAN),
-					'delete' => $this->getInput('profilEditFolderDelete', helper::FILTER_BOOLEAN),
-					'rename' => $this->getInput('profilEditFolderRename', helper::FILTER_BOOLEAN),
-					'copycut' => $this->getInput('profilEditFolderCopycut', helper::FILTER_BOOLEAN),
-					'chmod' => $this->getInput('profilEditFolderChmod', helper::FILTER_BOOLEAN),
-					'path' => $this->getInput('profilEditPath'),
-				],
-				'page' => [
-					'add' => $this->getInput('profilEditPageAdd', helper::FILTER_BOOLEAN),
-					'edit' => $this->getInput('profilEditPageEdit', helper::FILTER_BOOLEAN),
-					'delete' => $this->getInput('profilEditPageDelete', helper::FILTER_BOOLEAN),
-					'duplicate' => $this->getInput('profilEditPageDuplicate', helper::FILTER_BOOLEAN),
-					'module' => $this->getInput('profilEditPageModule', helper::FILTER_BOOLEAN),
-					'cssEditor' => $this->getInput('profilEditPagecssEditor', helper::FILTER_BOOLEAN),
-					'jsEditor' => $this->getInput('profilEditPagejsEditor', helper::FILTER_BOOLEAN),
-				],
-				'user' => [
-					'edit' => $this->getInput('profilEditUserEdit', helper::FILTER_BOOLEAN),
-				]
-			];
-
-			// Données des modules
-			$dataModules = helper::getModules();
-			if (is_array($dataModules)) {
-				foreach ($dataModules as $moduleId => $moduleValue) {
-					if (file_exists('module/' . $moduleId . '/profil/main/edit.inc.php')) {
-						include('module/' . $moduleId . '/profil/main/edit.inc.php');
-						if (is_array($moduleData[$moduleId])) {
-							$data = array_merge($data, [$moduleId => $moduleData[$moduleId]]);
+				// Effacer les données du numéro de profil ancien
+				$group = $this->getInput('profilEditGroup', helper::FILTER_STRING_SHORT, true);
+				// Les profils 1 sont désactivés dans le formulaire
+				$profil = empty($this->getInput('profilEditProfil')) ?  '1' : $this->getInput('profilEditProfil') ;
+				$oldProfil = $this->getInput('profilEditOldProfil', helper::FILTER_STRING_SHORT);
+				// Gère le chemin
+				$fileManager = $this->getInput('profilEditFileManager', helper::FILTER_BOOLEAN);
+				$path = $this->getInput('profilEditPath');
+				if ($group <= self::GROUP_ADMIN
+					&& $fileManager 
+					&& empty($path)
+					) {
+						$fileManager = false;
+				}
+				if ($profil !== $profil) {
+					$this->deleteData(['profil', $group, $oldProfil]);
+				}
+				// Données du formulaire
+				$data = [
+					'name' => $this->getInput('profilEditName', helper::FILTER_STRING_SHORT, true),
+					'readonly' => false,
+					'permanent' => $group === '1' ? true : false,
+					'comment' => $this->getInput('profilEditComment', helper::FILTER_STRING_SHORT, true),
+					'filemanager' => $fileManager,
+					'file' => [
+						'download' => $this->getInput('profilEditDownload', helper::FILTER_BOOLEAN),
+						'edit' => $this->getInput('profilEditEdit', helper::FILTER_BOOLEAN),
+						'create' => $this->getInput('profilEditCreate', helper::FILTER_BOOLEAN),
+						'rename' => $this->getInput('profilEditRename', helper::FILTER_BOOLEAN),
+						'upload' => $this->getInput('profilEditUpload', helper::FILTER_BOOLEAN),
+						'delete' => $this->getInput('profilEditDelete', helper::FILTER_BOOLEAN),
+						'preview' => $this->getInput('profilEditPreview', helper::FILTER_BOOLEAN),
+						'duplicate' => $this->getInput('profilEditDuplicate', helper::FILTER_BOOLEAN),
+						'extract' => $this->getInput('profilEditExtract', helper::FILTER_BOOLEAN),
+						'copycut' => $this->getInput('profilEditCopycut', helper::FILTER_BOOLEAN),
+						'chmod' => $this->getInput('profilEditChmod', helper::FILTER_BOOLEAN),
+					],
+					'folder' => [
+						'create' => $this->getInput('profilEditFolderCreate', helper::FILTER_BOOLEAN),
+						'delete' => $this->getInput('profilEditFolderDelete', helper::FILTER_BOOLEAN),
+						'rename' => $this->getInput('profilEditFolderRename', helper::FILTER_BOOLEAN),
+						'copycut' => $this->getInput('profilEditFolderCopycut', helper::FILTER_BOOLEAN),
+						'chmod' => $this->getInput('profilEditFolderChmod', helper::FILTER_BOOLEAN),
+						'path' => $path,
+					],
+					'page' => [
+						'add' => $this->getInput('profilEditPageAdd', helper::FILTER_BOOLEAN),
+						'edit' => $this->getInput('profilEditPageEdit', helper::FILTER_BOOLEAN),
+						'delete' => $this->getInput('profilEditPageDelete', helper::FILTER_BOOLEAN),
+						'duplicate' => $this->getInput('profilEditPageDuplicate', helper::FILTER_BOOLEAN),
+						'module' => $this->getInput('profilEditPageModule', helper::FILTER_BOOLEAN),
+						'cssEditor' => $this->getInput('profilEditPagecssEditor', helper::FILTER_BOOLEAN),
+						'jsEditor' => $this->getInput('profilEditPagejsEditor', helper::FILTER_BOOLEAN),
+					],
+					'user' => [
+						'edit' => $this->getInput('profilEditUserEdit', helper::FILTER_BOOLEAN),
+					]
+				];
+	
+				// Données des modules
+				$dataModules = helper::getModules();
+				if (is_array($dataModules)) {
+					foreach ($dataModules as $moduleId => $moduleValue) {
+						if (file_exists('module/' . $moduleId . '/profil/main/edit.inc.php')) {
+							include('module/' . $moduleId . '/profil/main/edit.inc.php');
+							if (is_array($moduleData[$moduleId])) {
+								$data = array_merge($data, [$moduleId => $moduleData[$moduleId]]);
+							}
 						}
 					}
 				}
+	
+				//Sauvegarder le données
+				$this->setData([
+					'profil',
+					$group,
+					$profil,
+					$data
+				]);
+	
+				// Valeurs en sortie
+				$this->addOutput([
+					'redirect' => helper::baseUrl() . 'user/profil',
+					'notification' => helper::translate('Modifications enregistrées'),
+					'state' => true
+				]);
 			}
-
-			//Sauvegarder le données
-			$this->setData([
-				'profil',
-				$group,
-				$profil,
-				$data
-			]);
-
-			// Valeurs en sortie
-			$this->addOutput([
-				'redirect' => helper::baseUrl() . 'user/profil',
-				'notification' => helper::translate('Modifications enregistrées'),
-				'state' => true
-			]);
-		}
 
 		// Chemin vers les dossiers du gestionnaire de fichier
 		self::$sharePath = $this->getSubdirectories('./site/file/source');
