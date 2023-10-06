@@ -35,7 +35,6 @@ tinymce.init({
 		insert: {title: 'Insert', items: 'template | nonbreaking hr charmap anchor | abbr insertdatetime '},
 		format: {title: 'Format', items: 'underline strikethrough superscript subscript | forecolor backcolor | formats | removeformat'},
 		table: {title: 'Table', items: 'inserttable tableprops deletetable | cell row column'},
-		
 	},
 	// Contenu de la barre d'outils
 	toolbar: "ndo redo | bold italic strikethrough | h1 h2 h3 | alignleft aligncenter alignright alignjustify | link | bullist numlist | image media | fullscreen",
@@ -94,7 +93,7 @@ tinymce.init({
 	content_css: [
 		baseUrl + "core/layout/common.css",
 		baseUrl + "core/vendor/tinymce/content.css",
-		baseUrl + "site/data/" + getCookie('ZWII_SITE_CONTENT') === null ? "home" : getCookie('ZWII_SITE_CONTENT') + "theme.css",
+		baseUrl + "site/data/" + getCookie('ZWII_SITE_CONTENT') === null ? "home" : "site/data/" + getCookie('ZWII_SITE_CONTENT') + "/theme.css",
 		baseUrl + "site/data/custom.css"
 	],
 	// Classe à ajouter à la balise body dans l'iframe
