@@ -402,7 +402,7 @@ class course extends common
         $courseId = $this->getUrl(2);
         $userId = $this->getuser('id');
         $message = '';
-        $redirect = helper::baseUrl();
+        $redirect = helper::baseUrl(true);
         $state = true;
 
         if (
@@ -411,8 +411,8 @@ class course extends common
         ) {
             $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
         }
-        // l'étudiant est inscrit dans le cours ET le cours est ouvert 
-        // ou un admin est connecté ou le prof du cours
+        // l'étudiant est inscrit dans le cours ET le cours est ouvert
+        // ou un admin  ou le prof du cours sont connectés
         elseif (
             $this->courseIsUserEnroled($courseId)
             && $this->courseIsAvailable($courseId)
@@ -456,8 +456,12 @@ class course extends common
                     break;
                 // Auto avec ou sans clé
                 case self::COURSE_ENROLMENT_SELF:
+                    $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
+                    $redirect .= 'course/enrol/' . $courseId;
+                    $message = helper::translate('Veuillez vous inscrire');
+                    break;
                 case self::COURSE_ENROLMENT_SELF_KEY:
-                    //L'étudiant dispsoe d'un compte
+                    //L'étudiant doit disposer d'un compte
                     if ($this->getUser('id')) {
                         $redirect .= 'course/enrol/' . $courseId;
                         $message = helper::translate('Veuillez vous inscrire');
@@ -466,16 +470,15 @@ class course extends common
                         $message = helper::translate('Vous devez disposer d\'un compte pour accéder à ce cours');
                         $state = false;
                     }
-
                     break;
                 // Par le prof
+                /*
                 case self::COURSE_ENROLMENT_MANUAL:
                     $message = helper::translate('L\'enseignant ne vous a pas inscrit dans ce cours !');
                     $state = false;
                     break;
                 default:
-                    # code...
-                    break;
+                */
             }
         }
 
