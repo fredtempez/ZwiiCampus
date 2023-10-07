@@ -368,10 +368,10 @@ class course extends common
                 $userId,
                 $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
                 $userValue['lastPageId'],
-                helper::dateUTF8('%d %B %Y - %H:%M', $userValue['lastDateVisited']),
+                helper::dateUTF8('%d %B %Y - %H:%M', $userValue['dateVisit']),
                 template::button('courseDelete' . $userId, [
                     'class' => 'categoryDelete buttonRed',
-                    'href' => helper::baseUrl() . 'course/categoryDelete/' . $userId,
+                    'href' => helper::baseUrl() . 'course/userDelete/' . $userId,
                     'value' => template::ico('trash'),
                     'help' => 'Supprimer'
                 ])
@@ -600,7 +600,7 @@ class course extends common
             $userId,
             [
                 'lastPageId' => '',
-                'lastVisit' => 0
+                'dateVisit' => 0
             ]
         ]);
     }
