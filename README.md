@@ -1,10 +1,7 @@
 # ZwiiLMS 1.0.n
 
-Zwii est un CMS sans base de données (flat-file) qui permet de créer et gérer facilement un site web sans aucune connaissance en programmation.
+ZwiiLMS est logiciel auteur destiné à mettre en ligne des tutoriels. Il dispose de plusieurs modalités d'ouverture et d'accès des cours. Basé sur la version 13 du CMS Zwii, la structure logicielle est solide, le framework de Zwii est éprouvé.
 
-ZwiiCMS a été créé par un développeur de talent, [Rémi Jean](https://remijean.fr/). Il est désormais maintenu par Frédéric Tempez.
-
-[Site](http://zwiicms.fr/) - [Forum](http://forum.zwiicms.com/) - [Version initiale](https://github.com/remijean/ZwiiCMS/) - [GitHub](https://github.com/fredtempez/ZwiiCMS)
 
 ## Configuration recommandée
 
@@ -17,12 +14,6 @@ Cette œuvre est mise à disposition sous licence Attribution - Pas d'utilisatio
 
 Pour voir une copie de cette licence, visitez http://creativecommons.org/licenses/by-nc-nd/4.0/ ou écrivez à Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
 
-## Téléchargement de ZwiiCMS
-
-Pour télécharger la dernière version publiée, rendez-vous :
-- sur [la page des mises à jour](https://forge.chapril.org/ZwiiCMS-Team/ZwiiCMS/releases)
-- ou sur [la page de téléchargement du site](https://zwiicms.fr/telechargement) 
-
 
 ## Installation
 
@@ -33,7 +24,7 @@ Vous trouverez de plus amples explications, en particulier pour une installation
 
 ## Procédures de mise à jour
 
-A l'occasion de l'installation d'une verion majeure, il est recommandé de réaliser une copie de sauvegarde.
+A l'occasion de l'installation d'une version majeure, il est recommandé de réaliser une copie de sauvegarde.
 
 ### Automatique
 
@@ -103,7 +94,7 @@ A l'occasion de l'installation d'une verion majeure, il est recommandé de réal
     [R] thumb              Miniatures des images
   [R] tmp                  Répertoire temporaire
 
-[F] index.php              Fichier d'initialisation de ZwiiCMS
+[F] index.php              Fichier d'initialisation de ZwiiLMS
 [F] robots.txt             Filtrage des répertoires accessibles aux robots des moteurs de recherche
 [F] sitemap.xml            Plan du site
 [F] sitemap.xml.gz         Version compressée
