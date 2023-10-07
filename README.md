@@ -1,6 +1,6 @@
 # ZwiiLMS 1.0.n
 
-ZwiiLMS est logiciel auteur destiné à mettre en ligne des tutoriels. Il dispose de plusieurs modalités d'ouverture et d'accès des cours. Basé sur la version 13 du CMS Zwii, la structure logicielle est solide, le framework de Zwii est éprouvé.
+ZwiiLMS (Learning Management System) est logiciel auteur destiné à mettre en ligne des tutoriels. Il dispose de plusieurs modalités d'ouverture et d'accès des cours. Basé sur la version 13 du CMS Zwii, la structure logicielle est solide, le framework de Zwii est éprouvé.
 
 
 ## Configuration recommandée
