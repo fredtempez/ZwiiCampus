@@ -1,4 +1,4 @@
-# ZwiiLMS 0.0.01
+# ZwiiLMS 1.0.n
 
 Zwii est un CMS sans base de données (flat-file) qui permet de créer et gérer facilement un site web sans aucune connaissance en programmation.
 
