@@ -7,11 +7,11 @@
         ]); ?>
     </div>
     <div class="col1 offset10">
-        <?php echo template::button('courseUserAdd', [
+        <?php /*echo template::button('courseUserAdd', [
             'class' => 'buttonGreen',
             'href' => helper::baseUrl() . 'course/userAdd',
             'value' => template::ico('plus')
-        ]); ?>
+        ]); */?>
     </div>
 </div>
 

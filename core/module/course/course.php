@@ -28,6 +28,7 @@ class course extends common
         'categoryDelete' => self::GROUP_ADMIN,
         'user' => self::GROUP_ADMIN,
         'userAdd' => self::GROUP_ADMIN,
+        'userDelete' => self::GROUP_ADMIN,
     ];
 
     public static $courseAccess = [
@@ -340,23 +341,34 @@ class course extends common
     public function categoryDelete()
     {
 
-        $categories = helper::arrayColumn($this->getData(['course']), 'category', 'SORT_ASC');
-        $courseId = $this->getUrl(2);
-        $message = helper::translate('Une catégorie affectée ne peut pas être effacée');
-        $state = false;
-        if (in_array($courseId, $categories) === false) {
-            $this->deleteData(['category', $this->getUrl(2)]);
+        // Accès refusé
+        if (
+            $this->getUser('permission', __CLASS__, __FUNCTION__) !== true
+        ) {
             // Valeurs en sortie
-            $message = helper::translate('Catégorie effacée');
-            $state = true;
+            $this->addOutput([
+                'access' => false
+            ]);
+        } else {
+            $categories = helper::arrayColumn($this->getData(['course']), 'category', 'SORT_ASC');
+            $courseId = $this->getUrl(2);
+            $message = helper::translate('Une catégorie affectée ne peut pas être effacée');
+            $state = false;
+            if (in_array($courseId, $categories) === false) {
+                $this->deleteData(['category', $this->getUrl(2)]);
+                // Valeurs en sortie
+                $message = helper::translate('Catégorie effacée');
+                $state = true;
+            }
+
+            // Valeurs en sortie
+            $this->addOutput([
+                'redirect' => helper::baseUrl() . 'course/category',
+                'notification' => $message,
+                'state' => $state
+            ]);
         }
 
-        // Valeurs en sortie
-        $this->addOutput([
-            'redirect' => helper::baseUrl() . 'course/category',
-            'notification' => $message,
-            'state' => $state
-        ]);
     }
 
     public function user()
@@ -369,11 +381,11 @@ class course extends common
                 $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
                 $userValue['lastPageId'],
                 helper::dateUTF8('%d %B %Y - %H:%M', $userValue['dateVisit']),
-                template::button('courseDelete' . $userId, [
-                    'class' => 'categoryDelete buttonRed',
-                    'href' => helper::baseUrl() . 'course/userDelete/' . $userId,
-                    'value' => template::ico('trash'),
-                    'help' => 'Supprimer'
+                template::button('userDelete' . $userId, [
+                    'class' => 'userDelete buttonRed',
+                    'href' => helper::baseUrl() . 'course/userDelete/'. $this->getUrl(2) . '/' .  $userId,
+                    'value' => template::ico('minus'),
+                    'help' => 'Désinscrire'
                 ])
             ];
         }
@@ -392,6 +404,30 @@ class course extends common
             'title' => helper::translate('Inscrire'),
             'view' => 'userAdd'
         ]);
+    }
+
+    /** 
+     * Désinscription d'un utilisateur
+     */
+    public function userDelete()
+    {
+        // Accès refusé
+        if (
+            $this->getUser('permission', __CLASS__, __FUNCTION__) !== true
+        ) {
+            // Valeurs en sortie
+            $this->addOutput([
+                'access' => false
+            ]);
+        } else {
+            $this->deleteData(['enrolment', $this->getUrl(2), $this->getUrl(3)]);
+            // Valeurs en sortie
+            $this->addOutput([
+                'redirect' => helper::baseUrl() . 'course/user/' . $this->getUrl(2),
+                'notification' => sprintf(helper::translate('%s est désinscrit'), $this->getUrl(3)),
+                'state' => true
+            ]);
+        }
     }
 
     /*
