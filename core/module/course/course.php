@@ -29,6 +29,7 @@ class course extends common
         'user' => self::GROUP_ADMIN,
         'userAdd' => self::GROUP_ADMIN,
         'userDelete' => self::GROUP_ADMIN,
+        'userDeleteAll' => self::GROUP_ADMIN,
     ];
 
     public static $courseAccess = [
@@ -425,6 +426,30 @@ class course extends common
             $this->addOutput([
                 'redirect' => helper::baseUrl() . 'course/user/' . $this->getUrl(2),
                 'notification' => sprintf(helper::translate('%s est désinscrit'), $this->getUrl(3)),
+                'state' => true
+            ]);
+        }
+    }
+
+    /** 
+     * Désinscription de tous les utilisateurs
+     */
+    public function userDeleteAll()
+    {
+        // Accès refusé
+        if (
+            $this->getUser('permission', __CLASS__, __FUNCTION__) !== true
+        ) {
+            // Valeurs en sortie
+            $this->addOutput([
+                'access' => false
+            ]);
+        } else {
+            $this->setData(['enrolment', $this->getUrl(2), array()]);
+            // Valeurs en sortie
+            $this->addOutput([
+                'redirect' => helper::baseUrl() . 'course/user/' . $this->getUrl(2),
+                'notification' => helper::translate('Cours réinitialisé'),
                 'state' => true
             ]);
         }
