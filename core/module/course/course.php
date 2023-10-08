@@ -377,11 +377,14 @@ class course extends common
         $users = $this->getData(['enrolment', $this->getUrl(2)]);
         ksort($users);
         foreach ($users as $userId => $userValue) {
+            $history = $userValue['history'];
+            $maxTime = max($history);
+            $pageId = array_search($maxTime, $history);
             self::$courseUsers[] = [
                 $userId,
                 $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
-                $userValue['lastPageId'],
-                helper::dateUTF8('%d %B %Y - %H:%M', $userValue['dateVisit']),
+                $pageId,
+                helper::dateUTF8('%d %B %Y - %H:%M', $maxTime),
                 template::button('userDelete' . $userId, [
                     'class' => 'userDelete buttonRed',
                     'href' => helper::baseUrl() . 'course/userDelete/'. $this->getUrl(2) . '/' .  $userId,
@@ -479,8 +482,9 @@ class course extends common
             && $this->courseIsAvailable($courseId)
         ) {
             // Récupérer la dernière page visitée par cet utilisateur si elle existe
-            if ($this->getData(['enrolment', $courseId, $userId, 'lastPageId'])) {
-                $redirect .= $this->getData(['enrolment', $courseId, $userId, 'lastPageId']);
+            $maxTime = max($this->getData(['enrolment', $courseId, $userId, 'history']));
+            if ($maxTime) {
+                $redirect .= array_search($maxTime,$this->getData(['enrolment', $courseId, $userId, 'history']));
             } else {
                 // Sinon la page d'accueil par défaut du module
                 $redirect .= $this->getData(['course', $courseId, 'homePageId']);
@@ -660,8 +664,7 @@ class course extends common
             $courseId,
             $userId,
             [
-                'lastPageId' => '',
-                'dateVisit' => 0
+                'history' => [],
             ]
         ]);
     }

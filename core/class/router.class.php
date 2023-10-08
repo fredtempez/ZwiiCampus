@@ -467,7 +467,7 @@ class core extends common
 			exit();
 		}
 
-		// Sauvegarde la dernière page visitée par l'utilisateur connecté
+		// Sauvegarde la dernière page visitée par l'utilisateur connecté et enregistre l'historique des consultations
 		if (
 			$this->getUser('id')
 			&& self::$siteContent !== 'home'
@@ -477,10 +477,8 @@ class core extends common
 				$this->getUser('group') < self::GROUP_ADMIN
 				|| $this->getUser('id') !== $this->getData(['course', self::$siteContent, 'author'])
 			)
-
 		) {
-			$this->setData(['enrolment', self::$siteContent, $this->getUser('id'), 'lastPageId', $this->getUrl(0)]);
-			$this->setData(['enrolment', self::$siteContent, $this->getUser('id'), 'dateVisit', time()]);
+			$this->setData(['enrolment', self::$siteContent, $this->getUser('id'), 'history', $this->getUrl(0), time()]);
 		}
 
 		// Journalisation
