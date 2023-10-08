@@ -396,7 +396,7 @@ class course extends common
 
         // Valeurs en sortie
         $this->addOutput([
-            'title' => helper::translate('Inscrits'),
+            'title' => sprintf(helper::translate('Inscrits dans le cours %s'),$this->getData(['course', $this->getUrl(2), 'title'])),
             'view' => 'user'
         ]);
     }
