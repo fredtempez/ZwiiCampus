@@ -469,9 +469,15 @@ class core extends common
 
 		// Sauvegarde la dernière page visitée par l'utilisateur connecté
 		if (
-			$this->getUser('id') &&
-			self::$siteContent != 'home' &&
-			in_array($this->getUrl(0), array_keys($this->getData(['page'])))
+			$this->getUser('id')
+			&& self::$siteContent !== 'home'
+			&& in_array($this->getUrl(0), array_keys($this->getData(['page'])))
+			// Le userId n'est pas celui d'un admis ni le prof du cours
+			&& (
+				$this->getUser('group') < self::GROUP_ADMIN
+				|| $this->getUser('id') !== $this->getData(['course', self::$siteContent, 'author'])
+			)
+
 		) {
 			$this->setData(['enrolment', self::$siteContent, $this->getUser('id'), 'lastPageId', $this->getUrl(0)]);
 			$this->setData(['enrolment', self::$siteContent, $this->getUser('id'), 'dateVisit', time()]);
@@ -512,7 +518,7 @@ class core extends common
 		}
 
 		// Pour éviter une 404 sur une langue étrangère, bascule dans la langue correcte.
-		/*
+
 		if (is_null($this->getData(['page', $this->getUrl(0)]))) {
 			foreach (self::$languages as $key => $value) {
 				if (
@@ -531,7 +537,6 @@ class core extends common
 				}
 			}
 		}
-		*/
 
 		// Check l'accès à la page
 		$access = null;
