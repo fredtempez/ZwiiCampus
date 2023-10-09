@@ -455,7 +455,7 @@ class course extends common
                 $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
                 $pageId,
                 helper::dateUTF8('%d %B %Y - %H:%M', $maxTime),
-                ($viewPages * 100)/ $sumPages . ' %',
+                round(($viewPages * 100)/ $sumPages, 1) . ' %',
                 template::button('userDelete' . $userId, [
                     'class' => 'userDelete buttonRed',
                     'href' => helper::baseUrl() . 'course/userDelete/' . $courseId . '/' . $userId,
