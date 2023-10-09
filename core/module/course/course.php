@@ -554,8 +554,9 @@ class course extends common
             && $this->courseIsAvailable($courseId)
         ) {
             // Récupérer la dernière page visitée par cet utilisateur si elle existe
-            $maxTime = max($this->getData(['enrolment', $courseId, $userId, 'history']));
-            if ($maxTime) {
+            if ($this->getData(['enrolment', $courseId, $userId, 'history']))
+                $maxTime = max($this->getData(['enrolment', $courseId, $userId, 'history']));
+            if (is_int($maxTime)) {
                 $redirect .= array_search($maxTime, $this->getData(['enrolment', $courseId, $userId, 'history']));
             } else {
                 // Sinon la page d'accueil par défaut du module
