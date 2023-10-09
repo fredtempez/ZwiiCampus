@@ -40,31 +40,31 @@
 </div>
 <?php echo template::formOpen('userFilterUserForm'); ?>
 <div class="row">
-    <div class="col10 offset1">
+    <div class="col12">
         <div class="block">
             <h4>
                 <?php echo helper::translate('Filtres'); ?>
             </h4>
             <div class="row">
-                <div class="col2">
+                <div class="col3">
                     <?php echo template::select('userFilterGroup', $module::$courseGroups, [
                         'label' => 'Groupes / Profils',
                         'selected' => isset($_POST['userFilterGroup']) ? $_POST['userFilterGroup'] : 'all',
                     ]); ?>
                 </div>
-                <div class="col2">
+                <div class="col3">
                     <?php echo template::select('userFilterFirstName', $module::$alphabet, [
                         'label' => 'Prénom commence par',
                         'selected' => isset($_POST['userFilterFirstName']) ? $_POST['userFilterFirstName'] : 'all',
                     ]); ?>
                 </div>
-                <div class="col2">
+                <div class="col3">
                     <?php echo template::select('userFilterLastName', $module::$alphabet, [
                         'label' => 'Nom commence par',
                         'selected' => isset($_POST['userFilterLastName']) ? $_POST['userFilterLastName'] : 'all',
                     ]); ?>
                 </div>
-                <div class="col2 offset4">
+                <div class="col2 offset1">
                     <?php echo template::submit('userFilterSubmit', [
                         'value' => 'Filtrer',
                         'uniqueSubmission' => true

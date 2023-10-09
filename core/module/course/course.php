@@ -55,7 +55,7 @@ class course extends common
     public static $alphabet = [];
 
     public static $courseGroups = [
-        'all' => 'Tous'
+        'all' => 'Tout'
     ];
 
     public static $courses = [];
@@ -402,7 +402,7 @@ class course extends common
         self::$alphabet = range('A', 'Z');
         $alphabet = range('A', 'Z');
         self::$alphabet = array_combine($alphabet, self::$alphabet);
-        self::$alphabet = array_merge(['all'=>'Toute'], self::$alphabet );
+        self::$alphabet = array_merge(['all'=>'Tout'], self::$alphabet );
         // Liste des inscrits dans le cours sélectionné.
         $courseId = $this->getUrl(2);
         $users = $this->getData(['enrolment', $courseId]);
