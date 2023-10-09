@@ -453,15 +453,17 @@ class user extends common
 					}
 			}
 		}
+
 		// Liste alphabétique
 		self::$alphabet = range('A', 'Z');
 		$alphabet = range('A', 'Z');
 		self::$alphabet = array_combine($alphabet, self::$alphabet);
 		self::$alphabet = array_merge(['all' => 'Toute'], self::$alphabet);
 
-		$userIdsFirstnames = helper::arrayColumn($this->getData(['user']), 'firstname');
-		ksort($userIdsFirstnames);
-		foreach ($userIdsFirstnames as $userId => $userFirstname) {
+		// Liste des membres
+		$userIdsLastNames = helper::arrayColumn($this->getData(['user']), 'lastname');
+		ksort($userIdsLastNames);
+		foreach ($userIdsLastNames as $userId => $userLastNames) {
 			if ($this->getData(['user', $userId, 'group'])) {
 				// Filtres
 				if ($this->isPost()) {
@@ -488,14 +490,15 @@ class user extends common
 					)
 						continue;
 				}
+
 				// Formatage de la liste
-				$group = helper::translate(self::$groups[(int) $this->getData(['user', $userId, 'group'])]);
-				$profil = $this->getData(['profil', $this->getData(['user', $userId, 'group']), $this->getData(['user', $userId, 'profil']), 'name']);
 				self::$users[] = [
 					$userId,
-					$userFirstname . ' ' . $this->getData(['user', $userId, 'lastname']),
-					$group,
-					empty($profil) ? $group : $profil,
+					$this->getData(['user', $userId, 'firstname']) . ' ' . $userLastNames,
+					helper::translate(self::$groups[(int) $this->getData(['user', $userId, 'group'])]),
+					empty($this->getData(['profil', $this->getData(['user', $userId, 'group']), $this->getData(['user', $userId, 'profil']), 'name']))
+						? helper::translate(self::$groups[(int) $this->getData(['user', $userId, 'group'])])
+						: $this->getData(['profil', $this->getData(['user', $userId, 'group']), $this->getData(['user', $userId, 'profil']), 'name']),
 					template::button('userEdit' . $userId, [
 						'href' => helper::baseUrl() . 'user/edit/' . $userId,
 						'value' => template::ico('pencil'),
