@@ -11,7 +11,8 @@
             'class' => 'userDeleteAll buttonRed',
             'href' => helper::baseUrl() . 'course/userDeleteAll/' . $this->getUrl(2),
             'value' => helper::translate('Réinitialiser'),
-            'help' => 'Désinscrire tous les utilisateurs'
+            'help' => 'Désinscrire tous les utilisateurs',
+            'ico'=> 'minus'
         ])
             ?>
     </div>
@@ -27,23 +28,24 @@
                 <div class="col2">
                     <?php echo template::select('courseFilterGroup', $module::$groups, [
                         'label' => 'Groupes / Profils',
-                        'selected' => isset($_POST['courseFilterGroup']) ? $_POST['courseFilterGroup'] : self::GROUP_VISITOR,
+                        'selected' => isset($_POST['courseFilterGroup']) ? $_POST['courseFilterGroup'] : 'all',
                     ]); ?>
                 </div>
                 <div class="col2">
                     <?php echo template::select('courseFilterFirstName', $module::$alphabet, [
                         'label' => 'Prénom commence par',
-                        'selected' => isset($_POST['courseFilterFirstName']) ? $_POST['courseFilterFirstName'] : 'A',
+                        'selected' => isset($_POST['courseFilterFirstName']) ? $_POST['courseFilterFirstName'] : 'all',
                     ]); ?>
                 </div>
                 <div class="col2">
                     <?php echo template::select('courseFilterLastName', $module::$alphabet, [
                         'label' => 'Nom commence par',
-                        'selected' => isset($_POST['courseFilterLastName']) ? $_POST['courseFilterLastName'] : 'A',
+                        'selected' => isset($_POST['courseFilterLastName']) ? $_POST['courseFilterLastName'] : 'all',
                     ]); ?>
                 </div>
                 <div class="col2 offset4">
                     <?php echo template::submit('courseFilterSubmit', [
+                        'value' => 'Filtrer',
                         'uniqueSubmission' => true
                     ]); ?>
                 </div>

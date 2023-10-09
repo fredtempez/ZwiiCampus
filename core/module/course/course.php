@@ -55,7 +55,7 @@ class course extends common
     public static $alphabet = [];
 
     public static $groups = [
-        self::GROUP_VISITOR => 'Aucun'
+        'all' => 'Tous'
     ];
 
     public static $courses = [];
@@ -393,13 +393,16 @@ class course extends common
                 case "2":
                     foreach ($groupValue as $profilId => $profilValue) {
                         if ($profilId) {
-                            self::$groups [$groupId . $profilId]= sprintf(helper::translate('Groupe %s - Profil %s'),self::$groupPublics[$groupId], $profilValue['name']);
+                            self::$groups[$groupId . $profilId] = sprintf(helper::translate('Groupe %s - Profil %s'), self::$groupPublics[$groupId], $profilValue['name']);
                         }
                     }
             }
         }
         // Liste alphabétique
-        self::$alphabet= range('A', 'Z');
+        self::$alphabet = range('A', 'Z');
+        $alphabet = range('A', 'Z');
+        self::$alphabet = array_combine($alphabet, self::$alphabet);
+        self::$alphabet = array_merge(['all'=>'Toute'], self::$alphabet );
         // Liste des inscrits dans le cours sélectionné.
         $courseId = $this->getUrl(2);
         $users = $this->getData(['enrolment', $courseId]);
@@ -408,6 +411,25 @@ class course extends common
             $history = $userValue['history'];
             $maxTime = max($history);
             $pageId = array_search($maxTime, $history);
+            // Filtres
+            if ($this->isPost()) {
+                // Groupe et profils
+                $group = (string) $this->getData(['user', $userId, 'group']);
+                $profil = (string) $this->getData(['user', $userId, 'profil']);
+                $firstName = $this->getData(['user', $userId, 'firstname']);
+                $lastName = $this->getData(['user', $userId, 'lastname']);
+                if ( $this->getInput('courseFilterGroup', helper::FILTER_INT) > 0
+                    && $this->getInput('courseFilterGroup', helper::FILTER_STRING_SHORT) !== $group . $profil  )
+                    continue;
+                // Première lettre du prénom
+                if ($this->getInput('courseFilterFirstName', helper::FILTER_STRING_SHORT) !== 'all'
+                    && $this->getInput('courseFilterFirstName', helper::FILTER_STRING_SHORT) !== strtoupper(substr($firstName, 0, 1)))
+                    continue;
+                // Première lettre du nom
+                if ($this->getInput('courseFilterLastName', helper::FILTER_STRING_SHORT)  !== 'all'
+                    && $this->getInput('courseFilterLastName', helper::FILTER_STRING_SHORT) !== strtoupper(substr($lastName, 0, 1)))
+                    continue;
+            }
             self::$courseUsers[] = [
                 $userId,
                 $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
@@ -421,6 +443,7 @@ class course extends common
                 ])
             ];
         }
+
 
         // Valeurs en sortie
         $this->addOutput([
