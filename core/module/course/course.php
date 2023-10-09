@@ -51,6 +51,13 @@ class course extends common
 
     public static $courseUsers = [];
 
+
+    public static $alphabet = [];
+
+    public static $groups = [
+        self::GROUP_VISITOR => 'Aucun'
+    ];
+
     public static $courses = [];
 
     public static $swapMessage = [];
@@ -374,7 +381,28 @@ class course extends common
 
     public function user()
     {
-        $users = $this->getData(['enrolment', $this->getUrl(2)]);
+        // Liste des groupes et des profils
+        $groups = $this->getData(['profil']);
+        foreach ($groups as $groupId => $groupValue) {
+            switch ($groupId) {
+                case "-1":
+                case "0":
+                case "3":
+                    break;
+                case "1":
+                case "2":
+                    foreach ($groupValue as $profilId => $profilValue) {
+                        if ($profilId) {
+                            self::$groups [$groupId . $profilId]= sprintf(helper::translate('Groupe %s - Profil %s'),self::$groupPublics[$groupId], $profilValue['name']);
+                        }
+                    }
+            }
+        }
+        // Liste alphabétique
+        self::$alphabet= range('A', 'Z');
+        // Liste des inscrits dans le cours sélectionné.
+        $courseId = $this->getUrl(2);
+        $users = $this->getData(['enrolment', $courseId]);
         ksort($users);
         foreach ($users as $userId => $userValue) {
             $history = $userValue['history'];
@@ -387,7 +415,7 @@ class course extends common
                 helper::dateUTF8('%d %B %Y - %H:%M', $maxTime),
                 template::button('userDelete' . $userId, [
                     'class' => 'userDelete buttonRed',
-                    'href' => helper::baseUrl() . 'course/userDelete/'. $this->getUrl(2) . '/' .  $userId,
+                    'href' => helper::baseUrl() . 'course/userDelete/' . $courseId . '/' . $userId,
                     'value' => template::ico('minus'),
                     'help' => 'Désinscrire'
                 ])
@@ -396,7 +424,7 @@ class course extends common
 
         // Valeurs en sortie
         $this->addOutput([
-            'title' => sprintf(helper::translate('Inscrits dans le cours %s'),$this->getData(['course', $this->getUrl(2), 'title'])),
+            'title' => sprintf(helper::translate('Inscrits dans le cours %s'), $this->getData(['course', $courseId, 'title'])),
             'view' => 'user'
         ]);
     }
@@ -484,7 +512,7 @@ class course extends common
             // Récupérer la dernière page visitée par cet utilisateur si elle existe
             $maxTime = max($this->getData(['enrolment', $courseId, $userId, 'history']));
             if ($maxTime) {
-                $redirect .= array_search($maxTime,$this->getData(['enrolment', $courseId, $userId, 'history']));
+                $redirect .= array_search($maxTime, $this->getData(['enrolment', $courseId, $userId, 'history']));
             } else {
                 // Sinon la page d'accueil par défaut du module
                 $redirect .= $this->getData(['course', $courseId, 'homePageId']);
