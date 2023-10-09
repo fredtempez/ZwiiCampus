@@ -73,6 +73,12 @@ class user extends common
 
 	public static $profils = [];
 
+	public static $alphabet = [];
+
+	public static $courseGroups = [
+		'all' => 'Tous'
+	];
+
 	/**
 	 * Ajout
 	 */
@@ -430,10 +436,59 @@ class user extends common
 	 */
 	public function index()
 	{
+		// Liste des groupes et des profils
+		$courseGroups = $this->getData(['profil']);
+		foreach ($courseGroups as $groupId => $groupValue) {
+			switch ($groupId) {
+				case "-1":
+				case "0":
+				case "3":
+					break;
+				case "1":
+				case "2":
+					foreach ($groupValue as $profilId => $profilValue) {
+						if ($profilId) {
+							self::$courseGroups[$groupId . $profilId] = sprintf(helper::translate('Groupe %s - Profil %s'), self::$groupPublics[$groupId], $profilValue['name']);
+						}
+					}
+			}
+		}
+		// Liste alphabétique
+		self::$alphabet = range('A', 'Z');
+		$alphabet = range('A', 'Z');
+		self::$alphabet = array_combine($alphabet, self::$alphabet);
+		self::$alphabet = array_merge(['all' => 'Toute'], self::$alphabet);
+
 		$userIdsFirstnames = helper::arrayColumn($this->getData(['user']), 'firstname');
 		ksort($userIdsFirstnames);
 		foreach ($userIdsFirstnames as $userId => $userFirstname) {
 			if ($this->getData(['user', $userId, 'group'])) {
+				// Filtres
+				if ($this->isPost()) {
+					// Groupe et profils
+					$group = (string) $this->getData(['user', $userId, 'group']);
+					$profil = (string) $this->getData(['user', $userId, 'profil']);
+					$firstName = $this->getData(['user', $userId, 'firstname']);
+					$lastName = $this->getData(['user', $userId, 'lastname']);
+					if (
+						$this->getInput('userFilterGroup', helper::FILTER_INT) > 0
+						&& $this->getInput('userFilterGroup', helper::FILTER_STRING_SHORT) !== $group . $profil
+					)
+						continue;
+					// Première lettre du prénom
+					if (
+						$this->getInput('userFilterFirstName', helper::FILTER_STRING_SHORT) !== 'all'
+						&& $this->getInput('userFilterFirstName', helper::FILTER_STRING_SHORT) !== strtoupper(substr($firstName, 0, 1))
+					)
+						continue;
+					// Première lettre du nom
+					if (
+						$this->getInput('userFilterLastName', helper::FILTER_STRING_SHORT) !== 'all'
+						&& $this->getInput('userFilterLastName', helper::FILTER_STRING_SHORT) !== strtoupper(substr($lastName, 0, 1))
+					)
+						continue;
+				}
+				// Formatage de la liste
 				$group = helper::translate(self::$groups[(int) $this->getData(['user', $userId, 'group'])]);
 				$profil = $this->getData(['profil', $this->getData(['user', $userId, 'group']), $this->getData(['user', $userId, 'profil']), 'name']);
 				self::$users[] = [
@@ -499,7 +554,7 @@ class user extends common
 				foreach ($groupData as $profilId => $profilData) {
 					self::$userGroups[$groupId . '.' . $profilId] = [
 						$groupId . '-' . $profilId,
-						helper::translate(self::$groups[$groupId]). '<br />Profil : ' . helper::translate($profilData['name']),
+						helper::translate(self::$groups[$groupId]) . '<br />Profil : ' . helper::translate($profilData['name']),
 						nl2br(helper::translate($profilData['comment'])),
 						template::button('profilEdit' . $groupId . $profilId, [
 							'href' => helper::baseUrl() . 'user/profilEdit/' . $groupId . '/' . $profilId,
@@ -535,95 +590,96 @@ class user extends common
 		if (
 			$this->getUser('permission', __CLASS__, __FUNCTION__) === true &&
 			$this->isPost()
-			) {
+		) {
 
-				// Effacer les données du numéro de profil ancien
-				$group = $this->getInput('profilEditGroup', helper::FILTER_STRING_SHORT, true);
-				// Les profils 1 sont désactivés dans le formulaire
-				$profil = empty($this->getInput('profilEditProfil')) ?  '1' : $this->getInput('profilEditProfil') ;
-				$oldProfil = $this->getInput('profilEditOldProfil', helper::FILTER_STRING_SHORT);
-				// Gère le chemin
-				$fileManager = $this->getInput('profilEditFileManager', helper::FILTER_BOOLEAN);
-				$path = $this->getInput('profilEditPath');
-				if ($group <= self::GROUP_ADMIN
-					&& $fileManager 
-					&& empty($path)
-					) {
-						$fileManager = false;
-				}
-				if ($profil !== $profil) {
-					$this->deleteData(['profil', $group, $oldProfil]);
-				}
-				// Données du formulaire
-				$data = [
-					'name' => $this->getInput('profilEditName', helper::FILTER_STRING_SHORT, true),
-					'readonly' => false,
-					'permanent' => $group === '1' ? true : false,
-					'comment' => $this->getInput('profilEditComment', helper::FILTER_STRING_SHORT, true),
-					'filemanager' => $fileManager,
-					'file' => [
-						'download' => $this->getInput('profilEditDownload', helper::FILTER_BOOLEAN),
-						'edit' => $this->getInput('profilEditEdit', helper::FILTER_BOOLEAN),
-						'create' => $this->getInput('profilEditCreate', helper::FILTER_BOOLEAN),
-						'rename' => $this->getInput('profilEditRename', helper::FILTER_BOOLEAN),
-						'upload' => $this->getInput('profilEditUpload', helper::FILTER_BOOLEAN),
-						'delete' => $this->getInput('profilEditDelete', helper::FILTER_BOOLEAN),
-						'preview' => $this->getInput('profilEditPreview', helper::FILTER_BOOLEAN),
-						'duplicate' => $this->getInput('profilEditDuplicate', helper::FILTER_BOOLEAN),
-						'extract' => $this->getInput('profilEditExtract', helper::FILTER_BOOLEAN),
-						'copycut' => $this->getInput('profilEditCopycut', helper::FILTER_BOOLEAN),
-						'chmod' => $this->getInput('profilEditChmod', helper::FILTER_BOOLEAN),
-					],
-					'folder' => [
-						'create' => $this->getInput('profilEditFolderCreate', helper::FILTER_BOOLEAN),
-						'delete' => $this->getInput('profilEditFolderDelete', helper::FILTER_BOOLEAN),
-						'rename' => $this->getInput('profilEditFolderRename', helper::FILTER_BOOLEAN),
-						'copycut' => $this->getInput('profilEditFolderCopycut', helper::FILTER_BOOLEAN),
-						'chmod' => $this->getInput('profilEditFolderChmod', helper::FILTER_BOOLEAN),
-						'path' => $path,
-					],
-					'page' => [
-						'add' => $this->getInput('profilEditPageAdd', helper::FILTER_BOOLEAN),
-						'edit' => $this->getInput('profilEditPageEdit', helper::FILTER_BOOLEAN),
-						'delete' => $this->getInput('profilEditPageDelete', helper::FILTER_BOOLEAN),
-						'duplicate' => $this->getInput('profilEditPageDuplicate', helper::FILTER_BOOLEAN),
-						'module' => $this->getInput('profilEditPageModule', helper::FILTER_BOOLEAN),
-						'cssEditor' => $this->getInput('profilEditPagecssEditor', helper::FILTER_BOOLEAN),
-						'jsEditor' => $this->getInput('profilEditPagejsEditor', helper::FILTER_BOOLEAN),
-					],
-					'user' => [
-						'edit' => $this->getInput('profilEditUserEdit', helper::FILTER_BOOLEAN),
-					]
-				];
-	
-				// Données des modules
-				$dataModules = helper::getModules();
-				if (is_array($dataModules)) {
-					foreach ($dataModules as $moduleId => $moduleValue) {
-						if (file_exists('module/' . $moduleId . '/profil/main/edit.inc.php')) {
-							include('module/' . $moduleId . '/profil/main/edit.inc.php');
-							if (is_array($moduleData[$moduleId])) {
-								$data = array_merge($data, [$moduleId => $moduleData[$moduleId]]);
-							}
+			// Effacer les données du numéro de profil ancien
+			$group = $this->getInput('profilEditGroup', helper::FILTER_STRING_SHORT, true);
+			// Les profils 1 sont désactivés dans le formulaire
+			$profil = empty($this->getInput('profilEditProfil')) ? '1' : $this->getInput('profilEditProfil');
+			$oldProfil = $this->getInput('profilEditOldProfil', helper::FILTER_STRING_SHORT);
+			// Gère le chemin
+			$fileManager = $this->getInput('profilEditFileManager', helper::FILTER_BOOLEAN);
+			$path = $this->getInput('profilEditPath');
+			if (
+				$group <= self::GROUP_ADMIN
+				&& $fileManager
+				&& empty($path)
+			) {
+				$fileManager = false;
+			}
+			if ($profil !== $profil) {
+				$this->deleteData(['profil', $group, $oldProfil]);
+			}
+			// Données du formulaire
+			$data = [
+				'name' => $this->getInput('profilEditName', helper::FILTER_STRING_SHORT, true),
+				'readonly' => false,
+				'permanent' => $group === '1' ? true : false,
+				'comment' => $this->getInput('profilEditComment', helper::FILTER_STRING_SHORT, true),
+				'filemanager' => $fileManager,
+				'file' => [
+					'download' => $this->getInput('profilEditDownload', helper::FILTER_BOOLEAN),
+					'edit' => $this->getInput('profilEditEdit', helper::FILTER_BOOLEAN),
+					'create' => $this->getInput('profilEditCreate', helper::FILTER_BOOLEAN),
+					'rename' => $this->getInput('profilEditRename', helper::FILTER_BOOLEAN),
+					'upload' => $this->getInput('profilEditUpload', helper::FILTER_BOOLEAN),
+					'delete' => $this->getInput('profilEditDelete', helper::FILTER_BOOLEAN),
+					'preview' => $this->getInput('profilEditPreview', helper::FILTER_BOOLEAN),
+					'duplicate' => $this->getInput('profilEditDuplicate', helper::FILTER_BOOLEAN),
+					'extract' => $this->getInput('profilEditExtract', helper::FILTER_BOOLEAN),
+					'copycut' => $this->getInput('profilEditCopycut', helper::FILTER_BOOLEAN),
+					'chmod' => $this->getInput('profilEditChmod', helper::FILTER_BOOLEAN),
+				],
+				'folder' => [
+					'create' => $this->getInput('profilEditFolderCreate', helper::FILTER_BOOLEAN),
+					'delete' => $this->getInput('profilEditFolderDelete', helper::FILTER_BOOLEAN),
+					'rename' => $this->getInput('profilEditFolderRename', helper::FILTER_BOOLEAN),
+					'copycut' => $this->getInput('profilEditFolderCopycut', helper::FILTER_BOOLEAN),
+					'chmod' => $this->getInput('profilEditFolderChmod', helper::FILTER_BOOLEAN),
+					'path' => $path,
+				],
+				'page' => [
+					'add' => $this->getInput('profilEditPageAdd', helper::FILTER_BOOLEAN),
+					'edit' => $this->getInput('profilEditPageEdit', helper::FILTER_BOOLEAN),
+					'delete' => $this->getInput('profilEditPageDelete', helper::FILTER_BOOLEAN),
+					'duplicate' => $this->getInput('profilEditPageDuplicate', helper::FILTER_BOOLEAN),
+					'module' => $this->getInput('profilEditPageModule', helper::FILTER_BOOLEAN),
+					'cssEditor' => $this->getInput('profilEditPagecssEditor', helper::FILTER_BOOLEAN),
+					'jsEditor' => $this->getInput('profilEditPagejsEditor', helper::FILTER_BOOLEAN),
+				],
+				'user' => [
+					'edit' => $this->getInput('profilEditUserEdit', helper::FILTER_BOOLEAN),
+				]
+			];
+
+			// Données des modules
+			$dataModules = helper::getModules();
+			if (is_array($dataModules)) {
+				foreach ($dataModules as $moduleId => $moduleValue) {
+					if (file_exists('module/' . $moduleId . '/profil/main/edit.inc.php')) {
+						include('module/' . $moduleId . '/profil/main/edit.inc.php');
+						if (is_array($moduleData[$moduleId])) {
+							$data = array_merge($data, [$moduleId => $moduleData[$moduleId]]);
 						}
 					}
 				}
-	
-				//Sauvegarder le données
-				$this->setData([
-					'profil',
-					$group,
-					$profil,
-					$data
-				]);
-	
-				// Valeurs en sortie
-				$this->addOutput([
-					'redirect' => helper::baseUrl() . 'user/profil',
-					'notification' => helper::translate('Modifications enregistrées'),
-					'state' => true
-				]);
 			}
+
+			//Sauvegarder le données
+			$this->setData([
+				'profil',
+				$group,
+				$profil,
+				$data
+			]);
+
+			// Valeurs en sortie
+			$this->addOutput([
+				'redirect' => helper::baseUrl() . 'user/profil',
+				'notification' => helper::translate('Modifications enregistrées'),
+				'state' => true
+			]);
+		}
 
 		// Chemin vers les dossiers du gestionnaire de fichier
 		self::$sharePath = $this->getSubdirectories('./site/file/source');
@@ -681,11 +737,12 @@ class user extends common
 			// Gère le chemin
 			$fileManager = $this->getInput('profilAddFileManager', helper::FILTER_BOOLEAN);
 			$path = $this->getInput('profilAddPath');
-			if ($group <= self::GROUP_ADMIN
-				&& $fileManager 
+			if (
+				$group <= self::GROUP_ADMIN
+				&& $fileManager
 				&& empty($path)
-				) {
-					$fileManager = false;
+			) {
+				$fileManager = false;
 			}
 
 			if ($profil < self::MAX_PROFILS) {
@@ -1116,7 +1173,7 @@ class user extends common
 									'pseudo' => $item['prenom'],
 									'signature' => 1,
 									// Pseudo
-									'password' => helper::filter($item['passe'],helper::FILTER_PASSWORD),
+									'password' => helper::filter($item['passe'], helper::FILTER_PASSWORD),
 									// A modifier à la première connexion
 									"connectFail" => null,
 									"connectTimeout" => null,

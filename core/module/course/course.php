@@ -54,7 +54,7 @@ class course extends common
 
     public static $alphabet = [];
 
-    public static $groups = [
+    public static $courseGroups = [
         'all' => 'Tous'
     ];
 
@@ -382,8 +382,8 @@ class course extends common
     public function user()
     {
         // Liste des groupes et des profils
-        $groups = $this->getData(['profil']);
-        foreach ($groups as $groupId => $groupValue) {
+        $courseGroups = $this->getData(['profil']);
+        foreach ($courseGroups as $groupId => $groupValue) {
             switch ($groupId) {
                 case "-1":
                 case "0":
@@ -393,7 +393,7 @@ class course extends common
                 case "2":
                     foreach ($groupValue as $profilId => $profilValue) {
                         if ($profilId) {
-                            self::$groups[$groupId . $profilId] = sprintf(helper::translate('Groupe %s - Profil %s'), self::$groupPublics[$groupId], $profilValue['name']);
+                            self::$courseGroups[$groupId . $profilId] = sprintf(helper::translate('Groupe %s - Profil %s'), self::$groupPublics[$groupId], $profilValue['name']);
                         }
                     }
             }

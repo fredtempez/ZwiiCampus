@@ -26,7 +26,7 @@
             </h4>
             <div class="row">
                 <div class="col2">
-                    <?php echo template::select('courseFilterGroup', $module::$groups, [
+                    <?php echo template::select('courseFilterGroup', $module::$courseGroups, [
                         'label' => 'Groupes / Profils',
                         'selected' => isset($_POST['courseFilterGroup']) ? $_POST['courseFilterGroup'] : 'all',
                     ]); ?>
