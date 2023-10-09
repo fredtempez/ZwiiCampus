@@ -55,7 +55,7 @@
 </div>
 <?php echo template::formClose(); ?>
 <?php if ($module::$courseUsers): ?>
-    <?php echo template::table([2, 3, 3, 3, 1], $module::$courseUsers, ['Id', 'Nom Prénom', 'Id dernière page', 'Date - Heure', '']); ?>
+    <?php echo template::table([2, 3, 3, 2, 1,  1], $module::$courseUsers, ['Id', 'Nom Prénom', 'Id dernière page', 'Date - Heure', 'Progression', '']); ?>
 <?php else: ?>
     <?php echo template::speech('Aucun inscrit'); ?>
 <?php endif; ?>

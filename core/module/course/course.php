@@ -398,13 +398,23 @@ class course extends common
                     }
             }
         }
+
         // Liste alphabétique
         self::$alphabet = range('A', 'Z');
         $alphabet = range('A', 'Z');
         self::$alphabet = array_combine($alphabet, self::$alphabet);
-        self::$alphabet = array_merge(['all'=>'Tout'], self::$alphabet );
-        // Liste des inscrits dans le cours sélectionné.
+        self::$alphabet = array_merge(['all' => 'Tout'], self::$alphabet);
+
+        // Cours sélectionné
         $courseId = $this->getUrl(2);
+
+        // Statistiques du cours sélectionné calcul du nombre de pages
+        $currentSite = self::$siteContent;
+        $this->initDB('page', $courseId);
+        $sumPages = count($this->getData(['page']));
+        self::$siteContent = $currentSite;
+
+        // Liste des inscrits dans le cours sélectionné.
         $users = $this->getData(['enrolment', $courseId]);
         ksort($users);
         foreach ($users as $userId => $userValue) {
@@ -418,23 +428,34 @@ class course extends common
                 $profil = (string) $this->getData(['user', $userId, 'profil']);
                 $firstName = $this->getData(['user', $userId, 'firstname']);
                 $lastName = $this->getData(['user', $userId, 'lastname']);
-                if ( $this->getInput('courseFilterGroup', helper::FILTER_INT) > 0
-                    && $this->getInput('courseFilterGroup', helper::FILTER_STRING_SHORT) !== $group . $profil  )
+                if (
+                    $this->getInput('courseFilterGroup', helper::FILTER_INT) > 0
+                    && $this->getInput('courseFilterGroup', helper::FILTER_STRING_SHORT) !== $group . $profil
+                )
                     continue;
                 // Première lettre du prénom
-                if ($this->getInput('courseFilterFirstName', helper::FILTER_STRING_SHORT) !== 'all'
-                    && $this->getInput('courseFilterFirstName', helper::FILTER_STRING_SHORT) !== strtoupper(substr($firstName, 0, 1)))
+                if (
+                    $this->getInput('courseFilterFirstName', helper::FILTER_STRING_SHORT) !== 'all'
+                    && $this->getInput('courseFilterFirstName', helper::FILTER_STRING_SHORT) !== strtoupper(substr($firstName, 0, 1))
+                )
                     continue;
                 // Première lettre du nom
-                if ($this->getInput('courseFilterLastName', helper::FILTER_STRING_SHORT)  !== 'all'
-                    && $this->getInput('courseFilterLastName', helper::FILTER_STRING_SHORT) !== strtoupper(substr($lastName, 0, 1)))
+                if (
+                    $this->getInput('courseFilterLastName', helper::FILTER_STRING_SHORT) !== 'all'
+                    && $this->getInput('courseFilterLastName', helper::FILTER_STRING_SHORT) !== strtoupper(substr($lastName, 0, 1))
+                )
                     continue;
             }
+
+            // Taux de parcours
+            $viewPages = count($this->getData(['enrolment', $courseId, $userId, 'history']));
+            // Construction tu tableau
             self::$courseUsers[] = [
                 $userId,
                 $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
                 $pageId,
                 helper::dateUTF8('%d %B %Y - %H:%M', $maxTime),
+                ($viewPages * 100)/ $sumPages . ' %',
                 template::button('userDelete' . $userId, [
                     'class' => 'userDelete buttonRed',
                     'href' => helper::baseUrl() . 'course/userDelete/' . $courseId . '/' . $userId,
