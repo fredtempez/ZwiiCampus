@@ -41,7 +41,7 @@
             ]); ?>
         </div>
     <?php else: ?>
-        <div class="col3 offset6">
+        <div class="col3 offset7">
             <?php echo template::submit('courseSwapSubmit', [
                 'value' => $module::$swapMessage['submitLabel'],
                 'disabled' => !$module->courseIsAvailable($this->getUrl(2)),
