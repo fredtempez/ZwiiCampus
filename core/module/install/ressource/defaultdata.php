@@ -44,6 +44,7 @@ class init extends common
 			'proxyType' => 'tcp://',
 			'smtp' => [
 				'enable' => false,
+				'from'=> 'no-reply@localhost'
 			],
 			'seo' => [
 				'robots' => true,
