@@ -1,7 +1,7 @@
 <?php echo template::formOpen('courseSwapForm'); ?>
 <div class="row">
     <div class="col12">
-        <?php echo "<h3>Auteur : " . $this->getData(['course', $this->getUrl(2), 'author']) . "</h3>"; ?>
+        <?php echo "<h3>Auteur : " . $this->signature($this->getData(['course', $this->getUrl(2), 'author'])). "</h3>"; ?>
         <?php echo "<p>Description : " . $this->getData(['course', $this->getUrl(2), 'description']) . "</p>"; ?>
         <?php echo "<p>Disponibilité : " . $module::$courseAccess[$this->getData(['course', $this->getUrl(2), 'access'])]; ?>
         <?php if ($this->getData(['course', $this->getUrl(2), 'access']) === $module::COURSE_ACCESS_DATE): ?>
