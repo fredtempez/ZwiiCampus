@@ -12,19 +12,20 @@
  */
 
 $(document).ready((function () {
-    (".userDelete").on("click", (function () {
+    $("#courseFilterGroup, #courseFilterFirstName, #courseFilterLastName").change(function () {
+        $("#courseFilterUserForm").submit();
+    });
+    $(".userDelete").on("click", (function () {
         var _this = $(this);
         return message = "<?php echo helper::translate('Confirmer la désinscription de cet utilisateur');?>", core.confirm(message, (function () {
             $(location).attr("href", _this.attr("href"))
         }))
     }));
-    (".userDeleteAll").on("click", (function () {
+    $(".userDeleteAll").on("click", (function () {
         var _this = $(this);
         return message = "<?php echo helper::translate('Confirmer la désinscription de tous les utilisateur');?>", core.confirm(message, (function () {
             $(location).attr("href", _this.attr("href"))
         }))
     }));
-    $("#courseFilterGroup, #courseFilterFirstName, #courseFilterLastName").change(function () {
-        $("#courseFilterUserForm").submit();
-    });
+
 }));
