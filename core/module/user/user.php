@@ -442,7 +442,9 @@ class user extends common
 			switch ($groupId) {
 				case "-1":
 				case "0":
+					break;
 				case "3":
+					self::$courseGroups['30'] = 'Administrateur';
 					break;
 				case "1":
 				case "2":
@@ -497,8 +499,8 @@ class user extends common
 					$this->getData(['user', $userId, 'firstname']) . ' ' . $userLastNames,
 					helper::translate(self::$groups[(int) $this->getData(['user', $userId, 'group'])]),
 					empty($this->getData(['profil', $this->getData(['user', $userId, 'group']), $this->getData(['user', $userId, 'profil']), 'name']))
-						? helper::translate(self::$groups[(int) $this->getData(['user', $userId, 'group'])])
-						: $this->getData(['profil', $this->getData(['user', $userId, 'group']), $this->getData(['user', $userId, 'profil']), 'name']),
+					? helper::translate(self::$groups[(int) $this->getData(['user', $userId, 'group'])])
+					: $this->getData(['profil', $this->getData(['user', $userId, 'group']), $this->getData(['user', $userId, 'profil']), 'name']),
 					template::button('userEdit' . $userId, [
 						'href' => helper::baseUrl() . 'user/edit/' . $userId,
 						'value' => template::ico('pencil'),
