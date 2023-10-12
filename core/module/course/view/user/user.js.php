@@ -24,7 +24,7 @@ $(document).ready((function () {
             $(location).attr("href", _this.attr("href"))
         }))
     }));
-    $("#userFilterGroup, #userFilterFirstName, #userFilterLastName").change(function () {
-        $("#userFilterUserForm").submit();
+    $("#courseFilterGroup, #courseFilterFirstName, #courseFilterLastName").change(function () {
+        $("#courseFilterUserForm").submit();
     });
 }));
