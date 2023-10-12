@@ -444,7 +444,7 @@ class user extends common
 				case "0":
 					break;
 				case "3":
-					self::$courseGroups['3'] = 'Administrateur';
+					self::$courseGroups['30'] = 'Administrateur';
 					break;
 				case "1":
 				case "2":
