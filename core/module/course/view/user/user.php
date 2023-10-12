@@ -43,12 +43,6 @@
                         'selected' => isset($_POST['courseFilterLastName']) ? $_POST['courseFilterLastName'] : 'all',
                     ]); ?>
                 </div>
-                <div class="col2 offset1">
-                    <?php echo template::submit('courseFilterSubmit', [
-                        'value' => 'Filtrer',
-                        'uniqueSubmission' => true
-                    ]); ?>
-                </div>
             </div>
         </div>
     </div>
