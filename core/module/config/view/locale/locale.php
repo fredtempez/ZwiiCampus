@@ -45,9 +45,9 @@
                 <div class="row">
                     <div class="col4">
                         <?php echo template::select('configLocaleHomePageId', helper::arrayColumn($module::$pagesList, 'title', 'SORT_ASC'), [
-                            'label' => 'Accueil',
+                            'label' => 'Page d\'accueil de la plate-forme',
                             'selected' => $this->homePageId(),
-                            'help' => 'La première page que vos visiteurs verront.'
+                            'help' => 'Ce n\'est pas la page d\'accueil d\'un cours.'
                         ]); ?>
                     </div>
                     <div class="col4">
