@@ -26,7 +26,7 @@
 						<div class="col6 blogEdit">
 							<!-- bloc signature et date -->
 							<?php echo template::ico('user'); ?>
-							<?php echo $module->signature($this->getData(['module', $this->getUrl(0), 'posts', $articleId, 'userId'])); ?>
+							<?php echo $this->signature($this->getData(['module', $this->getUrl(0), 'posts', $articleId, 'userId'])); ?>
 							<?php echo template::ico('calendar-empty'); ?>
 							<?php echo helper::dateUTF8($module::$dateFormat, $this->getData(['module', $this->getUrl(0), 'posts', $articleId, 'publishedOn']), self::$i18nUI) . ' - ' . helper::dateUTF8($module::$timeFormat, $this->getData(['module', $this->getUrl(0), 'posts', $articleId, 'publishedOn']), self::$i18nUI); ?>
 						</div>
@@ -141,7 +141,7 @@
 							<div class="blogDate">
 								<!-- bloc signature et date -->
 								<?php echo template::ico('user'); ?>
-								<?php echo $module->signature($this->getData(['module', $this->getUrl(0), 'posts', $articleId, 'userId'])); ?>
+								<?php echo $this->signature($this->getData(['module', $this->getUrl(0), 'posts', $articleId, 'userId'])); ?>
 								<?php echo template::ico('calendar-empty'); ?>
 								<?php echo helper::dateUTF8($module::$dateFormat, $this->getData(['module', $this->getUrl(0), 'posts', $articleId, 'publishedOn']), self::$i18nUI) . ' - ' . helper::dateUTF8($module::$timeFormat, $this->getData(['module', $this->getUrl(0), 'posts', $articleId, 'publishedOn']), self::$i18nUI); ?>
 							</div>
