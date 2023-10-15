@@ -788,7 +788,6 @@ class course extends common
         $count = 0;
         foreach ($array as $key => $value) {
             $count++; // Incrémente le compteur pour chaque clé associative trouvée
-    
             if (is_array($value)) {
                 $count += $this->countPages($value); // Appelle récursivement la fonction si la valeur est un tableau
             }

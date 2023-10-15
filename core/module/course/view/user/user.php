@@ -18,7 +18,7 @@
     </div>
 </div>
 <?php echo template::formOpen('courseFilterUserForm'); ?>
-<div class="row">
+<div class="row" id="Bfrtip">
     <div class="col3">
         <?php echo template::select('courseFilterGroup', $module::$courseGroups, [
             'label' => 'Groupes / Profils',
