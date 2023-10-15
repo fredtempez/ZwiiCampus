@@ -413,14 +413,16 @@ class course extends common
         // Statistiques du cours sélectionné calcul du nombre de pages
         $currentSite = self::$siteContent;
         $this->initDB('page', $courseId);
-        $sumPages = count($this->getData(['page']));
+        $sumPages = count($this->getHierarchy(null, false)); // Supprimer les barres
         self::$siteContent = $currentSite;
 
         // Liste des inscrits dans le cours sélectionné.
         $users = $this->getData(['enrolment', $courseId]);
+        // Tri du tableau par défaut par $userId
         ksort($users);
         foreach ($users as $userId => $userValue) {
             $history = $userValue['history'];
+
             $maxTime = max($history);
             $pageId = array_search($maxTime, $history);
             // Filtres
@@ -457,7 +459,8 @@ class course extends common
                 $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
                 $pageId,
                 helper::dateUTF8('%d %B %Y - %H:%M', $maxTime),
-                round(($viewPages * 100)/ $sumPages, 1) . ' %',
+                //round(($viewPages * 100)/ $sumPages, 1) . ' %',
+                $viewPages . ' / ' . $sumPages,
                 template::button('userDelete' . $userId, [
                     'class' => 'userDelete buttonRed',
                     'href' => helper::baseUrl() . 'course/userDelete/' . $courseId . '/' . $userId,
@@ -471,7 +474,10 @@ class course extends common
         // Valeurs en sortie
         $this->addOutput([
             'title' => sprintf(helper::translate('Inscrits dans le cours %s'), $this->getData(['course', $courseId, 'title'])),
-            'view' => 'user'
+            'view' => 'user',
+            'vendor' => [
+                'datatables'
+            ]
         ]);
     }
 
@@ -484,7 +490,7 @@ class course extends common
         ]);
     }
 
-    /** 
+    /**
      * Désinscription d'un utilisateur
      */
     public function userDelete()
