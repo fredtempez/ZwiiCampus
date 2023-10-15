@@ -473,7 +473,7 @@ class course extends common
 
         // Valeurs en sortie
         $this->addOutput([
-            'title' => sprintf(helper::translate('Inscrits dans le cours %s'), $this->getData(['course', $courseId, 'title'])),
+            'title' => sprintf(helper::translate('%s inscrits dans le cours %s'), count(self::$courseUsers), $this->getData(['course', $courseId, 'title'])),
             'view' => 'user',
             'vendor' => [
                 'datatables'

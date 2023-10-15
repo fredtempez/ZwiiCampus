@@ -10,7 +10,7 @@
         <?php echo template::button('userDeleteAll', [
             'class' => 'userDeleteAll buttonRed',
             'href' => helper::baseUrl() . 'course/userDeleteAll/' . $this->getUrl(2),
-            'value' => helper::translate('Réinitialiser'),
+            'value' => helper::translate('Vider'),
             'help' => 'Désinscrire tous les utilisateurs',
             'ico' => 'minus'
         ])

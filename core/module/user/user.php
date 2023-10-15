@@ -518,7 +518,7 @@ class user extends common
 
 		// Valeurs en sortie
 		$this->addOutput([
-			'title' => helper::translate('Utilisateurs'),
+			'title' => sprintf('%s (%s)', helper::translate('Utilisateurs'), count(self::$users)),
 			'view' => 'index'
 		]);
 	}
