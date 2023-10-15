@@ -413,7 +413,9 @@ class course extends common
         // Statistiques du cours sélectionné calcul du nombre de pages
         $currentSite = self::$siteContent;
         $this->initDB('page', $courseId);
-        $sumPages = count($this->getHierarchy(null, false)); // Supprimer les barres
+        $sumPages = $this->countPages($this->getHierarchy(null, false));
+        // Supprimer les barres
+        $sumPages =  $sumPages - count($this->getHierarchy(null, false, true));
         self::$siteContent = $currentSite;
 
         // Liste des inscrits dans le cours sélectionné.
@@ -459,8 +461,7 @@ class course extends common
                 $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
                 $pageId,
                 helper::dateUTF8('%d %B %Y - %H:%M', $maxTime),
-                //round(($viewPages * 100)/ $sumPages, 1) . ' %',
-                $viewPages . ' / ' . $sumPages,
+                round(($viewPages * 100)/ $sumPages, 1) . ' %',
                 template::button('userDelete' . $userId, [
                     'class' => 'userDelete buttonRed',
                     'href' => helper::baseUrl() . 'course/userDelete/' . $courseId . '/' . $userId,
@@ -783,5 +784,16 @@ class course extends common
         }
     }
 
+    private function countPages($array) {
+        $count = 0;
+        foreach ($array as $key => $value) {
+            $count++; // Incrémente le compteur pour chaque clé associative trouvée
+    
+            if (is_array($value)) {
+                $count += $this->countPages($value); // Appelle récursivement la fonction si la valeur est un tableau
+            }
+        }
+        return $count;
+    }
 
 }
