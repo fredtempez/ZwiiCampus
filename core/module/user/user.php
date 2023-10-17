@@ -75,7 +75,7 @@ class user extends common
 
 	public static $alphabet = [];
 
-	public static $courseGroups = [
+	public static $usersGroups = [
 		'all' => 'Tous'
 	];
 
@@ -437,20 +437,22 @@ class user extends common
 	public function index()
 	{
 		// Liste des groupes et des profils
-		$courseGroups = $this->getData(['profil']);
-		foreach ($courseGroups as $groupId => $groupValue) {
+		$usersGroups = $this->getData(['profil']);
+		foreach ($usersGroups as $groupId => $groupValue) {
 			switch ($groupId) {
 				case "-1":
 				case "0":
 					break;
 				case "3":
-					self::$courseGroups['30'] = 'Administrateur';
+					self::$usersGroups['30'] = 'Administrateur';
+					$profils['30'] = 0;
 					break;
 				case "1":
 				case "2":
 					foreach ($groupValue as $profilId => $profilValue) {
 						if ($profilId) {
-							self::$courseGroups[$groupId . $profilId] = sprintf(helper::translate('Groupe %s - Profil %s'), self::$groupPublics[$groupId], $profilValue['name']);
+							self::$usersGroups[$groupId . $profilId] = sprintf(helper::translate('Groupe %s - Profil %s'), self::$groupPublics[$groupId], $profilValue['name']);
+							$profils[$groupId . $profilId] = 0;
 						}
 					}
 			}
@@ -467,6 +469,10 @@ class user extends common
 		ksort($userIdsLastNames);
 		foreach ($userIdsLastNames as $userId => $userLastNames) {
 			if ($this->getData(['user', $userId, 'group'])) {
+
+				// Compte les rôles
+				$profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])]++;
+
 				// Filtres
 				if ($this->isPost()) {
 					// Groupe et profils
@@ -493,6 +499,8 @@ class user extends common
 						continue;
 				}
 
+
+
 				// Formatage de la liste
 				self::$users[] = [
 					$userId,
@@ -513,6 +521,16 @@ class user extends common
 						'help' => 'Supprimer'
 					])
 				];
+
+			}
+		}
+
+		// Ajoute les effectifs aux profils du sélecteur
+		foreach (self::$usersGroups as $groupId => $groupValue) {
+			if ($groupId === 'all') {
+				self::$usersGroups['all'] = self::$usersGroups['all'] . ' (' . array_sum($profils) . ')';
+			} else {
+				self::$usersGroups[$groupId] = self::$usersGroups[$groupId] . ' (' . $profils[$groupId] . ')';
 			}
 		}
 

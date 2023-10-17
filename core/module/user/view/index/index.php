@@ -41,7 +41,7 @@
 <?php echo template::formOpen('userFilterUserForm'); ?>
 <div class="row">
 	<div class="col3">
-		<?php echo template::select('userFilterGroup', $module::$courseGroups, [
+		<?php echo template::select('userFilterGroup', $module::$usersGroups, [
 			'label' => 'Groupes / Profils',
 			'selected' => isset($_POST['userFilterGroup']) ? $_POST['userFilterGroup'] : 'all',
 		]); ?>

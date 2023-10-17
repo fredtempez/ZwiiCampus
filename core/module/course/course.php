@@ -430,6 +430,10 @@ class course extends common
 
             $maxTime = max($history);
             $pageId = array_search($maxTime, $history);
+
+            // Compte les rôles
+            $profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])]++;
+
             // Filtres
             if ($this->isPost()) {
                 // Groupe et profils
@@ -474,17 +478,14 @@ class course extends common
                 ])
             ];
 
-            // Compte les rôles
-            $group = $this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil']);
-            $profils[$group]++;
         }
 
         // Ajoute les effectifs aux profils du sélecteur
         foreach (self::$courseGroups as $groupId => $groupValue) {
-            if($groupId === 'all') {
+            if ($groupId === 'all') {
                 self::$courseGroups['all'] = self::$courseGroups['all'] . ' (' . array_sum($profils) . ')';
             } else {
-               self::$courseGroups[$groupId] = self::$courseGroups[$groupId] . ' ('.$profils[$groupId].')'; 
+                self::$courseGroups[$groupId] = self::$courseGroups[$groupId] . ' (' . $profils[$groupId] . ')';
             }
         }
 
