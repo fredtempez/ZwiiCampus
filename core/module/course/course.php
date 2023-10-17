@@ -662,7 +662,7 @@ class course extends common
                         ]);
                         break;
                     case self::COURSE_ENROLMENT_SELF_KEY:
-                        if ($this->getInput('courseSwapEnrolmentKey', null, true) === $this->getData(['course', $courseId, 'enrolmentKey'])) {
+                        if ($this->getInput('courseSwapEnrolmentKey', helper::FILTER_PASSWORD, true) === $this->getData(['course', $courseId, 'enrolmentKey'])) {
                             $this->courseEnrolUser($courseId, $userId);
                             // Stocker la sélection
                             $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
