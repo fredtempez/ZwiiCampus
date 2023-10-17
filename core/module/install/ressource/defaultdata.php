@@ -554,6 +554,7 @@ class init extends common
 			],
 			'3' => [
 				'name' => 'Administrateur',
+				'group' => 0,
 				'readonly' => true,
 				'permanent' => true,
 				'comment' => 'Contrôle total',

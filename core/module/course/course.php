@@ -390,12 +390,14 @@ class course extends common
                     break;
                 case "3":
                     self::$courseGroups['30'] = 'Administrateur';
+                    $profils['30'] = 0;
                     break;
                 case "1":
                 case "2":
                     foreach ($groupValue as $profilId => $profilValue) {
                         if ($profilId) {
                             self::$courseGroups[$groupId . $profilId] = sprintf(helper::translate('Groupe %s - Profil %s'), self::$groupPublics[$groupId], $profilValue['name']);
+                            $profils[$groupId . $profilId] = 0;
                         }
                     }
             }
@@ -422,6 +424,7 @@ class course extends common
         $users = $this->getData(['enrolment', $courseId]);
         // Tri du tableau par défaut par $userId
         ksort($users);
+
         foreach ($users as $userId => $userValue) {
             $history = $userValue['history'];
 
@@ -455,7 +458,8 @@ class course extends common
 
             // Taux de parcours
             $viewPages = count($this->getData(['enrolment', $courseId, $userId, 'history']));
-            // Construction tu tableau
+
+            // Construction du tableau
             self::$courseUsers[] = [
                 $userId,
                 $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
@@ -469,12 +473,28 @@ class course extends common
                     'help' => 'Désinscrire'
                 ])
             ];
+
+            // Compte les rôles
+            $group = $this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil']);
+            $profils[$group]++;
         }
 
+        // Ajoute les effectifs aux profils du sélecteur
+        foreach (self::$courseGroups as $groupId => $groupValue) {
+            if($groupId === 'all') {
+                self::$courseGroups['all'] = self::$courseGroups['all'] . ' (' . array_sum($profils) . ')';
+            } else {
+               self::$courseGroups[$groupId] = self::$courseGroups[$groupId] . ' ('.$profils[$groupId].')'; 
+            }
+        }
 
+        // Message selon les effectifs
+        $message = count(self::$courseUsers) > 0
+            ? sprintf(helper::translate('%s inscrits dans le cours %s'), count(self::$courseUsers), $this->getData(['course', $courseId, 'title']))
+            : sprintf(helper::translate('Aucun inscrit dans le cours %s'), $this->getData(['course', $courseId, 'title']));
         // Valeurs en sortie
         $this->addOutput([
-            'title' => sprintf(helper::translate('%s inscrits dans le cours %s'), count(self::$courseUsers), $this->getData(['course', $courseId, 'title'])),
+            'title' => $message,
             'view' => 'user',
             'vendor' => [
                 'datatables'
