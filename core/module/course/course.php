@@ -656,27 +656,30 @@ class course extends common
                         $this->courseEnrolUser($courseId, $userId);
                         // Stocker la sélection
                         $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
+                        // Valeurs en sortie
+                        $this->addOutput([
+                            'redirect' => helper::baseUrl()
+                        ]);
                         break;
                     case self::COURSE_ENROLMENT_SELF_KEY:
                         if ($this->getInput('courseSwapEnrolmentKey', null, true) === $this->getData(['course', $courseId, 'enrolmentKey'])) {
                             $this->courseEnrolUser($courseId, $userId);
                             // Stocker la sélection
                             $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
+                            // Valeurs en sortie
+                            $this->addOutput([
+                                'redirect' => helper::baseUrl()
+                            ]);
                         } else {
                             // Valeurs en sortie
                             $this->addOutput([
-                                'redirect' => helper::baseUrl(),
+                                'redirect' => helper::baseUrl(!helper::checkRewrite()) . 'course/enrol/' . $courseId,
                                 'state' => false,
                                 'notification' => 'La clé est incorrecte'
                             ]);
                         }
                         break;
                 }
-
-                // Valeurs en sortie
-                $this->addOutput([
-                    'redirect' => helper::baseUrl()
-                ]);
             }
         }
         // L'étudiant est-il  inscrit
@@ -696,7 +699,6 @@ class course extends common
                         self::$swapMessage['enrolmentMessage'] = helper::translate('Connectez-vous pour accéder à ce cours.');
                         self::$swapMessage['submitLabel'] = helper::translate('Connexion');
                     } else {
-                        self::$swapMessage['submitLabel'] = helper::translate('Connexion');
                         self::$swapMessage['enrolmentKey'] = template::text('courseSwapEnrolmentKey', [
                             'label' => helper::translate('Clé d\'inscription'),
                         ]);
