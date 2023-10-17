@@ -415,7 +415,7 @@ class course extends common
         $this->initDB('page', $courseId);
         $sumPages = $this->countPages($this->getHierarchy(null, false));
         // Supprimer les barres
-        $sumPages =  $sumPages - count($this->getHierarchy(null, false, true));
+        $sumPages = $sumPages - count($this->getHierarchy(null, false, true));
         self::$siteContent = $currentSite;
 
         // Liste des inscrits dans le cours sélectionné.
@@ -461,7 +461,7 @@ class course extends common
                 $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
                 $pageId,
                 helper::dateUTF8('%d %B %Y - %H:%M', $maxTime),
-                round(($viewPages * 100)/ $sumPages, 1) . ' %',
+                round(($viewPages * 100) / $sumPages, 1) . ' %',
                 template::button('userDelete' . $userId, [
                     'class' => 'userDelete buttonRed',
                     'href' => helper::baseUrl() . 'course/userDelete/' . $courseId . '/' . $userId,
@@ -658,10 +658,17 @@ class course extends common
                         $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
                         break;
                     case self::COURSE_ENROLMENT_SELF_KEY:
-                        if ($this->getInput('courseSwapEnrolmentKey') === $this->getData(['course', $courseId, 'enrolmentKey'])) {
+                        if ($this->getInput('courseSwapEnrolmentKey', null, true) === $this->getData(['course', $courseId, 'enrolmentKey'])) {
                             $this->courseEnrolUser($courseId, $userId);
                             // Stocker la sélection
                             $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
+                        } else {
+                            // Valeurs en sortie
+                            $this->addOutput([
+                                'redirect' => helper::baseUrl(),
+                                'state' => false,
+                                'notification' => 'La clé est incorrecte'
+                            ]);
                         }
                         break;
                 }
@@ -784,7 +791,8 @@ class course extends common
         }
     }
 
-    private function countPages($array) {
+    private function countPages($array)
+    {
         $count = 0;
         foreach ($array as $key => $value) {
             $count++; // Incrémente le compteur pour chaque clé associative trouvée
