@@ -489,13 +489,9 @@ class course extends common
             }
         }
 
-        // Message selon les effectifs
-        $message = count(self::$courseUsers) > 0
-            ? sprintf(helper::translate('%s inscrits dans le cours %s'), count(self::$courseUsers), $this->getData(['course', $courseId, 'title']))
-            : sprintf(helper::translate('Aucun inscrit dans le cours %s'), $this->getData(['course', $courseId, 'title']));
         // Valeurs en sortie
         $this->addOutput([
-            'title' => $message,
+            'title' => sprintf(helper::translate('Aucun inscrit dans le cours %s'), $this->getData(['course', $courseId, 'title'])),
             'view' => 'user',
             'vendor' => [
                 'datatables'
