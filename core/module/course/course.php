@@ -30,6 +30,7 @@ class course extends common
         'userAdd' => self::GROUP_ADMIN,
         'userDelete' => self::GROUP_ADMIN,
         'userDeleteAll' => self::GROUP_ADMIN,
+        'userHistory' => self::GROUP_ADMIN,
     ];
 
     public static $courseAccess = [
@@ -64,6 +65,8 @@ class course extends common
 
     public static $pagesList = ['accueil' => 'Accueil'];
 
+
+    public static $userHistory = [];
 
     public function index()
     {
@@ -381,6 +384,10 @@ class course extends common
 
     public function user()
     {
+
+        // Cours sélectionné
+        $courseId = $this->getUrl(2);
+
         // Liste des groupes et des profils
         $courseGroups = $this->getData(['profil']);
         foreach ($courseGroups as $groupId => $groupValue) {
@@ -409,19 +416,18 @@ class course extends common
         self::$alphabet = array_combine($alphabet, self::$alphabet);
         self::$alphabet = array_merge(['all' => 'Tout'], self::$alphabet);
 
-        // Cours sélectionné
-        $courseId = $this->getUrl(2);
-
         // Statistiques du cours sélectionné calcul du nombre de pages
-        $currentSite = self::$siteContent;
-        $this->initDB('page', $courseId);
-        $sumPages = $this->countPages($this->getHierarchy(null, false));
-        // Supprimer les barres
-        $sumPages = $sumPages - count($this->getHierarchy(null, false, true));
-        self::$siteContent = $currentSite;
+        $sumPages = 0;
+        $data = json_decode(file_get_contents(self::DATA_DIR . $courseId . '/page.json'), true);
+        foreach($data['page'] as $pageId => $pageData) {
+            if ($pageData['block'] !== 'bar') {
+                $sumPages ++;
+            }
+        }
 
         // Liste des inscrits dans le cours sélectionné.
         $users = $this->getData(['enrolment', $courseId]);
+
         // Tri du tableau par défaut par $userId
         ksort($users);
 
@@ -654,6 +660,33 @@ class course extends common
 
     }
 
+    /**
+     * Liste les pages consultées par un utilisateur
+     */
+    public function userHistory()
+    {
+
+        $courseId = $this->getUrl(2);
+        $userId = $this->getUrl(3);
+        foreach ($this->getData(['history', $courseId, $userId]) as $pageId => $time) {
+            self::$userHistory[$pageId] = [
+                $this->getData(['page', $pageId, 'shortTitle']),
+                helper::dateUTF8('%d %B %Y - %H:%M', $time)
+            ]
+            ;
+        }
+
+        // Valeurs en sortie
+        $this->addOutput([
+            'title' => helper::translate('Historique'),
+            'view' => 'userHistory',
+            'vendor' => [
+                'datatables'
+            ]
+        ]);
+
+    }
+
     // Génération du message d'inscription
     public function enrol()
     {
@@ -734,13 +767,14 @@ class course extends common
         }
     }
 
+
     /**
      * Autorise l'accès à un cours
      * @param @return bool le user a le droit d'entrée dans le cours
      * @param string $userId identifiant de l'utilisateur
      * @param string $courseId identifiant du cours sollicité
      */
-    public function courseIsUserEnroled($courseId)
+    private function courseIsUserEnroled($courseId)
     {
         $userId = $this->getUser('id');
         $group = $userId ? $this->getData(['user', $userId, 'group']) : null;
@@ -763,18 +797,6 @@ class course extends common
                 $r = false;
         }
         return $r;
-    }
-
-    public function courseEnrolUser($courseId, $userId)
-    {
-        $this->setData([
-            'enrolment',
-            $courseId,
-            $userId,
-            [
-                'history' => [],
-            ]
-        ]);
     }
 
     /**
@@ -820,6 +842,18 @@ class course extends common
             }
         }
         return $count;
+    }
+
+    private function courseEnrolUser($courseId, $userId)
+    {
+        $this->setData([
+            'enrolment',
+            $courseId,
+            $userId,
+            [
+                'history' => [],
+            ]
+        ]);
     }
 
 }
