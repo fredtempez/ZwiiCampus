@@ -672,10 +672,11 @@ class course extends common
         $courseId = $this->getUrl(2);
         $userId = $this->getUrl(3);
         $history = $this->getData(['enrolment', $courseId, $userId]);
+        $pages = json_decode(file_get_contents(self::DATA_DIR . $courseId . '/page.json'), true);
         foreach ($history['history'] as $pageId => $time) {
             self::$userHistory[$pageId] = [
                 helper::dateUTF8('%d %B %Y - %H:%M:%S', $time),
-                $this->getData(['page', $pageId, 'shortTitle']),
+                $pages['page'][$pageId]['shortTitle'],
             ];
         }
 

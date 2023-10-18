@@ -15,6 +15,10 @@ $(document).ready((function () {
     $('#dataTables').DataTable({
         language: {
             url: "core/vendor/datatables/french.json"
-        }
+        },
+        searching: false,
+        pageLength: 100,
+        lengthChange: false,
+        paging: false
     });
 }));
