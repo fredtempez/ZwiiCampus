@@ -475,7 +475,10 @@ class course extends common
                 $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
                 $pageId,
                 helper::dateUTF8('%d %B %Y - %H:%M', $maxTime),
-                round(($viewPages * 100) / $sumPages, 1) . ' %',
+                template::button('userHistory' . $userId, [
+                    'href' => helper::baseUrl() . 'course/userHistory/' . $courseId . '/' . $userId,
+                    'value'=> round(($viewPages * 100) / $sumPages, 1) . ' %'
+                ] ),
                 template::button('userDelete' . $userId, [
                     'class' => 'userDelete buttonRed',
                     'href' => helper::baseUrl() . 'course/userDelete/' . $courseId . '/' . $userId,
@@ -497,7 +500,7 @@ class course extends common
 
         // Valeurs en sortie
         $this->addOutput([
-            'title' => sprintf(helper::translate('Aucun inscrit dans le cours %s'), $this->getData(['course', $courseId, 'title'])),
+            'title' => sprintf(helper::translate('Inscriptions dans le cours %s'), $this->getData(['course', $courseId, 'title'])),
             'view' => 'user',
             'vendor' => [
                 'datatables'
@@ -668,17 +671,17 @@ class course extends common
 
         $courseId = $this->getUrl(2);
         $userId = $this->getUrl(3);
-        foreach ($this->getData(['history', $courseId, $userId]) as $pageId => $time) {
+        $history = $this->getData(['enrolment', $courseId, $userId]);
+        foreach ($history['history'] as $pageId => $time) {
             self::$userHistory[$pageId] = [
+                helper::dateUTF8('%d %B %Y - %H:%M:%S', $time),
                 $this->getData(['page', $pageId, 'shortTitle']),
-                helper::dateUTF8('%d %B %Y - %H:%M', $time)
-            ]
-            ;
+            ];
         }
 
         // Valeurs en sortie
         $this->addOutput([
-            'title' => helper::translate('Historique'),
+            'title' => helper::translate('Historique ') . $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
             'view' => 'userHistory',
             'vendor' => [
                 'datatables'
