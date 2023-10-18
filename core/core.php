@@ -50,7 +50,7 @@ class common
 	const ACCESS_TIMER = 1800;
 
 	// Numéro de version
-	const ZWII_VERSION = '1.0.41';
+	const ZWII_VERSION = '1.0.42';
 
 	// URL autoupdate
 	const ZWII_UPDATE_URL = 'https://forge.chapril.org/ZwiiCMS-Team/update/raw/branch/master/lms/';
@@ -197,7 +197,7 @@ class common
 
 	// Descripteur de données Entrées / Sorties
 	// Liste ici tous les fichiers de données
-	private $dataFiles = [
+	public $dataFiles = [
 		'admin' => '',
 		'blacklist' => '',
 		'config' => '',
