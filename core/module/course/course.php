@@ -70,7 +70,7 @@ class course extends common
 
     public function index()
     {
-        $courseIdShortTitle = helper::arrayColumn($this->getData(['course']), 'shortTitle');
+        $courseIdShortTitle = helper::arrayColumn($this->getData(['course']), 'title');
         ksort($courseIdShortTitle);
         foreach ($courseIdShortTitle as $courseId => $courseTitle) {
             $categorieUrl = helper::baseUrl(!helper::checkRewrite()) . 'course/swap/' . $courseId;
@@ -146,7 +146,7 @@ class course extends common
                 $courseId,
                 [
                     'title' => $this->getInput('courseAddTitle', helper::FILTER_STRING_SHORT, true),
-                    'shortTitle' => $this->getInput('courseAddShortTitle', helper::FILTER_STRING_SHORT, true),
+                    'title' => $this->getInput('courseAddShortTitle', helper::FILTER_STRING_SHORT, true),
                     'author' => $this->getInput('courseAddAuthor'),
                     'homePageId' => 'accueil',
                     'category' => $this->getInput('courseAddCategories'),
@@ -201,8 +201,7 @@ class course extends common
                 'course',
                 $courseId,
                 [
-                    'title' => $this->getInput('courseEditTitle', helper::FILTER_STRING_SHORT, true),
-                    'shortTitle' => $this->getInput('courseEditShortTitle', helper::FILTER_STRING_SHORT, true),
+                    'title' => $this->getInput('courseEditShortTitle', helper::FILTER_STRING_SHORT, true),
                     'author' => $this->getInput('courseEditAuthor'),
                     'homePageId' => $this->getInput('courseEditHomePageId'),
                     'category' => $this->getInput('courseEditCategories'),
@@ -601,7 +600,7 @@ class course extends common
                 $to = helper::dateUTF8('%d %B %Y', $this->getData(['course', $courseId, 'closingDate']), self::$i18nUI) . helper::translate(' à ') . helper::dateUTF8('%H:%M', $this->getData(['course', $courseId, 'closingDate']), self::$i18nUI);
                 $message = sprintf(helper::translate('Ce cours ferme le %s'), $to);
             } else {
-                $message = sprintf(helper::translate('Bienvenue dans le cours %s'), $this->getData(['course', $courseId, 'shortTitle']));
+                $message = sprintf(helper::translate('Bienvenue dans le cours %s'), $this->getData(['course', $courseId, 'title']));
             }
             $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
         }
@@ -676,7 +675,7 @@ class course extends common
         foreach ($history['history'] as $pageId => $time) {
             self::$userHistory[$pageId] = [
                 helper::dateUTF8('%d %B %Y - %H:%M:%S', $time),
-                $pages['page'][$pageId]['shortTitle'],
+                $pages['page'][$pageId]['title'],
             ];
         }
 
@@ -764,7 +763,7 @@ class course extends common
             }
             // Valeurs en sortie
             $this->addOutput([
-                'title' => sprintf(helper::translate('Accéder au cours %s'), $this->getData(['course', $this->getUrl(2), 'shortTitle'])),
+                'title' => sprintf(helper::translate('Accéder au cours %s'), $this->getData(['course', $this->getUrl(2), 'title'])),
                 'view' => 'enrol',
                 'display' => self::DISPLAY_LAYOUT_LIGHT,
             ]);

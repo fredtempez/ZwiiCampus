@@ -9,12 +9,8 @@
                     <h4>
                     <?php endif; ?>
 
-                    <!-- Insère le titre ou le titre court dans tous les cas -->
-                    <?php if ($this->getData(['module', $this->getUrl(0), 'config', 'title']) === true): ?>
-                        <?php echo $courseValue['title']; ?>
-                    <?php else: ?>
-                        <?php echo $courseValue['shortTitle']; ?>
-                    <?php endif; ?>
+                    <!-- Insère le titre court dans tous les cas -->
+                    <?php echo $courseValue['title']; ?>
 
                     <!-- Fin du bloc et bordure titre 4 -->
                     <?php if ($this->getData(['module', $this->getUrl(0), 'config', 'template']) === true): ?>
@@ -29,18 +25,26 @@
                 <!-- Author -->
                 <?php if ($this->getData(['module', $this->getUrl(0), 'config', 'author']) === true): ?>
                     <p>
-                        <?php echo 'AUtuer : ' . $this->signature($courseValue['author']); ?>
+                        <?php echo sprintf(helper::translate('Auteur : %s'), $this->signature($courseValue['author'])); ?>
                     </p>
                 <?php endif; ?>
                 <!-- Modalité d'ouverture -->
-                <?php if ($this->getData(['module', $this->getUrl(0), 'config', 'author']) === true): ?>
+                <?php if ($this->getData(['module', $this->getUrl(0), 'config', 'access']) === true): ?>
                     <p>
                         <?php echo helper::translate('Disponibilité : ') . $module::$coursesAccess[$courseValue['access']]; ?>
                         <!--Les dates d'ouverture et de fermeture -->
                         <?php if ($courseValue['access'] === self::COURSE_ACCESS_DATE): ?>
-
-                            <?php echo sprintf(helper::translate(' du %s au %s'), helper::dateUTF8('%d %B %Y', $courseValue['openingDate']), helper::dateUTF8('%d %B %Y', $courseValue['closingDate'])); ?>
+                            <?php if ($this->getData(['module', $this->getUrl(0), 'config', 'openingdate']) === true): ?>
+                            <p>
+                                <?php echo sprintf(helper::translate('%s Ouvre le %s'), template::ico('calendar-empty'), helper::dateUTF8('%d %B %Y', $courseValue['openingDate'])); ?>
+                            </p>
                         <?php endif; ?>
+                        <?php if ($this->getData(['module', $this->getUrl(0), 'config', 'closingdate']) === true): ?>
+                            <p>
+                                <?php echo sprintf(helper::translate('%s Ferme le %s'), template::ico('calendar-empty'), helper::dateUTF8('%d %B %Y', $courseValue['closingDate'])); ?>
+                            </p>
+                        <?php endif; ?>
+                    <?php endif; ?>
                     </p>
                 <?php endif; ?>
 

@@ -18,18 +18,10 @@
                 <?php echo helper::translate('Paramètres'); ?>
             </h4>
             <div class="row">
-                <div class="col12">
-                    <?php echo template::text('courseEditTitle', [
-                        'label' => 'Titre',
-                        'value' => $this->getdata(['course', $this->getUrl(2), 'title'])
-                    ]); ?>
-                </div>
-            </div>
-            <div class="row">
                 <div class="col7">
                     <?php echo template::text('courseEditShortTitle', [
-                        'label' => 'Titre court',
-                        'value' => $this->getdata(['course', $this->getUrl(2), 'shortTitle'])
+                        'label' => 'Titre',
+                        'value' => $this->getdata(['course', $this->getUrl(2), 'title'])
                     ]); ?>
                 </div>
                 <div class="col5">

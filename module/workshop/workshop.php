@@ -13,7 +13,7 @@
  * @link http://zwiicms.fr/
  */
 
-class courses extends common
+class workshop extends common
 {
 	const VERSION = '1.0';
 	const REALNAME = 'Liste des cours';
@@ -68,12 +68,11 @@ class courses extends common
 				[
 					'category' => $this->getInput('coursesConfigCategories'),
 					'title' => $this->getInput('coursesConfigShowTitle', helper::FILTER_BOOLEAN),
-					'shortTitle' => $this->getInput('coursesConfigShowShortTitle', helper::FILTER_BOOLEAN),
 					'author' => $this->getInput('coursesConfigShowAuthor', helper::FILTER_BOOLEAN),
 					'description' => $this->getInput('coursesConfigShowDescription', helper::FILTER_BOOLEAN),
 					'access' => $this->getInput('coursesConfigShowAccess', helper::FILTER_BOOLEAN),
-					'opening' => $this->getInput('coursesConfigShowOpening', helper::FILTER_BOOLEAN),
-					'closing' => $this->getInput('coursesConfigShowClosing', helper::FILTER_BOOLEAN),
+					'openingdate' => $this->getInput('coursesConfigShowOpeningDate', helper::FILTER_BOOLEAN),
+					'closingdate' => $this->getInput('coursesConfigShowClosingDate', helper::FILTER_BOOLEAN),
 					'enrolment' => $this->getInput('coursesConfigShowEnrolment', helper::FILTER_BOOLEAN),
 					'urlText' => $this->getInput('coursesConfigUrlText', helper::FILTER_STRING_SHORT),
 					'layout' => $this->getInput('coursesConfigLayout', helper::FILTER_INT),

@@ -904,7 +904,7 @@ class layout extends common
                     $leftItems .= '<li><select id="barSelectCourse" >';
                     $leftItems .= '<option name="' . helper::translate('Accueil') . '" value="' . helper::baseUrl(true) . 'course/swap/home" ' . ('home' === self::$siteContent ? 'selected' : '') . '>' . helper::translate('Accueil') . '</option>';
                     foreach ($this->getCoursesByUser($this->getUser('id'), $this->getUser('group')) as $key => $value) {
-                        $leftItems .= '<option name="' . $value['shortTitle'] . '" value="' . helper::baseUrl(true) . 'course/swap/' . $key . '" ' . ($key === self::$siteContent ? 'selected' : '') . '>' . $value['shortTitle'] . '</option>';
+                        $leftItems .= '<option name="' . $value['title'] . '" value="' . helper::baseUrl(true) . 'course/swap/' . $key . '" ' . ($key === self::$siteContent ? 'selected' : '') . '>' . $value['title'] . '</option>';
                     }
                     $leftItems .= '</select></li>';
                 }

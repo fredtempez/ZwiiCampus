@@ -3,7 +3,7 @@
 	<div class="col1">
 		<?php echo template::button('coursesConfigBack', [
 			'class' => 'buttonGrey',
-			'href' => helper::baseUrl() . $this->getUrl(0),
+			'href' => helper::baseUrl() . 'page/edit/' . $this->getUrl(0),
 			'value' => template::ico('left')
 		]); ?>
 	</div>
@@ -19,15 +19,8 @@
 			</h4>
 			<div class="row">
 				<div class="col12">
-					<?php echo template::checkbox('coursesConfigShowTitle', true, 'Titre', [
+					<?php echo template::checkbox('coursesConfigShowTitle', true, 'Titre Long', [
 						'checked' => $this->getData(['module', $this->getUrl(0), 'config', 'title'])
-					]); ?>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col12">
-					<?php echo template::checkbox('coursesConfigShowShortTitle', true, 'Titre court', [
-						'checked' => $this->getData(['module', $this->getUrl(0), 'config', 'shortTitle'])
 					]); ?>
 				</div>
 			</div>
@@ -52,14 +45,14 @@
 					]); ?>
 				</div>
 				<div class="col4">
-					<?php echo template::checkbox('coursesConfigShowOpening', true, 'Date d\'ouverture', [
-						'checked' => $this->getData(['module', $this->getUrl(0), 'config', 'opening']),
+					<?php echo template::checkbox('coursesConfigShowOpeningDate', true, 'Date d\'ouverture', [
+						'checked' => $this->getData(['module', $this->getUrl(0), 'config', 'openingdate']),
 						'help' => 'Affiché si l\'accès est limité dans le temps',
 					]); ?>
 				</div>
 				<div class="col4">
-					<?php echo template::checkbox('coursesConfigShowClosing', true, 'Date de fermeture', [
-						'checked' => $this->getData(['module', $this->getUrl(0), 'config', 'closing']),
+					<?php echo template::checkbox('coursesConfigShowClosingDate', true, 'Date de fermeture', [
+						'checked' => $this->getData(['module', $this->getUrl(0), 'config', 'closingdate']),
 						'help' => 'Affiché si l\'accès est limité dans le temps',
 					]); ?>
 				</div>
