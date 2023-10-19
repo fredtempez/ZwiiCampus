@@ -18,7 +18,7 @@ class course extends common
 
     public static $actions = [
         'swap' => self::GROUP_VISITOR,
-        'enrol' => self::GROUP_VISITOR,
+        'suscribe' => self::GROUP_VISITOR,
         'index' => self::GROUP_ADMIN,
         'edit' => self::GROUP_ADMIN,
         'add' => self::GROUP_ADMIN,
@@ -764,7 +764,7 @@ class course extends common
             // Valeurs en sortie
             $this->addOutput([
                 'title' => sprintf(helper::translate('Accéder au cours %s'), $this->getData(['course', $this->getUrl(2), 'title'])),
-                'view' => 'enrol',
+                'view' => 'suscribe',
                 'display' => self::DISPLAY_LAYOUT_LIGHT,
             ]);
         }

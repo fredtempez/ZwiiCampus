@@ -45,8 +45,8 @@ class workshop extends common
 
     public static $coursesEnrolment = [
         self::COURSE_ENROLMENT_GUEST => 'anonyme, sans inscription',
-        self::COURSE_ENROLMENT_SELF => 'inscription libre',
-        self::COURSE_ENROLMENT_SELF_KEY => 'inscription avec clé',
+        self::COURSE_ENROLMENT_SELF => 'réservée aux membres inscrits',
+        self::COURSE_ENROLMENT_SELF_KEY => 'réservé aux membres et avec une clé d\'inscription ',
         //self::COURSE_ENROLMENT_MANUAL => 'Manuelle'
     ];
 
