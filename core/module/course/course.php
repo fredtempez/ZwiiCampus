@@ -19,6 +19,7 @@ class course extends common
     public static $actions = [
         'swap' => self::GROUP_VISITOR,
         'suscribe' => self::GROUP_VISITOR,
+        'unsuscribe' => self::GROUP_VISITOR,
         'index' => self::GROUP_ADMIN,
         'edit' => self::GROUP_ADMIN,
         'add' => self::GROUP_ADMIN,
@@ -418,9 +419,9 @@ class course extends common
         // Statistiques du cours sélectionné calcul du nombre de pages
         $sumPages = 0;
         $data = json_decode(file_get_contents(self::DATA_DIR . $courseId . '/page.json'), true);
-        foreach($data['page'] as $pageId => $pageData) {
+        foreach ($data['page'] as $pageId => $pageData) {
             if ($pageData['block'] !== 'bar') {
-                $sumPages ++;
+                $sumPages++;
             }
         }
 
@@ -476,8 +477,8 @@ class course extends common
                 helper::dateUTF8('%d %B %Y - %H:%M', $maxTime),
                 template::button('userHistory' . $userId, [
                     'href' => helper::baseUrl() . 'course/userHistory/' . $courseId . '/' . $userId,
-                    'value'=> round(($viewPages * 100) / $sumPages, 1) . ' %'
-                ] ),
+                    'value' => round(($viewPages * 100) / $sumPages, 1) . ' %'
+                ]),
                 template::button('userDelete' . $userId, [
                     'class' => 'userDelete buttonRed',
                     'href' => helper::baseUrl() . 'course/userDelete/' . $courseId . '/' . $userId,
@@ -768,6 +769,20 @@ class course extends common
                 'display' => self::DISPLAY_LAYOUT_LIGHT,
             ]);
         }
+    }
+
+    public function unsuscribe()
+    {
+        $courseId = $this->getUrl(2);
+        $userId = $this->getUser('id');
+        $this->deleteData(['enrolment', $courseId, $userId]);
+        // Valeurs en sortie
+        $this->addOutput([
+            'redirect' => helper::baseUrl(),
+            'notification' => helper::translate('Désinscription'),
+            'state' => true,
+        ]);
+
     }
 
 
