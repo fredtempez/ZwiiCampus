@@ -66,9 +66,9 @@
 			</div>
 			<div class="row">
 				<div class="col12">
-					<?php echo template::text('coursesConfigUrlText', [
+					<?php echo template::text('coursesConfigCaption', [
 						'label' => 'Texte du lien vers le cours',
-						'value' => $this->getData(['module', $this->getUrl(0), 'config', 'urlText'])
+						'value' => $this->getData(['module', $this->getUrl(0), 'config', 'caption'])
 					]); ?>
 				</div>
 			</div>

@@ -74,7 +74,7 @@ class workshop extends common
 					'openingdate' => $this->getInput('coursesConfigShowOpeningDate', helper::FILTER_BOOLEAN),
 					'closingdate' => $this->getInput('coursesConfigShowClosingDate', helper::FILTER_BOOLEAN),
 					'enrolment' => $this->getInput('coursesConfigShowEnrolment', helper::FILTER_BOOLEAN),
-					'urlText' => $this->getInput('coursesConfigUrlText', helper::FILTER_STRING_SHORT),
+					'caption' => $this->getInput('coursesConfigCaption', helper::FILTER_STRING_SHORT),
 					'layout' => $this->getInput('coursesConfigLayout', helper::FILTER_INT),
 					'template' => $this->getInput('coursesConfigTemplate', helper::FILTER_BOOLEAN),
 				]
