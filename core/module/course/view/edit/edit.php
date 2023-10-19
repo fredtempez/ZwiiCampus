@@ -64,7 +64,7 @@
             <div class="row">
                 <div class="col4">
                     <?php echo template::select('courseEditAccess', $module::$courseAccess, [
-                        'label' => 'Accès',
+                        'label' => 'Modalités d\'ouverture',
                         'selected' => $this->getdata(['course', $this->getUrl(2), 'access'])
                     ]); ?>
                 </div>
