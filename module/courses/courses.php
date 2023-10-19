@@ -29,13 +29,26 @@ class courses extends common
 	];
 
 	public static $coursesLayout = [
-		1 => 'Une colonne',
-		2 => 'Deux colonnes',
-		3 => 'Trois colonnes',
-		4 => 'Quatre colonnes',
-		5 => 'Cinq colonnes',
-		6 => 'Six colonnes',
+		12 => 'Un cours par ligne',
+		6 => 'Deux cours par ligne',
+		4 => 'Trois cours par ligne',
+		3 => 'Quatre cours par ligne',
+		2 => 'Six cours par ligne',
 	];
+
+
+    public static $coursesAccess = [
+        self::COURSE_ACCESS_OPEN => 'ouvert',
+        self::COURSE_ACCESS_DATE => 'période d\'ouverture',
+        self::COURSE_ACCESS_CLOSE => 'fermé',
+    ];
+
+    public static $coursesEnrolment = [
+        self::COURSE_ENROLMENT_GUEST => 'sans inscription',
+        self::COURSE_ENROLMENT_SELF => 'inscription libre',
+        self::COURSE_ENROLMENT_SELF_KEY => 'inscription avec clé',
+        //self::COURSE_ENROLMENT_MANUAL => 'Manuelle'
+    ];
 
 	public static $coursesDetails = [];
 	/**

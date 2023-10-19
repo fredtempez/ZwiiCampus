@@ -3,7 +3,7 @@
 	<div class="col1">
 		<?php echo template::button('coursesConfigBack', [
 			'class' => 'buttonGrey',
-			'href' => helper::baseUrl() . 'page/edit/' . $this->getUrl(0),
+			'href' => helper::baseUrl() . $this->getUrl(0),
 			'value' => template::ico('left')
 		]); ?>
 	</div>
