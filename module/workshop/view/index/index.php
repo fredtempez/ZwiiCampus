@@ -49,23 +49,34 @@
                 <?php endif; ?>
 
                 <!-- Modalité d'inscription -->
-                <?php if ($this->getData(['module', $this->getUrl(0), 'config', 'enrolment']) === true): ?>
+                <?php if ($this->getData(['module', $this->getUrl(0), 'config', 'enrolment']) === true ): ?>
                     <p>
-                        <?php echo  sprintf(helper::translate('Inscription : %s '), $module::$coursesEnrolment[$courseValue['enrolment']]); ?>
+                        <?php echo sprintf(helper::translate('Inscription : %s '), $module::$coursesEnrolment[$courseValue['enrolment']]); ?>
                     </p>
                 <?php endif; ?>
 
-                <!-- Lien -->
+                <!-- Lien accès au cours-->
+                <div class="row">
+                <div class="col6">
                 <?php if (
                     $courseValue['access'] === self::COURSE_ACCESS_OPEN
                     ||
                     ($courseValue['access'] === self::COURSE_ACCESS_DATE && time() >= $courseValue['openingDate'] && time() <= $courseValue['closingDate'])
                 ): ?>
                     <a href="<?php echo helper::baseUrl(); ?>course/swap/<?php echo $courseId; ?>">
-                        <?php echo $this->getData(['module', $this->getUrl(0), 'config', 'caption']); ?>
+                        <?php echo $this->getData(['module', $this->getUrl(0), 'caption', 'url']); ?>
                     </a>
                 <?php endif; ?>
-
+                </div>
+                <div class="col6 textAlignRight">
+                <!-- Lien désinscription-->
+                <?php if ($this->getData(['enrolment', $courseId, $this->getUser('id')])): ?>
+                    <a href="<?php echo helper::baseUrl(); ?>course/unsuscribe/<?php echo $courseId; ?>">
+                        <?php echo $this->getData(['module', $this->getUrl(0), 'caption', 'unsuscribe']); ?>
+                    </a>
+                <?php endif; ?>
+                </div>
+                </div>
                 <!-- Fin du bloc et bordure -->
                 <?php if ($this->getData(['module', $this->getUrl(0), 'config', 'template']) === true): ?>
                 </div>

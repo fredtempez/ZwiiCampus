@@ -36,26 +36,44 @@ class workshop extends common
 		2 => 'Six cours par ligne',
 	];
 
+	public static $coursesAccess = [];
 
-    public static $coursesAccess = [
-        self::COURSE_ACCESS_OPEN => 'ouvert',
-        self::COURSE_ACCESS_DATE => 'période d\'ouverture',
-        self::COURSE_ACCESS_CLOSE => 'fermé',
-    ];
+	public static $coursesEnrolment = [];
 
-    public static $coursesEnrolment = [
-        self::COURSE_ENROLMENT_GUEST => 'anonyme, sans inscription',
-        self::COURSE_ENROLMENT_SELF => 'réservée aux membres inscrits',
-        self::COURSE_ENROLMENT_SELF_KEY => 'réservé aux membres et avec une clé d\'inscription ',
-        //self::COURSE_ENROLMENT_MANUAL => 'Manuelle'
-    ];
+	public static $default = [
+		"config" => array(
+			"category" => "general",
+			"title" => true,
+			"author" => true,
+			"description" => true,
+			"access" => true,
+			"openingdate" => true,
+			"closingdate" => true,
+			"enrolment" => true,
+			"layout" => 6,
+			"template" => true
+		),
+		"caption" => array(
+			"accessopen" => "ouvert",
+			"accessdate" => "p&eacute;riode d&#039;ouverture",
+			"accessclose" => "ferm&eacute;",
+			"enrolguest" => "anonyme",
+			"enrolself" => "membres",
+			"enrolselfkey" => "membres avec cl&eacute;",
+			"url" => "Acc&eacute;der au cours",
+			"unsuscribe" => "Me d&eacute;sinscrire"
+		)
+	];
 
-	public static $coursesDetails = [];
 	/**
 	 * Configuration
 	 */
 	public function config()
 	{
+
+		// Contrôle de la configuration par défaut
+		$this->update();
+		
 		// Soumission du formulaire
 		if (
 			$this->getUser('permission', __CLASS__, __FUNCTION__) === true &&
@@ -79,6 +97,21 @@ class workshop extends common
 					'template' => $this->getInput('coursesConfigTemplate', helper::FILTER_BOOLEAN),
 				]
 			]);
+			$this->setData([
+				'module',
+				$this->getUrl(0),
+				'caption',
+				[
+					'accessopen' => $this->getInput('coursesCaptionAccessOpen', helper::FILTER_STRING_SHORT),
+					'accessdate' => $this->getInput('coursesCaptionAccessDate', helper::FILTER_STRING_SHORT),
+					'accessclose' => $this->getInput('coursesCaptionAccessClose', helper::FILTER_STRING_SHORT),
+					'enrolguest' => $this->getInput('coursesCaptionGuest', helper::FILTER_STRING_SHORT),
+					'enrolself' => $this->getInput('coursesCaptionSelf', helper::FILTER_STRING_SHORT),
+					'enrolselfkey' => $this->getInput('coursesCaptionSelfKey', helper::FILTER_STRING_SHORT),
+					'url' => $this->getInput('coursesCaptionUrl', helper::FILTER_STRING_SHORT),
+					'unsuscribe' => $this->getInput('coursesCaptionUnsuscribe', helper::FILTER_STRING_SHORT),
+				]
+			]);
 			// Valeurs en sortie
 			$this->addOutput([
 				'redirect' => helper::baseUrl() . $this->getUrl(),
@@ -97,6 +130,17 @@ class workshop extends common
 	}
 	public function index()
 	{
+		// Contrôle de la configuration par défaut
+		$this->update();
+
+		// Mise à jour des étiquettes
+		self::$coursesAccess[self::COURSE_ACCESS_OPEN] = $this->getData(['module', $this->getUrl(0), 'caption', 'accessopen']);
+		self::$coursesAccess[self::COURSE_ACCESS_DATE] = $this->getData(['module', $this->getUrl(0), 'caption', 'accessdate']);
+		self::$coursesAccess[self::COURSE_ACCESS_CLOSE] = $this->getData(['module', $this->getUrl(0), 'caption', 'accessclose']);
+		self::$coursesEnrolment[self::COURSE_ENROLMENT_GUEST] = $this->getData(['module', $this->getUrl(0), 'caption', 'enrolguest']);
+		self::$coursesEnrolment[self::COURSE_ENROLMENT_SELF] = $this->getData(['module', $this->getUrl(0), 'caption', 'enrolself']);
+		self::$coursesEnrolment[self::COURSE_ENROLMENT_SELF_KEY] = $this->getData(['module', $this->getUrl(0), 'caption', 'enrolselfkey']);
+
 		// Valeurs en sortie
 		$this->addOutput([
 			'showBarEditButton' => true,
@@ -111,5 +155,26 @@ class workshop extends common
 			'showPageContent' => true,
 			'view' => 'index',
 		]);
+	}
+
+	// Initialise avec des valeurs par défaut
+	private function update()
+	{
+		$check = false;
+		foreach (self::$default['config'] as $key => $value) {
+			if (is_null($this->getData(['module', $this->getUrl(0), 'config', $key]))) {
+				$this->setData(['module', $this->getUrl(0), 'config', $key, $value]);
+				$check = true;
+			}
+		}
+		foreach (self::$default['caption'] as $key => $value) {
+			if (is_null($this->getData(['module', $this->getUrl(0), 'caption', $key]))) {
+				$this->setData(['module', $this->getUrl(0), 'caption', $key, $value]);
+				$check = true;
+			}
+		}
+		if ($check) {
+			header('refresh:0');
+		}
 	}
 }
