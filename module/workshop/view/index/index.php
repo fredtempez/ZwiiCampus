@@ -48,25 +48,23 @@
                     </p>
                 <?php endif; ?>
 
+                <!-- Modalité d'inscription -->
+                <?php if ($this->getData(['module', $this->getUrl(0), 'config', 'enrolment']) === true): ?>
+                    <p>
+                        <?php echo  sprintf(helper::translate('Inscription : %s '), $module::$coursesEnrolment[$courseValue['enrolment']]); ?>
+                    </p>
+                <?php endif; ?>
+
                 <!-- Lien -->
                 <?php if (
                     $courseValue['access'] === self::COURSE_ACCESS_OPEN
                     ||
                     ($courseValue['access'] === self::COURSE_ACCESS_DATE && time() >= $courseValue['openingDate'] && time() <= $courseValue['closingDate'])
                 ): ?>
-                    <a href="<?php echo helper::baseUrl();?>course/swap/<?php echo $courseId; ?>">
+                    <a href="<?php echo helper::baseUrl(); ?>course/swap/<?php echo $courseId; ?>">
                         <?php echo $this->getData(['module', $this->getUrl(0), 'config', 'caption']); ?>
                     </a>
                 <?php endif; ?>
-
-                <!-- Modalité d'inscription -->
-                <?php if ($this->getData(['module', $this->getUrl(0), 'config', 'author']) === true): ?>
-                    <p>
-                        <?php echo helper::translate('Inscription : ') . $module::$coursesEnrolment[$courseValue['enrolment']]; ?>
-                    </p>
-                <?php endif; ?>
-
-                <!-- Lien d'accès -->
 
                 <!-- Fin du bloc et bordure -->
                 <?php if ($this->getData(['module', $this->getUrl(0), 'config', 'template']) === true): ?>

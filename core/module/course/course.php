@@ -40,7 +40,7 @@ class course extends common
     ];
 
     public static $courseEnrolment = [
-        self::COURSE_ENROLMENT_GUEST => 'Sans inscription',
+        self::COURSE_ENROLMENT_GUEST => 'Anonyme',
         self::COURSE_ENROLMENT_SELF => 'Inscription libre',
         self::COURSE_ENROLMENT_SELF_KEY => 'Inscription avec clé',
         //self::COURSE_ENROLMENT_MANUAL => 'Manuelle'
