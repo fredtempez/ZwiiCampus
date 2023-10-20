@@ -1241,7 +1241,9 @@ class layout extends common
 
         // Trouver la clé de l'élément recherché
         $key = array_search($elementToFind, $hierarchy);
-
+        
+        $previousPage = null;
+        $nextPage = null;
         if ($key !== false) {
             // Trouver l'élément précédent
             $previousKey = ($key > 0) ? $key - 1 : null;
