@@ -10,7 +10,7 @@
 <?php if ($module::$userHistory): ?>
     <div class="row textAlignCenter">
         <div class="col8">
-            <?php echo template::table([6, 6], $module::$userHistory, ['Dernière consultation de cette page', 'Titre de la page'], ['id' => 'dataTables']); ?>
+            <?php echo template::table([1, 6, 5], $module::$userHistory, ['Ordre', 'Titre de la page', 'Dernière consultation de cette page'], ['id' => 'dataTables']); ?>
         </div>
     </div>
 <?php else: ?>

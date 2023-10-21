@@ -419,8 +419,9 @@ class course extends common
         // Statistiques du cours sélectionné calcul du nombre de pages
         $sumPages = 0;
         $data = json_decode(file_get_contents(self::DATA_DIR . $courseId . '/page.json'), true);
+        // Exclure les barres et les pages masquées
         foreach ($data['page'] as $pageId => $pageData) {
-            if ($pageData['block'] !== 'bar') {
+            if ($pageData['position'] > 0) {
                 $sumPages++;
             }
         }
@@ -471,7 +472,8 @@ class course extends common
 
             // Construction du tableau
             self::$courseUsers[] = [
-                $userId,
+                //$userId,
+                $viewPages . '=' . $sumPages,
                 $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
                 $pageId,
                 helper::dateUTF8('%d %B %Y - %H:%M', $maxTime),
@@ -673,10 +675,12 @@ class course extends common
         $userId = $this->getUrl(3);
         $history = $this->getData(['enrolment', $courseId, $userId]);
         $pages = json_decode(file_get_contents(self::DATA_DIR . $courseId . '/page.json'), true);
+        $pages = $pages ['page'];
+
         foreach ($history['history'] as $pageId => $time) {
             self::$userHistory[$pageId] = [
                 helper::dateUTF8('%d %B %Y - %H:%M:%S', $time),
-                $pages['page'][$pageId]['title'],
+                $pages[$pageId]['title'],
             ];
         }
 

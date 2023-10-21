@@ -393,7 +393,7 @@ class common
 		setcookie('ZWII_UI', self::$i18nUI, time() + 3600, helper::baseUrl(false, false), '', false, false);
 		setcookie('ZWII_SITE_CONTENT', self::$siteContent, time() + 3600, helper::baseUrl(false, false), '', false, false);
 		setlocale(LC_ALL, self::$i18nUI);
-		
+
 		// Construit la liste des pages parents/enfants
 		if ($this->hierarchy['all'] === []) {
 			$this->buildHierarchy();
@@ -622,6 +622,7 @@ class common
 			'dir' => self::DATA_DIR . $path . '/',
 			'backup' => file_exists('site/data/.backup')
 		]);
+
 	}
 
 	/**
@@ -704,7 +705,6 @@ class common
 
 	/**
 	 * Fonction pour construire le tableau des pages
-	 * Appelée par le core uniquement
 	 */
 
 	private function buildHierarchy()
@@ -1395,7 +1395,7 @@ class common
 	public function saveLog($message = '')
 	{
 		// Journalisation
-		$dataLog = helper::dateUTF8('%Y %m %d', time(),  self::$i18nUI) . ' - ' . helper::dateUTF8('%H:%M', time(), self::$i18nUI);
+		$dataLog = helper::dateUTF8('%Y %m %d', time(), self::$i18nUI) . ' - ' . helper::dateUTF8('%H:%M', time(), self::$i18nUI);
 		$dataLog .= helper::getIp($this->getData(['config', 'connect', 'anonymousIp'])) . ';';
 		$dataLog .= empty($this->getUser('id')) ? 'visitor;' : $this->getUser('id') . ';';
 		$dataLog .= $message ? $this->getUrl() . ';' . $message : $this->getUrl();
