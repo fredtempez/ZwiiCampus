@@ -472,8 +472,7 @@ class course extends common
 
             // Construction du tableau
             self::$courseUsers[] = [
-                //$userId,
-                $viewPages . '=' . $sumPages,
+                $userId,
                 $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
                 $pageId,
                 helper::dateUTF8('%d %B %Y - %H:%M', $maxTime),
