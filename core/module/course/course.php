@@ -108,7 +108,10 @@ class course extends common
         // Valeurs en sortie
         $this->addOutput([
             'title' => helper::translate('Cours'),
-            'view' => 'index'
+            'view' => 'index',
+            'vendor' => [
+                'datatables'
+            ]
         ]);
     }
 
@@ -423,6 +426,7 @@ class course extends common
         foreach ($data['page'] as $pageId => $pageData) {
             if ($pageData['position'] > 0) {
                 $sumPages++;
+                $pages[$pageId] = $pageData['title'];
             }
         }
 
@@ -474,7 +478,7 @@ class course extends common
             self::$courseUsers[] = [
                 $userId,
                 $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
-                $pageId,
+                $pages[$pageId],
                 helper::dateUTF8('%d %B %Y - %H:%M', $maxTime),
                 template::button('userHistory' . $userId, [
                     'href' => helper::baseUrl() . 'course/userHistory/' . $courseId . '/' . $userId,

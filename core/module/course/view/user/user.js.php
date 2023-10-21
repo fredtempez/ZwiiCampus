@@ -35,6 +35,7 @@ $(document).ready((function () {
         "columnDefs": [
             {
                 target: 5,
+                orderable: false,
                 searchable: false
             }
         ]

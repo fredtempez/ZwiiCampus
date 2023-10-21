@@ -22,4 +22,31 @@ $(document).ready(function () {
             $(location).attr("href", _this.attr("href"));
         });
     });
+    $('#dataTables').DataTable({
+        language: {
+            url: "core/vendor/datatables/french.json"
+        },
+        "columnDefs": [
+            {
+                target: 3,
+                orderable: false,
+                searchable: false
+            },
+            {
+                target: 4,
+                orderable: false,
+                searchable: false
+            },
+            {
+                target: 5,
+                orderable: false,
+                searchable: false
+            },
+            {
+                target: 6,
+                orderable: false,
+                searchable: false
+            }
+        ]
+    });
 });
