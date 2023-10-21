@@ -674,11 +674,23 @@ class course extends common
         $courseId = $this->getUrl(2);
         $userId = $this->getUrl(3);
         $history = $this->getData(['enrolment', $courseId, $userId]);
-        $pages = json_decode(file_get_contents(self::DATA_DIR . $courseId . '/page.json'), true);
-        $pages = $pages ['page'];
+        $data = json_decode(file_get_contents(self::DATA_DIR . $courseId . '/page.json'), true);
+        $data = $data ['page'];
+        // Exclure les barres et les pages masquées
+        $count = 0;
+        foreach ($data as $pageId => $pageData) {
+            if ($pageData['position'] > 0) {
+                $count++;
+                $pages[$pageId] = [
+                    'number' => $count,
+                    'title' => $pageData['title'],
+                ];
+            }
+        }
 
         foreach ($history['history'] as $pageId => $time) {
             self::$userHistory[$pageId] = [
+                $pages[$pageId]['number'],
                 helper::dateUTF8('%d %B %Y - %H:%M:%S', $time),
                 $pages[$pageId]['title'],
             ];
