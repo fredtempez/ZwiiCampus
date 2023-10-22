@@ -45,7 +45,7 @@
                 <div class="workshopAccessContainer">
                     <p>
                         <span class="workshopAccess">
-                            <?php echo helper::translate('Disponibilité : ') . $module::$coursesAccess[$courseValue['access']]; ?>
+                            <?php echo $module::$coursesAccess[$courseValue['access']]; ?>
                         </span>
                         <!--Les dates d'ouverture et de fermeture -->
                         <?php if ($courseValue['access'] === self::COURSE_ACCESS_DATE): ?>
@@ -72,7 +72,7 @@
             <?php if ($this->getData(['module', $this->getUrl(0), 'config', 'enrolment']) === true): ?>
                 <p>
                     <span class="workshopEnrolment">
-                        <?php echo sprintf(helper::translate('Inscription : %s '), $module::$coursesEnrolment[$courseValue['enrolment']]); ?>
+                        <?php echo $module::$coursesEnrolment[$courseValue['enrolment']]; ?>
                     </span>
                 </p>
             <?php endif; ?>
