@@ -20,10 +20,95 @@
 	</div>
 </div>
 <div class="row">
+	<div class="col8">
+		<div class="block">
+			<h4>
+				<?php echo helper::translate('Elements à afficher'); ?>
+			</h4>
+			<div class="row">
+				<div class="col12">
+					<?php echo template::checkbox('coursesConfigShowTitle', true, 'Titre', [
+						'checked' => $this->getData(['module', $this->getUrl(0), 'config', 'title']),
+						'help' => 'Classe CSS de l\'élément en ligne : workshopTitle'
+					]); ?>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col12">
+					<?php echo template::checkbox('coursesConfigShowAuthor', true, 'Signature de l\'auteur', [
+						'checked' => $this->getData(['module', $this->getUrl(0), 'config', 'author']),
+						'help' => 'Classe CSS de l\'élément en ligne : workshopTitle'
+					]); ?>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col12">
+					<?php echo template::checkbox('coursesConfigShowDescription', true, 'Description', [
+						'checked' => $this->getData(['module', $this->getUrl(0), 'config', 'description']),
+						'help' => 'Classe CSS de l\'élément en ligne : workshopDescription'
+					]); ?>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col4">
+					<?php echo template::checkbox('coursesConfigShowAccess', true, 'Modalités d\'ouverture', [
+						'checked' => $this->getData(['module', $this->getUrl(0), 'config', 'access']),
+						'help' => 'Classes CSS de la division workshopAccessContainer, élément en ligne workshopAccess'
+					]); ?>
+				</div>
+				<div class="col4">
+					<?php echo template::checkbox('coursesConfigShowOpeningDate', true, 'Date d\'ouverture', [
+						'checked' => $this->getData(['module', $this->getUrl(0), 'config', 'openingdate']),
+						'help' => 'Affiché seulement si l\'accès est limité dans le temps. Classe CSS de l\'élément en ligne : workshopOpeningDate',
+					]); ?>
+				</div>
+				<div class="col4">
+					<?php echo template::checkbox('coursesConfigShowClosingDate', true, 'Date de fermeture', [
+						'checked' => $this->getData(['module', $this->getUrl(0), 'config', 'closingdate']),
+						'help' => 'Affiché seulement si l\'accès est limité dans le temps. Classe CSS de l\'élément en ligne : workshopClosingDate',
+					]); ?>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col12">
+					<?php echo template::checkbox('coursesConfigShowEnrolment', true, 'Modalités d\'inscription', [
+						'checked' => $this->getData(['module', $this->getUrl(0), 'config', 'enrolment']),
+						'help' => 'Classe CSS de l\'élément en ligne : workshopEnrolment'
+					]); ?>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col4">
+		<div class="block">
+			<h4>
+				<?php echo helper::translate('Thème'); ?>
+			</h4>
+			<div class="row">
+				<div class="col12">
+					<?php echo template::select('coursesConfigLayout', $module::$coursesLayout, [
+						'label' => 'Présentation en colonnes',
+						'selected' => $this->getData(['module', $this->getUrl(0), 'config', 'layout']),
+						'help' => 'Chaque cours est présenté dans une colonne'
+					]); ?>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col12">
+					<?php echo template::checkbox('coursesConfigTemplate', true, 'Mise en évidence', [
+						'checked' => $this->getData(['module', $this->getUrl(0), 'config', 'template']),
+						'help' => 'Template identique à TinyMCE avec une bordure et le titre en évidence. Classe de la division : workshopContainer'
+					]); ?>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
 	<div class="col12">
 		<div class="block">
 			<h4>
-				<?php echo helper::translate('Disponibilité du cours'); ?>
+				<?php echo helper::translate('Étiquettes  : disponibilité du cours'); ?>
 			</h4>
 			<div class="row">
 				<div class="col4">
@@ -49,7 +134,7 @@
 			<div class="row">
 				<div class="col12">
 					<h4>
-						<?php echo helper::translate('Modalité d\'accès'); ?>
+						<?php echo helper::translate('Étiquettes  : modalités d\'inscription'); ?>
 					</h4>
 				</div>
 			</div>
@@ -78,103 +163,22 @@
 				<div class="col4">
 					<?php echo template::text('coursesCaptionUrl', [
 						'label' => 'Lien vers le cours',
-						'value' => $this->getData(['module', $this->getUrl(0), 'caption', 'url'])
+						'value' => $this->getData(['module', $this->getUrl(0), 'caption', 'url']),
+						'help' => 'Classe CSS de la division : workshopSuscribe'
 					]); ?>
 				</div>
 				<div class="col4">
 					<?php echo template::text('coursesCaptionUnsuscribe', [
 						'label' => 'Désinscription',
-						'value' => $this->getData(['module', $this->getUrl(0), 'caption', 'unsuscribe'])
+						'value' => $this->getData(['module', $this->getUrl(0), 'caption', 'unsuscribe']),
+						'help' => 'Classe CSS de la division : workshopUnsuscribe'
 					]); ?>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-<div class="row">
-	<div class="col6">
-		<div class="block">
-			<h4>
-				<?php echo helper::translate('Elements à afficher'); ?>
-			</h4>
-			<div class="row">
-				<div class="col12">
-					<?php echo template::checkbox('coursesConfigShowTitle', true, 'Titre', [
-						'checked' => $this->getData(['module', $this->getUrl(0), 'config', 'title'])
-					]); ?>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col12">
-					<?php echo template::checkbox('coursesConfigShowAuthor', true, 'Signature de l\'auteur', [
-						'checked' => $this->getData(['module', $this->getUrl(0), 'config', 'author'])
-					]); ?>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col12">
-					<?php echo template::checkbox('coursesConfigShowDescription', true, 'Description', [
-						'checked' => $this->getData(['module', $this->getUrl(0), 'config', 'description'])
-					]); ?>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col4">
-					<?php echo template::checkbox('coursesConfigShowAccess', true, 'Modalités d\'ouverture', [
-						'checked' => $this->getData(['module', $this->getUrl(0), 'config', 'access'])
-					]); ?>
-				</div>
-				<div class="col4">
-					<?php echo template::checkbox('coursesConfigShowOpeningDate', true, 'Date d\'ouverture', [
-						'checked' => $this->getData(['module', $this->getUrl(0), 'config', 'openingdate']),
-						'help' => 'Affiché si l\'accès est limité dans le temps',
-					]); ?>
-				</div>
-				<div class="col4">
-					<?php echo template::checkbox('coursesConfigShowClosingDate', true, 'Date de fermeture', [
-						'checked' => $this->getData(['module', $this->getUrl(0), 'config', 'closingdate']),
-						'help' => 'Affiché si l\'accès est limité dans le temps',
-					]); ?>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col12">
-					<?php echo template::checkbox('coursesConfigShowEnrolment', true, 'Modalités d\'inscription', [
-						'checked' => $this->getData(['module', $this->getUrl(0), 'config', 'enrolment'])
-					]); ?>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="col6">
-		<div class="block">
-			<h4>
-				<?php echo helper::translate('Thème'); ?>
-			</h4>
 
-			<div class="row">
-				<div class="col12">
-					<?php echo template::select('coursesConfigLayout', $module::$coursesLayout, [
-						'label' => 'Présentation en colonnes',
-						'selected' => $this->getData(['module', $this->getUrl(0), 'config', 'layout']),
-						'help' => 'Chaque cours est présenté dans une colonne'
-					]); ?>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col12">
-					<?php echo template::checkbox('coursesConfigTemplate', true, 'Bordure', [
-						'checked' => $this->getData(['module', $this->getUrl(0), 'config', 'template']),
-						'help' => 'Template bordure de TinyMCE, le titre en évidence'
-					]); ?>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-</div>
-</div>
-</div>
 <?php echo template::formClose(); ?>
 <div class="moduleVersion">Version n°
 	<?php echo $module::VERSION; ?>
