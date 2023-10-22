@@ -461,7 +461,7 @@ td>.col12 {
     }
     #bar select {
         width: 95%;
-        margin: 10px;
+        margin: 5px;
         text-align-last: center;
     }
     #bar #barLeft {
@@ -469,7 +469,7 @@ td>.col12 {
     }
     #bar #barLeft,
     #bar #barRight {
-        font-size: 1.6em;
+        font-size: 1.2em;
     }
     #bar #displayUsername {
         display: none;
