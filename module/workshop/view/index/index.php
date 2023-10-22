@@ -36,7 +36,7 @@
             <?php if ($this->getData(['module', $this->getUrl(0), 'config', 'author']) === true): ?>
                 <p>
                     <span class="workshopAuthor">
-                        <?php echo sprintf(helper::translate('Auteur : %s'), $this->signature($courseValue['author'])); ?>
+                        <?php echo $this->signature($courseValue['author']); ?>
                     </span>
                 </p>
             <?php endif; ?>
@@ -45,25 +45,8 @@
                 <div class="workshopAccessContainer">
                     <p>
                         <span class="workshopAccess">
-                            <?php echo $module::$coursesAccess[$courseValue['access']]; ?>
+                            <?php echo sprintf(helper::translate($module::$coursesAccess[$courseValue['access']] ), helper::dateUTF8('%d %B %Y', $courseValue['openingDate']), helper::dateUTF8('%d %B %Y', $courseValue['closingDate'])) ?>
                         </span>
-                        <!--Les dates d'ouverture et de fermeture -->
-                        <?php if ($courseValue['access'] === self::COURSE_ACCESS_DATE): ?>
-                            <?php if ($this->getData(['module', $this->getUrl(0), 'config', 'openingdate']) === true): ?>
-                            <p>
-                                <span class="workshopOpeningDate">
-                                    <?php echo sprintf(helper::translate('%s Ouvre le %s'), template::ico('calendar-empty'), helper::dateUTF8('%d %B %Y', $courseValue['openingDate'])); ?>
-                                </span>
-                            </p>
-                        <?php endif; ?>
-                        <?php if ($this->getData(['module', $this->getUrl(0), 'config', 'closingdate']) === true): ?>
-                            <p>
-                                <span class="workshopClosingDate">
-                                    <?php echo sprintf(helper::translate('%s Ferme le %s'), template::ico('calendar-empty'), helper::dateUTF8('%d %B %Y', $courseValue['closingDate'])); ?>
-                                </span>
-                            </p>
-                        <?php endif; ?>
-                    <?php endif; ?>
                     </p>
                 </div>
             <?php endif; ?>

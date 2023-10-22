@@ -47,19 +47,17 @@ class workshop extends common
 			"author" => true,
 			"description" => true,
 			"access" => true,
-			"openingdate" => true,
-			"closingdate" => true,
 			"enrolment" => true,
 			"layout" => 6,
 			"template" => true
 		),
 		"caption" => array(
-			"accessopen" => "ouvert",
-			"accessdate" => "p&eacute;riode d&#039;ouverture",
-			"accessclose" => "ferm&eacute;",
-			"enrolguest" => "anonyme",
-			"enrolself" => "membres",
-			"enrolselfkey" => "membres avec cl&eacute;",
+			"accessopen" => "Ouvert",
+			"accessdate" => "P&eacute;riode d&#039;ouverture du %s au %s",
+			"accessclose" => "Ferm&eacute;",
+			"enrolguest" => "Anonyme",
+			"enrolself" => "Membres",
+			"enrolselfkey" => "Membres avec cl&eacute;",
 			"url" => "Acc&eacute;der au cours",
 			"unsuscribe" => "Me d&eacute;sinscrire"
 		)

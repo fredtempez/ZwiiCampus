@@ -56,18 +56,6 @@
 						'help' => 'Classes CSS de la division workshopAccessContainer, élément en ligne workshopAccess'
 					]); ?>
 				</div>
-				<div class="col4">
-					<?php echo template::checkbox('coursesConfigShowOpeningDate', true, 'Date d\'ouverture', [
-						'checked' => $this->getData(['module', $this->getUrl(0), 'config', 'openingdate']),
-						'help' => 'Affiché seulement si l\'accès est limité dans le temps. Classe CSS de l\'élément en ligne : workshopOpeningDate',
-					]); ?>
-				</div>
-				<div class="col4">
-					<?php echo template::checkbox('coursesConfigShowClosingDate', true, 'Date de fermeture', [
-						'checked' => $this->getData(['module', $this->getUrl(0), 'config', 'closingdate']),
-						'help' => 'Affiché seulement si l\'accès est limité dans le temps. Classe CSS de l\'élément en ligne : workshopClosingDate',
-					]); ?>
-				</div>
 			</div>
 			<div class="row">
 				<div class="col12">
@@ -120,7 +108,9 @@
 				<div class="col4">
 					<?php echo template::text('coursesCaptionAccessDate', [
 						'label' => 'Période',
-						'value' => $this->getData(['module', $this->getUrl(0), 'caption', 'accessdate'])
+						'value' => $this->getData(['module', $this->getUrl(0), 'caption', 'accessdate']),
+						'help' => 'Insérer deux symboles %s pour placer les dates d\'ouverture et de fermeture',
+						'placeholder' => 'Ouvre le %s et ferme le %s'
 					]); ?>
 				</div>
 
