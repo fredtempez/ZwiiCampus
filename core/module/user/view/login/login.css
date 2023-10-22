@@ -21,3 +21,15 @@
 #passwordIcon {
     float: right;
 }
+
+@media screen and (max-width: 768px) {
+    #buttonsContainer {
+        display: grid;
+    }
+    #loginContainer {
+        order: 1;
+    }
+    #backContainer{
+        order: 2;
+    }
+}
