@@ -97,7 +97,7 @@
 				<div class="col12">
 					<?php echo template::checkbox('coursesConfigTemplate', true, 'Mise en évidence', [
 						'checked' => $this->getData(['module', $this->getUrl(0), 'config', 'template']),
-						'help' => 'Template identique à TinyMCE avec une bordure et le titre en évidence. Classe de la division : workshopContainer'
+						'help' => 'Template identique à TinyMCE avec une bordure et le titre en évidence. Classe de la division : workshopItemContainer'
 					]); ?>
 				</div>
 			</div>

@@ -1,26 +1,28 @@
-<div class="row">
-    <?php foreach ($this->getData(['course']) as $courseId => $courseValue): ?>
-        <!-- Layout en colonnes -->
-        <div class="workshopContainer col<?php echo $this->getData(['module', $this->getUrl(0), 'config', 'layout']); ?>">
-
-            <!-- Affchage par bloc et bordure -->
-            <?php if ($this->getData(['module', $this->getUrl(0), 'config', 'template']) === true): ?>
-                <div class="block">
-                    <h4>
+<?php $startRow = 0; ?>
+<?php foreach ($this->getData(['course']) as $courseId => $courseValue): ?>
+    <?php if ($startRow === 0): ?>
+        <div class="row  workshopRowContainer">
+    <?php endif; ?>
+    <!-- Layout en colonnes -->
+    <div class="workshopItemContainer col<?php echo $this->getData(['module', $this->getUrl(0), 'config', 'layout']); ?>">
+        <!-- Affchage par bloc et bordure -->
+        <?php if ($this->getData(['module', $this->getUrl(0), 'config', 'template']) === true): ?>
+            <div class="block">
+                <h4>
                 <?php else: ?>
                     <p>
-                <?php endif; ?>
+        <?php endif; ?>
 
-                    <!-- Insère le titre court dans tous les cas -->
-                    <span class="workshopTitle">
-                        <?php echo $courseValue['title']; ?>
-                    </span>
+                <!-- Insère le titre court dans tous les cas -->
+                <span class="workshopTitle">
+                    <?php echo $courseValue['title']; ?>
+                </span>
 
-                        <!-- Fin du bloc et bordure titre 4 -->
+                <!-- Fin du bloc et bordure titre 4 -->
                 <?php if ($this->getData(['module', $this->getUrl(0), 'config', 'template']) === true): ?>
-                    </h4>
-                    <?php else: ?>
-                    <p>
+            </h4>
+            <?php else: ?>
+                <p>
                 <?php endif; ?>
                 <!-- Description -->
                 <?php if ($this->getData(['module', $this->getUrl(0), 'config', 'description']) === true): ?>
@@ -29,82 +31,86 @@
                         <?php echo $courseValue['description']; ?>
                     </span>
                 </p>
-                <?php endif; ?>
-                <!-- Author -->
-                <?php if ($this->getData(['module', $this->getUrl(0), 'config', 'author']) === true): ?>
+            <?php endif; ?>
+            <!-- Author -->
+            <?php if ($this->getData(['module', $this->getUrl(0), 'config', 'author']) === true): ?>
+                <p>
+                    <span class="workshopAuthor">
+                        <?php echo sprintf(helper::translate('Auteur : %s'), $this->signature($courseValue['author'])); ?>
+                    </span>
+                </p>
+            <?php endif; ?>
+            <!-- Modalité d'ouverture -->
+            <?php if ($this->getData(['module', $this->getUrl(0), 'config', 'access']) === true): ?>
+                <div class="workshopAccessContainer">
                     <p>
-                        <span class="workshopAuthor">
-                            <?php echo sprintf(helper::translate('Auteur : %s'), $this->signature($courseValue['author'])); ?>
+                        <span class="workshopAccess">
+                            <?php echo helper::translate('Disponibilité : ') . $module::$coursesAccess[$courseValue['access']]; ?>
                         </span>
-                    </p>
-                <?php endif; ?>
-                <!-- Modalité d'ouverture -->
-                <?php if ($this->getData(['module', $this->getUrl(0), 'config', 'access']) === true): ?>
-                    <div class="workshopAccessContainer">
-                        <p>
-                            <span class="workshopAccess">
-                                <?php echo helper::translate('Disponibilité : ') . $module::$coursesAccess[$courseValue['access']]; ?>
-                            </span>
-                            <!--Les dates d'ouverture et de fermeture -->
-                            <?php if ($courseValue['access'] === self::COURSE_ACCESS_DATE): ?>
-                                <?php if ($this->getData(['module', $this->getUrl(0), 'config', 'openingdate']) === true): ?>
-                                <p>
-                                    <span class="workshopOpeningDate">
+                        <!--Les dates d'ouverture et de fermeture -->
+                        <?php if ($courseValue['access'] === self::COURSE_ACCESS_DATE): ?>
+                            <?php if ($this->getData(['module', $this->getUrl(0), 'config', 'openingdate']) === true): ?>
+                            <p>
+                                <span class="workshopOpeningDate">
                                     <?php echo sprintf(helper::translate('%s Ouvre le %s'), template::ico('calendar-empty'), helper::dateUTF8('%d %B %Y', $courseValue['openingDate'])); ?>
-                                    </span>
-                                </p>
-                            <?php endif; ?>
-                            <?php if ($this->getData(['module', $this->getUrl(0), 'config', 'closingdate']) === true): ?>
-                                <p>
-                                    <span class="workshopClosingDate">
-                                     <?php echo sprintf(helper::translate('%s Ferme le %s'), template::ico('calendar-empty'), helper::dateUTF8('%d %B %Y', $courseValue['closingDate'])); ?>
-                                    </span>
-                                </p>
-                            <?php endif; ?>
+                                </span>
+                            </p>
                         <?php endif; ?>
-                        </p>
-                    </div>
-                <?php endif; ?>
-
-                <!-- Modalité d'inscription -->
-                <?php if ($this->getData(['module', $this->getUrl(0), 'config', 'enrolment']) === true): ?>
-                    <p>
-                        <span class="workshopEnrolment">
-                            <?php echo sprintf(helper::translate('Inscription : %s '), $module::$coursesEnrolment[$courseValue['enrolment']]); ?>
-                        </span>
+                        <?php if ($this->getData(['module', $this->getUrl(0), 'config', 'closingdate']) === true): ?>
+                            <p>
+                                <span class="workshopClosingDate">
+                                    <?php echo sprintf(helper::translate('%s Ferme le %s'), template::ico('calendar-empty'), helper::dateUTF8('%d %B %Y', $courseValue['closingDate'])); ?>
+                                </span>
+                            </p>
+                        <?php endif; ?>
+                    <?php endif; ?>
                     </p>
-                <?php endif; ?>
+                </div>
+            <?php endif; ?>
 
-                <!-- Lien accès au cours-->
-                <div class="row">
-                    <div class="col6 workshopLinkContainer">
-                        <?php if (
-                            $courseValue['access'] === self::COURSE_ACCESS_OPEN
-                            ||
-                            ($courseValue['access'] === self::COURSE_ACCESS_DATE && time() >= $courseValue['openingDate'] && time() <= $courseValue['closingDate'])
-                        ): ?>
-                       <span class="workshopSuscribe">
+            <!-- Modalité d'inscription -->
+            <?php if ($this->getData(['module', $this->getUrl(0), 'config', 'enrolment']) === true): ?>
+                <p>
+                    <span class="workshopEnrolment">
+                        <?php echo sprintf(helper::translate('Inscription : %s '), $module::$coursesEnrolment[$courseValue['enrolment']]); ?>
+                    </span>
+                </p>
+            <?php endif; ?>
+
+            <!-- Lien accès au cours-->
+            <div class="row">
+                <div class="col6 workshopLinkContainer">
+                    <?php if (
+                        $courseValue['access'] === self::COURSE_ACCESS_OPEN
+                        ||
+                        ($courseValue['access'] === self::COURSE_ACCESS_DATE && time() >= $courseValue['openingDate'] && time() <= $courseValue['closingDate'])
+                    ): ?>
+                        <span class="workshopSuscribe">
                             <a href="<?php echo helper::baseUrl(); ?>course/swap/<?php echo $courseId; ?>">
                                 <?php echo $this->getData(['module', $this->getUrl(0), 'caption', 'url']); ?>
                             </a>
                         </span>
-                        <?php endif; ?>
-                    </div>
-                    <div class="col6 textAlignRight">
-                        <!-- Lien désinscription-->
-                        <?php if ($this->getData(['enrolment', $courseId, $this->getUser('id')])): ?>
-                            <span class="workshopUnsuscribe">
+                    <?php endif; ?>
+                </div>
+                <div class="col6 textAlignRight">
+                    <!-- Lien désinscription-->
+                    <?php if ($this->getData(['enrolment', $courseId, $this->getUser('id')])): ?>
+                        <span class="workshopUnsuscribe">
                             <a href="<?php echo helper::baseUrl(); ?>course/unsuscribe/<?php echo $courseId; ?>">
                                 <?php echo $this->getData(['module', $this->getUrl(0), 'caption', 'unsuscribe']); ?>
                             </a>
-                            </span>
-                        <?php endif; ?>
-                    </div>
+                        </span>
+                    <?php endif; ?>
                 </div>
-                <!-- Fin du bloc et bordure -->
-                <?php if ($this->getData(['module', $this->getUrl(0), 'config', 'template']) === true): ?>
-                </div>
-            <?php endif; ?>
+            </div>
+            <!-- Fin du bloc et bordure -->
+            <?php if ($this->getData(['module', $this->getUrl(0), 'config', 'template']) === true): ?>
+            </div>
+        <?php endif; ?>
+    </div>
+    <?php $startRow = $startRow + $this->getData(['module', $this->getUrl(0), 'config', 'layout']); ?>
+    <?php if ($startRow === 12): ?>
         </div>
-    <?php endforeach; ?>
-</div>
+        <?php $startRow = 0; ?>
+    <?php endif; ?>
+<?php endforeach; ?>
