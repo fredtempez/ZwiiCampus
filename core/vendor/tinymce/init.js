@@ -165,6 +165,16 @@ tinymce.init({
 			description: "Bloc de texte avec un titre."
 		},
 		{
+			title: "Lien de retour",
+			url: baseUrl + "core/vendor/tinymce/templates/back_home.html",
+			description: "Insère un lien de retour à l'accueil."
+		},
+		{
+			title: "Lien de désinscription",
+			url: baseUrl + "core/vendor/tinymce/templates/unsuscribe.html",
+			description: "Insère un lien de désinscription."
+		},
+		{
 			title: "Effet accordéon",
 			url: baseUrl + "core/vendor/tinymce/templates/accordion.html",
 			description: "Bloc de texte avec effet accordéon."
