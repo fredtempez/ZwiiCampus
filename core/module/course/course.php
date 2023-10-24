@@ -678,7 +678,7 @@ class course extends common
         $userId = $this->getUrl(3);
         $history = $this->getData(['enrolment', $courseId, $userId]);
         $data = json_decode(file_get_contents(self::DATA_DIR . $courseId . '/page.json'), true);
-        $data = $data ['page'];
+        $data = $data['page'];
         // Exclure les barres et les pages masquées
         $count = 0;
         foreach ($data as $pageId => $pageData) {
@@ -792,16 +792,23 @@ class course extends common
 
     public function unsuscribe()
     {
-        $courseId = $this->getUrl(2);
-        $userId = $this->getUser('id');
-        $this->deleteData(['enrolment', $courseId, $userId]);
-        // Valeurs en sortie
-        $this->addOutput([
-            'redirect' => helper::baseUrl(),
-            'notification' => helper::translate('Désinscription'),
-            'state' => true,
-        ]);
-
+        // Désincription du cours ouvert ou du cours sélectionné
+        $courseId = $this->getUrl(2) ? $this->getUrl(2) : self::$siteContent;
+        // home n'est pas un cours dans lequel on peut se désincrire
+        if ($courseId !== 'home'
+            && array_key_exists($courseId, $this->getData(['course'])) 
+        ) {
+            $userId = $this->getUser('id');
+            $this->deleteData(['enrolment', $courseId, $userId]);
+            $_SESSION['ZWII_SITE_CONTENT'] = 'home';
+            // Valeurs en sortie
+            $this->addOutput([
+                'redirect' => helper::baseUrl(),
+                'notification' => helper::translate('Désinscription'),
+                'state' => true,
+            ]);
+            
+        }
     }
 
 

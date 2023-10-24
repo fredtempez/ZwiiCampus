@@ -160,20 +160,21 @@ tinymce.init({
 	// Templates
 	templates: [
 		{
-			title: "Bloc de texte",
-			url: baseUrl + "core/vendor/tinymce/templates/block.html",
-			description: "Bloc de texte avec un titre."
-		},
-		{
 			title: "Lien de retour",
 			url: baseUrl + "core/vendor/tinymce/templates/back_home.html",
-			description: "Insère un lien de retour à l'accueil."
+			description: "Insère un lien de retour à l'accueil de la plate-forme."
 		},
 		{
 			title: "Lien de désinscription",
 			url: baseUrl + "core/vendor/tinymce/templates/unsuscribe.html",
 			description: "Insère un lien de désinscription."
 		},
+		{
+			title: "Bloc de texte",
+			url: baseUrl + "core/vendor/tinymce/templates/block.html",
+			description: "Bloc de texte avec un titre."
+		},
+
 		{
 			title: "Effet accordéon",
 			url: baseUrl + "core/vendor/tinymce/templates/accordion.html",
@@ -182,37 +183,37 @@ tinymce.init({
 		{
 			title: "Grille symétrique : 6 - 6",
 			url: baseUrl + "core/vendor/tinymce/templates/col6.html",
-			description: "Grille adaptative sur 12 colonnes, sur mobile elles passent les unes en dessous des autres."
+			description: "Grille adaptative sur 12 colonnes, en colonne sur mobile."
 		},
 		{
 			title: "Grille symétrique : 4 - 4 - 4",
 			url: baseUrl + "core/vendor/tinymce/templates/col4.html",
-			description: "Grille adaptative sur 12 colonnes, sur mobile elles passent les unes en dessous des autres."
+			description: "Grille adaptative sur 12 colonnes, en colonne sur mobile.."
 		},
 		{
 			title: "Grille symétrique : 3 - 3 - 3 - 3",
 			url: baseUrl + "core/vendor/tinymce/templates/col3.html",
-			description: "Grille adaptative sur 12 colonnes, sur mobile elles passent les unes en dessous des autres."
+			description: "Grille adaptative sur 12 colonnes, en colonne sur mobile."
 		},
 		{
 			title: "Grille asymétrique : 4 - 8",
 			url: baseUrl + "core/vendor/tinymce/templates/col4-8.html",
-			description: "Grille adaptative sur 12 colonnes, sur mobile elles passent les unes en dessous des autres."
+			description: "Grille adaptative sur 12 colonnes, en colonne sur mobile."
 		},
 		{
 			title: "Grille asymétrique : 8 - 4",
 			url: baseUrl + "core/vendor/tinymce/templates/col8-4.html",
-			description: "Grille adaptative sur 12 colonnes, sur mobile elles passent les unes en dessous des autres."
+			description: "Grille adaptative sur 12 colonnes, en colonne sur mobile."
 		},
 		{
 			title: "Grille asymétrique : 2 - 10",
 			url: baseUrl + "core/vendor/tinymce/templates/col2-10.html",
-			description: "Grille adaptative sur 12 colonnes, sur mobile elles passent les unes en dessous des autres."
+			description: "Grille adaptative sur 12 colonnes, en colonne sur mobile."
 		},
 		{
 			title: "Grille asymétrique : 10 - 2",
 			url: baseUrl + "core/vendor/tinymce/templates/col10-2.html",
-			description: "Grille adaptative sur 12 colonnes, sur mobile elles passent les unes en dessous des autres."
+			description: "Grille adaptative sur 12 colonnes, en colonne sur mobile."
 		}
 	]
 });
