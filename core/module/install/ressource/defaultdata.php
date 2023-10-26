@@ -64,7 +64,7 @@ class init extends common
 			]
 		],
 		'core' => [
-			'dataVersion' => 13000,
+			'dataVersion' => 1000,
 			'lastBackup' => 0,
 			'lastClearTmp' => 0,
 			'lastAutoUpdate' => 0,
@@ -195,16 +195,16 @@ class init extends common
 		'blacklist' => [],
 		'language' => [
 			"fr_FR" => [
-				"version" => 13000,
-				"date" => 1693425383
+				"version" => 1000,
+				"date" => 1698310895
 			],
 			"es" => [
-				"version" => 13000,
-				"date" => 1693425383
+				"version" => 1000,
+				"date" => 1698310895
 			],
 			"en_EN" => [
-				"version" => 13000,
-				"date" => 1693425383
+				"version" => 1000,
+				"date" => 1698310895
 			]
 		],
 		'profil' => [
