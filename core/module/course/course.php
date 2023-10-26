@@ -19,7 +19,7 @@ class course extends common
     public static $actions = [
         'swap' => self::GROUP_VISITOR,
         'suscribe' => self::GROUP_VISITOR,
-        'unsuscribe' => self::GROUP_VISITOR,
+        'unsuscribe' => self::GROUP_MEMBER,
         'index' => self::GROUP_ADMIN,
         'edit' => self::GROUP_ADMIN,
         'add' => self::GROUP_ADMIN,
@@ -74,7 +74,7 @@ class course extends common
         $courseIdShortTitle = helper::arrayColumn($this->getData(['course']), 'title');
         ksort($courseIdShortTitle);
         foreach ($courseIdShortTitle as $courseId => $courseTitle) {
-            $categorieUrl = helper::baseUrl(!helper::checkRewrite()) . 'course/swap/' . $courseId;
+            $categorieUrl = helper::baseUrl(!helper::checkRewrite()) . 'course/suscribe/' . $courseId;
             $authorId = $this->getData(['course', $courseId, 'author']);
             $author = sprintf('%s %s', $this->getData(['user', $authorId, 'firstname']), $this->getData(['user', $authorId, 'lastname']));
             $access = self::$courseAccess[$this->getData(['course', $courseId, 'access'])];
@@ -578,7 +578,7 @@ class course extends common
         $courseId = $this->getUrl(2);
         $userId = $this->getuser('id');
         $message = '';
-        $redirect = helper::baseUrl(true);
+        $redirect = helper::baseUrl();
         $state = true;
 
         if (
@@ -597,10 +597,10 @@ class course extends common
             if ($this->getData(['enrolment', $courseId, $userId, 'history']))
                 $maxTime = max($this->getData(['enrolment', $courseId, $userId, 'history']));
             if (is_int($maxTime)) {
-                $redirect .= array_search($maxTime, $this->getData(['enrolment', $courseId, $userId, 'history']));
+                $redirect = helper::baseUrl() . array_search($maxTime, $this->getData(['enrolment', $courseId, $userId, 'history']));
             } else {
                 // Sinon la page d'accueil par défaut du module
-                $redirect .= $this->getData(['course', $courseId, 'homePageId']);
+                $redirect = helper::baseUrl() . $this->getData(['course', $courseId, 'homePageId']);
             }
             if ($this->getData(['course', $courseId, 'access']) === self::COURSE_ACCESS_DATE) {
                 $to = helper::dateUTF8('%d %B %Y', $this->getData(['course', $courseId, 'closingDate']), self::$i18nUI) . helper::translate(' à ') . helper::dateUTF8('%H:%M', $this->getData(['course', $courseId, 'closingDate']), self::$i18nUI);
@@ -634,17 +634,20 @@ class course extends common
                     break;
                 // Auto avec ou sans clé
                 case self::COURSE_ENROLMENT_SELF:
-                    $redirect .= 'course/enrol/' . $courseId;
-                    $message = helper::translate('Veuillez vous inscrire');
+                    //L'étudiant doit disposer d'un compte
+                    if ($this->getUser('id')) {
+                        $redirect = helper::baseUrl() . 'course/suscribe/' . $courseId;
+                    }  else {
+                        $message = helper::translate('Vous devez disposer d\'un compte pour accéder à ce cours ');
+                        $state = false;
+                    }
                     break;
                 case self::COURSE_ENROLMENT_SELF_KEY:
                     //L'étudiant doit disposer d'un compte
                     if ($this->getUser('id')) {
-                        $redirect .= 'course/enrol/' . $courseId;
-                        $message = helper::translate('Veuillez vous inscrire');
-                        $state = true;
+                        $redirect = helper::baseUrl() . 'course/suscribe/' . $courseId;
                     } else {
-                        $message = helper::translate('Vous devez disposer d\'un compte pour accéder à ce cours');
+                        $message = helper::translate('Vous devez disposer d\'un compte et d\'une clé pour accéder à ce cours ');
                         $state = false;
                     }
                     break;
@@ -711,7 +714,7 @@ class course extends common
     }
 
     // Génération du message d'inscription
-    public function enrol()
+    public function suscribe()
     {
         $courseId = $this->getUrl(2);
         $userId = $this->getUser('id');
@@ -746,7 +749,7 @@ class course extends common
                         } else {
                             // Valeurs en sortie
                             $this->addOutput([
-                                'redirect' => helper::baseUrl(!helper::checkRewrite()) . 'course/enrol/' . $courseId,
+                                'redirect' => helper::baseUrl(!helper::checkRewrite()) . 'course/suscribe/' . $courseId,
                                 'state' => false,
                                 'notification' => 'La clé est incorrecte'
                             ]);
@@ -795,8 +798,9 @@ class course extends common
         // Désincription du cours ouvert ou du cours sélectionné
         $courseId = $this->getUrl(2) ? $this->getUrl(2) : self::$siteContent;
         // home n'est pas un cours dans lequel on peut se désincrire
-        if ($courseId !== 'home'
-            && array_key_exists($courseId, $this->getData(['course'])) 
+        if (
+            $courseId !== 'home'
+            && array_key_exists($courseId, $this->getData(['course']))
         ) {
             $userId = $this->getUser('id');
             $this->deleteData(['enrolment', $courseId, $userId]);
@@ -807,7 +811,7 @@ class course extends common
                 'notification' => helper::translate('Désinscription'),
                 'state' => true,
             ]);
-            
+
         }
     }
 
