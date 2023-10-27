@@ -1407,37 +1407,6 @@ class common
 
 	// Fonctions pour la gestion des cours
 
-
-	/**
-	 * Retourne un tableau de tous les cours selon les autorisations
-	 * @param string $access
-	 *      - 0 le cours est ouvert
-	 *      - 1 le cours est ouvert entre les dates
-	 *      - 2 le cours est fermé
-	 * @param string $enrolment 
-	 *     - 0 accès est anonyme
-	 *     - 1 accès libre
-	 *     - 2 accès avec clé
-	 *     - 3 manuel, le prof inscrits
-	 */
-	public function getCourses($access = null, $enrolment = null)
-	{
-		$courses = $this->getData(['course']);
-		$response = [];
-		foreach ($courses as $courseId => $courseValues) {
-			$response[] = ($access === $courseValues['access'] || $access === null)
-				? $courseId : '';
-			$response[] = ($enrolment === $courseValues['enrolment'] || $enrolment === null)
-				? $courseId : '';
-		}
-		$response = array_unique($response);
-		$response = array_filter($response, function ($value) {
-			// Supprime les éléments vides (null, "", 0, false, etc.)
-			return !empty($value);
-		});
-		return $response;
-	}
-
 	/**
 	 * Retourne les cours d'un utilisateur
 	 * @param string $userId identifiant

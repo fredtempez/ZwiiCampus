@@ -156,12 +156,17 @@ class course extends common
                     'category' => $this->getInput('courseAddCategories'),
                     'description' => $this->getInput('courseAddDescription', helper::FILTER_STRING_SHORT, true),
                     'access' => $this->getInput('courseAddAccess', helper::FILTER_INT),
-                    'openingDate' => $this->getInput('courseOpeningDate', helper::FILTER_DATETIME),
-                    'closingDate' => $this->getInput('courseClosingDate', helper::FILTER_DATETIME),
+                    'openingDate' => $this->getInput('courseAddOpeningDate', helper::FILTER_DATETIME),
+                    'closingDate' => $this->getInput('courseAddClosingDate', helper::FILTER_DATETIME),
                     'enrolment' => $this->getInput('courseAddEnrolment', helper::FILTER_INT),
                     'enrolmentKey' => $this->getInput('courseAddEnrolmentKey'),
                 ]
             ]);
+
+            // Copie du thème
+            $sourceId = $this->getInput('courseAddTheme');
+            copy(self::DATA_DIR . $sourceId . '/theme.json', self::DATA_DIR . $courseId . '/theme.json');
+            copy(self::DATA_DIR . $sourceId . '/theme.css', self::DATA_DIR . $courseId . '/theme.css');
 
             // Valeurs en sortie
             $this->addOutput([
@@ -181,6 +186,11 @@ class course extends common
 
         // Liste des catégories de cours
         self::$courseCategories = $this->getData(['category']);
+
+        // Liste des cours disponibles pour la copie du thème
+        self::$courses = $this->getData(['course']);
+        self::$courses = helper::arrayColumn(self::$courses, 'title', 'SORT_ASC'    );
+        self::$courses = array_merge(['home'=>'Accueil de la plate-forme'], self::$courses);
 
         // Valeurs en sortie
         $this->addOutput([

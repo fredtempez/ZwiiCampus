@@ -38,12 +38,12 @@
             </div>
             <div class="row">
                 <div class="col6">
-                    <?php echo template::select('courseaDDHomePageId', $module::$pagesList, [
-                        'label' => 'Accueil du cours',
+                    <?php echo template::select('courseAddTheme', $module::$courses, [
+                        'label' => 'Copier le thème depuis',
                     ]); ?>
                 </div>
                 <div class="col6">
-                    <?php echo template::select('courseaDDCategories', $module::$courseCategories, [
+                    <?php echo template::select('courseAddCategories', $module::$courseCategories, [
                         'label' => 'Catégorie',
                     ]); ?>
                 </div>
@@ -62,13 +62,13 @@
                     ]); ?>
                 </div>
                 <div class="col4">
-                    <?php echo template::date('courseOpeningDate', [
+                    <?php echo template::date('courseAddOpeningDate', [
                         'type' => 'datetime-local',
                         'label' => 'Ouverture',
                     ]); ?>
                 </div>
                 <div class="col4">
-                    <?php echo template::date('courseClosingDate', [
+                    <?php echo template::date('courseAddClosingDate', [
                         'type' => 'datetime-local',
                         'label' => 'Fermeture',
                     ]); ?>
