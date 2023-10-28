@@ -39,9 +39,9 @@
                     ]); ?>
                 </div>
                 <div class="col6">
-                    <?php echo template::select('courseEditCategories', $module::$courseCategories, [
+                    <?php echo template::select('courseEditCategorie', $module::$courseCategories, [
                         'label' => 'Catégorie',
-                        'value' => $this->getdata(['course', $this->getUrl(2), 'category'])
+                        'selected' => $this->getdata(['course', $this->getUrl(2), 'category'])
                     ]); ?>
                 </div>
             </div>

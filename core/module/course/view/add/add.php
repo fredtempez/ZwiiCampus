@@ -43,7 +43,7 @@
                     ]); ?>
                 </div>
                 <div class="col6">
-                    <?php echo template::select('courseAddCategories', $module::$courseCategories, [
+                    <?php echo template::select('courseAddCategorie', $module::$courseCategories, [
                         'label' => 'Catégorie',
                     ]); ?>
                 </div>
