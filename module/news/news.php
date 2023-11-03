@@ -16,7 +16,7 @@
 class news extends common
 {
 
-	const VERSION = '5.0';
+	const VERSION = '5.1';
 	const REALNAME = 'News';
 	const DATADIRECTORY = self::DATA_DIR . 'news/';
 
@@ -230,9 +230,9 @@ class news extends common
 		// News en fonction de la pagination
 		for ($i = $pagination['first']; $i < $pagination['last']; $i++) {
 			// Met en forme le tableau
-			$dateOn = helper::dateUTF8(self::$dateFormat, $this->getData(['module', $this->getUrl(0), 'posts', $newsIds[$i], 'publishedOn']), self::$i18nUI) . ' - ' . helper::dateUTF8(self::$timeFormat, $this->getData(['module', $this->getUrl(0), 'posts', $newsIds[$i], 'publishedOn']), self::$i18nUI);
+			$dateOn = helper::dateUTF8(self::$dateFormat, $this->getData(['module', $this->getUrl(0), 'posts', $newsIds[$i], 'publishedOn']), self::$i18nContent) . ' - ' . helper::dateUTF8(self::$timeFormat, $this->getData(['module', $this->getUrl(0), 'posts', $newsIds[$i], 'publishedOn']), self::$i18nContent);
 			if ($this->getData(['module', $this->getUrl(0), 'posts', $newsIds[$i], 'publishedOff'])) {
-				$dateOff = helper::dateUTF8(self::$dateFormat, $this->getData(['module', $this->getUrl(0), 'posts', $newsIds[$i], 'publishedOff']), self::$i18nUI) . ' - ' . helper::dateUTF8(self::$timeFormat, $this->getData(['module', $this->getUrl(0), 'posts', $newsIds[$i], 'publishedOff']), self::$i18nUI);
+				$dateOff = helper::dateUTF8(self::$dateFormat, $this->getData(['module', $this->getUrl(0), 'posts', $newsIds[$i], 'publishedOff']), self::$i18nContent) . ' - ' . helper::dateUTF8(self::$timeFormat, $this->getData(['module', $this->getUrl(0), 'posts', $newsIds[$i], 'publishedOff']), self::$i18nContent);
 			} else {
 				$dateOff = helper::translate('Permanent');
 			}
@@ -332,9 +332,9 @@ class news extends common
 			// News en fonction de la pagination
 			for ($i = $pagination['first']; $i < $pagination['last']; $i++) {
 				// Met en forme le tableau
-				$dateOn = $dateOn = helper::dateUTF8(self::$dateFormat, $this->getData(['module', $this->getUrl(0), 'posts', $newsIds[$i], 'publishedOn']), self::$i18nUI) . ' - ' . helper::dateUTF8(self::$timeFormat, $this->getData(['module', $this->getUrl(0), 'posts', $newsIds[$i], 'publishedOn']), self::$i18nUI);
+				$dateOn = $dateOn = helper::dateUTF8(self::$dateFormat, $this->getData(['module', $this->getUrl(0), 'posts', $newsIds[$i], 'publishedOn']), self::$i18nContent) . ' - ' . helper::dateUTF8(self::$timeFormat, $this->getData(['module', $this->getUrl(0), 'posts', $newsIds[$i], 'publishedOn']), self::$i18nContent);
 				if ($this->getData(['module', $this->getUrl(0), 'posts', $newsIds[$i], 'publishedOff'])) {
-					$dateOff = helper::dateUTF8(self::$dateFormat, $this->getData(['module', $this->getUrl(0), 'posts', $newsIds[$i], 'publishedOff']), self::$i18nUI) . ' - ' . helper::dateUTF8(self::$timeFormat, $this->getData(['module', $this->getUrl(0), 'posts', $newsIds[$i], 'publishedOff']), self::$i18nUI);
+					$dateOff = helper::dateUTF8(self::$dateFormat, $this->getData(['module', $this->getUrl(0), 'posts', $newsIds[$i], 'publishedOff']), self::$i18nContent) . ' - ' . helper::dateUTF8(self::$timeFormat, $this->getData(['module', $this->getUrl(0), 'posts', $newsIds[$i], 'publishedOff']), self::$i18nContent);
 				} else {
 					$dateOff = helper::translate('Permanent');
 				}
@@ -547,7 +547,6 @@ class news extends common
 			]);
 		}
 	}
-
 
 	/**
 	 * Mise à jour du module
