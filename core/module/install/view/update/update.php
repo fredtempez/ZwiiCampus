@@ -1,9 +1,9 @@
 <div id="updateContainer">
 	<p><strong>
-			<?php echo helper::translate('Mise à jour de ZwiiLMS'); ?>
+			<?php echo helper::translate('Mise à jour'); ?>
 			&nbsp;
 			<?php echo self::ZWII_VERSION; ?>
-			<?php echo helper::translate('vers ZwiiLMS'); ?>
+			<?php echo helper::translate('vers'); ?>
 			&nbsp;
 			<?php echo $module::$newVersion; ?>.
 		</strong></p>
