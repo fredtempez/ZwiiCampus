@@ -1,6 +1,6 @@
 <div id="updateContainer">
 	<p><strong>
-			<?php echo helper::translate('Mise à jour'); ?>
+			<?php echo helper::translate('Version'); ?>
 			&nbsp;
 			<?php echo self::ZWII_VERSION; ?>
 			<?php echo helper::translate('vers'); ?>

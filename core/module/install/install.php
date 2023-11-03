@@ -38,6 +38,8 @@ class install extends common
 	// Fichiers des Interface
 	public static $i18nFiles = [];
 
+	public static $updateButtonText = 'Réinstaller';
+
 	/**
 	 * Pré-installation - choix de la langue
 	 */
@@ -446,10 +448,14 @@ class install extends common
 		} else {
 			// Nouvelle version
 			self::$newVersion = helper::getUrlContents(common::ZWII_UPDATE_URL . common::ZWII_UPDATE_CHANNEL . '/version');
+			// Variable de version
+			if (helper::checkNewVersion(common::ZWII_UPDATE_CHANNEL)) {
+				self::$updateButtonText = helper::translate('Mettre à jour');
+			}
 			// Valeurs en sortie
 			$this->addOutput([
 				'display' => self::DISPLAY_LAYOUT_LIGHT,
-				'title' => helper::translate('Mise à jour'),
+				'title' => helper::translate(self::$updateButtonText),
 				'view' => 'update'
 			]);
 		}
