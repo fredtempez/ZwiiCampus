@@ -420,7 +420,7 @@ class plugin extends common
 	public function index()
 	{
 
-		$siteContent = [];
+		$siteContent = ['home' => 'Accueil de la plate-forme'];
 		/**
 		 * Tableau des cours, cette partie est spécifique au LMS
 		 */
@@ -441,31 +441,31 @@ class plugin extends common
 		// Parcourir les langues du site traduit et recherche les modules affectés à des pages
 		$pagesInfos = [];
 
-		foreach ($siteContent as $keyi18n => $valuei18n) {
+		foreach ($siteContent as $courseKey => $courseValue) {
 
 			// Clés moduleIds dans les pages de la langue
-			$pages = json_decode(file_get_contents(self::DATA_DIR . $keyi18n . '/page.json'), true);
+			$pages = json_decode(file_get_contents(self::DATA_DIR . $courseKey . '/page.json'), true);
 
 			// Extraire les clés des modules
-			$pagesModules[$keyi18n] = array_filter(helper::arrayColumn($pages['page'], 'moduleId', 'SORT_DESC'), 'strlen');
+			$pagesModules[$courseKey] = array_filter(helper::arrayColumn($pages['page'], 'moduleId', 'SORT_DESC'), 'strlen');
 
 			// Générer la liste des pages avec module de la langue par défaut
-			foreach ($pagesModules[$keyi18n] as $key => $value) {
+			foreach ($pagesModules[$courseKey] as $key => $value) {
 				if (!empty($value)) {
-					$pagesInfos[$keyi18n][$key]['pageId'] = $key;
-					$pagesInfos[$keyi18n][$key]['title'] = $pages['page'][$key]['title'];
-					$pagesInfos[$keyi18n][$key]['moduleId'] = $value;
+					$pagesInfos[$courseKey][$key]['pageId'] = $key;
+					$pagesInfos[$courseKey][$key]['title'] = $pages['page'][$key]['title'];
+					$pagesInfos[$courseKey][$key]['moduleId'] = $value;
 				}
 			}
 		}
 
 		// Recherche des modules orphelins dans toutes les langues
 		$orphans = $installed = array_flip(array_keys($infoModules));
-		foreach ($siteContent as $keyi18n => $valuei18n) {
+		foreach ($siteContent as $courseKey => $courseValue) {
 			// Générer la liste des modules orphelins
 			foreach ($infoModules as $key => $value) {
 				// Supprimer les éléments affectés
-				if (array_search($key, $pagesModules[$keyi18n])) {
+				if (array_search($key, $pagesModules[$courseKey])) {
 					unset($orphans[$key]);
 				}
 			}
@@ -526,29 +526,29 @@ class plugin extends common
 		if (
 			isset($pagesInfos)
 		) {
-			foreach ($siteContent as $keyi18n => $valuei18n) {
-				if (isset($pagesInfos[$keyi18n])) {
-					foreach ($pagesInfos[$keyi18n] as $keyPage => $value) {
-						if (isset($infoModules[$pagesInfos[$keyi18n][$keyPage]['moduleId']])) {
+			foreach ($siteContent as $courseKey => $courseValue) {
+				if (isset($pagesInfos[$courseKey])) {
+					foreach ($pagesInfos[$courseKey] as $keyPage => $value) {
+						if (isset($infoModules[$pagesInfos[$courseKey][$keyPage]['moduleId']])) {
 							// Construire le tableau de sortie
 							self::$modulesData[] = [
-								$infoModules[$pagesInfos[$keyi18n][$keyPage]['moduleId']]['realName'] . '&nbsp(' . $pagesInfos[$keyi18n][$keyPage]['moduleId'] . ')',
-								$infoModules[$pagesInfos[$keyi18n][$keyPage]['moduleId']]['version'],
-								template::flag($keyi18n, '20px') . '&nbsp<a href ="' . helper::baseUrl() . $keyPage . '" target="_blank">' . $pagesInfos[$keyi18n][$keyPage]['title'] . ' (' . $keyPage . ')</a>',
+								$infoModules[$pagesInfos[$courseKey][$keyPage]['moduleId']]['realName'] . '&nbsp(' . $pagesInfos[$courseKey][$keyPage]['moduleId'] . ')',
+								$infoModules[$pagesInfos[$courseKey][$keyPage]['moduleId']]['version'],
+								template::flag($courseKey, '20px') . '&nbsp<a href ="' . helper::baseUrl() . $keyPage . '" target="_blank">' . $pagesInfos[$courseKey][$keyPage]['title'] . ' (' . $keyPage . ')</a>',
 								template::button('dataExport' . $keyPage, [
-									'href' => helper::baseUrl() . $this->getUrl(0) . '/dataExport/filemanager/' . self::$siteContent . '/' . $pagesInfos[$keyi18n][$keyPage]['moduleId'] . '/' . $keyPage,
+									'href' => helper::baseUrl() . $this->getUrl(0) . '/dataExport/filemanager/' . self::$siteContent . '/' . $pagesInfos[$courseKey][$keyPage]['moduleId'] . '/' . $keyPage,
 									// appel de fonction vaut exécution, utiliser un paramètre
 									'value' => template::ico('download-cloud'),
 									'help' => 'Sauvegarder les données du module dans le gestionnaire de fichiers'
 								]),
 								template::button('dataExport' . $keyPage, [
-									'href' => helper::baseUrl() . $this->getUrl(0) . '/dataExport/download/' . self::$siteContent . '/' . $pagesInfos[$keyi18n][$keyPage]['moduleId'] . '/' . $keyPage,
+									'href' => helper::baseUrl() . $this->getUrl(0) . '/dataExport/download/' . self::$siteContent . '/' . $pagesInfos[$courseKey][$keyPage]['moduleId'] . '/' . $keyPage,
 									// appel de fonction vaut exécution, utiliser un paramètre
 									'value' => template::ico('download'),
 									'help' => 'Sauvegarder et télécharger les données du module'
 								]),
 								template::button('dataDelete' . $keyPage, [
-									'href' => helper::baseUrl() . $this->getUrl(0) . '/dataDelete/' . self::$siteContent . '/' . $pagesInfos[$keyi18n][$keyPage]['moduleId'] . '/' . $keyPage,
+									'href' => helper::baseUrl() . $this->getUrl(0) . '/dataDelete/' . self::$siteContent . '/' . $pagesInfos[$courseKey][$keyPage]['moduleId'] . '/' . $keyPage,
 									// appel de fonction vaut exécution, utiliser un paramètre
 									'value' => template::ico('trash'),
 									'class' => 'buttonRed dataDelete',
