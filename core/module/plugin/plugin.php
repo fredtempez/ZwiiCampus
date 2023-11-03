@@ -377,7 +377,7 @@ class plugin extends common
 					$store[$key]['category'],
 					'<a href="' . self::BASEURL_STORE . self::MODULE_STORE . $key . '" target="_blank" >' . $store[$key]['title'] . '</a>',
 					$store[$key]['version'],
-					helper::dateUTF8('%d %B %Y', $store[$key]['versionDate'], self::$i18nUI),
+					helper::dateUTF8('%d %B %Y', $store[$key]['versionDate'], self::$i18nContent),
 					implode(' - ', $pageInfos),
 					template::button('moduleExport' . $key, [
 						'class' => $class,
@@ -403,7 +403,7 @@ class plugin extends common
 	{
 		$store = json_decode(helper::getUrlContents(self::BASEURL_STORE . self::MODULE_STORE . 'list'), true);
 		self::$storeItem = $store[$this->getUrl(2)];
-		self::$storeItem['fileDate'] = helper::dateUTF8('%d %B %Y', self::$storeItem['fileDate'], self::$i18nUI);
+		self::$storeItem['fileDate'] = helper::dateUTF8('%d %B %Y', self::$storeItem['fileDate'], self::$i18nContent);
 		// Valeurs en sortie
 		$this->addOutput([
 			'title' => helper::translate('Module ' . self::$storeItem['title']),
@@ -531,19 +531,19 @@ class plugin extends common
 								$infoModules[$pagesInfos[$keyi18n][$keyPage]['moduleId']]['version'],
 								template::flag($keyi18n, '20px') . '&nbsp<a href ="' . helper::baseUrl() . $keyPage . '" target="_blank">' . $pagesInfos[$keyi18n][$keyPage]['title'] . ' (' . $keyPage . ')</a>',
 								template::button('dataExport' . $keyPage, [
-									'href' => helper::baseUrl() . $this->getUrl(0) . '/dataExport/filemanager/' . self::$siteContent . '/' . $pagesInfos[$keyi18n][$keyPage]['moduleId'] . '/' . $keyPage,
+									'href' => helper::baseUrl() . $this->getUrl(0) . '/dataExport/filemanager/' . self::$i18nContent . '/' . $pagesInfos[$keyi18n][$keyPage]['moduleId'] . '/' . $keyPage,
 									// appel de fonction vaut exécution, utiliser un paramètre
 									'value' => template::ico('download-cloud'),
 									'help' => 'Sauvegarder les données du module dans le gestionnaire de fichiers'
 								]),
 								template::button('dataExport' . $keyPage, [
-									'href' => helper::baseUrl() . $this->getUrl(0) . '/dataExport/download/' . self::$siteContent . '/' . $pagesInfos[$keyi18n][$keyPage]['moduleId'] . '/' . $keyPage,
+									'href' => helper::baseUrl() . $this->getUrl(0) . '/dataExport/download/' . self::$i18nContent . '/' . $pagesInfos[$keyi18n][$keyPage]['moduleId'] . '/' . $keyPage,
 									// appel de fonction vaut exécution, utiliser un paramètre
 									'value' => template::ico('download'),
 									'help' => 'Sauvegarder et télécharger les données du module'
 								]),
 								template::button('dataDelete' . $keyPage, [
-									'href' => helper::baseUrl() . $this->getUrl(0) . '/dataDelete/' . self::$siteContent . '/' . $pagesInfos[$keyi18n][$keyPage]['moduleId'] . '/' . $keyPage,
+									'href' => helper::baseUrl() . $this->getUrl(0) . '/dataDelete/' . self::$i18nContent . '/' . $pagesInfos[$keyi18n][$keyPage]['moduleId'] . '/' . $keyPage,
 									// appel de fonction vaut exécution, utiliser un paramètre
 									'value' => template::ico('trash'),
 									'class' => 'buttonRed dataDelete',
@@ -603,7 +603,6 @@ class plugin extends common
 						mkdir(self::FILE_DIR . 'source/modules');
 					}
 					$success = copy($tmpFolder . $fileName, self::FILE_DIR . 'source/modules/' . $fileName);
-
 					// Valeurs en sortie
 					$this->addOutput([
 						'redirect' => helper::baseUrl() . 'plugin',
@@ -626,4 +625,5 @@ class plugin extends common
 			$this->deleteDir($tmpFolder);
 		}
 	}
+
 }
