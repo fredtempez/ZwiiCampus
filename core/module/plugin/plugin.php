@@ -12,6 +12,9 @@
  * @copyright Copyright (C) 2018-2023, Frédéric Tempez
  * @license CC Attribution-NonCommercial-NoDerivatives 4.0 International
  * @link http://zwiicms.fr/
+ *
+ * THIS MODULE MUST ONLY BE USE WITH ZWIILMS, NOT ZWIICMS
+ *
  */
 
 class plugin extends common
@@ -377,7 +380,7 @@ class plugin extends common
 					$store[$key]['category'],
 					'<a href="' . self::BASEURL_STORE . self::MODULE_STORE . $key . '" target="_blank" >' . $store[$key]['title'] . '</a>',
 					$store[$key]['version'],
-					helper::dateUTF8('%d %B %Y', $store[$key]['versionDate'], self::$i18nContent),
+					helper::dateUTF8('%d %B %Y', $store[$key]['versionDate'], self::$siteContent),
 					implode(' - ', $pageInfos),
 					template::button('moduleExport' . $key, [
 						'class' => $class,
@@ -403,7 +406,7 @@ class plugin extends common
 	{
 		$store = json_decode(helper::getUrlContents(self::BASEURL_STORE . self::MODULE_STORE . 'list'), true);
 		self::$storeItem = $store[$this->getUrl(2)];
-		self::$storeItem['fileDate'] = helper::dateUTF8('%d %B %Y', self::$storeItem['fileDate'], self::$i18nContent);
+		self::$storeItem['fileDate'] = helper::dateUTF8('%d %B %Y', self::$storeItem['fileDate'], self::$siteContent);
 		// Valeurs en sortie
 		$this->addOutput([
 			'title' => helper::translate('Module ' . self::$storeItem['title']),
@@ -417,16 +420,18 @@ class plugin extends common
 	public function index()
 	{
 
-		$i18nSites = [];
-		// Tableau des langues rédigées
-		foreach (self::$languages as $key => $value) {
+		$siteContent = [];
+		/**
+		 * Tableau des cours, cette partie est spécifique au LMS
+		 */
+		foreach ($this->getData(['course']) as $key => $value) {
 			// tableau des langues installées
 			if (
 				is_dir(self::DATA_DIR . $key)
 				&& file_exists(self::DATA_DIR . $key . '/page.json')
 				&& file_exists(self::DATA_DIR . $key . '/module.json')
 			) {
-				$i18nSites[$key] = $value;
+				$siteContent[$key] = $value['title'];
 			}
 		}
 
@@ -436,7 +441,7 @@ class plugin extends common
 		// Parcourir les langues du site traduit et recherche les modules affectés à des pages
 		$pagesInfos = [];
 
-		foreach ($i18nSites as $keyi18n => $valuei18n) {
+		foreach ($siteContent as $keyi18n => $valuei18n) {
 
 			// Clés moduleIds dans les pages de la langue
 			$pages = json_decode(file_get_contents(self::DATA_DIR . $keyi18n . '/page.json'), true);
@@ -456,7 +461,7 @@ class plugin extends common
 
 		// Recherche des modules orphelins dans toutes les langues
 		$orphans = $installed = array_flip(array_keys($infoModules));
-		foreach ($i18nSites as $keyi18n => $valuei18n) {
+		foreach ($siteContent as $keyi18n => $valuei18n) {
 			// Générer la liste des modules orphelins
 			foreach ($infoModules as $key => $value) {
 				// Supprimer les éléments affectés
@@ -521,7 +526,7 @@ class plugin extends common
 		if (
 			isset($pagesInfos)
 		) {
-			foreach ($i18nSites as $keyi18n => $valuei18n) {
+			foreach ($siteContent as $keyi18n => $valuei18n) {
 				if (isset($pagesInfos[$keyi18n])) {
 					foreach ($pagesInfos[$keyi18n] as $keyPage => $value) {
 						if (isset($infoModules[$pagesInfos[$keyi18n][$keyPage]['moduleId']])) {
@@ -531,19 +536,19 @@ class plugin extends common
 								$infoModules[$pagesInfos[$keyi18n][$keyPage]['moduleId']]['version'],
 								template::flag($keyi18n, '20px') . '&nbsp<a href ="' . helper::baseUrl() . $keyPage . '" target="_blank">' . $pagesInfos[$keyi18n][$keyPage]['title'] . ' (' . $keyPage . ')</a>',
 								template::button('dataExport' . $keyPage, [
-									'href' => helper::baseUrl() . $this->getUrl(0) . '/dataExport/filemanager/' . self::$i18nContent . '/' . $pagesInfos[$keyi18n][$keyPage]['moduleId'] . '/' . $keyPage,
+									'href' => helper::baseUrl() . $this->getUrl(0) . '/dataExport/filemanager/' . self::$siteContent . '/' . $pagesInfos[$keyi18n][$keyPage]['moduleId'] . '/' . $keyPage,
 									// appel de fonction vaut exécution, utiliser un paramètre
 									'value' => template::ico('download-cloud'),
 									'help' => 'Sauvegarder les données du module dans le gestionnaire de fichiers'
 								]),
 								template::button('dataExport' . $keyPage, [
-									'href' => helper::baseUrl() . $this->getUrl(0) . '/dataExport/download/' . self::$i18nContent . '/' . $pagesInfos[$keyi18n][$keyPage]['moduleId'] . '/' . $keyPage,
+									'href' => helper::baseUrl() . $this->getUrl(0) . '/dataExport/download/' . self::$siteContent . '/' . $pagesInfos[$keyi18n][$keyPage]['moduleId'] . '/' . $keyPage,
 									// appel de fonction vaut exécution, utiliser un paramètre
 									'value' => template::ico('download'),
 									'help' => 'Sauvegarder et télécharger les données du module'
 								]),
 								template::button('dataDelete' . $keyPage, [
-									'href' => helper::baseUrl() . $this->getUrl(0) . '/dataDelete/' . self::$i18nContent . '/' . $pagesInfos[$keyi18n][$keyPage]['moduleId'] . '/' . $keyPage,
+									'href' => helper::baseUrl() . $this->getUrl(0) . '/dataDelete/' . self::$siteContent . '/' . $pagesInfos[$keyi18n][$keyPage]['moduleId'] . '/' . $keyPage,
 									// appel de fonction vaut exécution, utiliser un paramètre
 									'value' => template::ico('trash'),
 									'class' => 'buttonRed dataDelete',
