@@ -37,7 +37,11 @@ tinymce.init({
 		table: {title: 'Table', items: 'inserttable tableprops deletetable | cell row column'},
 	},
 	// Contenu de la barre d'outils
-	toolbar: "ndo redo | bold italic strikethrough | h1 h2 h3 | alignleft aligncenter alignright alignjustify | link | bullist numlist | image media | fullscreen",
+	toolbar: [
+        "fontselect fontsizeselect formatselect | bold italic strikethrough forecolor backcolor",
+        "link image ImgPen media | alignleft aligncenter alignright alignjustify | " +
+        "numlist bullist | outdent indent removeformat"
+    ],
 	toolbar_sticky: true,
 	fontsize_formats:
 		"8pt 9pt 10pt 11pt 12pt 14pt 18pt 24pt 30pt 36pt 48pt 60pt 72pt 96pt",
@@ -88,7 +92,7 @@ tinymce.init({
 	// Pages internes
 	link_list: baseUrl + "core/vendor/tinymce/links.php",
 	// Contenu du menu contextuel
-	contextmenu: "exelink | inserttable | cell row column deletetable",
+	contextmenu: "inserttable | cell row column deletetable",
 	// Fichiers CSS à intégrer à l'éditeur
 	content_css: [
 		baseUrl + "core/layout/common.css",
