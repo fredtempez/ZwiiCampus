@@ -649,7 +649,7 @@
     "jour": "day",
     "jours": "days",
     "sauvegardé avec succès": "successfully saved",
-    "vers": "",
+    "vers": "to",
     "À droite": "Right",
     "À gauche": "Left",
     "À l'emplacement du mot clé [MODULE] dans la page": "At the location of the keyword [MODULE] on the page",
@@ -685,5 +685,8 @@
     "Flèche": "Arrow",
     "Modèle": "Template",
     "Bouton de navigation droit": "Right Navigation Button",
-    "Bouton de navigation gauche": "Left Navigation Button"
+    "Bouton de navigation gauche": "Left Navigation Button",
+    "Groupes / Profils": "Groups / Profiles",
+    "Prénom commence par": "First Name starts with",
+    "Nom commence par": "Last Name starts with"
 }
