@@ -421,19 +421,14 @@ class user extends common
 					null,
 					$this->getData(['config', 'smtp', 'from'])
 				);
-				// Valeurs en sortie
-				$this->addOutput([
-					'notification' => ($sent === true ? helper::translate('Un mail a été envoyé pour confirmer la réinitialisation') : $sent),
-					'state' => ($sent === true ? true : null)
-				]);
+
 			}
-			// L'utilisateur n'existe pas
-			else {
-				// Valeurs en sortie
-				$this->addOutput([
-					'notification' => helper::translate('Utilisateur inexistant')
-				]);
-			}
+			// L'utilisateur n'existe pas, on ne le précise pas
+			// Valeurs en sortie
+			$this->addOutput([
+				'notification' => helper::translate('Un mail a été envoyé pour confirmer la réinitialisation'),
+				'state' => ($sent === true ? true : null)
+			]);
 		}
 		// Valeurs en sortie
 		$this->addOutput([
@@ -1120,14 +1115,15 @@ class user extends common
 			// Id unique incorrecte
 			or $this->getUrl(3) !== md5(json_encode($this->getData(['user', $this->getUrl(2)])))
 		) {
-			$message[0] = ($this->getData(['user', $this->getUrl(2)]) === null) === true ?'Utilisateur inconnu':'';
-			$message[1] = ($this->getData(['user', $this->getUrl(2), 'forgot']) + 86400 < time()) === true ?'Temps dépassé':'';
-			$message[2] = ($this->getUrl(3) !== md5(json_encode($this->getData(['user', $this->getUrl(2)])))) === true ?'Id incorrect':'';
+			$message[0] = ($this->getData(['user', $this->getUrl(2)]) === null) === true ?'Utilisateur inexistant':'';
+			$message[1] = empty($message[0]) && ($this->getData(['user', $this->getUrl(2), 'forgot']) + 86400 < time()) === true ?'Temps dépassé':'';
+			$message[2] = empty($message[0]) && ($this->getUrl(3) !== md5(json_encode($this->getData(['user', $this->getUrl(2)])))) === true ?'Id incorrect':'';
 
 			// Valeurs en sortie
 			$this->addOutput([
-				'access' => false,
-				'notification' => implode (' | ', $message)
+				'redirect' => helper::baseurl(),
+				'state' => false,
+				'notification' => implode (' ', $message)
 			]);
 		}
 		// Accès autorisé
