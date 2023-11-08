@@ -1,5 +1,9 @@
 <?php $startRow = 0; ?>
 <?php foreach ($this->getData(['course']) as $courseId => $courseValue): ?>
+    <!-- Filtre de catégorie -->
+    <?php if ($courseValue['category'] !== $this->getData(['module', $this->getUrl(0), 'config', 'category'])):?>
+        <?php continue; ?>
+    <?php endif; ?>
     <?php if ($startRow === 0): ?>
         <div class="row  workshopRowContainer">
     <?php endif; ?>
