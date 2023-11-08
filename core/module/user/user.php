@@ -1134,7 +1134,7 @@ class user extends common
 		else {
 			// Soumission du formulaire
 			if (
-				// Tous les suers peuvent réinitialiser
+				// Tous les users peuvent réinitialiser
 				// $this->getUser('permission', __CLASS__, __FUNCTION__) === true &&
 				$this->isPost()
 			) {
