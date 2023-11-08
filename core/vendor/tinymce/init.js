@@ -7,40 +7,39 @@
 /**
  * Quand tinyMCE est invoqué hors connexion, initialiser privateKey
  */
-if (typeof (privateKey) == 'undefined') {
+if (typeof (privateKey) == "undefined") {
 	var privateKey = null;
 };
 tinymce.init({
-	// Classe où appliquer l'éditeur
+	// Classe où appliquer l"éditeur
 	selector: ".editorWysiwyg",
 	// Aperçu dans le pied de page
 	setup: function (ed) {
-		ed.on('change', function (e) {
-			if (ed.id === 'themeFooterText') {
-				$("#footerText").html(tinyMCE.get('themeFooterText').getContent());
+		ed.on("change", function (e) {
+			if (ed.id === "themeFooterText") {
+				$("#footerText").html(tinyMCE.get("themeFooterText").getContent());
 			}
-			if (ed.id === 'themeHeaderText') {
-				$("#featureContent").html(tinyMCE.get('themeHeaderText').getContent());
+			if (ed.id === "themeHeaderText") {
+				$("#featureContent").html(tinyMCE.get("themeHeaderText").getContent());
 			}
 
 		});
 	},
 	// Langue
-	language: getCookie('ZWII_UI') === null ? "fr_FR" : getCookie('ZWII_UI'),
+	language: getCookie("ZWII_UI") === null ? "fr_FR" : getCookie("ZWII_UI"),
 	// Plugins
 	plugins: "advlist anchor autolink autoresize autosave codemirror contextmenu colorpicker fullscreen hr image imagetools link lists media paste searchreplace tabfocus table template textcolor visualblocks nonbreaking emoticons charmap",
 	// Contenu du menu
 	menu: {
-		edit: {title: 'Edit', items: 'undo redo | selectall searchreplace | cut copy paste pastetext | style'},
-		insert: {title: 'Insert', items: 'template | nonbreaking hr charmap anchor | abbr insertdatetime '},
-		format: {title: 'Format', items: 'underline strikethrough superscript subscript | forecolor backcolor | formats | removeformat'},
-		table: {title: 'Table', items: 'inserttable tableprops deletetable | cell row column'},
+		edit: {title: "Edit", items: "undo redo | selectall searchreplace | cut copy paste pastetext | style"},
+		insert: {title: "Insert", items: "template | nonbreaking hr charmap anchor | abbr insertdatetime "},
+		format: {title: "Format", items: " bold underline strikethrough superscript subscript | | formats | removeformat"},
+		tools: { title: "Tools", items: ""},
+		table: {title: "Table", items: "inserttable tableprops deletetable | cell row column"},
 	},
 	// Contenu de la barre d'outils
 	toolbar: [
-        "fontselect fontsizeselect formatselect | bold italic strikethrough forecolor backcolor",
-        "link image ImgPen media | alignleft aligncenter alignright alignjustify | " +
-        "numlist bullist | outdent indent removeformat | fullscreen"
+		"undo redo | fontsizeselect | h1 h2 h3 |  alignleft aligncenter alignright alignjustify | bold forecolor backcolor| bullist numlist | link image media | outdent indent removeformat | fullscreen",
     ],
 	toolbar_sticky: true,
 	fontsize_formats:
@@ -50,7 +49,7 @@ tinymce.init({
 	// CodeMirror
 	codemirror: {
 		indentOnInit: true, // Whether or not to indent code on init.
-		path: 'codemirror', // Path to CodeMirror distribution
+		path: "codemirror", // Path to CodeMirror distribution
 		saveCursorPosition: false,    // Insert caret marker
 		config: {           // CodeMirror config object
 			fullscreen: true,
@@ -60,14 +59,14 @@ tinymce.init({
 			mode: "htmlmixed"
 		},
 		jsFiles: [
-			'mode/php/php.js',
-			'mode/css/css.js',
-			'mode/htmlmixed/htmlmixed.js',
-			'mode/htmlembedded/htmlembedded.js',
-			'mode/javascript/javascript.js',
-			'mode/xml/xml.js',
-			'addon/search/searchcursor.js',
-			'addon/search/search.js',
+			"mode/php/php.js",
+			"mode/css/css.js",
+			"mode/htmlmixed/htmlmixed.js",
+			"mode/htmlembedded/htmlembedded.js",
+			"mode/javascript/javascript.js",
+			"mode/xml/xml.js",
+			"addon/search/searchcursor.js",
+			"addon/search/search.js",
 		],
 		/*
 		cssFiles: [
