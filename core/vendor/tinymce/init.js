@@ -31,27 +31,41 @@ tinymce.init({
 	plugins: "advlist anchor autolink autoresize autosave codemirror contextmenu colorpicker fullscreen hr image imagetools link lists media paste searchreplace tabfocus table template textcolor visualblocks nonbreaking emoticons charmap",
 	// Contenu du menu
 	menu: {
-		edit: {title: "Edit", items: "undo redo | selectall searchreplace | cut copy paste pastetext | style"},
-		insert: {title: "Insert", items: "template | nonbreaking hr charmap anchor | abbr insertdatetime "},
-		format: {title: "Format", items: " bold underline strikethrough superscript subscript | | formats | removeformat"},
-		tools: { title: "Tools", items: ""},
-		table: {title: "Table", items: "inserttable tableprops deletetable | cell row column"},
+		edit: {
+			title: "Edit",
+			items: "undo redo | selectall searchreplace | cut copy paste pastetext"
+		},
+		insert: {
+			title: "Insert",
+			items: "template | nonbreaking hr charmap anchor"
+		},
+		format: {
+			title: "Format",
+			items: " bold underline strikethrough superscript subscript | | formats | removeformat"
+		},
+		tools: {
+			title: "Tools",
+			items: ""
+		},
+		table: {
+			title: "Table",
+			items: "inserttable tableprops deletetable | cell row column"
+		},
 	},
 	// Contenu de la barre d'outils
 	toolbar: [
 		"undo redo | fontsizeselect | h1 h2 h3 |  alignleft aligncenter alignright alignjustify | bold forecolor backcolor| bullist numlist | link image media | outdent indent removeformat | fullscreen",
-    ],
+	],
 	toolbar_sticky: true,
-	fontsize_formats:
-		"8pt 9pt 10pt 11pt 12pt 14pt 18pt 24pt 30pt 36pt 48pt 60pt 72pt 96pt",
+	fontsize_formats: "8pt 9pt 10pt 11pt 12pt 14pt 18pt 24pt 30pt 36pt 48pt 60pt 72pt 96pt",
 	theme: "silver",
 	max_height: 600,
 	// CodeMirror
 	codemirror: {
 		indentOnInit: true, // Whether or not to indent code on init.
 		path: "codemirror", // Path to CodeMirror distribution
-		saveCursorPosition: false,    // Insert caret marker
-		config: {           // CodeMirror config object
+		saveCursorPosition: false, // Insert caret marker
+		config: { // CodeMirror config object
 			fullscreen: true,
 			/*mode: 'application/x-httpd-php',*/
 			lineNumbers: true,
@@ -72,19 +86,32 @@ tinymce.init({
 		cssFiles: [
 			'theme/cobalt.css',
 		],*/
-		width: 800,         // Default value is 800
-		height: 500       // Default value is 550
+		width: 800, // Default value is 800
+		height: 500 // Default value is 550
 	},
 	// Cibles de la target
-	target_list: [
-		{ title: 'None', value: '' },
-		{ title: 'Nouvel onglet', value: '_blank' }
+	target_list: [{
+			title: 'None',
+			value: ''
+		},
+		{
+			title: 'Nouvel onglet',
+			value: '_blank'
+		}
 	],
 	// Target pour lightbox
-	rel_list: [
-		{ title: 'None', value: '' },
-		{ title: 'Une popup (Lity)', value: 'data-lity' },
-		{ title: 'Une galerie d\'images (SimpleLightbox)', value: 'gallery' }
+	rel_list: [{
+			title: 'None',
+			value: ''
+		},
+		{
+			title: 'Une popup (Lity)',
+			value: 'data-lity'
+		},
+		{
+			title: 'Une galerie d\'images (SimpleLightbox)',
+			value: 'gallery'
+		}
 	],
 	// Titre des image
 	image_title: true,
@@ -140,29 +167,57 @@ tinymce.init({
 	// Contenu du bouton insérer
 	insert_button_items: "anchor hr table",
 	// Contenu du bouton formats
-	style_formats: [
-		{
-			title: "Headers", items: [
-				{ title: "Header 1", format: "h1" },
-				{ title: "Header 2", format: "h2" },
-				{ title: "Header 3", format: "h3" },
-				{ title: "Header 4", format: "h4" },
-				{ title: "Header 5", format: "h5" },
-				{ title: "Header 6", format: "h6" }
+	style_formats: [{
+			title: "Headers",
+			items: [{
+					title: "Header 1",
+					format: "h1"
+				},
+				{
+					title: "Header 2",
+					format: "h2"
+				},
+				{
+					title: "Header 3",
+					format: "h3"
+				},
+				{
+					title: "Header 4",
+					format: "h4"
+				},
+				{
+					title: "Header 5",
+					format: "h5"
+				},
+				{
+					title: "Header 6",
+					format: "h6"
+				}
 			]
 		},
 		{
-			title: "Blocks", items: [
-				{ title: "Paragraph", format: "p" },
-				{ title: "Citation", format: "blockquote" },
-				{ title: "Div", format: "div" },
-				{ title: "Pre", format: "pre" }
+			title: "Blocks",
+			items: [{
+					title: "Paragraph",
+					format: "p"
+				},
+				{
+					title: "Citation",
+					format: "blockquote"
+				},
+				{
+					title: "Div",
+					format: "div"
+				},
+				{
+					title: "Pre",
+					format: "pre"
+				}
 			]
 		}
 	],
 	// Templates
-	templates: [
-		{
+	templates: [{
 			title: "Lien de retour",
 			url: baseUrl + "core/vendor/tinymce/templates/back_home.html",
 			description: "Insère un lien de retour à l'accueil de la plate-forme."
@@ -238,7 +293,9 @@ tinymce.init({
 		var id_alarm = "#blogArticleContentAlarm"
 		var contentLength = 0;
 		ed.on("keydown", function (e) {
-			contentLength = ed.getContent({ format: 'text' }).length;
+			contentLength = ed.getContent({
+				format: 'text'
+			}).length;
 			if (contentLength > maxlength) {
 				$(id_alarm).html("Vous avez atteint le maximum de " + maxlength + " caractères ! ");
 				if (e.keyCode != 8 && e.keyCode != 46) {
@@ -246,19 +303,19 @@ tinymce.init({
 					e.stopPropagation();
 					return false;
 				}
-			}
-			else {
+			} else {
 				if (maxlength - contentLength < alarmCaraMin) {
 					$(id_alarm).html((maxlength - contentLength) + " caractères restants");
-				}
-				else {
+				} else {
 					$(id_alarm).html(" ");
 				}
 			}
 		});
 		// Limitation y compris lors d'un copier/coller
 		ed.on("paste", function (e) {
-			contentLeng = ed.getContent({ format: 'text' }).length - 16;
+			contentLeng = ed.getContent({
+				format: 'text'
+			}).length - 16;
 			var data = e.clipboardData.getData('Text');
 			if (data.length > (maxlength - contentLeng)) {
 				$(id_alarm).html("Vous alliez dépasser le maximum de " + maxlength + " caractères ! ");
@@ -266,8 +323,7 @@ tinymce.init({
 			} else {
 				if (maxlength - contentLeng < alarmCaraMin) {
 					$(id_alarm).html((maxlength - contentLeng - data.length) + " caractères restants");
-				}
-				else {
+				} else {
 					$(id_alarm).html(" ");
 				}
 				return true;
