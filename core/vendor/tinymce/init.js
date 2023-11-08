@@ -40,7 +40,7 @@ tinymce.init({
 	toolbar: [
         "fontselect fontsizeselect formatselect | bold italic strikethrough forecolor backcolor",
         "link image ImgPen media | alignleft aligncenter alignright alignjustify | " +
-        "numlist bullist | outdent indent removeformat"
+        "numlist bullist | outdent indent removeformat | fullscreen"
     ],
 	toolbar_sticky: true,
 	fontsize_formats:
