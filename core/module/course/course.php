@@ -312,11 +312,13 @@ class course extends common
             self::$courseCategories[] = [
                 $categoryId,
                 $categoryTitle,
+                /**
                 template::button('categoryEdit' . $categoryId, [
                     'href' => helper::baseUrl() . 'course/categoryEdit/' . $categoryId,
                     'value' => template::ico('pencil'),
                     'help' => 'Éditer'
                 ]),
+                */
                 template::button('courseDelete' . $categoryId, [
                     'class' => 'categoryDelete buttonRed',
                     'href' => helper::baseUrl() . 'course/categoryDelete/' . $categoryId,

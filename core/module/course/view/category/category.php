@@ -16,7 +16,7 @@
 </div>
 
 <?php if($module::$courseCategories): ?>
-	<?php echo template::table([5,5,1,1], $module::$courseCategories, ['Id', 'Titre', '', '']); ?>
+	<?php echo template::table([5,6,1], $module::$courseCategories, ['Id', 'Titre', '']); ?>
 <?php else: ?>
 	<?php echo template::speech('Aucune catégorie'); ?>
 <?php endif; ?>
