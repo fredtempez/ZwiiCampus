@@ -265,9 +265,9 @@ class user extends common
 				if (
 					$this->isPost()
 				) {
+					$oldPassword = $this->getData(['user', $this->getUrl(2), 'password']);
 					// Double vérification pour le mot de passe
 					if ($this->getUser('group') < self::GROUP_ADMIN) {
-						$newPassword = $this->getData(['user', $this->getUrl(2), 'password']);						
 						if ($this->getInput('userEditNewPassword')) {
 							// L'ancien mot de passe est correct
 							if (password_verify(html_entity_decode($this->getInput('userEditOldPassword')), $this->getData(['user', $this->getUrl(2), 'password']))) {
@@ -287,7 +287,10 @@ class user extends common
 							}
 						}
 					} else {
-						if ($this->getInput('userEditNewPassword') === $this->getInput('userEditConfirmPassword')) {
+						if (
+							!empty($this->getInput('userEditNewPassword')) 
+							&&	$this->getInput('userEditNewPassword') === $this->getInput('userEditConfirmPassword')
+						) {
 							$newPassword = $this->getInput('userEditNewPassword', helper::FILTER_PASSWORD);
 							// Déconnexion de l'utilisateur si il change le mot de passe de son propre compte
 							if ($this->getUser('id') === $this->getUrl(2)) {
@@ -332,7 +335,7 @@ class user extends common
 							'pseudo' => $this->getInput('userEditPseudo', helper::FILTER_STRING_SHORT, true),
 							'signature' => $this->getInput('userEditSignature', helper::FILTER_INT, true),
 							'mail' => $this->getInput('userEditMail', helper::FILTER_MAIL, true),
-							'password' => $newPassword ? $newPassword : $this->getData(['user', $this->getUrl(2)], 'password'),
+							'password' => empty($newPassword) ? $oldPassword : $newPassword,
 							'connectFail' => $this->getData(['user', $this->getUrl(2), 'connectFail']),
 							'connectTimeout' => $this->getData(['user', $this->getUrl(2), 'connectTimeout']),
 							'accessUrl' => $this->getData(['user', $this->getUrl(2), 'accessUrl']),
@@ -1115,16 +1118,10 @@ class user extends common
 			// Id unique incorrecte
 			or $this->getUrl(3) !== md5(json_encode($this->getData(['user', $this->getUrl(2)])))
 		) {
-			
-			$message = ($this->getData(['user', $this->getUrl(2), 'forgot']) + 86400 < time()) === true ?'Temps dépassé':'';
-			$message = ($this->getUrl(3) !== md5(json_encode($this->getData(['user', $this->getUrl(2)])))) === true ?'Id incorrect':'';
-			$message = ($this->getData(['user', $this->getUrl(2)]) === null) === true ?'Utilisateur inconnu':'';
 
 			// Valeurs en sortie
 			$this->addOutput([
-				'redirect' => helper::baseUrl(),
-				'notification' => 'Invalide : '. $message,
-				'state' => false,
+				'access' => false
 			]);
 		}
 		// Accès autorisé
@@ -1154,8 +1151,7 @@ class user extends common
 					// Valeurs en sortie
 					$this->addOutput([
 						'notification' => helper::translate('Nouveau mot de passe enregistré'),
-						//'redirect' => helper::baseUrl() . 'user/login/' . str_replace('/', '_', $this->getUrl()),
-						'redirect' => helper::baseUrl(),
+						'redirect' => helper::baseUrl() . 'user/login/' . str_replace('/', '_', $this->getUrl()),
 						'state' => true
 					]);
 				}
