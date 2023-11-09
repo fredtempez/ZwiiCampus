@@ -1123,7 +1123,7 @@ class user extends common
 			// Valeurs en sortie
 			$this->addOutput([
 				'redirect' => helper::baseUrl(),
-				'notification' => 'Invalide : '. $message
+				'notification' => 'Invalide : '. $message,
 				'state' => false,
 			]);
 		}
