@@ -421,19 +421,14 @@ class user extends common
 					null,
 					$this->getData(['config', 'smtp', 'from'])
 				);
-				// Valeurs en sortie
-				$this->addOutput([
-					'notification' => ($sent === true ? helper::translate('Un mail a été envoyé pour confirmer la réinitialisation') : $sent),
-					'state' => ($sent === true ? true : null)
-				]);
+
 			}
-			// L'utilisateur n'existe pas
-			else {
-				// Valeurs en sortie
-				$this->addOutput([
-					'notification' => helper::translate('Utilisateur inexistant')
-				]);
-			}
+			// L'utilisateur n'existe pas, on ne le précise pas
+			// Valeurs en sortie
+			$this->addOutput([
+				'notification' => helper::translate('Un mail a été envoyé pour confirmer la réinitialisation'),
+				'state' => ($sent === true ? true : null)
+			]);
 		}
 		// Valeurs en sortie
 		$this->addOutput([
@@ -1129,6 +1124,7 @@ class user extends common
 			$this->addOutput([
 				'redirect' => helper::baseUrl(),
 				'notification' => 'Invalide : '. $message
+				'state' => false,
 			]);
 		}
 		// Accès autorisé

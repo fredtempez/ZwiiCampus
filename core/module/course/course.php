@@ -26,6 +26,7 @@ class course extends common
         'delete' => self::GROUP_ADMIN,
         'category' => self::GROUP_ADMIN,
         'categoryAdd' => self::GROUP_ADMIN,
+        'categoryEdit' => self::GROUP_ADMIN,
         'categoryDelete' => self::GROUP_ADMIN,
         'user' => self::GROUP_ADMIN,
         'userAdd' => self::GROUP_ADMIN,
@@ -312,13 +313,11 @@ class course extends common
             self::$courseCategories[] = [
                 $categoryId,
                 $categoryTitle,
-                /**
                 template::button('categoryEdit' . $categoryId, [
                     'href' => helper::baseUrl() . 'course/categoryEdit/' . $categoryId,
                     'value' => template::ico('pencil'),
                     'help' => 'Éditer'
                 ]),
-                */
                 template::button('courseDelete' . $categoryId, [
                     'class' => 'categoryDelete buttonRed',
                     'href' => helper::baseUrl() . 'course/categoryDelete/' . $categoryId,
@@ -360,6 +359,35 @@ class course extends common
         $this->addOutput([
             'title' => helper::translate('Ajouter une catégorie'),
             'view' => 'categoryAdd'
+        ]);
+    }
+
+    public function categoryEdit()
+    {
+
+        // Soumission du formulaire
+        if (
+            $this->getUser('permission', __CLASS__, __FUNCTION__) === true &&
+            $this->isPost()
+        ) {
+            $categoryId = $this->getUrl(2);
+            $this->setData([
+                'category',
+                $categoryId,
+                $this->getInput('categoryEditTitle', helper::FILTER_STRING_SHORT, true)
+            ]);
+            // Valeurs en sortie
+            $this->addOutput([
+                'redirect' => helper::baseUrl() . 'course/category',
+                'notification' => helper::translate('Catégorie éditée'),
+                'state' => true
+            ]);
+        }
+
+        // Valeurs en sortie
+        $this->addOutput([
+            'title' => helper::translate('Éditer une catégorie'),
+            'view' => 'categoryEdit'
         ]);
     }
 
