@@ -1014,6 +1014,8 @@ class common
 
 	public function updateSitemap()
 	{
+		// Le drapeau prend true quand au moins une page est trouvée
+		$flag = false;
 
 		// Rafraîchit la liste des pages après une modification de pageId notamment 
 		$this->buildHierarchy();
@@ -1057,6 +1059,7 @@ class common
 				// Cas de la page d'accueil ne pas dupliquer l'URL
 				$pageId = ($parentPageId !== $this->homePageId()) ? $parentPageId : '';
 				$sitemap->addUrl('/' . $pageId, $datetime);
+				$flag = true;
 			}
 			// Articles du blog
 			if (
@@ -1067,6 +1070,7 @@ class common
 					if ($this->getData(['module', $parentPageId, 'posts', $articleId, 'state']) === true) {
 						$date = $this->getData(['module', $parentPageId, 'posts', $articleId, 'publishedOn']);
 						$sitemap->addUrl('/' . $parentPageId . '/' . $articleId, new DateTime('@{$date}', new DateTimeZone($timezone)));
+						$flag = true;
 					}
 				}
 			}
@@ -1078,6 +1082,7 @@ class common
 				// Cas de la page d'accueil ne pas dupliquer l'URL
 				$pageId = ($childKey !== $this->homePageId()) ? $childKey : '';
 				$sitemap->addUrl('/' . $childKey, $datetime);
+				$flag = true;
 
 				// La sous-page est un blog
 				if (
@@ -1088,10 +1093,15 @@ class common
 						if ($this->getData(['module', $childKey, 'posts', $articleId, 'state']) === true) {
 							$date = $this->getData(['module', $childKey, 'posts', $articleId, 'publishedOn']);
 							$sitemap->addUrl('/' . $childKey . '/' . $articleId, new DateTime('@{$date}', new DateTimeZone($timezone)));
+							$flag = true;
 						}
 					}
 				}
 			}
+		}
+
+		if ($flag === false) {
+			return false;
 		}
 
 		// Flush all stored urls from memory to the disk and close all necessary tags.
@@ -1117,7 +1127,6 @@ class common
 		}
 
 		return (file_exists('sitemap.xml') && file_exists('robots.txt'));
-
 
 	}
 
