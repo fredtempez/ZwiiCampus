@@ -1120,21 +1120,22 @@ class user extends common
 			// Id unique incorrecte
 			or $this->getUrl(3) !== md5(json_encode($this->getData(['user', $this->getUrl(2)])))
 		) {
-			$message[0] = ($this->getData(['user', $this->getUrl(2)]) === null) === true ?'Utilisateur inconnu':'';
-			$message[1] = ($this->getData(['user', $this->getUrl(2), 'forgot']) + 86400 < time()) === true ?'Temps dépassé':'';
-			$message[2] = ($this->getUrl(3) !== md5(json_encode($this->getData(['user', $this->getUrl(2)])))) === true ?'Id incorrect':'';
+			
+			$message = ($this->getData(['user', $this->getUrl(2), 'forgot']) + 86400 < time()) === true ?'Temps dépassé':'';
+			$message = ($this->getUrl(3) !== md5(json_encode($this->getData(['user', $this->getUrl(2)])))) === true ?'Id incorrect':'';
+			$message = ($this->getData(['user', $this->getUrl(2)]) === null) === true ?'Utilisateur inconnu':'';
 
 			// Valeurs en sortie
 			$this->addOutput([
-				'access' => false,
-				'notification' => implode (' | ', $message)
+				'redirect' => helper::baseUrl(),
+				'notification' => 'Invalide : '. $message
 			]);
 		}
 		// Accès autorisé
 		else {
 			// Soumission du formulaire
 			if (
-				// Tous les suers peuvent réinitialiser
+				// Tous les users peuvent réinitialiser
 				// $this->getUser('permission', __CLASS__, __FUNCTION__) === true &&
 				$this->isPost()
 			) {
