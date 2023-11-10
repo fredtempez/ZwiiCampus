@@ -33,6 +33,7 @@ class course extends common
         'userDelete' => self::GROUP_ADMIN,
         'userDeleteAll' => self::GROUP_ADMIN,
         'userHistory' => self::GROUP_ADMIN,
+        'userHistoryExport' => self::GROUP_ADMIN,
     ];
 
     public static $courseAccess = [
@@ -189,8 +190,8 @@ class course extends common
 
         // Liste des cours disponibles pour la copie du thème
         self::$courses = $this->getData(['course']);
-        self::$courses = helper::arrayColumn(self::$courses, 'title', 'SORT_ASC'    );
-        self::$courses = array_merge(['home'=>'Accueil de la plate-forme'], self::$courses);
+        self::$courses = helper::arrayColumn(self::$courses, 'title', 'SORT_ASC');
+        self::$courses = array_merge(['home' => 'Accueil de la plate-forme'], self::$courses);
 
         // Valeurs en sortie
         $this->addOutput([
@@ -526,7 +527,7 @@ class course extends common
                 template::button('userDelete' . $userId, [
                     'class' => 'userDelete buttonRed',
                     'href' => helper::baseUrl() . 'course/userDelete/' . $courseId . '/' . $userId,
-                    'value' => template::ico('minus'),
+                    'value' => template::ico('trash'),
                     'help' => 'Désinscrire'
                 ])
             ];
@@ -676,7 +677,7 @@ class course extends common
                     //L'étudiant doit disposer d'un compte
                     if ($this->getUser('id')) {
                         $redirect = helper::baseUrl() . 'course/suscribe/' . $courseId;
-                    }  else {
+                    } else {
                         $message = helper::translate('Vous devez disposer d\'un compte pour accéder à ce cours ');
                         $state = false;
                     }
@@ -749,6 +750,80 @@ class course extends common
                 'datatables'
             ]
         ]);
+
+    }
+
+    public function userHistoryExport()
+    {
+
+
+        $courseId = $this->getUrl(2);
+
+        // Statistiques du cours sélectionné calcul du nombre de pages
+        $sumPages = 0;
+        $data = json_decode(file_get_contents(self::DATA_DIR . $courseId . '/page.json'), true);
+        // Exclure les barres et les pages masquées
+        foreach ($data['page'] as $pageId => $pageData) {
+            if ($pageData['position'] > 0) {
+                $sumPages++;
+                $pages[$pageId] = $pageData['title'];
+            }
+        }
+
+        // Liste des inscrits dans le cours sélectionné.
+        $users = $this->getData(['enrolment', $courseId]);
+
+        // Tri du tableau par défaut par $userId
+        ksort($users);
+
+        foreach ($users as $userId => $userValue) {
+            $history = $userValue['history'];
+
+            $maxTime = max($history);
+            $pageId = array_search($maxTime, $history);
+
+            // Taux de parcours
+            $viewPages = count($this->getData(['enrolment', $courseId, $userId, 'history']));
+
+            // Construction du tableau
+            self::$courseUsers[] = [
+                $userId,
+                $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
+                $pages[$pageId],
+                helper::dateUTF8('%d %B %Y - %H:%M', $maxTime),
+                round(($viewPages * 100) / $sumPages, 1)
+            ];
+
+            // Nom du fichier CSV
+            if (is_dir(self::FILE_DIR . 'source/export') === false) {
+                mkdir(self::FILE_DIR . 'source/export');
+            }
+
+            $filename = self::FILE_DIR . 'source/export/export_' .  helper::dateUTF8('%Y%m%d',time()) . '_' . $courseId . '.csv';
+
+            // Ouverture du fichier en écriture
+            $file = fopen($filename, 'w');
+
+            // Écriture des données dans le fichier
+            foreach (self::$courseUsers as $user) {
+                // Décode les entités HTML dans chaque élément du tableau
+                $decodedUser = array_map('html_entity_decode', $user);
+
+                // Écrire la ligne dans le fichier CSV
+                fputcsv($file, $decodedUser, ';');
+            }
+
+            // Fermeture du fichier
+            fclose($file);
+
+            // Valeurs en sortie
+            $this->addOutput([
+                'redirect' => helper::baseUrl(!helper::checkRewrite()) . 'course/user/' . $courseId,
+                'notification' => 'Création ' . basename ($filename) . ' dans le dossier "Export"',
+                'state' => true,
+            ]);
+
+        }
 
     }
 
