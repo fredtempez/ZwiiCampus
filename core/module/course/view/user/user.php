@@ -8,11 +8,10 @@
     </div>
     <div class="col1 offset9">
         <?php echo template::button('userDeleteAll', [
-            'href' => helper::baseUrl() . 'course/userHistoryExport/' . $this->getUrl(2),
+            'href' => helper::baseUrl() . 'course/usersHistoryExport/' . $this->getUrl(2),
             'value' => template::ico('download'),
             'help' => 'Exporter',
-        ])
-            ?>
+        ]) ?>
     </div>
     <div class="col1">
         <?php echo template::button('userDeleteAll', [
@@ -20,8 +19,7 @@
             'href' => helper::baseUrl() . 'course/userDeleteAll/' . $this->getUrl(2),
             'value' => template::ico('trash'),
             'help' => 'Désinscrire tous les utilisateurs',
-        ])
-            ?>
+        ])?>
     </div>
 </div>
 <?php echo template::formOpen('courseFilterUserForm'); ?>

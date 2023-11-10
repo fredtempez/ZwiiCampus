@@ -33,6 +33,7 @@ class course extends common
         'userDelete' => self::GROUP_ADMIN,
         'userDeleteAll' => self::GROUP_ADMIN,
         'userHistory' => self::GROUP_ADMIN,
+        'usersHistoryExport' => self::GROUP_ADMIN,
         'userHistoryExport' => self::GROUP_ADMIN,
     ];
 
@@ -76,7 +77,7 @@ class course extends common
         $courseIdShortTitle = helper::arrayColumn($this->getData(['course']), 'title');
         ksort($courseIdShortTitle);
         foreach ($courseIdShortTitle as $courseId => $courseTitle) {
-            $categorieUrl = helper::baseUrl(!helper::checkRewrite()) . 'course/suscribe/' . $courseId;
+            $categorieUrl = helper::baseUrl() . 'course/suscribe/' . $courseId;
             $authorId = $this->getData(['course', $courseId, 'author']);
             $author = sprintf('%s %s', $this->getData(['user', $authorId, 'firstname']), $this->getData(['user', $authorId, 'lastname']));
             $access = self::$courseAccess[$this->getData(['course', $courseId, 'access'])];
@@ -753,9 +754,8 @@ class course extends common
 
     }
 
-    public function userHistoryExport()
+    public function usersHistoryExport()
     {
-
 
         $courseId = $this->getUrl(2);
 
@@ -776,6 +776,17 @@ class course extends common
         // Tri du tableau par défaut par $userId
         ksort($users);
 
+        // Dossier temporaire
+        if (is_dir(self::FILE_DIR . 'source/export') === false) {
+            mkdir(self::FILE_DIR . 'source/export');
+        }
+        if (is_dir(self::FILE_DIR . 'source/export/' . $courseId) === false) {
+            mkdir(self::FILE_DIR . 'source/export/' . $courseId);
+        }
+        $path = self::FILE_DIR . 'source/export/';
+
+        $filename = $path . $courseId . '/synthèse' . helper::dateUTF8('%Y%m%d', time()) . '.csv';
+
         foreach ($users as $userId => $userValue) {
             $history = $userValue['history'];
 
@@ -794,17 +805,11 @@ class course extends common
                 round(($viewPages * 100) / $sumPages, 1)
             ];
 
-            // Nom du fichier CSV
-            if (is_dir(self::FILE_DIR . 'source/export') === false) {
-                mkdir(self::FILE_DIR . 'source/export');
-            }
-
-            $filename = self::FILE_DIR . 'source/export/export_' .  helper::dateUTF8('%Y%m%d',time()) . '_' . $courseId . '.csv';
-
+            // Synthèse des historiques
+            // ------------------------
             // Ouverture du fichier en écriture
             $file = fopen($filename, 'w');
 
-            // Écriture des données dans le fichier
             foreach (self::$courseUsers as $user) {
                 // Décode les entités HTML dans chaque élément du tableau
                 $decodedUser = array_map('html_entity_decode', $user);
@@ -812,18 +817,73 @@ class course extends common
                 // Écrire la ligne dans le fichier CSV
                 fputcsv($file, $decodedUser, ';');
             }
-
             // Fermeture du fichier
             fclose($file);
 
             // Valeurs en sortie
             $this->addOutput([
                 'redirect' => helper::baseUrl(!helper::checkRewrite()) . 'course/user/' . $courseId,
-                'notification' => 'Création ' . basename ($filename) . ' dans le dossier "Export"',
+                'notification' => 'Création ' . basename($filename) . ' dans le dossier "Export"',
                 'state' => true,
             ]);
 
         }
+
+    }
+
+    public function userHistoryExport()
+    {
+
+        $courseId = $this->getUrl(2);
+        $userId = $this->getUrl(3);
+        $history = $this->getData(['enrolment', $courseId, $userId]);
+        $data = json_decode(file_get_contents(self::DATA_DIR . $courseId . '/page.json'), true);
+        $data = $data['page'];
+
+        // Dossier temporaire
+        if (is_dir(self::FILE_DIR . 'source/export') === false) {
+            mkdir(self::FILE_DIR . 'source/export');
+        }
+        if (is_dir(self::FILE_DIR . 'source/export/' . $courseId) === false) {
+            mkdir(self::FILE_DIR . 'source/export/' . $courseId);
+        }
+        $path = self::FILE_DIR . 'source/export/';
+
+        $filename = $path . $courseId . '/' . $userId . '.csv';
+
+        // Exclure les barres et les pages masquées
+        $count = 0;
+        foreach ($data as $pageId => $pageData) {
+            if ($pageData['position'] > 0) {
+                $count++;
+                $pages[$pageId] = [
+                    'number' => $count,
+                    'title' => $pageData['title'],
+                ];
+            }
+        }
+        $file = fopen($filename, 'w');
+        foreach ($history['history'] as $pageId => $time) {
+            $data = array_map('html_entity_decode', array(
+                $pageId,
+                $pages[$pageId]['title'],
+                $pages[$pageId]['number'],
+                helper::dateUTF8('%d %B %Y - %H:%M:%S', $time),
+            ));
+
+            // Écrire la ligne dans le fichier CSV
+            fputcsv($file, $data, ';');
+        }
+        // Fermeture du fichier
+        fclose($file);
+
+        // Valeurs en sortie
+        $this->addOutput([
+            'redirect' => helper::baseUrl() . 'course/userHistory/' . $courseId . '/' . $userId,
+            'notification' => 'Création ' . basename($filename) . ' dans le dossier "Export"',
+            'state' => true,
+        ]);
+
 
     }
 
@@ -863,7 +923,7 @@ class course extends common
                         } else {
                             // Valeurs en sortie
                             $this->addOutput([
-                                'redirect' => helper::baseUrl(!helper::checkRewrite()) . 'course/suscribe/' . $courseId,
+                                'redirect' => helper::baseUrl() . 'course/suscribe/' . $courseId,
                                 'state' => false,
                                 'notification' => 'La clé est incorrecte'
                             ]);
