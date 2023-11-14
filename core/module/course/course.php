@@ -635,8 +635,7 @@ class course extends common
             && $this->courseIsAvailable($courseId)
         ) {
             // Récupérer la dernière page visitée par cet utilisateur si elle existe
-            if ($this->getData(['enrolment', $courseId, $userId, 'history']))
-                $maxTime = max($this->getData(['enrolment', $courseId, $userId, 'history']));
+            $maxTime = $this->getData(['enrolment', $courseId, $userId, 'history']) ? max($this->getData(['enrolment', $courseId, $userId, 'history'])) : null;
             if (is_int($maxTime)) {
                 $redirect = helper::baseUrl() . array_search($maxTime, $this->getData(['enrolment', $courseId, $userId, 'history']));
             } else {
