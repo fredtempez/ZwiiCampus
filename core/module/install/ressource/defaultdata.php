@@ -910,7 +910,7 @@ class init extends common
 			<p>Zwii Campus est un outil auteur destin&eacute; &agrave; mettre en ligne des contenus d\'enseignement pour des apprenants.</p>
 			<p>Les contenus d\'enseignement se pr&eacute;sentent comme des mini site Web. Le contenu des cours est librement personnalisable, dans la plupart des cas on utilisera un menu lat&eacute;ral et les pages disposeront de boutons de navigation.</p>
 			<p>Chaque cours disposent de modalit&eacute;s d\'ouverture :&nbsp;ouvert, ferm&eacute; et ouvert entre deux dates.</p>
-			<p>Et des modalit&eacute;s d\'acc&egrave;s :</p>
+			<p>Les modalit&eacute;s d\'acc&egrave;s sont vari&eacute;es:</p>
 			<ul>
 			<li>anonyme (ouvert &agrave; tous sans avoir &agrave; disposer de compte d\'acc&egrave;s),</li>
 			<li>avec inscription libre pour les d&eacute;tenteurs d\'un compte d\'acc&egrave;s,</li>
