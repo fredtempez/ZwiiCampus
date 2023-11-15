@@ -1046,7 +1046,10 @@ class layout extends common
                     'attr' => 'data-lity'
                 ]) . '</li>';
             }
-            if ($this->getUser('group') >= self::GROUP_ADMIN) {
+            if (
+                self::$siteContent === 'home'
+                && $this->getUser('group') >= self::GROUP_ADMIN
+            ) {
                 $rightItems .= '<li>' . template::ico('puzzle', [
                     'help' => 'Modules',
                     'href' => helper::baseUrl() . 'plugin'
@@ -1241,7 +1244,7 @@ class layout extends common
 
         // Trouver la clé de l'élément recherché
         $key = array_search($elementToFind, $hierarchy);
-        
+
         $previousPage = null;
         $nextPage = null;
         if ($key !== false) {
