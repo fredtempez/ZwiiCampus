@@ -57,7 +57,7 @@ class init extends common
 				'anonymousIp' => 2,
 				'captcha' => true,
 				'captchaStrong' => false,
-				"captchaType" => 'num',
+				'captchaType' => 'num',
 				'autoDisconnect' => true,
 				'showPassword' => true,
 				'redirectLogin' => true
@@ -194,17 +194,17 @@ class init extends common
 		],
 		'blacklist' => [],
 		'language' => [
-			"fr_FR" => [
-				"version" => 1066,
-				"date" => 1699354723
+			'fr_FR' => [
+				'version' => 1066,
+				'date' => 1699354723
 			],
-			"es" => [
-				"version" => 1066,
-				"date" => 1699354723
+			'es' => [
+				'version' => 1066,
+				'date' => 1699354723
 			],
-			"en_EN" => [
-				"version" => 1066,
-				"date" => 1699354723
+			'en_EN' => [
+				'version' => 1066,
+				'date' => 1699354723
 			]
 		],
 		'profil' => [
@@ -1004,8 +1004,8 @@ class init extends common
 				'targetBlank' => false,
 				'title' => 'Accueil',
 				'shortTitle' => 'Accueil',
-				'block' => '12',
-				'barLeft' => '',
+				'block' => '3-9',
+				'barLeft' => 'barre',
 				'barRight' => '',
 				'navLeft' => 'none',
 				'navRight' => 'none',
@@ -1016,6 +1016,39 @@ class init extends common
 				'extraPosition' => false,
 				'css' => '',
 				'js' => ''
+			],
+			'barre' => [
+				'typeMenu' => 'text',
+				'iconUrl' => '',
+				'disable' => false,
+				'content' => 'barre.html',
+				'hideTitle' => true,
+				'breadCrumb' => false,
+				'metaDescription' => '',
+				'metaTitle' => '',
+				'moduleId' => '',
+				'modulePosition' => 'bottom',
+				'parentPageId' => '',
+				'position' => 0,
+				'group' => 0,
+				'profil' => 0,
+				'targetBlank' => false,
+				'title' => 'Menu',
+				'shortTitle' => 'Menu',
+				'block' => 'bar',
+				'barLeft' => '',
+				'barRight' => '',
+				'navLeft' => 'none',
+				'navRight' => 'none',
+				'navTemplate' => 'dir',
+				'displayMenu' => 'parents',
+				'hideMenuSide' => false,
+				'hideMenuHead' => false,
+				'hideMenuChildren' => false,
+				'extraPosition' => false,
+				'css' => '',
+				'js' => ''
+
 			],
 		],
 		'theme' => [
@@ -1087,7 +1120,7 @@ class init extends common
 				'height' => '15px 10px',
 				'loginLink' => false,
 				'margin' => false,
-				'position' => 'site-second',
+				'position' => 'hide',
 				'textAlign' => 'left',
 				'textColor' => 'rgba(255, 255, 255, 1)',
 				'textTransform' => 'none',
@@ -1136,6 +1169,9 @@ class init extends common
 		'accueil' => [
 			'content' => '<h2>Bienvenue sur votre nouveau Cours !</h2>'
 		],
+		'barre' => [
+			'content' => ''
+		]
 	];
 
 }
