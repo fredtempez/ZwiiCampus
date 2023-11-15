@@ -16,7 +16,7 @@
 class workshop extends common
 {
 	const VERSION = '1.0';
-	const REALNAME = 'Liste des cours';
+	const REALNAME = 'Liste des contenus';
 	const DATADIRECTORY = ''; // Contenu localisé inclus par défaut (page.json et module.json)
 
 	public static $actions = [
@@ -29,11 +29,11 @@ class workshop extends common
 	];
 
 	public static $coursesLayout = [
-		12 => 'Un cours par ligne',
-		6 => 'Deux cours par ligne',
-		4 => 'Trois cours par ligne',
-		3 => 'Quatre cours par ligne',
-		2 => 'Six cours par ligne',
+		12 => 'Un contenu par ligne',
+		6 => 'Deux contenu par ligne',
+		4 => 'Trois contenu par ligne',
+		3 => 'Quatre contenu par ligne',
+		2 => 'Six contenu par ligne',
 	];
 
 	public static $coursesAccess = [];
@@ -58,7 +58,7 @@ class workshop extends common
 			"enrolguest" => "Anonyme",
 			"enrolself" => "Membres",
 			"enrolselfkey" => "Membres avec cl&eacute;",
-			"url" => "Acc&eacute;der au cours",
+			"url" => "Acc&eacute;der au contenu",
 			"unsuscribe" => "Me d&eacute;sinscrire"
 		)
 	];
@@ -117,7 +117,7 @@ class workshop extends common
 				'state' => true
 			]);
 		}
-		// Liste des catégories de cours
+		// Liste des catégories de contenu
 		self::$courseCategories = array_merge(self::$courseCategories, $this->getData(['category']));
 
 		// Valeurs en sortie

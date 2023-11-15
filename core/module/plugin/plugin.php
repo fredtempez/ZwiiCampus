@@ -422,7 +422,7 @@ class plugin extends common
 
 		$siteContent = ['home' => 'Accueil de la plate-forme'];
 		/**
-		 * Tableau des cours, cette partie est spécifique au LMS
+		 * Tableau des contenus, cette partie est spécifique au LMS
 		 */
 		foreach ($this->getData(['course']) as $key => $value) {
 			// tableau des langues installées

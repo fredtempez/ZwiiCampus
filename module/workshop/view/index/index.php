@@ -64,7 +64,7 @@
                 </p>
             <?php endif; ?>
 
-            <!-- Lien accès au cours-->
+            <!-- Lien accès au contenu-->
             <div class="row">
                 <div class="col6 workshopLinkContainer">
                     <?php if (

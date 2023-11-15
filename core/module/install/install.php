@@ -122,7 +122,7 @@ class install extends common
 				self::$i18nUI = $_SESSION['ZWII_UI'];
 				self::$i18nUI = array_key_exists(self::$i18nUI, self::$languages) ? self::$i18nUI : 'fr_FR';
 
-				// Création du dossier de cours avec le marqueur de langue par défaut
+				// Création du dossier de contenu avec le marqueur de langue par défaut
 				if (!is_dir(self::DATA_DIR . $_SESSION['ZWII_SITE_CONTENT'])) {
 					mkdir(self::DATA_DIR . $_SESSION['ZWII_SITE_CONTENT']);
 					touch(self::DATA_DIR . $_SESSION['ZWII_SITE_CONTENT'] . '/.default');

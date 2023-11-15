@@ -47,7 +47,7 @@
                         <?php echo template::select('configLocaleHomePageId', helper::arrayColumn($module::$pagesList, 'title', 'SORT_ASC'), [
                             'label' => 'Page d\'accueil de la plate-forme',
                             'selected' => $this->homePageId(),
-                            'help' => 'Ce n\'est pas la page d\'accueil d\'un cours.'
+                            'help' => 'Ce n\'est pas la page d\'accueil d\'un contenu.'
                         ]); ?>
                     </div>
                     <div class="col4">
@@ -129,8 +129,8 @@
                 <div class="row">
                     <div class="col4 offset2">
                         <?php echo template::text('configLocaleSitemapPageLabel', [
-                            'label' => 'Plan du cours',
-                            'placeholder' => 'Plan du cours',
+                            'label' => 'Plan du contenu',
+                            'placeholder' => 'Plan du contenu',
                             'value' => $this->getData(['config', 'sitemapPageLabel']),
                         ]); ?>
                     </div>

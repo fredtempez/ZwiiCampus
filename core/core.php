@@ -59,7 +59,7 @@ class common
 	// Valeurs possibles multiple de 10, 10 autorise 9 profils, 100 autorise 99 profils
 	const MAX_PROFILS = 10;
 
-	// Constantes pour les cours
+	// Constantes pourles contenus
 
 	// Modalités d'ouverture
 	const COURSE_ACCESS_OPEN = 0;
@@ -340,7 +340,7 @@ class common
 		foreach ($this->configFiles as $module => $value) {
 			$this->initDB($module);
 		}
-		// Les fichiers des cours
+		// Les fichiers des contenus
 		foreach ($this->contentFiles as $module => $value) {
 			$this->initDB($module, self::$siteContent);
 		}
@@ -389,7 +389,7 @@ class common
 			}
 			$_SESSION['ZWII_UI'] = self::$i18nUI;
 		}
-		// Stocker le cookie de langue pour l'éditeur de texte ainsi que l'url du cours pour le theme
+		// Stocker le cookie de langue pour l'éditeur de texte ainsi que l'url du contenu pour le theme
 		setcookie('ZWII_UI', self::$i18nUI, time() + 3600, helper::baseUrl(false, false), '', false, false);
 		setcookie('ZWII_SITE_CONTENT', self::$siteContent, time() + 3600, helper::baseUrl(false, false), '', false, false);
 		setlocale(LC_ALL, self::$i18nUI);
@@ -626,7 +626,7 @@ class common
 	}
 
 	/**
-	 * Initialisation des données sur un cours ou la page d'accueil
+	 * Initialisation des données sur un contenu ou la page d'accueil
 	 * @param string $course : id du module à générer
 	 * @param string $path : le dossier à créer
 	 * Données valides : page ou module
@@ -817,7 +817,7 @@ class common
 			'value' => $rewrite . 'search'
 		];
 		$children[] = [
-			'title' => 'Plan du cours',
+			'title' => 'Plan du contenu',
 			'value' => $rewrite . 'sitemap'
 		];
 		$parents[] = [
@@ -1413,10 +1413,10 @@ class common
 		}
 	}
 
-	// Fonctions pour la gestion des cours
+	// Fonctions pour la gestion des contenus
 
 	/**
-	 * Retourne les cours d'un utilisateur
+	 * Retourneles contenus d'un utilisateur
 	 * @param string $userId identifiant
 	 * @param string $serStatus teacher ou student ou admin
 	 */

@@ -302,7 +302,7 @@ class layout extends common
         // Affichage du sitemap
         $items .= '<span id="footerDisplaySiteMap"';
         $items .= $this->getData(['theme', 'footer', 'displaySiteMap']) === false ? ' class="displayNone"' : '';
-        $label = ($this->getData(['config', 'sitemapPageLabel']) === 'none') ? 'Plan du cours' : $this->getData(['config', 'sitemapPageLabel']);
+        $label = ($this->getData(['config', 'sitemapPageLabel']) === 'none') ? 'Plan du contenu' : $this->getData(['config', 'sitemapPageLabel']);
         $items .= '><wbr>&nbsp;|&nbsp;<a href="' . helper::baseUrl() . 'sitemap"  >' . $label . '</a>';
         $items .= '</span>';
         // Affichage du module de recherche
@@ -893,11 +893,11 @@ class layout extends common
         if ($this->getUser('password') === $this->getInput('ZWII_USER_PASSWORD')) {
             // Items de gauche
             $leftItems = '';
-            // Sélecteur de cours
+            // Sélecteur de contenu
             /**
-             * Les admins voient tous les cours
-             * Les enseignants les cours dont ils sont auteurs
-             * Les étudiants les cours dans lesquels ils sont inscrits
+             * Les admins voient tousles contenus
+             * Les enseignantsles contenus dont ils sont auteurs
+             * Les étudiantsles contenus dans lesquels ils sont inscrits
              */
             if ($this->getUser('group') >= self::GROUP_EDITOR) {
                 if ($this->getCoursesByUser($this->getUser('id'), $this->getUser('group'))) {
@@ -909,11 +909,11 @@ class layout extends common
                     $leftItems .= '</select></li>';
                 }
             }
-            // Bouton Gérer les cours
+            // Bouton Gérerles contenus
             if ($this->getUser('group') >= self::GROUP_ADMIN) {
                 $leftItems .= '<li>' . template::ico('cubes', [
                     'href' => helper::baseUrl() . 'course',
-                    'help' => 'Cours'
+                    'help' => 'Contenu'
                 ]) . '</li>';
                 $leftItems .= '<li>' . template::ico('brush', [
                     'help' => 'Thème',

@@ -493,7 +493,7 @@ class core extends common
 			$this->getUser('id')
 			&& self::$siteContent !== 'home'
 			&& in_array($this->getUrl(0), array_keys($this->getData(['page'])))
-			// Le userId n'est pas celui d'un admis ni le prof du cours
+			// Le userId n'est pas celui d'un admis ni le prof du contenu
 			&& (
 				$this->getUser('group') < self::GROUP_ADMIN
 				|| $this->getUser('id') !== $this->getData(['course', self::$siteContent, 'author'])

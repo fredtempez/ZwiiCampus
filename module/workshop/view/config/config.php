@@ -77,7 +77,7 @@
 					<?php echo template::select('coursesConfigLayout', $module::$coursesLayout, [
 						'label' => 'Présentation en colonnes',
 						'selected' => $this->getData(['module', $this->getUrl(0), 'config', 'layout']),
-						'help' => 'Chaque cours est présenté dans une colonne'
+						'help' => 'Chaque contenu est présenté dans une colonne'
 					]); ?>
 				</div>
 			</div>
@@ -96,7 +96,7 @@
 	<div class="col12">
 		<div class="block">
 			<h4>
-				<?php echo helper::translate('Étiquettes  : disponibilité du cours'); ?>
+				<?php echo helper::translate('Étiquettes  : disponibilité du contenu'); ?>
 			</h4>
 			<div class="row">
 				<div class="col4">
@@ -152,7 +152,7 @@
 			<div class="row">
 				<div class="col4">
 					<?php echo template::text('coursesCaptionUrl', [
-						'label' => 'Lien vers le cours',
+						'label' => 'Lien vers le contenu',
 						'value' => $this->getData(['module', $this->getUrl(0), 'caption', 'url']),
 						'help' => 'Classe CSS de la division : workshopSuscribe'
 					]); ?>

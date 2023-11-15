@@ -10,7 +10,7 @@
 		<?php echo template::button('courseCategory', [
 			'href' => helper::baseUrl() . 'course/category',
 			'value' => template::ico('table'),
-			'help' => 'Catégories de cours'
+			'help' => 'Catégories de contenu'
 		]); ?>
 	</div>
     <div class="col1 ">
@@ -24,5 +24,5 @@
 <?php if($module::$courses): ?>
 	<?php echo template::table([2, 2, 2, 3, 1, 1, 1], $module::$courses, ['Titre court', 'Auteur', 'Description', 'Lien direct', '', '', ''], ['id' => 'dataTables']); ?>
 <?php else: ?>
-	<?php echo template::speech('Aucun Cours'); ?>
+	<?php echo template::speech('Aucun Contenu'); ?>
 <?php endif; ?>

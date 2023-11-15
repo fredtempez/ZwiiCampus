@@ -17,7 +17,7 @@ $(document).ready(function () {
      */
     $(".courseDelete").on("click", function () {
         var _this = $(this);
-        var message = "<?php echo helper::translate('Supprimer ce cours ?'); ?>";
+        var message = "<?php echo helper::translate('Supprimer ce contenu ?'); ?>";
         return core.confirm(message, function () {
             $(location).attr("href", _this.attr("href"));
         });
