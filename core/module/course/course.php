@@ -110,7 +110,7 @@ class course extends common
 
         // Valeurs en sortie
         $this->addOutput([
-            'title' => helper::translate('Contenu'),
+            'title' => helper::translate('Contenus disponibles'),
             'view' => 'index',
             'vendor' => [
                 'datatables'
