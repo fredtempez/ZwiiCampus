@@ -260,7 +260,6 @@ class suscribe extends common
 			}
 			// Si tout est ok
 			if ($check === true) {
-				$auth = uniqid();
 				//  Enregistrement temporaire du compte 
 				$this->setData([
 					'module',
@@ -304,7 +303,7 @@ class suscribe extends common
 
 				// Mail de confirmation à l'utilisateur
 				// forger le lien de vérification
-				$validateLink = helper::baseUrl(true) . $this->getUrl() . '/validate/' . $userId . '/' . $auth;
+				$validateLink = helper::baseUrl(true) . $this->getUrl() . '/validate/' . $userId . '/' . $_SESSION['csrf'];
 				// Envoi
 				$sentMailtoUser = false;
 				if ($check === true) {
@@ -346,27 +345,30 @@ class suscribe extends common
 		$csrf = $this->getUrl(3);
 		$userId = $this->getUrl(2);
 		// Validité
-		if (time() - $this->getData(['user', $userId, 'timer']) <= (60 * $this->getdata(['module', $this->getUrl(0), 'config', 'pageTimeOut']))) {
+		if (time() - $this->getData(['module', $this->getUrl(0), 'user', $userId, 'timer']) <= (60 * $this->getdata(['module', $this->getUrl(0), 'config', 'pageTimeOut']))) {
 			$check = false;
 			$notification = 'Le lien n\'est plus valide';
 		}
-		if (($csrf !== $this->getData(['user', $userId, 'auth']))) {
+		if (($csrf !== $_SESSION['csrf'])) {
 			$check = false;
 			$notification = 'Identifiant ou mot de passe inconnu';
 		}
+
 		if ($check) {
 			$this->setData([
 				'user',
 				$userId,
 				[
-					'firstname' => $this->getData(['user', $userId, 'firstname']),
-					'lastname' => $this->getData(['user', $userId, 'lastname']),
-					'mail' => $this->getData(['user', $userId, 'mail']),
-					'password' => $this->getData(['user', $userId, 'password']),
-					'group' => $this->getdata(['module', $this->getUrl(0), 'config', 'state']) === true ? self::STATUS_VALIDATED : self::GROUP_MEMBER,
+					'firstname' => $this->getData(['module', $this->getUrl(0), 'user', $userId, 'firstname']),
+					'lastname' => $this->getData(['module', $this->getUrl(0), 'user', $userId, 'lastname']),
+					'mail' => $this->getData(['module', $this->getUrl(0), 'user', $userId, 'mail']),
+					'password' => $this->getData(['module', $this->getUrl(0), 'user', $userId, 'password']),
+					'group' => self::GROUP_MEMBER,
 					'profil' => 1,
 					'forgot' => 0,
-					'timer' => $this->getData(['user', $userId, 'timer'])
+					'pseudo' => $userId,
+					'signature' => 1,
+					'language' => self::$siteContent,
 				]
 			]);
 		}
