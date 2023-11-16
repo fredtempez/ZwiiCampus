@@ -885,11 +885,13 @@ class core extends common
 		}
 		if ($access === false) {
 			// Bascule sur le site d'accueil
+			/*
 			if ($_SESSION['ZWII_SITE_CONTENT'] !== 'home') {
 				$_SESSION['ZWII_SITE_CONTENT'] = 'home';
 				header('Location:' . helper::baseUrl() . $this->getUrl());
 				exit();
 			}
+			*/
 			http_response_code(403);
 			if ($accessInfo['userName']) {
 				$this->addOutput([
@@ -912,11 +914,12 @@ class core extends common
 			}
 		} elseif ($this->output['content'] === '') {
 			// Bascule sur le site d'accueil pour afficher la page d'erreur
+			/*
 			if ($_SESSION['ZWII_SITE_CONTENT'] !== 'home') {
 				$_SESSION['ZWII_SITE_CONTENT'] = 'home';
 				header('Location:' . helper::baseUrl() . $this->getUrl());
 				exit();
-			}
+			}*/
 			http_response_code(404);
 			if (
 				$this->getData(['config', 'page404']) !== 'none'
