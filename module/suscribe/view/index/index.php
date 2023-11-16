@@ -62,14 +62,6 @@
 				</div>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col12">
-				<?php echo template::hidden('registrationAddTimer', [
-					'value' => time()
-				]);
-				?>
-			</div>
-		</div>
 	</div>
 	<div class="row">
 		<div class="col2 offset8">
