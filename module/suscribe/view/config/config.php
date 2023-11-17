@@ -29,7 +29,7 @@
                 <div class="col6">
                     <?php echo template::select('registrationConfigTimeOut',  $module::$timeLimit , [
                         'label' => 'Validité du lien',
-                        'selected' => $this->getData(['module','registration',$this->getUrl(0),'config','timeOut'])
+                        'selected' => $this->getData(['module',$this->getUrl(0),'config','timeOut'])
                     ]); ?>
                 </div>
             </div>
@@ -37,13 +37,13 @@
                 <div class="col6">
                     <?php echo template::select('registrationConfigSuccess', helper::arraycollumn($this->getData(['page']), 'title', 'SORT_ASC'), [
                         'label' => 'Redirection après confirmation',
-                        'selected' => $this->getData(['module','registration',$this->getUrl(0),'config','pageSuccess'])
+                        'selected' => $this->getData(['module',$this->getUrl(0),'config','pageSuccess'])
                     ]); ?>
                 </div>
                 <div class="col6">
                     <?php echo template::select('registrationConfigError', helper::arraycollumn($this->getData(['page']), 'title', 'SORT_ASC'), [
                         'label' => 'Redirection après erreur',
-                        'selected' => $this->getData(['module','registration',$this->getUrl(0),'config','pageError'])
+                        'selected' => $this->getData(['module',$this->getUrl(0),'config','pageError'])
                     ]); ?>
                 </div>
             </div>
@@ -52,7 +52,7 @@
                     <?php $messageDefault = '<p>Confirmez votre inscription en cliquant sur ce lien dans les ... minutes.</p>'; ?>
                     <?php echo template::textarea('registrationconfigMailRegisterContent', [
                             'label' => 'Corps du mail de confirmation',
-                            'value' => !empty($this->getData(['module','registration',$this->getUrl(0),'config','mailRegisterContent'])) ? $this->getData(['module','registration',$this->getUrl(0),'config','mailRegisterContent']) : $messageDefault,
+                            'value' => !empty($this->getData(['module',$this->getUrl(0),'config','mailRegisterContent'])) ? $this->getData(['module',$this->getUrl(0),'config','mailRegisterContent']) : $messageDefault,
                             'class' => 'editorWysiwyg',
                             'help' => 'Précisez la durée de validité. Le lien sera inséré après ces explications.'
                         ]); ?>
@@ -61,7 +61,7 @@
             <div class="row">
                 <div class="col6 verticalAlignMiddle">
                     <?php echo template::checkbox('registrationConfigState', true, 'Approbation préalable', [
-                        'checked' => $this->getData(['module','registration',$this->getUrl(0),'config','state']),
+                        'checked' => $this->getData(['module',$this->getUrl(0),'config','approval']),
                         'help' => 'Les comptes sont inactifs tant que les inscriptions ne sont pas approuvées par un administrateur.',
                         'check' => true
                         ]); ?>
@@ -72,7 +72,7 @@
                 <?php $messageDefault = '<p>Votre inscription a été approuvée par un administrateur.</p>'; ?>
                     <?php echo template::textarea('registrationconfigMailValidateContent', [
                         'label' => 'Corps du mail d\'approbation',
-                        'value' =>!empty($this->getData(['module','registration',$this->getUrl(0),'config','mailValidateContent'])) ? $this->getData(['module','registration',$this->getUrl(0),'config','mailValidateContent']) : $messageDefault,
+                        'value' =>!empty($this->getData(['module',$this->getUrl(0),'config','mailValidateContent'])) ? $this->getData(['module',$this->getUrl(0),'config','mailValidateContent']) : $messageDefault,
                         'class' => 'editorWysiwyg'
                         ]); ?>
                 </div>
