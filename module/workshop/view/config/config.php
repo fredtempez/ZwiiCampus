@@ -165,6 +165,15 @@
 					]); ?>
 				</div>
 			</div>
+			<div class="row">
+				<div class="col4">
+					<?php echo template::text('coursesCaptionEnrolmentLimit', [
+						'label' => 'Limitation date inscription',
+						'value' => $this->getData(['module', $this->getUrl(0), 'caption', 'enrolmentLimit']),
+						'help' => 'Classe CSS de la division : workshopEnrolmentLimit'
+					]); ?>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

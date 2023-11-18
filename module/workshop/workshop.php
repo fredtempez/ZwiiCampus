@@ -41,25 +41,26 @@ class workshop extends common
 	public static $coursesEnrolment = [];
 
 	public static $default = [
-		"config" => array(
-			"category" => "general",
-			"title" => true,
-			"author" => true,
-			"description" => true,
-			"access" => true,
-			"enrolment" => true,
-			"layout" => 6,
-			"template" => true
+		'config' => array(
+			'category' => 'general',
+			'title' => true,
+			'author' => true,
+			'description' => true,
+			'access' => true,
+			'enrolment' => true,
+			'layout' => 6,
+			'template' => true
 		),
-		"caption" => array(
-			"accessopen" => "Ouvert",
-			"accessdate" => "P&eacute;riode d&#039;ouverture du %s au %s",
-			"accessclose" => "Ferm&eacute;",
-			"enrolguest" => "Anonyme",
-			"enrolself" => "Membres",
-			"enrolselfkey" => "Membres avec cl&eacute;",
-			"url" => "Acc&eacute;der au contenu",
-			"unsuscribe" => "Me d&eacute;sinscrire"
+		'caption' => array(
+			'accessopen' => 'Ouvert',
+			'accessdate' => 'P&eacute;riode d&#039;ouverture du %s au %s',
+			'accessclose' => 'Ferm&eacute;',
+			'enrolguest' => 'Anonyme',
+			'enrolself' => 'Membres',
+			'enrolselfkey' => 'Membres avec cl&eacute;',
+			'url' => 'Acc&eacute;der au contenu',
+			'unsuscribe' => 'Me d&eacute;sinscrire',
+			'enrolmentLimit' => 'Date limite des inscriptions',
 		)
 	];
 
@@ -71,7 +72,7 @@ class workshop extends common
 
 		// Contrôle de la configuration par défaut
 		$this->update();
-		
+
 		// Soumission du formulaire
 		if (
 			$this->getUser('permission', __CLASS__, __FUNCTION__) === true &&
@@ -108,6 +109,7 @@ class workshop extends common
 					'enrolselfkey' => $this->getInput('coursesCaptionSelfKey', helper::FILTER_STRING_SHORT),
 					'url' => $this->getInput('coursesCaptionUrl', helper::FILTER_STRING_SHORT),
 					'unsuscribe' => $this->getInput('coursesCaptionUnsuscribe', helper::FILTER_STRING_SHORT),
+					'enrolmentLimit' => $this->getInput('coursesCaptionEnrolmentLimit', helper::FILTER_STRING_SHORT),
 				]
 			]);
 			// Valeurs en sortie
