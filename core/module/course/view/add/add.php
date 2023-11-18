@@ -86,6 +86,19 @@
                     ]); ?>
                 </div>
             </div>
+            <div class="row">
+                <div class="col4">
+                    <?php echo template::checkbox('courseAddEnrolmentLimit', true, 'Date de fin d\'inscription', [
+                        'help' => 'Ne s\'applique pas à l\'inscription anonyme',
+                    ]); ?>
+                </div>
+                <div class="col4">
+                    <?php echo template::date('courseAddEnrolmentLimitDate', [
+                        'type' => 'datetime-local',
+                        'label' => 'Fermeture',
+                    ]); ?>
+                </div>
+            </div>
         </div>
     </div>
     <?php echo template::formClose(); ?>

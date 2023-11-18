@@ -162,6 +162,8 @@ class course extends common
                     'closingDate' => $this->getInput('courseAddClosingDate', helper::FILTER_DATETIME),
                     'enrolment' => $this->getInput('courseAddEnrolment', helper::FILTER_INT),
                     'enrolmentKey' => $this->getInput('courseAddEnrolmentKey'),
+                    'limitEnrolment' => $this->getInput('courseAddEnrolmentLimit', helper::FILTER_BOOLEAN),
+                    'limitEnrolmentDate' => $this->getInput('courseAddEnrolmentLimitDate', helper::FILTER_DATETIME),
                 ]
             ]);
 
@@ -227,6 +229,8 @@ class course extends common
                     'closingDate' => $this->getInput('courseClosingDate', helper::FILTER_DATETIME),
                     'enrolment' => $this->getInput('courseEditEnrolment', helper::FILTER_INT),
                     'enrolmentKey' => $this->getInput('courseEditEnrolmentKey'),
+                    'limitEnrolment' => $this->getInput('courseEditEnrolmentLimit', helper::FILTER_BOOLEAN),
+                    'limitEnrolmentDate' => $this->getInput('courseEditEnrolmentLimitDate', helper::FILTER_DATETIME),
                 ]
             ]);
 
@@ -863,12 +867,15 @@ class course extends common
         }
         $file = fopen($filename, 'w');
         foreach ($history['history'] as $pageId => $time) {
-            $data = array_map('html_entity_decode', array(
-                $pageId,
-                $pages[$pageId]['title'],
-                $pages[$pageId]['number'],
-                helper::dateUTF8('%d %B %Y - %H:%M:%S', $time),
-            ));
+            $data = array_map(
+                'html_entity_decode',
+                array(
+                    $pageId,
+                    $pages[$pageId]['title'],
+                    $pages[$pageId]['number'],
+                    helper::dateUTF8('%d %B %Y - %H:%M:%S', $time),
+                )
+            );
 
             // Écrire la ligne dans le fichier CSV
             fputcsv($file, $data, ';');
