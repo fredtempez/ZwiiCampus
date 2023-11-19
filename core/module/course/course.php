@@ -20,21 +20,21 @@ class course extends common
         'swap' => self::GROUP_VISITOR,
         'suscribe' => self::GROUP_VISITOR,
         'unsuscribe' => self::GROUP_MEMBER,
-        'index' => self::GROUP_ADMIN,
-        'edit' => self::GROUP_ADMIN,
+        'index' => self::GROUP_EDITOR,
+        'edit' => self::GROUP_EDITOR,
         'add' => self::GROUP_ADMIN,
         'delete' => self::GROUP_ADMIN,
         'category' => self::GROUP_ADMIN,
         'categoryAdd' => self::GROUP_ADMIN,
         'categoryEdit' => self::GROUP_ADMIN,
         'categoryDelete' => self::GROUP_ADMIN,
-        'user' => self::GROUP_ADMIN,
-        'userAdd' => self::GROUP_ADMIN,
-        'userDelete' => self::GROUP_ADMIN,
-        'userDeleteAll' => self::GROUP_ADMIN,
-        'userHistory' => self::GROUP_ADMIN,
-        'usersHistoryExport' => self::GROUP_ADMIN,
-        'userHistoryExport' => self::GROUP_ADMIN,
+        'user' => self::GROUP_EDITOR,
+        'userAdd' => self::GROUP_EDITOR,
+        'userDelete' => self::GROUP_EDITOR,
+        'userDeleteAll' => self::GROUP_EDITOR,
+        'userHistory' => self::GROUP_EDITOR,
+        'usersHistoryExport' => self::GROUP_EDITOR,
+        'userHistoryExport' => self::GROUP_EDITOR,
     ];
 
     public static $courseAccess = [
@@ -74,38 +74,40 @@ class course extends common
 
     public function index()
     {
-        $courseIdShortTitle = helper::arrayColumn($this->getData(['course']), 'title');
-        ksort($courseIdShortTitle);
-        foreach ($courseIdShortTitle as $courseId => $courseTitle) {
-            $categorieUrl = helper::baseUrl() . 'course/suscribe/' . $courseId;
-            $authorId = $this->getData(['course', $courseId, 'author']);
-            $author = sprintf('%s %s', $this->getData(['user', $authorId, 'firstname']), $this->getData(['user', $authorId, 'lastname']));
-            $access = self::$courseAccess[$this->getData(['course', $courseId, 'access'])];
-            $enrolment = self::$courseEnrolment[$this->getData(['course', $courseId, 'enrolment'])];
-            $description = sprintf('%s<br />%s<br />%s<br />', $this->getData(['course', $courseId, 'description']), $access, $enrolment);
-            self::$courses[] = [
-                $courseTitle,
-                $author,
-                $description,
-                '<a href="' . $categorieUrl . '" target="_blank">' . $categorieUrl . '</a>',
-                template::button('categoryUser' . $courseId, [
-                    'href' => helper::baseUrl() . 'course/user/' . $courseId,
-                    'value' => template::ico('users'),
-                    'help' => 'Inscrits'
-                ]),
-                template::button('courseEdit' . $courseId, [
-                    'href' => helper::baseUrl() . 'course/edit/' . $courseId,
-                    'value' => template::ico('pencil'),
-                    'help' => 'Éditer'
-                ]),
-                template::button('courseDelete' . $courseId, [
-                    'class' => 'courseDelete buttonRed',
-                    'href' => helper::baseUrl() . 'course/delete/' . $courseId,
-                    'value' => template::ico('trash'),
-                    'help' => 'Supprimer'
-                ])
+        if ($this->getCoursesByUser($this->getUser('id'), $this->getUser('group'))) {
+            foreach ($this->getCoursesByUser($this->getUser('id'), $this->getUser('group')) as $courseId => $courseValue) {
+                $categorieUrl = helper::baseUrl() . 'course/suscribe/' . $courseId;
+                $authorId = $this->getData(['course', $courseId, 'author']);
+                $author = isset($authorId)
+                    ? sprintf('%s %s', $this->getData(['user', $authorId, 'firstname']), $this->getData(['user', $authorId, 'lastname']))
+                    : '';
+                $access = self::$courseAccess[$courseValue ['access']];
+                $enrolment = self::$courseEnrolment[$courseValue ['enrolment']];
+                $description = sprintf('%s<br />%s<br />%s<br />', $courseValue ['description'], $access, $enrolment);
+                self::$courses[] = [
+                    $courseValue['title'],
+                    $author,
+                    $description,
+                    '<a href="' . $categorieUrl . '" target="_blank">' . $categorieUrl . '</a>',
+                    template::button('categoryUser' . $courseId, [
+                        'href' => helper::baseUrl() . 'course/user/' . $courseId,
+                        'value' => template::ico('users'),
+                        'help' => 'Inscrits'
+                    ]),
+                    template::button('courseEdit' . $courseId, [
+                        'href' => helper::baseUrl() . 'course/edit/' . $courseId,
+                        'value' => template::ico('pencil'),
+                        'help' => 'Éditer'
+                    ]),
+                    template::button('courseDelete' . $courseId, [
+                        'class' => 'courseDelete buttonRed',
+                        'href' => helper::baseUrl() . 'course/delete/' . $courseId,
+                        'value' => template::ico('trash'),
+                        'help' => 'Supprimer'
+                    ])
 
-            ];
+                ];
+            }
         }
 
         // Valeurs en sortie

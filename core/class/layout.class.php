@@ -896,8 +896,7 @@ class layout extends common
             // Sélecteur de contenu
             /**
              * Les admins voient tousles contenus
-             * Les enseignantsles contenus dont ils sont auteurs
-             * Les étudiantsles contenus dans lesquels ils sont inscrits
+             * Les enseignants les contenus dont ils sont auteurs
              */
             if ($this->getUser('group') >= self::GROUP_EDITOR) {
                 if ($this->getCoursesByUser($this->getUser('id'), $this->getUser('group'))) {
@@ -908,9 +907,6 @@ class layout extends common
                     }
                     $leftItems .= '</select></li>';
                 }
-            }
-            // Bouton Gérerles contenus
-            if ($this->getUser('group') >= self::GROUP_ADMIN) {
                 $leftItems .= '<li>' . template::ico('cubes', [
                     'href' => helper::baseUrl() . 'course',
                     'help' => 'Contenu'

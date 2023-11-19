@@ -1416,7 +1416,7 @@ class common
 	// Fonctions pour la gestion des contenus
 
 	/**
-	 * Retourneles contenus d'un utilisateur
+	 * Retourne les contenus d'un utilisateur
 	 * @param string $userId identifiant
 	 * @param string $serStatus teacher ou student ou admin
 	 */
@@ -1428,7 +1428,7 @@ class common
 				return $c;
 			case self::GROUP_EDITOR:
 				foreach ($c as $courseId => $value) {
-					if ($this->getData(['enrolment', $courseId]) !== $userId) {
+					if ($this->getData(['course', $courseId, 'author']) !== $userId) {
 						unset($c[$courseId]);
 					}
 				}
