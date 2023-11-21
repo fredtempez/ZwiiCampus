@@ -28,10 +28,10 @@ class course extends common
         'categoryAdd' => self::GROUP_ADMIN,
         'categoryEdit' => self::GROUP_ADMIN,
         'categoryDelete' => self::GROUP_ADMIN,
-        'user' => self::GROUP_EDITOR,
-        'userAdd' => self::GROUP_EDITOR,
+        'users' => self::GROUP_EDITOR,
+        'usersAdd' => self::GROUP_EDITOR,
         'userDelete' => self::GROUP_EDITOR,
-        'userDeleteAll' => self::GROUP_EDITOR,
+        'usersDelete' => self::GROUP_EDITOR,
         'userHistory' => self::GROUP_EDITOR,
         'usersHistoryExport' => self::GROUP_EDITOR,
         'userHistoryExport' => self::GROUP_EDITOR,
@@ -95,7 +95,7 @@ class course extends common
                     $description,
                     '<a href="' . $categorieUrl . '" target="_blank">' . $categorieUrl . '</a>',
                     template::button('categoryUser' . $courseId, [
-                        'href' => helper::baseUrl() . 'course/user/' . $courseId,
+                        'href' => helper::baseUrl() . 'course/users/' . $courseId,
                         'value' => template::ico('users'),
                         'help' => 'Inscrits'
                     ]),
@@ -437,7 +437,7 @@ class course extends common
 
     }
 
-    public function user()
+    public function users()
     {
 
         // Contenu sélectionné
@@ -558,14 +558,14 @@ class course extends common
         // Valeurs en sortie
         $this->addOutput([
             'title' => sprintf(helper::translate('Inscriptions dans le contenu %s'), $this->getData(['course', $courseId, 'title'])),
-            'view' => 'user',
+            'view' => 'users',
             'vendor' => [
                 'datatables'
             ]
         ]);
     }
 
-    public function userAdd()
+    public function usersAdd()
     {
         // Contenu sélectionné
         $courseId = $this->getUrl(2);
@@ -644,7 +644,9 @@ class course extends common
             // Construction du tableau
             self::$courseUsers[] = [
                 $userId,
-                $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
+                $this->getData(['user', $userId, 'firstname']),
+                $this->getData(['user', $userId, 'lastname']),
+                template::checkbox('courseUserSelect' . $userId , true, '')
             ];
 
         }
@@ -655,39 +657,6 @@ class course extends common
                 self::$courseGroups['all'] = self::$courseGroups['all'] . ' (' . array_sum($profils) . ')';
             } else {
                 self::$courseGroups[$groupId] = self::$courseGroups[$groupId] . ' (' . $profils[$groupId] . ')';
-            }
-        }
-
-        // Valeurs en sortie
-        $this->addOutput([
-            'title' => sprintf(helper::translate('Inscriptions dans le contenu %s'), $this->getData(['course', $courseId, 'title'])),
-            'view' => 'user',
-            'vendor' => [
-                'datatables'
-            ]
-        ]);
-        // Contenu sélectionné
-        $courseId = $this->getUrl(2);
-
-        // Liste des groupes et des profils
-        $courseGroups = $this->getData(['profil']);
-        foreach ($courseGroups as $groupId => $groupValue) {
-            switch ($groupId) {
-                case "-1":
-                case "0":
-                    break;
-                case "3":
-                    self::$courseGroups['30'] = 'Administrateur';
-                    $profils['30'] = 0;
-                    break;
-                case "1":
-                case "2":
-                    foreach ($groupValue as $profilId => $profilValue) {
-                        if ($profilId) {
-                            self::$courseGroups[$groupId . $profilId] = sprintf(helper::translate('Groupe %s - Profil %s'), self::$groupPublics[$groupId], $profilValue['name']);
-                            $profils[$groupId . $profilId] = 0;
-                        }
-                    }
             }
         }
 
@@ -728,7 +697,9 @@ class course extends common
             // Construction du tableau
             self::$courseUsers[] = [
                 $userId,
-                $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname'])
+                $this->getData(['user', $userId, 'firstname']),
+                $this->getData(['user', $userId, 'lastname']),
+                template::checkbox('courseUserSelect' . $userId , true, '')
             ];
 
         }
@@ -736,7 +707,7 @@ class course extends common
         // Valeurs en sortie
         $this->addOutput([
             'title' => helper::translate('Inscription en masse'),
-            'view' => 'userAdd'
+            'view' => 'usersAdd'
         ]);
     }
 
@@ -767,7 +738,7 @@ class course extends common
     /** 
      * Désinscription de tous les utilisateurs
      */
-    public function userDeleteAll()
+    public function usersDelete()
     {
         // Accès refusé
         if (
