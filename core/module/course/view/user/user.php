@@ -6,7 +6,7 @@
             'value' => template::ico('left')
         ]); ?>
     </div>
-    <div class="col1 offset9">
+    <div class="col1 offset8">
         <?php echo template::button('userDeleteAll', [
             'href' => helper::baseUrl() . 'course/usersHistoryExport/' . $this->getUrl(2),
             'value' => template::ico('download'),
@@ -20,6 +20,14 @@
             'value' => template::ico('trash'),
             'help' => 'Désinscrire tous les utilisateurs',
         ])?>
+    </div>
+    <div class="col1">
+        <?php echo template::button('userDeleteAll', [
+            'class' => 'buttonGreen',
+            'href' => helper::baseUrl() . 'course/userAdd/' . $this->getUrl(2),
+            'value' => template::ico('plus'),
+            'help' => 'Inscrire',
+        ]) ?>
     </div>
 </div>
 <?php echo template::formOpen('courseFilterUserForm'); ?>
