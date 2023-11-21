@@ -685,7 +685,7 @@ class template
             'name' => $nameId,
             'selected' => '',
             'font' =>  [],
-            'multiple' => false
+            'multiple' => ''
         ], $attributes);
         // Traduction de l'aide et de l'étiquette
         $attributes['label'] = helper::translate($attributes['label']);
