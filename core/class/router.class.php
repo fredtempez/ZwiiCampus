@@ -885,7 +885,10 @@ class core extends common
 		}
 		if ($access === false) {
 			// Bascule sur le site d'accueil
-			if ($_SESSION['ZWII_SITE_CONTENT'] !== 'home') {
+			if (
+				isset($_SESSION['ZWII_SITE_CONTENT'])
+				&& $_SESSION['ZWII_SITE_CONTENT'] !== 'home'
+			) {
 				$_SESSION['ZWII_SITE_CONTENT'] = 'home';
 				header('Location:' . helper::baseUrl() . $this->getUrl());
 				exit();
@@ -912,7 +915,11 @@ class core extends common
 			}
 		} elseif ($this->output['content'] === '') {
 			// Bascule sur le site d'accueil pour afficher la page d'erreur
-			if ($_SESSION['ZWII_SITE_CONTENT'] !== 'home') {
+
+			if (
+				isset($_SESSION['ZWII_SITE_CONTENT'])
+				&& $_SESSION['ZWII_SITE_CONTENT'] !== 'home'
+			) {
 				$_SESSION['ZWII_SITE_CONTENT'] = 'home';
 				header('Location:' . helper::baseUrl() . $this->getUrl());
 				exit();
