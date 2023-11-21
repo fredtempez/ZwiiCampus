@@ -74,16 +74,21 @@ class course extends common
 
     public function index()
     {
-        if ($this->getCoursesByUser($this->getUser('id'), $this->getUser('group'))) {
+        self::$courses = array();
+        if (
+            $this->getUser('id')
+            && $this->getUser('group')
+            && $this->getCoursesByUser($this->getUser('id'), $this->getUser('group'))
+        ) {
             foreach ($this->getCoursesByUser($this->getUser('id'), $this->getUser('group')) as $courseId => $courseValue) {
                 $categorieUrl = helper::baseUrl() . 'course/suscribe/' . $courseId;
                 $authorId = $this->getData(['course', $courseId, 'author']);
                 $author = isset($authorId)
                     ? sprintf('%s %s', $this->getData(['user', $authorId, 'firstname']), $this->getData(['user', $authorId, 'lastname']))
                     : '';
-                $access = self::$courseAccess[$courseValue ['access']];
-                $enrolment = self::$courseEnrolment[$courseValue ['enrolment']];
-                $description = sprintf('%s<br />%s<br />%s<br />', $courseValue ['description'], $access, $enrolment);
+                $access = self::$courseAccess[$courseValue['access']];
+                $enrolment = self::$courseEnrolment[$courseValue['enrolment']];
+                $description = sprintf('%s<br />%s<br />%s<br />', $courseValue['description'], $access, $enrolment);
                 self::$courses[] = [
                     $courseValue['title'],
                     $author,
