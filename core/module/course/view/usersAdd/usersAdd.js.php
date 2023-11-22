@@ -12,6 +12,8 @@
  */
 
 $(document).ready((function () {
+
+
     $("#courseFilterGroup, #courseFilterFirstName, #courseFilterLastName").change(function () {
         saveCheckboxState();
         $("#courseUsersFilterForm").submit();
@@ -31,6 +33,12 @@ $(document).ready((function () {
         ]
     });
 
+    // Handle checkbox change event
+    $('.checkboxSelect').on('change', function () {
+        // Save checkbox state to cookies or local storage
+        saveCheckboxState();
+    });
+
     // Handle checkbox state on DataTables draw event
     table.on('draw', function () {
         // Restore checkbox state from cookies or local storage
@@ -38,28 +46,37 @@ $(document).ready((function () {
     });
 
 
-    // Function to save checkbox state
+    // Restore checkbox state on page load
+    restoreCheckboxState();
+
     function saveCheckboxState() {
-        var checkboxState = [];
+
+        // Récupérer d'abord les données existantes dans le localStorage
+        var existingData = JSON.parse(localStorage.getItem('checkboxState')) || {};
+        console.log(existingData);
+
+        // Ajouter ou mettre à jour les données actuelles
         $('.checkboxSelect').each(function () {
-            checkboxState.push({
-                'rowIndex': $(this).closest('tr').index(),
-                'checked': $(this).prop('checked')
-            });
+            var checkboxId = $(this).attr('id');
+            var checked = $(this).prop('checked');
+            existingData[checkboxId] = checked;
         });
-        // Use cookies or local storage to store checkbox state
-        localStorage.setItem('checkboxState', JSON.stringify(checkboxState));
+
+        // Sauvegarder les données mises à jour dans le localStorage
+        localStorage.setItem('checkboxState', JSON.stringify(existingData));
     }
 
     // Function to restore checkbox state
     function restoreCheckboxState() {
-        var checkboxState = JSON.parse(localStorage.getItem('checkboxState')) || [];
-        checkboxState.forEach(function (item) {
-            var rowIndex = item.rowIndex;
-            var checked = item.checked;
-            // Update checkbox state based on stored information
-            $('#example tbody tr:eq(' + rowIndex + ') .checkboxSelect').prop('checked', checked);
-        });
+        var checkboxState = JSON.parse(localStorage.getItem('checkboxState')) || {};
+       // console.log(checkboxState);
+        for (var checkboxId in checkboxState) {
+            if (checkboxState.hasOwnProperty(checkboxId)) {
+                var checked = checkboxState[checkboxId];
+                // Update checkbox state based on stored information
+                $('#' + checkboxId).prop('checked', checked);
+            }
+        }
     }
 
 }));
