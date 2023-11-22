@@ -646,7 +646,7 @@ class course extends common
                 $userId,
                 $this->getData(['user', $userId, 'firstname']),
                 $this->getData(['user', $userId, 'lastname']),
-                template::checkbox('courseUserSelect' . $userId , true, '')
+                template::checkbox('courseUserSelect' . $userId , true, '', ['class' => 'checkboxSelect'])
             ];
 
         }
@@ -699,7 +699,7 @@ class course extends common
                 $userId,
                 $this->getData(['user', $userId, 'firstname']),
                 $this->getData(['user', $userId, 'lastname']),
-                template::checkbox('courseUserSelect' . $userId , true, '')
+                template::checkbox('courseUserSelect' . $userId , true, '', ['class' => 'checkboxSelect'])
             ];
 
         }

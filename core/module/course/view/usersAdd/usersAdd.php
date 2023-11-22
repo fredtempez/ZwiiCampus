@@ -1,4 +1,4 @@
-<?php echo template::formOpen('courseUsersAddForm'); ?>
+<?php echo template::formOpen('courseUsersFilterForm'); ?>
 <div class="row">
     <div class="col1">
         <?php echo template::button('courseUserAddBack', [
