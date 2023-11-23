@@ -16,8 +16,8 @@ $(document).ready((function () {
     $("#courseFilterGroup, #courseFilterFirstName, #courseFilterLastName").change(function () {
         saveCheckboxState();
         $("#courseUsersAddForm").submit();
-
     });
+
     var table = $('#dataTables').DataTable({
         language: {
             url: "core/vendor/datatables/french.json"
@@ -27,7 +27,6 @@ $(document).ready((function () {
                 target: 3,
                 orderable: false,
                 searchable: false,
-
             }
         ]
     });
@@ -46,6 +45,7 @@ $(document).ready((function () {
 
     // Empty local storage after submit
     $("#courseUsersAddSubmit").on("click", function () {
+
         localStorage.setItem('checkboxState', JSON.stringify({}));
     });
 
