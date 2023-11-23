@@ -1,4 +1,4 @@
-<?php echo template::formOpen('courseUsersFilterForm'); ?>
+<?php echo template::formOpen('courseUsersAddForm'); ?>
 <div class="row">
     <div class="col1">
         <?php echo template::button('courseUserAddBack', [
@@ -7,13 +7,12 @@
             'value' => template::ico('left')
         ]); ?>
     </div>
-    <div class="col2 offset9">
-        <?php echo template::submit('courseUserAddSubmit', [
+</div>
+<div class="col2 offset9">
+        <?php echo template::submit('courseUsersAddSubmit', [
             'value' => 'Ajouter'
         ]); ?>
     </div>
-</div>
-<?php echo template::formOpen('courseFilterUserForm'); ?>
 <div class="row" id="Bfrtip">
     <div class="col3">
         <?php echo template::select('courseFilterGroup', $module::$courseGroups, [

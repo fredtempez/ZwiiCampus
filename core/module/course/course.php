@@ -570,6 +570,85 @@ class course extends common
         // Contenu sélectionné
         $courseId = $this->getUrl(2);
 
+        // Liste des inscrits dans le contenu sélectionné.
+        $suscribers = $this->getData(['enrolment', $courseId]);
+        $suscribers = array_keys($suscribers);
+
+        $users = array_diff_key($this->getData(['user']), array_flip($suscribers));
+
+        // Tri du tableau par défaut par $userId
+        ksort($users);
+
+        if ($this->isPost()) {
+            if (
+                isset($_POST['courseUsersAddSubmit'])
+            ) {
+                foreach ($_POST as $key => $value) {
+                    // Exclure les variables post qui ne sont pas des userId
+                    if (is_null(['user', $key])) {
+                        continue;
+                    }
+                    $this->getData(['enrolment', $courseId, $key]);
+                }
+
+            }
+
+            // Traitement du filtre
+            if (
+                isset($_POST['courseFilterGroup'])
+                || isset($_POST['courseFilterFirstName'])
+                || isset($_POST['courseFilterLastName'])
+            ) {
+
+
+                foreach ($users as $userId) {
+
+                    // Compte les rôles
+                    $profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])]++;
+
+                    // Filtres
+                    if ($this->isPost()) {
+
+                        // Groupe et profils
+                        $group = (string) $this->getData(['user', $userId, 'group']);
+                        $profil = (string) $this->getData(['user', $userId, 'profil']);
+                        $firstName = $this->getData(['user', $userId, 'firstname']);
+                        $lastName = $this->getData(['user', $userId, 'lastname']);
+                        if (
+                            $this->getInput('courseFilterGroup', helper::FILTER_INT) > 0
+                            && $this->getInput('courseFilterGroup', helper::FILTER_STRING_SHORT) !== $group . $profil
+                        )
+                            continue;
+                        // Première lettre du prénom
+                        if (
+                            $this->getInput('courseFilterFirstName', helper::FILTER_STRING_SHORT) !== 'all'
+                            && $this->getInput('courseFilterFirstName', helper::FILTER_STRING_SHORT) !== strtoupper(substr($firstName, 0, 1))
+                        )
+                            continue;
+                        // Première lettre du nom
+                        if (
+                            $this->getInput('courseFilterLastName', helper::FILTER_STRING_SHORT) !== 'all'
+                            && $this->getInput('courseFilterLastName', helper::FILTER_STRING_SHORT) !== strtoupper(substr($lastName, 0, 1))
+                        )
+                            continue;
+                    }
+
+
+                    // Construction du tableau
+                    self::$courseUsers[] = [
+                        $userId,
+                        $this->getData(['user', $userId, 'firstname']),
+                        $this->getData(['user', $userId, 'lastname']),
+                        template::checkbox($userId, true, '', ['class' => 'checkboxSelect'])
+                    ];
+
+                }
+            }
+        }
+
+
+        // Construit le tableau
+
         // Liste des groupes et des profils
         $courseGroups = $this->getData(['profil']);
         foreach ($courseGroups as $groupId => $groupValue) {
@@ -598,59 +677,6 @@ class course extends common
         self::$alphabet = array_combine($alphabet, self::$alphabet);
         self::$alphabet = array_merge(['all' => 'Tout'], self::$alphabet);
 
-
-        // Liste des inscrits dans le contenu sélectionné.
-        $suscribers = $this->getData(['enrolment', $courseId]);
-        $suscribers = array_keys($suscribers);
-        $users = $this->getData(['user']);
-        $users = array_keys($users);
-        $users = array_diff($users, $suscribers);
-
-        // Tri du tableau par défaut par $userId
-        ksort($users);
-
-        foreach ($users as $userId) {
-
-            // Compte les rôles
-            $profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])]++;
-
-            // Filtres
-            if ($this->isPost()) {
-                // Groupe et profils
-                $group = (string) $this->getData(['user', $userId, 'group']);
-                $profil = (string) $this->getData(['user', $userId, 'profil']);
-                $firstName = $this->getData(['user', $userId, 'firstname']);
-                $lastName = $this->getData(['user', $userId, 'lastname']);
-                if (
-                    $this->getInput('courseFilterGroup', helper::FILTER_INT) > 0
-                    && $this->getInput('courseFilterGroup', helper::FILTER_STRING_SHORT) !== $group . $profil
-                )
-                    continue;
-                // Première lettre du prénom
-                if (
-                    $this->getInput('courseFilterFirstName', helper::FILTER_STRING_SHORT) !== 'all'
-                    && $this->getInput('courseFilterFirstName', helper::FILTER_STRING_SHORT) !== strtoupper(substr($firstName, 0, 1))
-                )
-                    continue;
-                // Première lettre du nom
-                if (
-                    $this->getInput('courseFilterLastName', helper::FILTER_STRING_SHORT) !== 'all'
-                    && $this->getInput('courseFilterLastName', helper::FILTER_STRING_SHORT) !== strtoupper(substr($lastName, 0, 1))
-                )
-                    continue;
-            }
-
-
-            // Construction du tableau
-            self::$courseUsers[] = [
-                $userId,
-                $this->getData(['user', $userId, 'firstname']),
-                $this->getData(['user', $userId, 'lastname']),
-                template::checkbox('courseUserSelect' . $userId , true, '', ['class' => 'checkboxSelect'])
-            ];
-
-        }
-
         // Ajoute les effectifs aux profils du sélecteur
         foreach (self::$courseGroups as $groupId => $groupValue) {
             if ($groupId === 'all') {
@@ -660,16 +686,11 @@ class course extends common
             }
         }
 
-        // Liste des inscrits dans le contenu sélectionné.
-        $users = $this->getData(['enrolment', $courseId]);
-
-        // Tri du tableau par défaut par $userId
-        ksort($users);
-
         foreach ($users as $userId => $userValue) {
 
             // Filtres
             if ($this->isPost()) {
+
                 // Groupe et profils
                 $group = (string) $this->getData(['user', $userId, 'group']);
                 $profil = (string) $this->getData(['user', $userId, 'profil']);
@@ -699,7 +720,7 @@ class course extends common
                 $userId,
                 $this->getData(['user', $userId, 'firstname']),
                 $this->getData(['user', $userId, 'lastname']),
-                template::checkbox('courseUserSelect' . $userId , true, '', ['class' => 'checkboxSelect'])
+                template::checkbox($userId, true, '', ['class' => 'checkboxSelect'])
             ];
 
         }
@@ -728,7 +749,7 @@ class course extends common
             $this->deleteData(['enrolment', $this->getUrl(2), $this->getUrl(3)]);
             // Valeurs en sortie
             $this->addOutput([
-                'redirect' => helper::baseUrl() . 'course/user/' . $this->getUrl(2),
+                'redirect' => helper::baseUrl() . 'course/users/' . $this->getUrl(2),
                 'notification' => sprintf(helper::translate('%s est désinscrit'), $this->getUrl(3)),
                 'state' => true
             ]);
