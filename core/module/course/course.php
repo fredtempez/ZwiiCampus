@@ -488,8 +488,10 @@ class course extends common
         foreach ($users as $userId => $userValue) {
             $history = $userValue['history'];
 
-            $maxTime = max($history);
-            $pageId = array_search($maxTime, $history);
+            if (!empty($history)) {
+                $maxTime = max($history);
+                $pageId = array_search($maxTime, $history);
+            }
 
             // Compte les rôles
             $profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])]++;
@@ -527,11 +529,12 @@ class course extends common
             self::$courseUsers[] = [
                 $userId,
                 $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
-                $pages[$pageId],
-                helper::dateUTF8('%d %B %Y - %H:%M', $maxTime),
+                !empty($history) ? $pages[$pageId] : '-',
+                !empty($history) ? helper::dateUTF8('%d %B %Y - %H:%M', $maxTime) : '-',
                 template::button('userHistory' . $userId, [
                     'href' => helper::baseUrl() . 'course/userHistory/' . $courseId . '/' . $userId,
-                    'value' => round(($viewPages * 100) / $sumPages, 1) . ' %'
+                    'value' => !empty($history) ? round(($viewPages * 100) / $sumPages, 1) . ' %' : '0%',
+                    'disable' => empty($history)
                 ]),
                 template::button('userDelete' . $userId, [
                     'class' => 'userDelete buttonRed',
@@ -571,7 +574,8 @@ class course extends common
         ) {
             foreach ($_POST as $keyPost => $valuePost) {
                 // Exclure les variables post qui ne sont pas des userId et ne traiter que les non inscrits
-                if ($this->getData(['user', $keyPost]) !== null
+                if (
+                    $this->getData(['user', $keyPost]) !== null
                     && $this->getData(['enrolment', $courseId, $keyPost]) === null
                 ) {
                     $this->setData(['enrolment', $courseId, $keyPost, 'history', array()]);

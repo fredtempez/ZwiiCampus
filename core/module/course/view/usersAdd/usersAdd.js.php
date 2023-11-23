@@ -13,7 +13,6 @@
 
 $(document).ready((function () {
 
-
     $("#courseFilterGroup, #courseFilterFirstName, #courseFilterLastName").change(function () {
         saveCheckboxState();
         $("#courseUsersAddForm").submit();
@@ -45,6 +44,10 @@ $(document).ready((function () {
         restoreCheckboxState();
     });
 
+    // Empty local storage after submit
+    $("#courseUsersAddSubmit").on("click", function () {
+        localStorage.setItem('checkboxState', JSON.stringify({}));
+    });
 
     // Restore checkbox state on page load
     restoreCheckboxState();
@@ -53,7 +56,6 @@ $(document).ready((function () {
 
         // Récupérer d'abord les données existantes dans le localStorage
         var existingData = JSON.parse(localStorage.getItem('checkboxState')) || {};
-        console.log(existingData);
 
         // Ajouter ou mettre à jour les données actuelles
         $('.checkboxSelect').each(function () {
