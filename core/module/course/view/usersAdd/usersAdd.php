@@ -8,9 +8,9 @@
         ]); ?>
     </div>
 </div>
-<div class="col2 offset9">
+<div class="col2 offset10">
         <?php echo template::submit('courseUsersAddSubmit', [
-            'value' => 'Ajouter'
+            'value' => 'Inscrire'
         ]); ?>
     </div>
 <div class="row" id="Bfrtip">
