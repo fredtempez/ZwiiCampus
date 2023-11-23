@@ -16,7 +16,7 @@ $(document).ready((function () {
 
     $("#courseFilterGroup, #courseFilterFirstName, #courseFilterLastName").change(function () {
         saveCheckboxState();
-        $("#courseUsersFilterForm").submit();
+        $("#courseUsersAddForm").submit();
 
     });
     var table = $('#dataTables').DataTable({
