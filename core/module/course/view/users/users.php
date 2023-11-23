@@ -25,8 +25,8 @@
         <?php echo template::button('userDeleteAll', [
             'class' => 'buttonGreen',
             'href' => helper::baseUrl() . 'course/usersAdd/' . $this->getUrl(2),
-            'value' => template::ico('plus'),
-            'help' => 'Inscrire',
+            'value' => template::ico('users'),
+            'help' => 'Inscription',
         ]) ?>
     </div>
 </div>
