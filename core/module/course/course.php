@@ -539,7 +539,7 @@ class course extends common
                 template::button('userDelete' . $userId, [
                     'class' => 'userDelete buttonRed',
                     'href' => helper::baseUrl() . 'course/userDelete/' . $courseId . '/' . $userId,
-                    'value' => template::ico('trash'),
+                    'value' => template::ico('user'),
                     'help' => 'Désinscrire'
                 ])
             ];
@@ -711,23 +711,119 @@ class course extends common
      */
     public function usersDelete()
     {
-        // Accès refusé
+
+        // Contenu sélectionné
+        $courseId = $this->getUrl(2);
+
+        // Inscription des utilisateurs cochés
         if (
-            $this->getUser('permission', __CLASS__, __FUNCTION__) !== true
+            isset($_POST['courseUsersDeleteSubmit'])
         ) {
-            // Valeurs en sortie
-            $this->addOutput([
-                'access' => false
-            ]);
-        } else {
-            $this->setData(['enrolment', $this->getUrl(2), array()]);
-            // Valeurs en sortie
-            $this->addOutput([
-                'redirect' => helper::baseUrl() . 'course/user/' . $this->getUrl(2),
-                'notification' => helper::translate('Contenu réinitialisé'),
-                'state' => true
-            ]);
+            foreach ($_POST as $keyPost => $valuePost) {
+                // Exclure les variables post qui ne sont pas des userId et ne traiter que les non inscrits
+                if (
+                    $this->getData(['user', $keyPost]) !== null
+                    && $this->getData(['enrolment', $courseId, $keyPost]) !== null
+                ) {
+                    $this->deleteData(['enrolment', $courseId, $keyPost]);
+                }
+            }
         }
+
+        // Liste des groupes et des profils
+        $courseGroups = $this->getData(['profil']);
+        foreach ($courseGroups as $groupId => $groupValue) {
+            switch ($groupId) {
+                case "-1":
+                case "0":
+                    break;
+                case "3":
+                    self::$courseGroups['30'] = 'Administrateur';
+                    $profils['30'] = 0;
+                    break;
+                case "1":
+                case "2":
+                    foreach ($groupValue as $profilId => $profilValue) {
+                        if ($profilId) {
+                            self::$courseGroups[$groupId . $profilId] = sprintf(helper::translate('Groupe %s - Profil %s'), self::$groupPublics[$groupId], $profilValue['name']);
+                            $profils[$groupId . $profilId] = 0;
+                        }
+                    }
+            }
+        }
+
+        // Liste alphabétique
+        self::$alphabet = range('A', 'Z');
+        $alphabet = range('A', 'Z');
+        self::$alphabet = array_combine($alphabet, self::$alphabet);
+        self::$alphabet = array_merge(['all' => 'Tout'], self::$alphabet);
+
+        // Liste des inscrits dans le contenu sélectionné.
+        $users = $this->getData(['enrolment', $courseId]);
+
+        // Tri du tableau par défaut par $userId
+        ksort($users);
+
+        foreach ($users as $userId => $userValue) {
+
+            // Compte les rôles
+            $profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])]++;
+
+            // Filtres
+            if (
+                isset($_POST['courseFilterGroup'])
+                || isset($_POST['courseFilterFirstName'])
+                || isset($_POST['courseFilterLastName'])
+            ) {
+
+                // Groupe et profils
+                $group = (string) $this->getData(['user', $userId, 'group']);
+                $profil = (string) $this->getData(['user', $userId, 'profil']);
+                $firstName = $this->getData(['user', $userId, 'firstname']);
+                $lastName = $this->getData(['user', $userId, 'lastname']);
+                if (
+                    $this->getInput('courseFilterGroup', helper::FILTER_INT) > 0
+                    && $this->getInput('courseFilterGroup', helper::FILTER_STRING_SHORT) !== $group . $profil
+                )
+                    continue;
+                // Première lettre du prénom
+                if (
+                    $this->getInput('courseFilterFirstName', helper::FILTER_STRING_SHORT) !== 'all'
+                    && $this->getInput('courseFilterFirstName', helper::FILTER_STRING_SHORT) !== strtoupper(substr($firstName, 0, 1))
+                )
+                    continue;
+                // Première lettre du nom
+                if (
+                    $this->getInput('courseFilterLastName', helper::FILTER_STRING_SHORT) !== 'all'
+                    && $this->getInput('courseFilterLastName', helper::FILTER_STRING_SHORT) !== strtoupper(substr($lastName, 0, 1))
+                )
+                    continue;
+            }
+
+            // Construction du tableau
+            self::$courseUsers[] = [
+                $userId,
+                $this->getData(['user', $userId, 'firstname']),
+                $this->getData(['user', $userId, 'lastname']),
+                template::checkbox($userId, true, '', ['class' => 'checkboxSelect'])
+            ];
+
+        }
+
+        // Ajoute les effectifs aux profils du sélecteur
+        foreach (self::$courseGroups as $groupId => $groupValue) {
+            if ($groupId === 'all') {
+                self::$courseGroups['all'] = self::$courseGroups['all'] . ' (' . array_sum($profils) . ')';
+            } else {
+                self::$courseGroups[$groupId] = self::$courseGroups[$groupId] . ' (' . $profils[$groupId] . ')';
+            }
+        }
+
+        // Valeurs en sortie
+        $this->addOutput([
+            'title' => helper::translate('Désincription en masse'),
+            'view' => 'usersDelete'
+        ]);
     }
 
     /*
