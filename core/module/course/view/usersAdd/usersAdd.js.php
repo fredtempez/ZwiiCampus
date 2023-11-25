@@ -13,6 +13,15 @@
 
 $(document).ready((function () {
 
+    $('#courseUserAddSelectAll').on('click', function() {
+        $('.checkboxSelect').prop('checked', true);
+        saveCheckboxState();
+    });
+    $('#courseUserAddSelectNone').on('click', function() {
+        $('.checkboxSelect').prop('checked', false);
+        saveCheckboxState();
+    });
+
     $("#courseFilterGroup, #courseFilterFirstName, #courseFilterLastName").change(function () {
         saveCheckboxState();
         $("#courseUsersAddForm").submit();
@@ -24,7 +33,7 @@ $(document).ready((function () {
         },
         "columnDefs": [
             {
-                target: 3,
+                target: 0,
                 orderable: false,
                 searchable: false,
             }
@@ -45,7 +54,6 @@ $(document).ready((function () {
 
     // Empty local storage after submit
     $("#courseUsersAddSubmit").on("click", function () {
-
         localStorage.setItem('checkboxState', JSON.stringify({}));
     });
 

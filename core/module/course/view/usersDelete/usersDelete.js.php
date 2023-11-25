@@ -13,6 +13,14 @@
 
 $(document).ready((function () {
 
+    $('#courseUserDeleteSelectAll').on('click', function() {
+        $('.checkboxSelect').prop('checked', true);
+        saveCheckboxState();
+    });
+    $('#courseUserDeleteSelectNone').on('click', function() {
+        $('.checkboxSelect').prop('checked', false);
+        saveCheckboxState();
+    });
 
     $("#courseFilterGroup, #courseFilterFirstName, #courseFilterLastName").change(function () {
         saveCheckboxState();
@@ -25,7 +33,7 @@ $(document).ready((function () {
         },
         "columnDefs": [
             {
-                target: 3,
+                target: 0,
                 orderable: false,
                 searchable: false,
             }
@@ -46,9 +54,7 @@ $(document).ready((function () {
 
     // Empty local storage after submit
     $("#courseUsersDeleteSubmit").on("click", function () {
-
         localStorage.setItem('checkboxState', JSON.stringify({}));
-
     });
 
     // Restore checkbox state on page load

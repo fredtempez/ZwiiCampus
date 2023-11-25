@@ -1,18 +1,28 @@
 <?php echo template::formOpen('courseUsersDeleteForm'); ?>
 <div class="row">
     <div class="col1">
-        <?php echo template::button('courseUserAddBack', [
+        <?php echo template::button('courseUserDeleteBack', [
             'class' => 'buttonGrey',
             'href' => helper::baseUrl() . 'course/users/' . $this->getUrl(2),
             'value' => template::ico('left')
         ]); ?>
     </div>
-</div>
-<div class="col2 offset10">
+    <div class="col1 offset7">
+        <?php echo template::button('courseUserDeleteSelectAll', [
+            'value' => 'Tout'
+        ]); ?>
+    </div>
+    <div class="col1">
+        <?php echo template::button('courseUserDeleteSelectNone', [
+            'value' => 'Aucun'
+        ]); ?>
+    </div>
+<div class="col2">
         <?php echo template::submit('courseUsersDeleteSubmit', [
             'class' => 'buttonRed',
             'value' => 'Désinscrire'
         ]); ?>
+    </div>
     </div>
 <div class="row" id="Bfrtip">
     <div class="col3">
@@ -35,7 +45,7 @@
     </div>
 </div>
 <?php if ($module::$courseUsers): ?>
-    <?php echo template::table([4, 4, 4, 1], $module::$courseUsers, ['Id', 'Prénom',  'Nom', ''], ['id' => 'dataTables']); ?>
+    <?php echo template::table([1, 4, 4, 3], $module::$courseUsers, ['', 'Id',  'Prénom', 'Nom'], ['id' => 'dataTables']); ?>
 <?php else: ?>
     <?php echo template::speech('Aucun inscrit'); ?>
 <?php endif; ?>

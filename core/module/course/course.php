@@ -658,10 +658,10 @@ class course extends common
 
             // Construction du tableau
             self::$courseUsers[] = [
+                template::checkbox($userId, true, '', ['class' => 'checkboxSelect']),
                 $userId,
                 $this->getData(['user', $userId, 'firstname']),
                 $this->getData(['user', $userId, 'lastname']),
-                template::checkbox($userId, true, '', ['class' => 'checkboxSelect'])
             ];
 
         }
@@ -802,10 +802,10 @@ class course extends common
 
             // Construction du tableau
             self::$courseUsers[] = [
+                template::checkbox($userId, true, '', ['class' => 'checkboxSelect']),
                 $userId,
                 $this->getData(['user', $userId, 'firstname']),
                 $this->getData(['user', $userId, 'lastname']),
-                template::checkbox($userId, true, '', ['class' => 'checkboxSelect'])
             ];
 
         }
