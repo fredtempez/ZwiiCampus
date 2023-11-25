@@ -941,9 +941,6 @@ class common
 	 */
 	public function getPermission($key1, $key2 = null)
 	{
-		// User n'existe pas
-		// if (is_array($this->user) === false) {
-		//	return false;
 		// Administrateur, toutes les permissions
 		if ($this->getUser('group') === self::GROUP_ADMIN) {
 			return true;
@@ -967,10 +964,18 @@ class common
 		) {
 			return $this->getData(['profil', $this->user['group'], $this->user['profil'], $key1]);
 		} else {
-			// Une permission non spécifiée dans le profil est autorisée par défaut pour le fonctionnement de $action
-			return true;
+			// Une permission non spécifiée dans le profil est autorisée selon la valeur de $actions
+			if (class_exists($key1)) {
+				$module = new $key1;
+				if (array_key_exists($key2, $module::$actions)) {
+					// var_dump($this->getUser('group'));
+					// var_dump($module::$actions[$key2]);
+					// var_dump($this->getUser('group') >= $module::$actions[$key2]);
+					return $this->getUser('group') >= $module::$actions[$key2];
+				} 
+			}
+			return false;
 		}
-
 	}
 
 	/**

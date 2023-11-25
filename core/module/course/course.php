@@ -74,6 +74,7 @@ class course extends common
 
     public function index()
     {
+
         self::$courses = array();
         if (
             $this->getUser('id')
@@ -280,11 +281,9 @@ class course extends common
     {
         $courseId = $this->getUrl(2);
         if (
-            $this->getUser('permission', __CLASS__, __FUNCTION__) !== true ||
+            ($this->getUser('permission', __CLASS__, __FUNCTION__) !== true 
             // Le contenu n'existe pas
-            $this->getData(['course', $courseId]) === null
-            // Groupe insuffisant
-            and ($this->getUrl('group') < self::GROUP_EDITOR)
+            || $this->getData(['course', $courseId]) === null)
         ) {
             // Valeurs en sortie
             $this->addOutput([
@@ -294,7 +293,6 @@ class course extends common
         } else {
             // Active l'accueil
             $_SESSION['ZWII_SITE_CONTENT'] = 'home';
-
             // ET efface la structure
             if (is_dir(self::DATA_DIR . $courseId)) {
                 $success = $this->deleteDir(self::DATA_DIR . $courseId);
@@ -1031,7 +1029,7 @@ class course extends common
 
             // Valeurs en sortie
             $this->addOutput([
-                'redirect' => helper::baseUrl(!helper::checkRewrite()) . 'course/user/' . $courseId,
+                'redirect' => helper::baseUrl() . 'course/users/' . $courseId,
                 'notification' => 'Création ' . basename($filename) . ' dans le dossier "Export"',
                 'state' => true,
             ]);
