@@ -113,7 +113,6 @@
 						'placeholder' => 'Ouvre le %s et ferme le %s'
 					]); ?>
 				</div>
-
 				<div class="col4">
 					<?php echo template::text('coursesCaptionAccessClose', [
 						'label' => 'Fermé',
@@ -129,23 +128,28 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col4">
+				<div class="col3">
 					<?php echo template::text('coursesCaptionGuest', [
 						'label' => 'Anonyme',
 						'value' => $this->getData(['module', $this->getUrl(0), 'caption', 'enrolguest'])
 					]); ?>
 				</div>
-				<div class="col4">
+				<div class="col3">
 					<?php echo template::text('coursesCaptionSelf', [
 						'label' => 'Membre',
 						'value' => $this->getData(['module', $this->getUrl(0), 'caption', 'enrolself'])
 					]); ?>
 				</div>
-
-				<div class="col4">
+				<div class="col3">
 					<?php echo template::text('coursesCaptionSelfKey', [
 						'label' => 'Membre avec clé',
 						'value' => $this->getData(['module', $this->getUrl(0), 'caption', 'enrolselfkey'])
+					]); ?>
+				</div>
+				<div class="col3">
+					<?php echo template::text('coursesCaptionMandatory', [
+						'label' => 'Imposée',
+						'value' => $this->getData(['module', $this->getUrl(0), 'caption', 'enrolMandatory'])
 					]); ?>
 				</div>
 			</div>

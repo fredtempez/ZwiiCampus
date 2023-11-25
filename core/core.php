@@ -69,7 +69,7 @@ class common
 	const COURSE_ENROLMENT_GUEST = 0;
 	const COURSE_ENROLMENT_SELF = 1; // Ouvert à tous les membres
 	const COURSE_ENROLMENT_SELF_KEY = 2; // Ouvert à tous les membres disposant de la clé
-	const COURSE_ENROLMENT_MANUAL = 3;
+	const COURSE_ENROLMENT_MANDATORY = 3;
 
 
 	public static $actions = [];

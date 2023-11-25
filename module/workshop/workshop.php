@@ -58,6 +58,7 @@ class workshop extends common
 			'enrolguest' => 'Anonyme',
 			'enrolself' => 'Membres',
 			'enrolselfkey' => 'Membres avec cl&eacute;',
+			'enrolMandatory' => 'Inscription par l\'enseignant',
 			'url' => 'Acc&eacute;der au contenu',
 			'unsuscribe' => 'Me d&eacute;sinscrire',
 			'enrolmentLimit' => 'Date limite des inscriptions',
@@ -107,6 +108,7 @@ class workshop extends common
 					'enrolguest' => $this->getInput('coursesCaptionGuest', helper::FILTER_STRING_SHORT),
 					'enrolself' => $this->getInput('coursesCaptionSelf', helper::FILTER_STRING_SHORT),
 					'enrolselfkey' => $this->getInput('coursesCaptionSelfKey', helper::FILTER_STRING_SHORT),
+					'enrolMandatory' => $this->getInput('coursesCaptionMandatory', helper::FILTER_STRING_SHORT),
 					'url' => $this->getInput('coursesCaptionUrl', helper::FILTER_STRING_SHORT),
 					'unsuscribe' => $this->getInput('coursesCaptionUnsuscribe', helper::FILTER_STRING_SHORT),
 					'enrolmentLimit' => $this->getInput('coursesCaptionEnrolmentLimit', helper::FILTER_STRING_SHORT),
@@ -140,6 +142,7 @@ class workshop extends common
 		self::$coursesEnrolment[self::COURSE_ENROLMENT_GUEST] = $this->getData(['module', $this->getUrl(0), 'caption', 'enrolguest']);
 		self::$coursesEnrolment[self::COURSE_ENROLMENT_SELF] = $this->getData(['module', $this->getUrl(0), 'caption', 'enrolself']);
 		self::$coursesEnrolment[self::COURSE_ENROLMENT_SELF_KEY] = $this->getData(['module', $this->getUrl(0), 'caption', 'enrolselfkey']);
+		self::$coursesEnrolment[self::COURSE_ENROLMENT_MANDATORY] = $this->getData(['module', $this->getUrl(0), 'caption', 'enrolMandatory']);
 
 		// Valeurs en sortie
 		$this->addOutput([

@@ -47,7 +47,7 @@ class course extends common
         self::COURSE_ENROLMENT_GUEST => 'Anonyme',
         self::COURSE_ENROLMENT_SELF => 'Inscription libre',
         self::COURSE_ENROLMENT_SELF_KEY => 'Inscription avec clé',
-        //self::COURSE_ENROLMENT_MANUAL => 'Manuelle'
+        self::COURSE_ENROLMENT_MANDATORY => 'Imposée'
     ];
 
     public static $courseTeachers = [];
@@ -893,7 +893,7 @@ class course extends common
                     if ($this->getUser('id')) {
                         $redirect = helper::baseUrl() . 'course/suscribe/' . $courseId;
                     } else {
-                        $message = helper::translate('Vous devez disposer d\'un compte pour accéder à ce contenu ');
+                        $message = helper::translate('Vous devez disposer d\'un compte pour accéder à ce contenu');
                         $state = false;
                     }
                     break;
@@ -902,18 +902,16 @@ class course extends common
                     if ($this->getUser('id')) {
                         $redirect = helper::baseUrl() . 'course/suscribe/' . $courseId;
                     } else {
-                        $message = helper::translate('Vous devez disposer d\'un compte et d\'une clé pour accéder à ce contenu ');
+                        $message = helper::translate('Vous devez disposer d\'un compte et d\'une clé pour accéder à ce contenu');
                         $state = false;
                     }
                     break;
                 // Par le prof
-                /*
-                case self::COURSE_ENROLMENT_MANUAL:
-                    $message = helper::translate('L\'enseignant ne vous a pas inscrit dans ce contenu !');
+                case self::COURSE_ENROLMENT_MANDATORY:
+                    $message = helper::translate('L\'enseignant doit vous inscrire');
                     $state = false;
                     break;
                 default:
-                */
             }
         }
 
@@ -1168,8 +1166,8 @@ class course extends common
                         ]);
                     }
                     break;
-                case self::COURSE_ENROLMENT_MANUAL:
-                    self::$swapMessage['enrolmentMessage'] = helper::translate('L\'enseignant inscrit les étudiants dans le contenu, vous ne pouvez pas vous inscrire vous-même.');
+                case self::COURSE_ENROLMENT_MANDATORY:
+                    self::$swapMessage['enrolmentMessage'] = helper::translate('Vous ne pouvez pas vous inscrire par vous-même.');
                     break;
             }
             // Valeurs en sortie

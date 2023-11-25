@@ -338,7 +338,7 @@ class suscribe extends common
 			$check = false;
 			$notification = 'La validité est dépassée';
 		}
-		// La clé est incorrecte ou le compet a déjà été validé
+		// La clé est incorrecte ou le compte a déjà été validé
 		if (
 			$check &&
 			($auth !== $this->getData(['module', $this->getUrl(0), 'user', $userId, 'auth'])
