@@ -76,7 +76,6 @@ class common
 	public static $coreModuleIds = [
 		'config',
 		'course',
-		'dashboard',
 		'install',
 		'language',
 		'maintenance',
