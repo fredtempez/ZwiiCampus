@@ -911,6 +911,8 @@ class layout extends common
                     'href' => helper::baseUrl() . 'course',
                     'help' => 'Contenu'
                 ]) . '</li>';
+            }
+            if ($this->getUser('group') >= self::GROUP_ADMIN) {
                 $leftItems .= '<li>' . template::ico('brush', [
                     'help' => 'Thème',
                     'href' => helper::baseUrl() . 'theme'
