@@ -61,7 +61,7 @@ class core extends common
 
 		// Crée le fichier de personnalisation avancée
 		if (file_exists(self::DATA_DIR . 'custom.css') === false) {
-			file_put_contents(self::DATA_DIR . 'custom.css', file_get_contents('core/module/theme/resource/custom.css'));
+			file_put_contents(self::DATA_DIR . 'custom.css', ('core/module/theme/resource/custom.css'));
 			chmod(self::DATA_DIR . 'custom.css', 0755);
 		}
 		// Crée le fichier de personnalisation
@@ -884,54 +884,61 @@ class core extends common
 			exit();
 		}
 		if ($access === false) {
-			// Bascule sur le site d'accueil
-			/*if (
-				isset($_SESSION['ZWII_SITE_CONTENT'])
-				&& $_SESSION['ZWII_SITE_CONTENT'] !== 'home'
-			) {
-				$_SESSION['ZWII_SITE_CONTENT'] = 'home';
-				header('Location:' . helper::baseUrl() . $this->getUrl());
-				exit();
-			}*/
 			http_response_code(403);
 			if ($accessInfo['userName']) {
 				$this->addOutput([
 					'title' => 'Accès verrouillé',
-					'content' => template::speech('<p>'. sprintf(helper::translate('La page %s est ouverte par l\'utilisateur %s</p><p><a style="color:inherit" href="javascript:history.back()">%s</a></p>'), $accessInfo['pageId'], $accessInfo['userName'], helper::translate('Retour')))
+					'content' => template::speech('<p>' . sprintf(helper::translate('La page %s est ouverte par l\'utilisateur %s</p><p><a style="color:inherit" href="javascript:history.back()">%s</a></p>'), $accessInfo['pageId'], $accessInfo['userName'], helper::translate('Retour')))
 				]);
 			} else {
 				if (
-					$this->getData(['config', 'page403']) !== 'none'
-					and $this->getData(['page', $this->getData(['config', 'page403'])])
-				) {
+					$this->getData(['config', 'page403']) !== 'none' ) {
+				// Une page 403 est configurée, lire le nom de la page dans les pages du site home 
+				$errorPage403 = json_decode(file_get_contents(self::DATA_DIR . 'home/page.json'), true);
+				// Vérification de l'existance de la page	
+				if ($errorPage403['page'][$this->getData(['config', 'page403'])]) {
+					// On bascule sur le site d'accueil pour afficher la bonne page
+					$_SESSION['ZWII_SITE_CONTENT'] = 'home';
 					header('Location:' . helper::baseUrl() . $this->getData(['config', 'page403']));
 				} else {
+					// La page n'existe pas, affichage par défaut
 					$this->addOutput([
-						'title' => 'Accès interdit',
-						'content' => template::speech('<p>' . helper::translate('Vous n\'êtes pas autorisé à consulter cette page (erreur 403)') . '</p><p><a style="color:inherit" href="javascript:history.back()">'. helper::translate('Retour') . '</a></p>')
+						'title' => 'Page indisponible',
+						'content' => template::speech('<p>' . helper::translate('La page demandée n\'existe pas ou est introuvable (erreur 404)') . '</p><p><a style="color:inherit" href="javascript:history.back()">' . helper::translate('Retour') . '</a></p>')
 					]);
 				}
+			} else {
+				// La page n'est pas configurée, affichage par défaut
+				$this->addOutput([
+					'title' => 'Page indisponible',
+					'content' => template::speech('<p>' . helper::translate('La page demandée n\'existe pas ou est introuvable (erreur 404)') . '</p><p><a style="color:inherit" href="javascript:history.back()">' . helper::translate('Retour') . '</a></p>')
+				]);
+			}
 			}
 		} elseif ($this->output['content'] === '') {
-			// Bascule sur le site d'accueil pour afficher la page d'erreur
-			/*if (
-				isset($_SESSION['ZWII_SITE_CONTENT'])
-				&& $_SESSION['ZWII_SITE_CONTENT'] !== 'home'
-			) {
-				$_SESSION['ZWII_SITE_CONTENT'] = 'home';
-				header('Location:' . helper::baseUrl() . $this->getUrl());
-				exit();
-			}*/
 			http_response_code(404);
 			if (
 				$this->getData(['config', 'page404']) !== 'none'
-				and $this->getData(['page', $this->getData(['config', 'page404'])])
 			) {
-				header('Location:' . helper::baseUrl() . $this->getData(['config', 'page404']));
+				// Une page 404 est configurée, lire le nom de la page dans les pages du site home 
+				$errorPage404 = json_decode(file_get_contents(self::DATA_DIR . 'home/page.json'), true);
+				// Vérification de l'existance de la page	
+				if ($errorPage404['page'][$this->getData(['config', 'page404'])]) {
+					// On bascule sur le site d'accueil pour afficher la bonne page
+					$_SESSION['ZWII_SITE_CONTENT'] = 'home';
+					header('Location:' . helper::baseUrl() . $this->getData(['config', 'page404']));
+				} else {
+					// La page n'existe pas, affichage par défaut
+					$this->addOutput([
+						'title' => 'Page indisponible',
+						'content' => template::speech('<p>' . helper::translate('Vous n\'êtes pas autorisé à consulter cette page (erreur 403)') . '</p><p><a style="color:inherit" href="javascript:history.back()">'. helper::translate('Retour') . '</a></p>')
+					]);
+				}
 			} else {
+				// La page n'est pas configurée, affichage par défaut
 				$this->addOutput([
 					'title' => 'Page indisponible',
-					'content' => template::speech('<p>' . helper::translate('La page demandée n\'existe pas ou est introuvable (erreur 404)') . '</p><p><a style="color:inherit" href="javascript:history.back()">'. helper::translate('Retour') . '</a></p>')
+					'content' => template::speech('<p>' . helper::translate('Vous n\'êtes pas autorisé à consulter cette page (erreur 403)') . '</p><p><a style="color:inherit" href="javascript:history.back()">'. helper::translate('Retour') . '</a></p>')
 				]);
 			}
 		}

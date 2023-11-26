@@ -1399,7 +1399,6 @@ class common
 
 				return ($this->getData(['course', self::$siteContent, 'homePageId']));
 		}
-
 	}
 
 	/**
