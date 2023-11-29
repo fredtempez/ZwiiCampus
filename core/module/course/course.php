@@ -82,7 +82,7 @@ class course extends common
             && $this->getCoursesByUser($this->getUser('id'), $this->getUser('group'))
         ) {
             foreach ($this->getCoursesByUser($this->getUser('id'), $this->getUser('group')) as $courseId => $courseValue) {
-                $categorieUrl = helper::baseUrl() . 'course/suscribe/' . $courseId;
+                $categorieUrl = helper::baseUrl() . 'course/swap/' . $courseId;
                 $authorId = $this->getData(['course', $courseId, 'author']);
                 $author = isset($authorId)
                     ? sprintf('%s %s', $this->getData(['user', $authorId, 'firstname']), $this->getData(['user', $authorId, 'lastname']))
