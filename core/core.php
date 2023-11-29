@@ -389,8 +389,8 @@ class common
 			$_SESSION['ZWII_UI'] = self::$i18nUI;
 		}
 		// Stocker le cookie de langue pour l'éditeur de texte ainsi que l'url du contenu pour le theme
-		setcookie('ZWII_UI', self::$i18nUI, time() + 3600, helper::baseUrl(false, false), '', false, false);
-		setcookie('ZWII_SITE_CONTENT', self::$siteContent, time() + 3600, helper::baseUrl(false, false), '', false, false);
+		setcookie('ZWII_UI', self::$i18nUI, time() + 3600, '', '', false, false);
+		setcookie('ZWII_SITE_CONTENT', self::$siteContent, time() + 3600, '', '', false, false);
 		setlocale(LC_ALL, self::$i18nUI);
 
 		// Construit la liste des pages parents/enfants
