@@ -538,6 +538,9 @@ class page extends common
 				}
 			}
 			// Construction du formulaire
+			
+			// Met à jour le sitemap
+			$this->updateSitemap();
 
 			// Création du sélecteur de modules	
 			self::$moduleIds = [];
