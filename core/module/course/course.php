@@ -491,8 +491,10 @@ class course extends common
                 $pageId = array_search($maxTime, $history);
             }
 
-            // Compte les rôles
-            $profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])]++;
+            // Compte les rôles valides
+            if (isset($profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])])) {
+                $profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])]++;
+            }
 
             // Filtres
             if ($this->isPost()) {
@@ -529,6 +531,7 @@ class course extends common
                 $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
                 !empty($history) ? $pages[$pageId] : '-',
                 !empty($history) ? helper::dateUTF8('%d %B %Y - %H:%M', $maxTime) : '-',
+                $this->getData(['user', $userId, 'tags']),
                 template::button('userHistory' . $userId, [
                     'href' => helper::baseUrl() . 'course/userHistory/' . $courseId . '/' . $userId,
                     'value' => !empty($history) ? round(($viewPages * 100) / $sumPages, 1) . ' %' : '0%',
@@ -660,6 +663,7 @@ class course extends common
                 $userId,
                 $this->getData(['user', $userId, 'firstname']),
                 $this->getData(['user', $userId, 'lastname']),
+                $this->getData(['user', $userId, 'tags']),
             ];
 
         }
@@ -804,6 +808,7 @@ class course extends common
                 $userId,
                 $this->getData(['user', $userId, 'firstname']),
                 $this->getData(['user', $userId, 'lastname']),
+                $this->getData(['user', $userId, 'tags']),
             ];
 
         }
