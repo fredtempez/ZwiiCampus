@@ -1291,7 +1291,6 @@ class user extends common
 								}
 							}
 							// Création du tableau de confirmation
-							var_dump( $item['profil']);
 							self::$users[] = [
 								$userId,
 								$item['nom'],
