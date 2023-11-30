@@ -133,6 +133,7 @@ class user extends common
 					'accessTimer' => null,
 					'accessCsrf' => null,
 					'language' => $this->getInput('userEditLanguage', helper::FILTER_STRING_SHORT),
+					'tags' => ''
 				]
 			]);
 
@@ -343,6 +344,7 @@ class user extends common
 							'accessCsrf' => $this->getData(['user', $this->getUrl(2), 'accessCsrf']),
 							'files' => $this->getInput('userEditFiles', helper::FILTER_BOOLEAN),
 							'language' => $this->getInput('userEditLanguage', helper::FILTER_STRING_SHORT),
+							'tags' => $this->getInput('userEditTags', helper::FILTER_STRING_SHORT),
 						]
 					]);
 					// Redirection spécifique si l'utilisateur change son mot de passe
@@ -519,6 +521,7 @@ class user extends common
 					empty($this->getData(['profil', $this->getData(['user', $userId, 'group']), $this->getData(['user', $userId, 'profil']), 'name']))
 					? helper::translate(self::$groups[(int) $this->getData(['user', $userId, 'group'])])
 					: $this->getData(['profil', $this->getData(['user', $userId, 'group']), $this->getData(['user', $userId, 'profil']), 'name']),
+					$this->getData(['user', $userId, 'tags']),
 					template::button('userEdit' . $userId, [
 						'href' => helper::baseUrl() . 'user/edit/' . $userId,
 						'value' => template::ico('pencil'),
@@ -1201,17 +1204,22 @@ class user extends common
 						and array_key_exists('prenom', $item)
 						and array_key_exists('nom', $item)
 						and array_key_exists('groupe', $item)
+						and array_key_exists('profil', $item)
 						and array_key_exists('email', $item)
 						and array_key_exists('passe', $item)
-						and $item['nom']
-						and $item['prenom']
-						and $item['id']
-						and $item['email']
-						and $item['groupe']
-						and $item['passe']
+						and array_key_exists('tags', $item)
+						and isset($item['id'])
+						and isset($item['nom'])
+						and isset($item['prenom'])
+						and isset($item['email'])
+						and isset($item['groupe'])
+						and isset($item['profil'])
+						and isset($item['passe'])
+						and isset($item['tags'])
 					) {
 						// Validation du groupe
 						$item['groupe'] = (int) $item['groupe'];
+						$item['profil'] = (int) $item['profil'];
 						$item['groupe'] = ($item['groupe'] >= self::GROUP_BANNED and $item['groupe'] <= self::GROUP_ADMIN)
 							? $item['groupe'] : 1;
 						// L'utilisateur existe
@@ -1224,8 +1232,12 @@ class user extends common
 								$item['nom'],
 								$item['prenom'],
 								self::$groups[$item['groupe']],
+								($this->getData(['profil', $item['groupe'], $item['profil'], 'name']) !== null ) 
+								? $this->getData(['profil', $item['groupe'], $item['profil'], 'name']) 
+								: $item['profil'],
 								$item['prenom'],
 								helper::filter($item['email'], helper::FILTER_MAIL),
+								$item['tags'],
 								$item['notification']
 							];
 							// L'utilisateur n'existe pas
@@ -1240,6 +1252,7 @@ class user extends common
 									'firstname' => $item['prenom'],
 									'forgot' => 0,
 									'group' => $item['groupe'],
+									'profil' => $item['profil'],
 									'lastname' => $item['nom'],
 									'mail' => $item['email'],
 									'pseudo' => $item['prenom'],
@@ -1251,7 +1264,8 @@ class user extends common
 									"connectTimeout" => null,
 									"accessUrl" => null,
 									"accessTimer" => null,
-									"accessCsrf" => null
+									"accessCsrf" => null,
+									'tags' => $item['tags']
 								]
 							]);
 							// Icône de notification
@@ -1277,17 +1291,23 @@ class user extends common
 								}
 							}
 							// Création du tableau de confirmation
+							var_dump( $item['profil']);
 							self::$users[] = [
 								$userId,
 								$item['nom'],
 								$item['prenom'],
 								self::$groups[$item['groupe']],
+								($this->getData(['profil', $item['groupe'], $item['profil'], 'name']) !== null ) 
+								? $this->getData(['profil', $item['groupe'], $item['profil'], 'name']) 
+								: $item['profil'],
 								$item['prenom'],
 								$item['email'],
+								$item['tags'],
 								$item['notification']
 							];
 						}
 					}
+
 				}
 				if (empty(self::$users)) {
 					$notification = helper::translate('Rien à importer, erreur de format ou fichier incorrect');
