@@ -98,7 +98,7 @@ class course extends common
                     template::button('categoryUser' . $courseId, [
                         'href' => helper::baseUrl() . 'course/users/' . $courseId,
                         'value' => template::ico('users'),
-                        'help' => 'Inscrits'
+                        'help' => 'Participants'
                     ]),
                     template::button('courseEdit' . $courseId, [
                         'href' => helper::baseUrl() . 'course/edit/' . $courseId,
@@ -555,7 +555,7 @@ class course extends common
 
         // Valeurs en sortie
         $this->addOutput([
-            'title' => sprintf(helper::translate('Inscriptions %s'), $this->getData(['course', $courseId, 'title'])),
+            'title' => sprintf(helper::translate('Participants %s'), $this->getData(['course', $courseId, 'title'])),
             'view' => 'users',
         ]);
     }
