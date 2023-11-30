@@ -29,7 +29,7 @@ class suscribe extends common
 		self::STATUS_EMAIL_AWAITING => 'Email non confirmé',
 		self::STATUS_EMAIL_VALID => 'Email confimé',
 		self::STATUS_ACCOUNT_AWAITING => 'Email validé, en attente de validation',
-		self::STATUS_ACCOUNT_VALID => 'Email validé, compte validation',
+		self::STATUS_ACCOUNT_VALID => 'Email validé, compte activé',
 	];
 
 	public static $actions = [
@@ -338,14 +338,15 @@ class suscribe extends common
 			$check = false;
 			$notification = 'La validité est dépassée';
 		}
-		// La clé est incorrecte ou le compte a déjà été validé
+
+		// La clé est incorrecte ou le compte n'est pas en attente de validation
 		if (
-			$check &&
-			($auth !== $this->getData(['module', $this->getUrl(0), 'user', $userId, 'auth'])
-				|| $this->getData(['module', $this->getUrl(0), 'user', $userId, 'auth']) !== self::STATUS_ACCOUNT_VALID)
+			$check
+			&& $auth !== $this->getData(['module', $this->getUrl(0), 'user', $userId, 'auth'])
+			&& $this->getData(['module', $this->getUrl(0), 'user', $userId, 'status']) !== self::STATUS_EMAIL_AWAITING
 		) {
 			$check = false;
-			$notification = 'Identifiant ou mot de passe inconnu';
+			$notification = 'L\adresse transmise est incorrecte !';
 		}
 
 		if ($check) {
@@ -371,7 +372,7 @@ class suscribe extends common
 					]
 				]);
 				// Modifier le statut dans le module
-				$this->setData(['module', $this->getUrl(0), 'user', $userId, 'auth', self::STATUS_ACCOUNT_VALID]);
+				$this->setData(['module', $this->getUrl(0), 'user', $userId, 'status', self::STATUS_ACCOUNT_VALID]);
 				$notification = 'Votre inscription est confirmée';
 			} else {
 				// Approbation nécessaire
