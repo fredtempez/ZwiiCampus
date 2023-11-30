@@ -624,7 +624,9 @@ class course extends common
         foreach ($users as $userId => $userValue) {
 
             // Compte les rôles
-            $profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])]++;
+            if (isset($profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])])) {
+                $profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])]++;
+            }
 
             // Filtres
             if (
@@ -769,7 +771,9 @@ class course extends common
         foreach ($users as $userId => $userValue) {
 
             // Compte les rôles
-            $profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])]++;
+            if (isset($profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])])) {
+                $profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])]++;
+            }
 
             // Filtres
             if (
