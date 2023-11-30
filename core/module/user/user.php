@@ -1232,9 +1232,9 @@ class user extends common
 								$item['nom'],
 								$item['prenom'],
 								self::$groups[$item['groupe']],
-								($this->getData(['profil', $item['groupe'], $item['profil'], 'name']) !== null ) 
-								? $this->getData(['profil', $item['groupe'], $item['profil'], 'name']) 
-								: $item['profil'],
+								empty($this->getData(['profil', $this->getData(['user', $userId, 'group']), $this->getData(['user', $userId, 'profil']), 'name']))
+								? helper::translate(self::$groups[(int) $this->getData(['user', $userId, 'group'])])
+								: $this->getData(['profil', $this->getData(['user', $userId, 'group']), $this->getData(['user', $userId, 'profil']), 'name']),
 								$item['prenom'],
 								helper::filter($item['email'], helper::FILTER_MAIL),
 								$item['tags'],
@@ -1296,9 +1296,9 @@ class user extends common
 								$item['nom'],
 								$item['prenom'],
 								self::$groups[$item['groupe']],
-								($this->getData(['profil', $item['groupe'], $item['profil'], 'name']) !== null ) 
-								? $this->getData(['profil', $item['groupe'], $item['profil'], 'name']) 
-								: $item['profil'],
+								empty($this->getData(['profil', $this->getData(['user', $userId, 'group']), $this->getData(['user', $userId, 'profil']), 'name']))
+								? helper::translate(self::$groups[(int) $this->getData(['user', $userId, 'group'])])
+								: $this->getData(['profil', $this->getData(['user', $userId, 'group']), $this->getData(['user', $userId, 'profil']), 'name']),
 								$item['prenom'],
 								$item['email'],
 								$item['tags'],
