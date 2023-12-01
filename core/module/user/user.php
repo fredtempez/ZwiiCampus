@@ -561,8 +561,19 @@ class user extends common
 	 */
 	public function profil()
 	{
-		foreach ($this->getData(['profil']) as $groupId => $groupData) {
 
+		// Ne pas supprimer un profil utililsé
+		// recherche les membres du groupe 
+		$groups = helper::arrayColumn($this->getData(['user']), 'group');
+		$groups = array_keys($groups, $this->getUrl(2));
+		$profilUsed = true;
+		// Stoppe si le profil est affecté
+		foreach ($groups as $userId) {
+			if ((string) $this->getData(['user', $userId, 'profil']) === $this->getUrl(3)) {
+				$profilUsed= false;
+			}
+		}
+		foreach ($this->getData(['profil']) as $groupId => $groupData) {
 			// Membres sans permissions spécifiques
 			if (
 				$groupId == self::GROUP_BANNED ||
@@ -605,7 +616,7 @@ class user extends common
 							'href' => helper::baseUrl() . 'user/profilDelete/' . $groupId . '/' . $profilId,
 							'value' => template::ico('trash'),
 							'help' => 'Supprimer',
-							'disabled' => $profilData['permanent'],
+							'disabled' => $profilData['permanent'] && $profilUsed,
 						])
 					];
 				}
@@ -927,6 +938,17 @@ class user extends common
 
 	public function profilDelete()
 	{
+		// Ne pas supprimer un profil utililsé
+		// recherche les membres du groupe 
+		$groups = helper::arrayColumn($this->getData(['user']), 'group');
+		$groups = array_keys($groups, $this->getUrl(2));
+		$flag= true;
+		// Stoppe si le profil est affecté
+		foreach ($groups as $userId) {
+			if ((string) $this->getData(['user', $userId, 'profil']) === $this->getUrl(3)) {
+				$flag= false;
+			}
+		}
 		if (
 			$this->getUser('permission', __CLASS__, __FUNCTION__) !== true ||
 			$this->getData(['profil', $this->getUrl(2), $this->getUrl(3)]) === null ||
@@ -938,12 +960,15 @@ class user extends common
 			]);
 			// Suppression
 		} else {
-			$this->deleteData(['profil', $this->getUrl(2), $this->getUrl(3)]);
+			if ($flag) {
+				$this->deleteData(['profil', $this->getUrl(2), $this->getUrl(3)]);
+			}
+			
 			// Valeurs en sortie
 			$this->addOutput([
 				'redirect' => helper::baseUrl() . $this->getUrl(0) . '/profil',
-				'notification' => helper::translate('Profil supprimé'),
-				'state' => true
+				'notification' => $flag ? helper::translate('Profil supprimé') : helper::translate('Action interdite'),
+				'state' => $flag
 			]);
 		}
 	}
