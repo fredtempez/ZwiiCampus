@@ -289,8 +289,8 @@ class user extends common
 						}
 					} else {
 						if (
-							!empty($this->getInput('userEditNewPassword')) 
-							&&	$this->getInput('userEditNewPassword') === $this->getInput('userEditConfirmPassword')
+							!empty($this->getInput('userEditNewPassword'))
+							&& $this->getInput('userEditNewPassword') === $this->getInput('userEditConfirmPassword')
 						) {
 							$newPassword = $this->getInput('userEditNewPassword', helper::FILTER_PASSWORD);
 							// Déconnexion de l'utilisateur si il change le mot de passe de son propre compte
@@ -645,7 +645,10 @@ class user extends common
 			) {
 				$fileManager = false;
 			}
-			if ($profil !== $profil) {
+			if (
+				$profil !== $oldProfil &&
+				$this->deleteData(['profil', $group, $oldProfil])
+			) {
 				$this->deleteData(['profil', $group, $oldProfil]);
 			}
 			// Données du formulaire
@@ -1042,7 +1045,7 @@ class user extends common
 						]);
 					} else {
 						$logStatus = 'Connexion réussie';
-						$redirect = ($this->getUrl(2) && strpos($this->getUrl(2), 'user_reset') !== 0)  ? helper::baseUrl() . str_replace('_', '/', str_replace('__', '#', $this->getUrl(2))) : helper::baseUrl();
+						$redirect = ($this->getUrl(2) && strpos($this->getUrl(2), 'user_reset') !== 0) ? helper::baseUrl() . str_replace('_', '/', str_replace('__', '#', $this->getUrl(2))) : helper::baseUrl();
 						// Valeurs en sortie
 						$this->addOutput([
 							'notification' => sprintf(helper::translate('Bienvenue %s %s'), $this->getData(['user', $userId, 'firstname']), $this->getData(['user', $userId, 'lastname'])),
@@ -1126,7 +1129,7 @@ class user extends common
 
 			// Valeurs en sortie
 			$this->addOutput([
-				'redirect' => helper::baseurl(), 
+				'redirect' => helper::baseurl(),
 				'notification' => helper::translate('Impossible de réinitialiser le mot de passe de ce compte !'),
 				'state' => false
 				//'access' => false
