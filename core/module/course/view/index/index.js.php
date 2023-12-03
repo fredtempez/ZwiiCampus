@@ -26,6 +26,7 @@ $(document).ready(function () {
         language: {
             url: "core/vendor/datatables/french.json"
         },
+        locale: 'fr',
         "columnDefs": [
             {
                 target: 3,

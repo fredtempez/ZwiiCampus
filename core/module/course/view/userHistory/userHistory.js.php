@@ -16,6 +16,7 @@ $(document).ready((function () {
         language: {
             url: "core/vendor/datatables/french.json"
         },
+        locale: 'fr',
         searching: false,
         pageLength: 100,
         lengthChange: false,
