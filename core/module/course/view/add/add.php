@@ -77,7 +77,7 @@
             <div class="row">
                 <div class="col6">
                     <?php echo template::select('courseAddEnrolment', $module::$courseEnrolment, [
-                        'label' => 'Inscription'
+                        'label' => 'Participation'
                     ]); ?>
                 </div>
                 <div class="col6">

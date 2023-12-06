@@ -78,7 +78,7 @@
             <div class="row">
                 <div class="col4">
                     <?php echo template::select('courseEditEnrolment', $module::$courseEnrolment, [
-                        'label' => 'Inscription',
+                        'label' => 'Participation',
                         'selected' => $this->getdata(['course', $this->getUrl(2), 'enrolment'])
                     ]); ?>
                 </div>
