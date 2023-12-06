@@ -53,7 +53,7 @@
                     <div class="workshopAccessContainer">
                         <p>
                             <span class="workshopAccess">
-                                <?php echo sprintf(helper::translate($module::$coursesAccess[$courseValue['access']]), helper::dateUTF8('%d %B %Y', $courseValue['openingDate']), helper::dateUTF8('%d %B %Y', $courseValue['closingDate'])) ?>
+                                <?php echo sprintf(helper::translate($module::$coursesAccess[$courseValue['access']]), helper::dateUTF8('%d %B %Y', $courseValue['openingDate']) . helper::translate(' à ') . helper::dateUTF8('%H:%M', $courseValue['openingDate']) , helper::dateUTF8('%d %B %Y', $courseValue['closingDate']) . helper::translate(' à ') . helper::dateUTF8('%H:%M', $courseValue['closingDate'])) ?>
                             </span>
                         </p>
                     </div>
