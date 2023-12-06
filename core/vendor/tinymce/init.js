@@ -99,7 +99,7 @@ tinymce.init({
 	content_css: [
 		baseUrl + "core/layout/common.css",
 		baseUrl + "core/vendor/tinymce/content.css",
-		baseUrl + "site/data/theme.css",
+		baseUrl + "site/data/"+ (getCookie("ZWII_SITE_CONTENT") === null ? 'home' : getCookie("ZWII_SITE_CONTENT")) +"/theme.css",
 		baseUrl + "site/data/custom.css"
 	],
 	// Classe à ajouter à la balise body dans l'iframe
