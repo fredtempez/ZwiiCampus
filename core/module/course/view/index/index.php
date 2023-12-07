@@ -18,7 +18,8 @@
         <?php echo template::button('courseAdd', [
             'class' => 'buttonGreen',
             'href' => helper::baseUrl() . 'course/add',
-            'value' => template::ico('plus')
+            'value' => template::ico('plus'),
+            'help' => 'Ajouter un espace'
         ]); ?>
     </div>
     <?php endif; ?>
@@ -26,5 +27,5 @@
 <?php if($module::$courses): ?>
 	<?php echo template::table([2, 2, 2, 3, 1, 1, 1], $module::$courses, ['Titre court', 'Auteur', 'Description', 'Lien direct', '', '', ''], ['id' => 'dataTables']); ?>
 <?php else: ?>
-	<?php echo template::speech('Aucun Contenu'); ?>
+	<?php echo template::speech('Aucun espace'); ?>
 <?php endif; ?>

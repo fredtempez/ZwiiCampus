@@ -118,7 +118,7 @@ class course extends common
 
         // Valeurs en sortie
         $this->addOutput([
-            'title' => helper::translate('Contenus disponibles'),
+            'title' => helper::translate('Espaces disponibles'),
             'view' => 'index'
         ]);
     }
@@ -180,7 +180,7 @@ class course extends common
             // Valeurs en sortie
             $this->addOutput([
                 'redirect' => helper::baseUrl() . 'course',
-                'notification' => helper::translate('Contenu créé'),
+                'notification' => helper::translate('Espace créé'),
                 'state' => true
             ]);
         }
@@ -203,7 +203,7 @@ class course extends common
 
         // Valeurs en sortie
         $this->addOutput([
-            'title' => helper::translate('Ajouter un contenu'),
+            'title' => helper::translate('Ajouter un espace'),
             'view' => 'add'
         ]);
     }
@@ -242,7 +242,7 @@ class course extends common
             // Valeurs en sortie
             $this->addOutput([
                 'redirect' => helper::baseUrl() . 'course',
-                'notification' => helper::translate('Contenu édité'),
+                'notification' => helper::translate('Espace modifié'),
                 'state' => true
             ]);
         }
@@ -272,7 +272,7 @@ class course extends common
 
         // Valeurs en sortie
         $this->addOutput([
-            'title' => helper::translate('Editer un contenu'),
+            'title' => helper::translate('Editer un espace'),
             'view' => 'edit'
         ]);
     }
@@ -303,7 +303,7 @@ class course extends common
             // Valeurs en sortie
             $this->addOutput([
                 'redirect' => helper::baseUrl() . 'course',
-                'notification' => $success ? helper::translate('Contenu supprimé') : helper::translate('Erreur de suppression'),
+                'notification' => $success ? helper::translate('Espace supprimé') : helper::translate('Erreur de suppression'),
                 'state' => $success
             ]);
         }
@@ -336,7 +336,7 @@ class course extends common
         }
         // Valeurs en sortie
         $this->addOutput([
-            'title' => helper::translate('Catégorie de contenu'),
+            'title' => helper::translate('Catégories'),
             'view' => 'category'
         ]);
     }
@@ -868,19 +868,19 @@ class course extends common
                 $to = helper::dateUTF8('%d %B %Y', $this->getData(['course', $courseId, 'closingDate']), self::$i18nUI) . helper::translate(' à ') . helper::dateUTF8('%H:%M', $this->getData(['course', $courseId, 'closingDate']), self::$i18nUI);
                 $message = sprintf(helper::translate('Ce contenu ferme le %s'), $to);
             } else {
-                $message = sprintf(helper::translate('Bienvenue dans le contenu %s'), $this->getData(['course', $courseId, 'title']));
+                $message = sprintf(helper::translate('Bienvenue dans l\'espace  %s'), $this->getData(['course', $courseId, 'title']));
             }
             $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
         }
         // Le contenu est fermé
         elseif ($this->courseIsAvailable($courseId) === false) {
             // Génération du message
-            $message = helper::translate('Ce contenu est fermé');
+            $message = helper::translate('Cet espace est fermé');
             $state = false;
             if ($this->getData(['course', $courseId, 'access']) === self::COURSE_ACCESS_DATE) {
                 $from = helper::dateUTF8('%d %B %Y', $this->getData(['course', $courseId, 'openingDate']), self::$i18nUI) . helper::translate(' à ') . helper::dateUTF8('%H:%M', $this->getData(['course', $courseId, 'openingDate']), self::$i18nUI);
                 $to = helper::dateUTF8('%d %B %Y', $this->getData(['course', $courseId, 'closingDate']), self::$i18nUI) . helper::translate(' à ') . helper::dateUTF8('%H:%M', $this->getData(['course', $courseId, 'closingDate']), self::$i18nUI);
-                $message = sprintf(helper::translate('Ce contenu ouvre le <br>%s <br> et ferme le %s'), $from, $to);
+                $message = sprintf(helper::translate('Cet espace ouvre le <br>%s <br> et ferme le %s'), $from, $to);
             }
         }
         // le contenu est ouvert, l'étudiant n'est pas inscrit, l'accès au contenu est anonyme
@@ -900,7 +900,7 @@ class course extends common
                     if ($this->getUser('id')) {
                         $redirect = helper::baseUrl() . 'course/suscribe/' . $courseId;
                     } else {
-                        $message = helper::translate('Vous devez disposer d\'un compte pour accéder à ce contenu');
+                        $message = helper::translate('Vous devez disposer d\'un compte pour accéder à cet espace');
                         $state = false;
                     }
                     break;
@@ -909,7 +909,7 @@ class course extends common
                     if ($this->getUser('id')) {
                         $redirect = helper::baseUrl() . 'course/suscribe/' . $courseId;
                     } else {
-                        $message = helper::translate('Vous devez disposer d\'un compte et d\'une clé pour accéder à ce contenu');
+                        $message = helper::translate('Vous devez disposer d\'un compte et d\'une clé pour accéder à cet espace');
                         $state = false;
                     }
                     break;
@@ -1159,13 +1159,13 @@ class course extends common
             switch ($this->getData(['course', $courseId, 'enrolment'])) {
                 case self::COURSE_ENROLMENT_SELF:
                     if ($userId == '') {
-                        self::$swapMessage['enrolmentMessage'] = helper::translate('Connectez-vous pour accéder à ce contenu.');
+                        self::$swapMessage['enrolmentMessage'] = helper::translate('Connectez-vous pour accéder à ce espace.');
                         self::$swapMessage['submitLabel'] = helper::translate('Connexion');
                     }
                     break;
                 case self::COURSE_ENROLMENT_SELF_KEY:
                     if ($userId == '') {
-                        self::$swapMessage['enrolmentMessage'] = helper::translate('Connectez-vous pour accéder à ce contenu.');
+                        self::$swapMessage['enrolmentMessage'] = helper::translate('Connectez-vous pour accéder à cet espace.');
                         self::$swapMessage['submitLabel'] = helper::translate('Connexion');
                     } else {
                         self::$swapMessage['enrolmentKey'] = template::text('courseSwapEnrolmentKey', [
@@ -1179,7 +1179,7 @@ class course extends common
             }
             // Valeurs en sortie
             $this->addOutput([
-                'title' => sprintf(helper::translate('Accéder au contenu %s'), $this->getData(['course', $this->getUrl(2), 'title'])),
+                'title' => sprintf(helper::translate('Accéder à l\'espace %s'), $this->getData(['course', $this->getUrl(2), 'title'])),
                 'view' => 'suscribe',
                 'display' => self::DISPLAY_LAYOUT_LIGHT,
             ]);

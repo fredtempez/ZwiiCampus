@@ -18,7 +18,7 @@ class init extends common
 			'legalPageId' => 'none',
 			'searchPageId' => 'none',
 			'searchPageLabel' => 'Rechercher',
-			'sitemapPageLabel' => 'Plan du contenu',
+			'sitemapPageLabel' => 'Sommaire',
 			'legalPageLabel' => 'Mentions légales',
 			'metaDescription' => 'Zwii est un CMS sans base de données qui permet de créer et gérer facilement un site web sans aucune connaissance en programmation.',
 			'title' => 'Votre site en quelques clics !',
@@ -474,7 +474,7 @@ class init extends common
 					'name' => 'Rédacteur',
 					'readonly' => false,
 					'permanent' => false,
-					'comment' => 'Tous les droits d\'édition des contenus',
+					'comment' => 'Tous les droits d\'édition des espaces',
 					'filemanager' => true,
 					'file' => [
 						'download' => true,
@@ -907,16 +907,16 @@ class init extends common
 	public static $siteContent = [
 		'accueil' => [
 			'content' => '<h2>Bienvenue sur cette nouvelle installation de Zwii Campus.</h2>
-			<p>Zwii Campus est un outil auteur destin&eacute; &agrave; mettre en ligne des contenus d\'enseignement pour des apprenants.</p>
-			<p>Les contenus d\'enseignement se pr&eacute;sentent comme des mini site Web. Le contenu des contenus est librement personnalisable, dans la plupart des cas on utilisera un menu lat&eacute;ral et les pages disposeront de boutons de navigation.</p>
-			<p>Chaque contenu disposent de modalit&eacute;s d\'ouverture :&nbsp;ouvert, ferm&eacute; et ouvert entre deux dates.</p>
+			<p>Zwii Campus est un outil auteur destin&eacute; &agrave; mettre en ligne des espaces d\'enseignement pour des apprenants.</p>
+			<p>Les esapces d\'enseignement se pr&eacute;sentent comme des mini site Web. Le contenu des espaces est librement personnalisable, dans la plupart des cas on utilisera un menu lat&eacute;ral et les pages disposeront de boutons de navigation.</p>
+			<p>Chaque espace dispose de modalit&eacute;s d\'ouverture :&nbsp;ouvert, ferm&eacute; et ouvert entre deux dates.</p>
 			<p>Les modalit&eacute;s d\'acc&egrave;s sont vari&eacute;es:</p>
 			<ul>
 			<li>anonyme (ouvert &agrave; tous sans avoir &agrave; disposer de compte d\'acc&egrave;s),</li>
 			<li>avec inscription libre pour les d&eacute;tenteurs d\'un compte d\'acc&egrave;s,</li>
 			<li>et avec une cl&eacute; d\'inscription pour les d&eacute;tenteurs d\'un compte d\'acc&egrave;s.</li>
 			</ul>
-			<p>Le parcours des apprenants est suivi : le pourcentage de progression et le d&eacute;tail de la consultation des pages est visible dans la gestion des contenus.</p>'
+			<p>Le parcours des apprenants est suivi : le pourcentage de progression et le d&eacute;tail de la consultation des pages est visible dans la gestion des espaces.</p>'
 		],
 		'contact' => [
 			'content' => '<p>Cette page contient un exemple de formulaire conçu à partir du module de génération de formulaires. Il est configuré pour envoyer les données saisies par mail aux administrateurs du site.</p>'

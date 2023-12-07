@@ -909,7 +909,7 @@ class layout extends common
                 }
                 $leftItems .= '<li>' . template::ico('cubes', [
                     'href' => helper::baseUrl() . 'course',
-                    'help' => 'Contenu'
+                    'help' => 'Espaces'
                 ]) . '</li>';
             }
             if ($this->getUser('group') >= self::GROUP_ADMIN) {

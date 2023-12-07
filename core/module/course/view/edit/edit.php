@@ -34,7 +34,7 @@
             <div class="row">
                 <div class="col6">
                     <?php echo template::select('courseEditHomePageId', helper::arrayColumn($module::$pagesList, 'title', 'SORT_ASC'), [
-                        'label' => 'Accueil du contenu',
+                        'label' => 'Page d\'accueil',
                         'selected' => $this->getdata(['course', $this->getUrl(2), 'homePageId']),
                     ]); ?>
                 </div>
