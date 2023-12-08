@@ -281,9 +281,9 @@ class course extends common
     {
         $courseId = $this->getUrl(2);
         if (
-            ($this->getUser('permission', __CLASS__, __FUNCTION__) !== true 
-            // Le contenu n'existe pas
-            || $this->getData(['course', $courseId]) === null)
+            ($this->getUser('permission', __CLASS__, __FUNCTION__) !== true
+                // Le contenu n'existe pas
+                || $this->getData(['course', $courseId]) === null)
         ) {
             // Valeurs en sortie
             $this->addOutput([
@@ -484,11 +484,25 @@ class course extends common
         ksort($users);
 
         foreach ($users as $userId => $userValue) {
-            $history = $userValue['history'];
 
-            if (!empty($history)) {
-                $maxTime = max($history);
-                $pageId = array_search($maxTime, $history);
+            // Date et heure de la dernière page vue
+            $history = $userValue['history'];
+            $maxTime = 0;
+            foreach ($userValue['history'] as $pageId => $times) {
+                if (is_array($times)) {
+                    foreach ($times as $time) {
+                        if ($time > $maxTime) {
+                            $maxTime = $time;
+                            $lastPageId = $pageId;
+                        }                
+                    }
+                } else {
+                    // Compatibilité anciennes versions
+                    if ($times > $maxTime) {
+                        $maxTime = $times;
+                        $lastPageId = $pageId;
+                    }
+                }
             }
 
             // Compte les rôles valides
@@ -529,7 +543,7 @@ class course extends common
             self::$courseUsers[] = [
                 $userId,
                 $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
-                !empty($history) ? $pages[$pageId] : '-',
+                !empty($history) ? $pages[$lastPageId] : '-',
                 !empty($history) ? helper::dateUTF8('%d %B %Y - %H:%M', $maxTime) : '-',
                 $this->getData(['user', $userId, 'tags']),
                 template::button('userHistory' . $userId, [

@@ -499,7 +499,10 @@ class core extends common
 				|| $this->getUser('id') !== $this->getData(['course', self::$siteContent, 'author'])
 			)
 		) {
-			$this->setData(['enrolment', self::$siteContent, $this->getUser('id'), 'history', $this->getUrl(0), time()]);
+			$data = is_array($this->getData(['enrolment', self::$siteContent, $this->getUser('id'), 'history', $this->getUrl(0)]))
+				? array_merge([time()], $this->getData(['enrolment', self::$siteContent, $this->getUser('id'), 'history', $this->getUrl(0)]))
+				: [time()];
+			$this->setData(['enrolment', self::$siteContent, $this->getUser('id'), 'history', $this->getUrl(0), $data]);
 		}
 
 		// Journalisation
