@@ -533,10 +533,11 @@ class course extends common
                     continue;
             }
 
-            // Taux de parcours
+            // Progression
             $viewPages = $this->getData(['enrolment', $courseId, $userId, 'history']) !== null ?
                 count(array_keys($this->getData(['enrolment', $courseId, $userId, 'history']))) :
                 0;
+            
             // Construction du tableau
             self::$courseUsers[] = [
                 $userId,
@@ -1014,6 +1015,10 @@ class course extends common
 
         $courseId = $this->getUrl(2);
 
+        self::$courseUsers = [
+            0 => ['UserId', 'Prénom', 'Nom',  'Page Titre', 'Consultation Date', 'Consultation Heure', 'Progression']
+        ];
+
         // Statistiques du contenu sélectionné calcul du nombre de pages
         $sumPages = 0;
         $data = json_decode(file_get_contents(self::DATA_DIR . $courseId . '/page.json'), true);
@@ -1043,21 +1048,35 @@ class course extends common
         $filename = $path . $courseId . '/synthèse' . helper::dateUTF8('%Y%m%d', time()) . '.csv';
 
         foreach ($users as $userId => $userValue) {
-            $history = $userValue['history'];
 
-            $maxTime = max($history);
-            $pageId = array_search($maxTime, $history);
+            // Date et heure de la dernière page vue
+            // Compatibilité anciennes versions
+            if (
+                $this->getData(['enrolment', $courseId, $userId, 'lastPageView']) === null
+                or $this->getData(['enrolment', $courseId, $userId, 'datePageView']) === null
+            ) {
+                if (!empty($userValue['history'])) {
+                    $maxTime = max($userValue['history']);
+                    $lastPageId = array_search($maxTime, $userValue['history']);
+                    $this->setData(['enrolment', $courseId, $userId, 'lastPageView', $lastPageId]);
+                    $this->setData(['enrolment', $courseId, $userId, 'datePageView', $maxTime]);
+                }
+            }
 
-            // Taux de parcours
-            $viewPages = count($this->getData(['enrolment', $courseId, $userId, 'history']));
+            // Progression
+            $viewPages = $this->getData(['enrolment', $courseId, $userId, 'history']) !== null ?
+                count(array_keys($this->getData(['enrolment', $courseId, $userId, 'history']))) :
+                0;
 
             // Construction du tableau
             self::$courseUsers[] = [
                 $userId,
-                $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
-                $pages[$pageId],
-                helper::dateUTF8('%d %B %Y - %H:%M', $maxTime),
-                round(($viewPages * 100) / $sumPages, 1)
+                $this->getData(['user', $userId, 'firstname']),
+                $this->getData(['user', $userId, 'lastname']),
+                $pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])],
+                helper::dateUTF8('%d/%d/%Y', $this->getData(['enrolment', $courseId, $userId, 'datePageView'])),
+                helper::dateUTF8('%H:%M', $this->getData(['enrolment', $courseId, $userId, 'datePageView'])),
+                number_format(round(($viewPages * 100) / $sumPages, 1) / 100, 2, ',') 
             ];
 
             // Synthèse des historiques
@@ -1092,6 +1111,9 @@ class course extends common
         $courseId = $this->getUrl(2);
         $userId = $this->getUrl(3);
         $history = $this->getData(['enrolment', $courseId, $userId, 'history']);
+        self::$userHistory= [
+            0 => ['Ordre', 'PageId', 'Page Titre', 'Consultation Date', 'Consultation Heure']
+        ];
 
         // Liste des pages contenues dans cet espace et exclure les barres et les pages masquées
         $data = json_decode(file_get_contents(self::DATA_DIR . $courseId . '/page.json'), true);
@@ -1116,15 +1138,18 @@ class course extends common
                         $pages[$pageId]['number'],
                         $pageId,
                         html_entity_decode($pages[$pageId]['title']),
-                        helper::dateUTF8('%d %B %Y %H:%M:%S', $time)
+                        helper::dateUTF8('%d/%d/%Y', $time),
+                        helper::dateUTF8('%H:%M:%S', $time),
                     ];
                 }
             } else {
+
                 self::$userHistory[] = [
                     $pages[$pageId]['number'],
                     $pageId,
                     html_entity_decode($pages[$pageId]['title']),
-                    helper::dateUTF8('%d %B %Y %H:%M:%S', $times)
+                    helper::dateUTF8('%d/%d/%Y', $times),
+                    helper::dateUTF8('%H:%M:%S', $time),
                 ];
             }
         }
