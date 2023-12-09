@@ -970,19 +970,21 @@ class course extends common
             if (is_array($times)) {
                 $d = array();
                 foreach ($times as $time) {
-                    $d[] = helper::dateUTF8('%d %B %Y - %H:%M:%S', $time);
+                    self::$userHistory[] = [
+                        $pages[$pageId]['number'],
+                        html_entity_decode($pages[$pageId]['title']),
+                        helper::dateUTF8('%d %B %Y %H:%M:%S', $time)
+                    ];
                 }
-                $dates = implode('<br />', $d);
             } else {
-                $dates = helper::dateUTF8('%d %B %Y - %H:%M:%S', $times);
+                self::$userHistory[] = [
+                    $pages[$pageId]['number'],
+                    html_entity_decode($pages[$pageId]['title']),
+                    helper::dateUTF8('%d %B %Y %H:%M:%S', $times)
+                ];
             }
-
-            self::$userHistory[$pageId] = [
-                $pages[$pageId]['number'],
-                $pages[$pageId]['title'],
-                $dates,
-            ];
         }
+
 
         // Valeurs en sortie
         $this->addOutput([
@@ -1110,8 +1112,6 @@ class course extends common
                     helper::dateUTF8('%d %B %Y %H:%M:%S', $times)
                 ];
             }
-
-
         }
 
         // Dossier temporaire
@@ -1124,7 +1124,7 @@ class course extends common
         $path = self::FILE_DIR . 'source/export/';
         $filename = $path . $courseId . '/' . $userId . '.csv';
         $file = fopen($filename, 'w');
-        
+
         foreach (self::$userHistory as $keys => $values) {
             $data = $values;
             // Écrire la ligne dans le fichier CSV
