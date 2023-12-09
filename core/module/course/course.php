@@ -466,12 +466,11 @@ class course extends common
         self::$alphabet = array_combine($alphabet, self::$alphabet);
         self::$alphabet = array_merge(['all' => 'Tout'], self::$alphabet);
 
-        // Statistiques du contenu sélectionné calcul du nombre de pages
+        // Liste des pages contenues dans cet espace et exclure les barres et les pages masquées
         $sumPages = 0;
-        $data = json_decode(file_get_contents(self::DATA_DIR . $courseId . '/page.json'), true);
-
-        // Compter les pages et exclure les barres et les pages masquées
-        foreach ($data['page'] as $pageId => $pageData) {
+        $pages = json_decode(file_get_contents(self::DATA_DIR . $courseId . '/page.json'), true);
+        $pages = $pages ['page'];
+        foreach ($pages as $pageId => $pageData) {
             if ($pageData['position'] > 0) {
                 $sumPages++;
             }
@@ -539,7 +538,7 @@ class course extends common
             self::$courseUsers[] = [
                 $userId,
                 $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
-                $this->getData(['enrolment', $courseId, $userId, 'lastPageView']),
+                $pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])]['title'],
                 helper::dateUTF8('%d %B %Y - %H:%M', $this->getData(['enrolment', $courseId, $userId, 'datePageView'])),
                 $this->getData(['user', $userId, 'tags']),
                 template::button('userHistory' . $userId, [
@@ -950,10 +949,11 @@ class course extends common
 
         $courseId = $this->getUrl(2);
         $userId = $this->getUrl(3);
-        $history = $this->getData(['enrolment', $courseId, $userId]);
+        $history = $this->getData(['enrolment', $courseId, $userId, 'history']);
+
+        // Liste des pages contenues dans cet espace et exclure les barres et les pages masquées
         $data = json_decode(file_get_contents(self::DATA_DIR . $courseId . '/page.json'), true);
         $data = $data['page'];
-        // Exclure les barres et les pages masquées
         $count = 0;
         foreach ($data as $pageId => $pageData) {
             if ($pageData['position'] > 0) {
@@ -966,6 +966,7 @@ class course extends common
         }
 
         foreach ($history as $pageId => $times) {
+            // Dates de consultation de la page
             if (is_array($times)) {
                 $d = array();
                 foreach ($times as $time) {
@@ -973,7 +974,7 @@ class course extends common
                 }
                 $dates = implode('<br />', $d);
             } else {
-                $dates = helper::dateUTF8('%d %B %Y - %H:%M:%S', $history);
+                $dates = helper::dateUTF8('%d %B %Y - %H:%M:%S', $times);
             }
 
             self::$userHistory[$pageId] = [
