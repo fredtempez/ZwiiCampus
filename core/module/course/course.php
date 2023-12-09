@@ -1074,22 +1074,11 @@ class course extends common
 
         $courseId = $this->getUrl(2);
         $userId = $this->getUrl(3);
-        $history = $this->getData(['enrolment', $courseId, $userId]);
+        $history = $this->getData(['enrolment', $courseId, $userId, 'history']);
+
+        // Liste des pages contenues dans cet espace et exclure les barres et les pages masquées
         $data = json_decode(file_get_contents(self::DATA_DIR . $courseId . '/page.json'), true);
         $data = $data['page'];
-
-        // Dossier temporaire
-        if (is_dir(self::FILE_DIR . 'source/export') === false) {
-            mkdir(self::FILE_DIR . 'source/export');
-        }
-        if (is_dir(self::FILE_DIR . 'source/export/' . $courseId) === false) {
-            mkdir(self::FILE_DIR . 'source/export/' . $courseId);
-        }
-        $path = self::FILE_DIR . 'source/export/';
-
-        $filename = $path . $courseId . '/' . $userId . '.csv';
-
-        // Exclure les barres et les pages masquées
         $count = 0;
         foreach ($data as $pageId => $pageData) {
             if ($pageData['position'] > 0) {
@@ -1100,18 +1089,44 @@ class course extends common
                 ];
             }
         }
-        $file = fopen($filename, 'w');
-        foreach ($history['history'] as $pageId => $time) {
-            $data = array_map(
-                'html_entity_decode',
-                array(
-                    $pageId,
-                    $pages[$pageId]['title'],
-                    $pages[$pageId]['number'],
-                    helper::dateUTF8('%d %B %Y - %H:%M:%S', $time),
-                )
-            );
 
+        foreach ($history as $pageId => $times) {
+            // Dates de consultation de la page
+            if (is_array($times)) {
+                $d = array();
+                foreach ($times as $time) {
+                    self::$userHistory[] = [
+                        $pages[$pageId]['number'],
+                        $pageId,
+                        html_entity_decode($pages[$pageId]['title']),
+                        helper::dateUTF8('%d %B %Y %H:%M:%S', $time)
+                    ];
+                }
+            } else {
+                self::$userHistory[] = [
+                    $pages[$pageId]['number'],
+                    $pageId,
+                    html_entity_decode($pages[$pageId]['title']),
+                    helper::dateUTF8('%d %B %Y %H:%M:%S', $times)
+                ];
+            }
+
+
+        }
+
+        // Dossier temporaire
+        if (is_dir(self::FILE_DIR . 'source/export') === false) {
+            mkdir(self::FILE_DIR . 'source/export');
+        }
+        if (is_dir(self::FILE_DIR . 'source/export/' . $courseId) === false) {
+            mkdir(self::FILE_DIR . 'source/export/' . $courseId);
+        }
+        $path = self::FILE_DIR . 'source/export/';
+        $filename = $path . $courseId . '/' . $userId . '.csv';
+        $file = fopen($filename, 'w');
+        
+        foreach (self::$userHistory as $keys => $values) {
+            $data = $values;
             // Écrire la ligne dans le fichier CSV
             fputcsv($file, $data, ';');
         }
