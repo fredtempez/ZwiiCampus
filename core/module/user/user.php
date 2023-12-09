@@ -552,7 +552,10 @@ class user extends common
 		// Valeurs en sortie
 		$this->addOutput([
 			'title' => helper::translate('Utilisateurs'),
-			'view' => 'index'
+			'view' => 'index',
+            'vendor' => [
+                'datatables'
+            ]
 		]);
 	}
 

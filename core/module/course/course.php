@@ -119,7 +119,10 @@ class course extends common
         // Valeurs en sortie
         $this->addOutput([
             'title' => helper::translate('Espaces disponibles'),
-            'view' => 'index'
+            'view' => 'index',
+            'vendor' => [
+                'datatables'
+            ]
         ]);
     }
 
@@ -569,6 +572,9 @@ class course extends common
         $this->addOutput([
             'title' => sprintf(helper::translate('Participants %s'), $this->getData(['course', $courseId, 'title'])),
             'view' => 'users',
+            'vendor' => [
+                'datatables'
+            ]
         ]);
     }
 
@@ -691,7 +697,10 @@ class course extends common
         // Valeurs en sortie
         $this->addOutput([
             'title' => helper::translate('Inscription en masse'),
-            'view' => 'usersAdd'
+            'view' => 'usersAdd',
+            'vendor' => [
+                'datatables'
+            ]
         ]);
     }
 
@@ -838,7 +847,10 @@ class course extends common
         // Valeurs en sortie
         $this->addOutput([
             'title' => helper::translate('Désincription en masse'),
-            'view' => 'usersDelete'
+            'view' => 'usersDelete',
+            'vendor' => [
+                'datatables'
+            ]
         ]);
     }
 
@@ -989,7 +1001,10 @@ class course extends common
         // Valeurs en sortie
         $this->addOutput([
             'title' => helper::translate('Historique ') . $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
-            'view' => 'userHistory'
+            'view' => 'userHistory',
+            'vendor' => [
+                'datatables'
+            ]
         ]);
 
     }
