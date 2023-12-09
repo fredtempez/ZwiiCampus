@@ -499,10 +499,14 @@ class core extends common
 				|| $this->getUser('id') !== $this->getData(['course', self::$siteContent, 'author'])
 			)
 		) {
+			// Stocke l'historique des pages vues
 			$data = is_array($this->getData(['enrolment', self::$siteContent, $this->getUser('id'), 'history', $this->getUrl(0)]))
 				? array_merge([time()], $this->getData(['enrolment', self::$siteContent, $this->getUser('id'), 'history', $this->getUrl(0)]))
 				: [time()];
 			$this->setData(['enrolment', self::$siteContent, $this->getUser('id'), 'history', $this->getUrl(0), $data]);
+			// Stocke la dernière page vue et sa date de consultation
+			$this->setData(['enrolment', self::$siteContent, $this->getUser('id'), 'lastPageView', $this->getUrl(0)]);
+			$this->setData(['enrolment', self::$siteContent, $this->getUser('id'), 'datePageView', time()]);
 		}
 
 		// Journalisation

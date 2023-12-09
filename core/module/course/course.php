@@ -469,11 +469,11 @@ class course extends common
         // Statistiques du contenu sélectionné calcul du nombre de pages
         $sumPages = 0;
         $data = json_decode(file_get_contents(self::DATA_DIR . $courseId . '/page.json'), true);
-        // Exclure les barres et les pages masquées
+
+        // Compter les pages et exclure les barres et les pages masquées
         foreach ($data['page'] as $pageId => $pageData) {
             if ($pageData['position'] > 0) {
                 $sumPages++;
-                $pages[$pageId] = $pageData['title'];
             }
         }
 
@@ -486,24 +486,19 @@ class course extends common
         foreach ($users as $userId => $userValue) {
 
             // Date et heure de la dernière page vue
-            $history = $userValue['history'];
-            $maxTime = 0;
-            foreach ($userValue['history'] as $pageId => $times) {
-                if (is_array($times)) {
-                    foreach ($times as $time) {
-                        if ($time > $maxTime) {
-                            $maxTime = $time;
-                            $lastPageId = $pageId;
-                        }                
-                    }
-                } else {
-                    // Compatibilité anciennes versions
-                    if ($times > $maxTime) {
-                        $maxTime = $times;
-                        $lastPageId = $pageId;
-                    }
+            // Compatibilité anciennes versions
+            if (
+                $this->getData(['enrolment', $courseId, $userId, 'lastPageView']) === null
+                or $this->getData(['enrolment', $courseId, $userId, 'datePageView']) === null
+            ) {
+                if (!empty($userValue['history'])) {
+                    $maxTime = max($userValue['history']);
+                    $lastPageId = array_search($maxTime, $userValue['history']);
+                    $this->setData(['enrolment', $courseId, $userId, 'lastPageView', $lastPageId]);
+                    $this->setData(['enrolment', $courseId, $userId, 'datePageView', $maxTime]);
                 }
             }
+
 
             // Compte les rôles valides
             if (isset($profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])])) {
@@ -537,19 +532,20 @@ class course extends common
             }
 
             // Taux de parcours
-            $viewPages = count($this->getData(['enrolment', $courseId, $userId, 'history']));
-
+            $viewPages = $this->getData(['enrolment', $courseId, $userId, 'history']) !== null ?
+                count(array_keys($this->getData(['enrolment', $courseId, $userId, 'history']))) :
+                0;
             // Construction du tableau
             self::$courseUsers[] = [
                 $userId,
                 $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
-                !empty($history) ? $pages[$lastPageId] : '-',
-                !empty($history) ? helper::dateUTF8('%d %B %Y - %H:%M', $maxTime) : '-',
+                $this->getData(['enrolment', $courseId, $userId, 'lastPageView']),
+                helper::dateUTF8('%d %B %Y - %H:%M', $this->getData(['enrolment', $courseId, $userId, 'datePageView'])),
                 $this->getData(['user', $userId, 'tags']),
                 template::button('userHistory' . $userId, [
                     'href' => helper::baseUrl() . 'course/userHistory/' . $courseId . '/' . $userId,
-                    'value' => !empty($history) ? round(($viewPages * 100) / $sumPages, 1) . ' %' : '0%',
-                    'disable' => empty($history)
+                    'value' => !empty($userValue['history']) ? round(($viewPages * 100) / $sumPages, 1) . ' %' : '0%',
+                    'disable' => empty($userValue['history'])
                 ]),
                 template::button('userDelete' . $userId, [
                     'class' => 'userDelete buttonRed',
@@ -871,18 +867,19 @@ class course extends common
             && $this->courseIsAvailable($courseId)
         ) {
             // Récupérer la dernière page visitée par cet utilisateur si elle existe
-            $maxTime = $this->getData(['enrolment', $courseId, $userId, 'history']) ? max($this->getData(['enrolment', $courseId, $userId, 'history'])) : null;
-            if (is_int($maxTime)) {
-                $redirect = helper::baseUrl() . array_search($maxTime, $this->getData(['enrolment', $courseId, $userId, 'history']));
-            } else {
-                // Sinon la page d'accueil par défaut du module
-                $redirect = helper::baseUrl() . $this->getData(['course', $courseId, 'homePageId']);
-            }
+            $redirect = $this->getData(['enrolment', $courseId, $userId, 'lastPageView'])
+                ? helper::baseUrl() . $this->getData(['enrolment', $courseId, $userId, 'lastPageView'])
+                : helper::baseUrl() . $this->getData(['course', $courseId, 'homePageId']);
+            /*
+        $essage = $this->getData(['enrolment', $courseId, $userId, 'datePageView']) 
+            ? $this->getData(['enrolment', $courseId, $userId, 'datePageView']) 
+            : '';
+            */
             if ($this->getData(['course', $courseId, 'access']) === self::COURSE_ACCESS_DATE) {
                 $to = helper::dateUTF8('%d %B %Y', $this->getData(['course', $courseId, 'closingDate']), self::$i18nUI) . helper::translate(' à ') . helper::dateUTF8('%H:%M', $this->getData(['course', $courseId, 'closingDate']), self::$i18nUI);
-                $message = sprintf(helper::translate('Ce contenu ferme le %s'), $to);
+                $message .= sprintf(helper::translate('Ce contenu ferme le %s'), $to);
             } else {
-                $message = sprintf(helper::translate('Bienvenue dans l\'espace  %s'), $this->getData(['course', $courseId, 'title']));
+                $message .= sprintf(helper::translate('Bienvenue dans l\'espace  %s'), $this->getData(['course', $courseId, 'title']));
             }
             $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
         }
@@ -968,11 +965,21 @@ class course extends common
             }
         }
 
-        foreach ($history['history'] as $pageId => $time) {
+        foreach ($history as $pageId => $times) {
+            if (is_array($times)) {
+                $d = array();
+                foreach ($times as $time) {
+                    $d[] = helper::dateUTF8('%d %B %Y - %H:%M:%S', $time);
+                }
+                $dates = implode('<br />', $d);
+            } else {
+                $dates = helper::dateUTF8('%d %B %Y - %H:%M:%S', $history);
+            }
+
             self::$userHistory[$pageId] = [
                 $pages[$pageId]['number'],
-                helper::dateUTF8('%d %B %Y - %H:%M:%S', $time),
                 $pages[$pageId]['title'],
+                $dates,
             ];
         }
 
