@@ -72,6 +72,8 @@ class course extends common
 
     public static $userHistory = [];
 
+    public static $userStat = [];
+
     public function index()
     {
 
@@ -977,6 +979,9 @@ class course extends common
                 ];
             }
         }
+        
+        $floorTime = 99999999999;
+        $topTime = 0;
 
         foreach ($history as $pageId => $times) {
             // Dates de consultation de la page
@@ -986,18 +991,28 @@ class course extends common
                     self::$userHistory[] = [
                         $pages[$pageId]['number'],
                         html_entity_decode($pages[$pageId]['title']),
-                        helper::dateUTF8('%d %B %Y %H:%M:%S', $time)
+                        helper::dateUTF8('%d %B %Y %H:%M', $time)
                     ];
+                    $floorTime = $floorTime < $time ? $floorTime : $time;
+                    $TopTime = $TopTime > $time ? $TopTime : $time;
                 }
             } else {
                 self::$userHistory[] = [
                     $pages[$pageId]['number'],
                     html_entity_decode($pages[$pageId]['title']),
-                    helper::dateUTF8('%d %B %Y %H:%M:%S', $times)
+                    helper::dateUTF8('%d %B %Y %H:%M', $times)
                 ];
+                $floorTime = $floorTime < $times ? $floorTime : $times;
+                $topTime = $topTime > $times ?$topTime : $times;
             }
         }
 
+        self::$userStat['floor'] =  helper::dateUTF8('%d %B %Y %H:%M',$floorTime);
+        self::$userStat['top'] =  helper::dateUTF8('%d %B %Y %H:%M',$topTime);
+        $d = $topTime - $floorTime;
+        $d_hours = floor($d / 3600);
+        $d_minutes = floor(($d % 3600) / 60);
+        self::$userStat['time'] =   $d_hours . ' heures, ' . $d_minutes . ' minutes ' ;
 
         // Valeurs en sortie
         $this->addOutput([

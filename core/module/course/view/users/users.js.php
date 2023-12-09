@@ -29,7 +29,7 @@ $(document).ready((function () {
         locale: 'fr',
         "columnDefs": [
             {
-                target: 5,
+                target: 6,
                 orderable: false,
                 searchable: false
             }
