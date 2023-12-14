@@ -152,7 +152,8 @@
                     <?php echo template::select('profilEditPath', $module::$sharePath, [
                         'label' => 'Dossier',
                         'class' => 'filemanager',
-                        'selected' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'folder', 'path'])
+                        'selected' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'folder', 'path']),
+                        'help' => 'Chaque espace dispose d\'un dossier spécifique, le choix \'Dossier de l\'espace actif\' le sélectionne automatiquement.'
                     ]); ?>
                 </div>
             </div>

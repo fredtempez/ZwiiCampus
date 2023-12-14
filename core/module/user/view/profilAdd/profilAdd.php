@@ -113,6 +113,7 @@
                     <?php echo template::select('profilAddPath', $module::$sharePath, [
                         'label' => 'Dossier',
                         'class' => 'filemanager',
+                        'help' => 'Chaque espace dispose d\'un dossier spécifique, le choix "Dossier de l\'espace actif" le sélectionne automatiquement.'
                     ]); ?>
                 </div>
             </div>
