@@ -130,7 +130,7 @@
 			)
 		) : ?>
 			<!-- Bannière dans le site -->
-			<?php echo ($this->getData(['theme', 'header', 'linkHomePage']) &&  $this->getData(['theme', 'header', 'feature']) === 'wallpaper') ? '<a href="' . helper::baseUrl(false) . '">' : ''; ?>
+			<?php echo ($this->getData(['theme', 'header', 'linkHomePage']) && $this->getData(['theme', 'header', 'feature']) === 'wallpaper') ?  '<a href="' . helper::baseUrl(true) . 'course/swap/home">' : ''; ?>
 			<?php
 			$headerClass =  $this->getData(['theme', 'header', 'position']) === 'hide' ? 'displayNone' : '';
 			$headerClass .= $this->getData(['theme', 'header', 'tinyHidden']) ? ' bannerDisplay ' : '';
