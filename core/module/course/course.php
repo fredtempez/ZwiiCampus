@@ -177,6 +177,9 @@ class course extends common
                 ]
             ]);
 
+            // Dossier du gestionnaire de fichier
+            mkdir(self::FILE_DIR . 'source/' . $courseId);
+
             // Copie du thème
             $sourceId = $this->getInput('courseAddTheme');
             copy(self::DATA_DIR . $sourceId . '/theme.json', self::DATA_DIR . $courseId . '/theme.json');
@@ -303,6 +306,11 @@ class course extends common
                 $success = $this->deleteDir(self::DATA_DIR . $courseId);
                 $this->deleteData(['course', $courseId]);
                 $this->deleteData(['enrolment', $courseId]);
+
+            }
+            // Dossier du gestionnaire de fichier
+            if (is_dir(self::FILE_DIR . 'source/' . $courseId)) {                          
+                $this->deleteDir(self::FILE_DIR . 'source/' . $courseId);
             }
 
             // Valeurs en sortie

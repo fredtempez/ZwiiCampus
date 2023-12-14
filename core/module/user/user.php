@@ -651,11 +651,9 @@ class user extends common
 			$oldProfil = $this->getInput('profilEditOldProfil', helper::FILTER_STRING_SHORT);
 			// Gère le chemin
 			$fileManager = $this->getInput('profilEditFileManager', helper::FILTER_BOOLEAN);
-			$path = $this->getInput('profilEditPath');
+			// Sécurité supplémentaire
 			if (
-				$group <= self::GROUP_ADMIN
-				&& $fileManager
-				&& empty($path)
+				$group < self::GROUP_EDITOR
 			) {
 				$fileManager = false;
 			}
@@ -691,7 +689,7 @@ class user extends common
 					'rename' => $this->getInput('profilEditFolderRename', helper::FILTER_BOOLEAN),
 					'copycut' => $this->getInput('profilEditFolderCopycut', helper::FILTER_BOOLEAN),
 					'chmod' => $this->getInput('profilEditFolderChmod', helper::FILTER_BOOLEAN),
-					'path' => $path,
+					'path' => $this->getInput('profilEditPath'),
 				],
 				'page' => [
 					'add' => $this->getInput('profilEditPageAdd', helper::FILTER_BOOLEAN),
@@ -740,13 +738,8 @@ class user extends common
 		self::$sharePath = $this->getSubdirectories('./site/file/source');
 		self::$sharePath = array_flip(self::$sharePath);
 		self::$sharePath = array_merge(['./site/file/source/' => 'Tous les dossiers'], self::$sharePath);
-		self::$sharePath = array_merge([null => 'Aucun dossier'], self::$sharePath);
-
-		// Chemin vers les dossiers du gestionnaire de fichier
-		self::$sharePath = $this->getSubdirectories('./site/file/source');
-		self::$sharePath = array_flip(self::$sharePath);
-		self::$sharePath = array_merge(['./site/file/source/' => 'Tous les dossiers'], self::$sharePath);
-		self::$sharePath = array_merge([null => 'Aucun dossier'], self::$sharePath);
+		//self::$sharePath = array_merge(['' => 'Aucun dossier'], self::$sharePath);
+		self::$sharePath = array_merge(['' => 'Dossier du cours'], self::$sharePath);
 
 		// Liste des modules installés
 		self::$listModules = helper::getModules();
@@ -809,11 +802,9 @@ class user extends common
 			$profil = count($this->getData(['profil', $group]));
 			// Gère le chemin
 			$fileManager = $this->getInput('profilAddFileManager', helper::FILTER_BOOLEAN);
-			$path = $this->getInput('profilAddPath');
+			// Sécurité supplémentaire
 			if (
-				$group <= self::GROUP_ADMIN
-				&& $fileManager
-				&& empty($path)
+				$group < self::GROUP_EDITOR
 			) {
 				$fileManager = false;
 			}
@@ -846,7 +837,7 @@ class user extends common
 						'rename' => $this->getInput('profilAddFolderRename', helper::FILTER_BOOLEAN),
 						'copycut' => $this->getInput('profilAddFolderCopycut', helper::FILTER_BOOLEAN),
 						'chmod' => $this->getInput('profilAddFolderChmod', helper::FILTER_BOOLEAN),
-						'path' => $path,
+						'path' => $this->getInput('profilAddPath'),
 					],
 					'page' => [
 						'add' => $this->getInput('profilAddPageAdd', helper::FILTER_BOOLEAN),
@@ -903,13 +894,8 @@ class user extends common
 		self::$sharePath = $this->getSubdirectories('./site/file/source');
 		self::$sharePath = array_flip(self::$sharePath);
 		self::$sharePath = array_merge(['./site/file/source/' => 'Tous les dossiers'], self::$sharePath);
-		self::$sharePath = array_merge([null => 'Aucun dossier'], self::$sharePath);
-
-		// Chemin vers les dossiers du gestionnaire de fichier
-		self::$sharePath = $this->getSubdirectories('./site/file/source');
-		self::$sharePath = array_flip(self::$sharePath);
-		self::$sharePath = array_merge(['./site/file/source/' => 'Tous les dossiers'], self::$sharePath);
-		self::$sharePath = array_merge([null => 'Aucun dossier'], self::$sharePath);
+		//self::$sharePath = array_merge(['' => 'Aucun dossier'], self::$sharePath);
+		self::$sharePath = array_merge(['' => 'Dossier du cours'], self::$sharePath);
 
 		// Liste des modules installés
 		self::$listModules = helper::getModules();

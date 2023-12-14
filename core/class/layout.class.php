@@ -1033,6 +1033,9 @@ class layout extends common
             $rightItems = '';
             if (
                 $this->getUser('group') >= self::GROUP_EDITOR
+                // ZwiiCampus ------
+                && self::$siteContent !== 'home'
+                // ZwiiCampus ------
                 && $this->getUser(
                     'permission',
                     'filemanager'

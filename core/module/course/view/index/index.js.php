@@ -17,7 +17,7 @@ $(document).ready(function () {
      */
     $(".courseDelete").on("click", function () {
         var _this = $(this);
-        var message = "<?php echo helper::translate('Supprimer cet espace ?'); ?>";
+        var message = "<?php echo helper::translate('Supprimer cet espace et les documents du gestionnaire de fichier ?'); ?>";
         return core.confirm(message, function () {
             $(location).attr("href", _this.attr("href"));
         });
