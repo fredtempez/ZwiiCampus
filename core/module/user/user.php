@@ -653,7 +653,7 @@ class user extends common
 			$fileManager = $this->getInput('profilEditFileManager', helper::FILTER_BOOLEAN);
 			// Sécurité supplémentaire
 			if (
-				$group < self::GROUP_EDITOR
+				$group < self::GROUP_MEMBER
 			) {
 				$fileManager = false;
 			}
@@ -804,7 +804,7 @@ class user extends common
 			$fileManager = $this->getInput('profilAddFileManager', helper::FILTER_BOOLEAN);
 			// Sécurité supplémentaire
 			if (
-				$group < self::GROUP_EDITOR
+				$group < self::GROUP_MEMBER
 			) {
 				$fileManager = false;
 			}
