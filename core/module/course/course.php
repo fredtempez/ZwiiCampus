@@ -871,6 +871,8 @@ class course extends common
     public function swap()
     {
         $courseId = $this->getUrl(2);
+        // pageIfd est transmis lors de l'appel de la page depuis un lien direct alors que l'espace n'est pas sélectionné.
+        $pageId = $this->getUrl(3);
         $userId = $this->getuser('id');
         $message = '';
         $redirect = helper::baseUrl();
@@ -891,7 +893,7 @@ class course extends common
             // Récupérer la dernière page visitée par cet utilisateur si elle existe
             $redirect = $this->getData(['enrolment', $courseId, $userId, 'lastPageView'])
                 ? helper::baseUrl() . $this->getData(['enrolment', $courseId, $userId, 'lastPageView'])
-                : helper::baseUrl() . $this->getData(['course', $courseId, 'homePageId']);
+                : helper::baseUrl() . $pageId;
             /*
         $essage = $this->getData(['enrolment', $courseId, $userId, 'datePageView']) 
             ? $this->getData(['enrolment', $courseId, $userId, 'datePageView']) 
@@ -926,6 +928,8 @@ class course extends common
                 // Anonyme
                 case self::COURSE_ENROLMENT_GUEST:
                     $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
+                    // Accès direct à la page
+                    $redirect = helper::baseUrl() . $pageId;
                     break;
                 // Auto avec ou sans clé
                 case self::COURSE_ENROLMENT_SELF:

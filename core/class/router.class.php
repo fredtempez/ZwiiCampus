@@ -544,7 +544,6 @@ class core extends common
 		}
 
 		// Pour éviter une 404 sur une langue étrangère, bascule dans la langue correcte.
-
 		if (is_null($this->getData(['page', $this->getUrl(0)]))) {
 			foreach ($this->getData(['course']) as $key => $value) {;
 				if (
@@ -556,8 +555,8 @@ class core extends common
 						is_array($pagesId['page']) &&
 						array_key_exists($this->getUrl(0), $pagesId['page'])
 					) {
-						$_SESSION['ZWII_SITE_CONTENT'] = $key;
-						header('Refresh:0; url=' . helper::baseUrl() . $this->getUrl(0));
+						//$_SESSION['ZWII_SITE_CONTENT'] = $key;
+						header('Refresh:0; url=' . helper::baseUrl() . 'course/swap/' . $key . '/' . $this->getUrl(0));
 						exit();
 					}
 				}
