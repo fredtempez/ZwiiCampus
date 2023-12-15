@@ -546,7 +546,7 @@ class core extends common
 		// Pour éviter une 404 sur une langue étrangère, bascule dans la langue correcte.
 
 		if (is_null($this->getData(['page', $this->getUrl(0)]))) {
-			foreach (self::$languages as $key => $value) {
+			foreach ($this->getData(['course']) as $key => $value) {;
 				if (
 					is_dir(self::DATA_DIR . $key) &&
 					file_exists(self::DATA_DIR . $key . '/page.json')
@@ -891,15 +891,6 @@ class core extends common
 			exit();
 		}
 		if ($access === false) {
-			// Bascule sur le site d'accueil
-			/*if (
-				isset($_SESSION['ZWII_SITE_CONTENT'])
-				&& $_SESSION['ZWII_SITE_CONTENT'] !== 'home'
-			) {
-				$_SESSION['ZWII_SITE_CONTENT'] = 'home';
-				header('Location:' . helper::baseUrl() . $this->getUrl());
-				exit();
-			}*/
 			http_response_code(403);
 			if ($accessInfo['userName']) {
 				$this->addOutput([
@@ -920,15 +911,6 @@ class core extends common
 				}
 			}
 		} elseif ($this->output['content'] === '') {
-			// Bascule sur le site d'accueil pour afficher la page d'erreur
-			/*if (
-				isset($_SESSION['ZWII_SITE_CONTENT'])
-				&& $_SESSION['ZWII_SITE_CONTENT'] !== 'home'
-			) {
-				$_SESSION['ZWII_SITE_CONTENT'] = 'home';
-				header('Location:' . helper::baseUrl() . $this->getUrl());
-				exit();
-			}*/
 			http_response_code(404);
 			if (
 				$this->getData(['config', 'page404']) !== 'none'
