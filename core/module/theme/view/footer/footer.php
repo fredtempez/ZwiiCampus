@@ -131,29 +131,29 @@
             <div class="row">
                 <div class="col3">
                     <?php echo template::checkbox('themeFooterDisplayLegal', true, 'Mentions légales', [
-                        'checked' => $this->getData(['config', 'legalPageId']) === 'none' ? false : $this->getData(['theme', 'footer', 'displayLegal']),
-                        'disabled' => $this->getData(['config', 'legalPageId']) === 'none' ? true : false,
+                        'checked' => $this->getData(['locale', 'legalPageId']) === 'none' ? false : $this->getData(['theme', 'footer', 'displayLegal']),
+                        'disabled' => $this->getData(['locale', 'legalPageId']) === 'none' ? true : false,
                         'help' => 'Sélectionnez une page pour activer'
                     ]); ?>
                 </div>
                 <div class="col3">
                     <?php echo template::select('configLegalPageId', array_merge(['none' => 'Aucune'], helper::arrayColumn($module::$pagesList, 'title', 'SORT_ASC')), [
                         'label' =>  helper::translate('Mentions légales') . '&nbsp;' . template::flag('selected', '20px'),
-                        'selected' => $this->getData(['config', 'legalPageId'])
+                        'selected' => $this->getData(['locale', 'legalPageId'])
                     ]); ?>
                 </div>
 
                 <div class="col3">
                     <?php echo template::checkbox('themeFooterDisplaySearch', true, 'Rechercher dans le site', [
-                        'checked' => $this->getData(['config', 'searchPageId']) === 'none' ? false : $this->getData(['theme', 'footer', 'displaySearch']),
-                        'disabled' => $this->getData(['config', 'searchPageId']) === 'none' ? true : false,
+                        'checked' => $this->getData(['locale', 'searchPageId']) === 'none' ? false : $this->getData(['theme', 'footer', 'displaySearch']),
+                        'disabled' => $this->getData(['locale', 'searchPageId']) === 'none' ? true : false,
                         'help' => 'Sélectionnez une page pour activer'
                     ]); ?>
                 </div>
                 <div class="col3">
                     <?php echo template::select('configSearchPageId', array_merge(['none' => 'Aucune'], helper::arrayColumn($module::$pagesList, 'title', 'SORT_ASC')), [
                         'label' =>  helper::translate('Rechercher dans le site') . '&nbsp;' . template::flag('selected', '20px'),
-                        'selected' => $this->getData(['config', 'searchPageId'])
+                        'selected' => $this->getData(['locale', 'searchPageId'])
                     ]); ?>
                 </div>
             </div>
