@@ -309,7 +309,7 @@ class course extends common
 
             }
             // Dossier du gestionnaire de fichier
-            if (is_dir(self::FILE_DIR . 'source/' . $courseId)) {                          
+            if (is_dir(self::FILE_DIR . 'source/' . $courseId)) {
                 $this->deleteDir(self::FILE_DIR . 'source/' . $courseId);
             }
 

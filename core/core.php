@@ -50,7 +50,7 @@ class common
 	const ACCESS_TIMER = 1800;
 
 	// Numéro de version
-	const ZWII_VERSION = '1.4.02';
+	const ZWII_VERSION = '1.4.03';
 
 	// URL autoupdate
 	const ZWII_UPDATE_URL = 'https://forge.chapril.org/ZwiiCMS-Team/campus-update/raw/branch/master/';
@@ -223,7 +223,6 @@ class common
 		'user' => '',
 		'language' => '',
 		'profil' => '',
-		'enrolment' => '',
 		'category' => '',
 	];
 
@@ -231,6 +230,7 @@ class common
 		'page' => '',
 		'module' => '',
 		'theme' => '',
+		'enrolment' => '',
 	];
 
 	public static $fontsWebSafe = [
