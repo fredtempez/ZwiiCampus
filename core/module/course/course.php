@@ -35,6 +35,7 @@ class course extends common
         'userHistory' => self::GROUP_EDITOR,
         'usersHistoryExport' => self::GROUP_EDITOR,
         'userHistoryExport' => self::GROUP_EDITOR,
+        'courseBackup' =>self::GROUP_ADMIN,
     ];
 
     public static $courseAccess = [
@@ -94,9 +95,8 @@ class course extends common
                 $description = sprintf('%s<br />%s<br />%s<br />', $courseValue['description'], $access, $enrolment);
                 self::$courses[] = [
                     $courseValue['title'],
-                    $author,
-                    $description,
-                    '<a href="' . $categorieUrl . '" target="_blank">' . $categorieUrl . '</a>',
+                    //$author,
+                    '<a href="' . $categorieUrl . '" target="_blank">' . $description. '</a>',
                     template::button('categoryUser' . $courseId, [
                         'href' => helper::baseUrl() . 'course/users/' . $courseId,
                         'value' => template::ico('users'),
@@ -106,6 +106,17 @@ class course extends common
                         'href' => helper::baseUrl() . 'course/edit/' . $courseId,
                         'value' => template::ico('pencil'),
                         'help' => 'Éditer'
+                    ]),
+                    template::button('courseDownload' . $courseId, [
+                        'href' => helper::baseUrl() . 'course/courseBackup/' . $courseId,
+                        'value' => template::ico('download'),
+                        'help' => 'Sauvegarder'
+                    ]),
+                    template::button('courseUpload' . $courseId, [
+                        'href' => helper::baseUrl() . 'course',
+                        'value' => template::ico('upload'),
+                        'help' => 'Restaurer',
+                        'disabled' => true,
                     ]),
                     template::button('courseDelete' . $courseId, [
                         'class' => 'courseDelete buttonRed',
@@ -547,7 +558,7 @@ class course extends common
             $viewPages = $this->getData(['enrolment', $courseId, $userId, 'history']) !== null ?
                 count(array_keys($this->getData(['enrolment', $courseId, $userId, 'history']))) :
                 0;
-            
+
             // Construction du tableau
             self::$courseUsers[] = [
                 $userId,
@@ -1290,6 +1301,9 @@ class course extends common
         }
     }
 
+    /**
+     * Désinscription d'un participant
+     */
     public function unsuscribe()
     {
         // Désincription du contenu ouvert ou du contenu sélectionné
@@ -1310,6 +1324,41 @@ class course extends common
             ]);
 
         }
+    }
+
+    /**
+     * Sauvegarde d'un cours sans option
+     */
+
+    public function courseBackup() {
+        $courseId = $this->getUrl(2);
+
+        // Participants avec historiques
+        $enrolment = $this->getData(['enrolment', $courseId]);
+        // Générer un fichier dans le dossier de l'espace
+        file_put_contents(self::DATA_DIR . $courseId . '/enrolment.json', json_encode($enrolment, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+
+        // Idem pour la catégorie
+        $enrolment = $this->getData(['category']);
+        // Générer un fichier dans le dossier de l'espace
+        file_put_contents(self::DATA_DIR . $courseId . '/enrolment.json', json_encode($enrolment, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+
+        // Génère une archive ZIP
+        $this->makeZip(self::TEMP_DIR . $courseId . '-' . date('Y-m-d-H-i-s', time()) . '.zip', self::DATA_DIR . $courseId);
+
+        if (!is_dir(self::FILE_DIR . 'source/backup')){
+            mkdir(self::FILE_DIR . 'source/backup');
+        }
+
+        copy (self::TEMP_DIR . $courseId . '-' . date('Y-m-d-H-i-s', time()) . '.zip', self::FILE_DIR . 'source/backup/' . $courseId . '-' . date('Y-m-d-H-i-s', time()) . '.zip' );
+
+        // Valeurs en sortie
+        $this->addOutput([
+            'redirect' => helper::baseUrl() . 'course',
+            'state' => true,
+            'notification' => helper::translate('Sauvegarde générée avec succès'),
+        ]);
+
     }
 
 

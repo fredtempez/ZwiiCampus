@@ -29,6 +29,11 @@ $(document).ready(function () {
         locale: 'fr',
         "columnDefs": [
             {
+                target: 2,
+                orderable: false,
+                searchable: false
+            },
+            {
                 target: 3,
                 orderable: false,
                 searchable: false
