@@ -510,8 +510,8 @@ class layout extends common
             && $this->getData(['theme', 'menu', 'memberBar']) === true
         ) {
             if (
-                $this->getUser('group') >= self::GROUP_MEMBER &&
-                $this->getUser('permission', 'filemanager') === true
+                ($this->getUser('group') >= self::GROUP_MEMBER &&
+                    $this->getUser('permission', 'filemanager') === true)
             ) {
                 $itemsRight .= '<li>' . template::ico('folder', [
                     'href' => helper::baseUrl(false) . 'core/vendor/filemanager/dialog.php?type=0&akey=' . md5_file(self::DATA_DIR . 'core.json') . '&lang=' . $this->getData(['user', $this->getUser('id'), 'language']),
@@ -1032,14 +1032,15 @@ class layout extends common
             // Items de droite
             $rightItems = '';
             if (
-                $this->getUser('group') >= self::GROUP_EDITOR
-                // ZwiiCampus ------
-                && self::$siteContent !== 'home'
-                // ZwiiCampus ------
-                && $this->getUser(
-                    'permission',
-                    'filemanager'
+                (
+                    // ZwiiCampus ------
+                    self::$siteContent !== 'home'
+                    // ZwiiCampus ------
+                    && $this->getUser('group') >= self::GROUP_EDITOR
+                    && $this->getUser('permission', 'filemanager')
+
                 )
+                || $this->getUser('group') == self::GROUP_ADMIN
             ) {
                 $rightItems .= '<li>' . template::ico('folder', [
                     'help' => 'Fichiers',
