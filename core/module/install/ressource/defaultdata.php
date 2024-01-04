@@ -328,7 +328,7 @@ class init extends common
 						'copycut' => false,
 						'chmod' => false,
 						'share' => true,
-						'path' => './site/file/source/partage/',
+						'path' => '/site/file/source/partage/',
 					],
 					'page' => [
 						'add' => false,
