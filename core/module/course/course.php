@@ -35,7 +35,8 @@ class course extends common
         'userHistory' => self::GROUP_EDITOR,
         'usersHistoryExport' => self::GROUP_EDITOR,
         'userHistoryExport' => self::GROUP_EDITOR,
-        'courseBackup' => self::GROUP_ADMIN,
+        'backup' => self::GROUP_EDITOR,
+        'restore' => self::GROUP_EDITOR,
     ];
 
     public static $courseAccess = [
@@ -108,15 +109,14 @@ class course extends common
                         'help' => 'Éditer'
                     ]),
                     template::button('courseDownload' . $courseId, [
-                        'href' => helper::baseUrl() . 'course/courseBackup/' . $courseId,
-                        'value' => template::ico('download'),
+                        'href' => helper::baseUrl() . 'course/backup/' . $courseId,
+                        'value' => template::ico('download-cloud'),
                         'help' => 'Sauvegarder'
                     ]),
                     template::button('courseUpload' . $courseId, [
-                        'href' => helper::baseUrl() . 'course',
-                        'value' => template::ico('upload'),
+                        'href' => helper::baseUrl() . 'course/restore/',
+                        'value' => template::ico('upload-cloud'),
                         'help' => 'Restaurer',
-                        'disabled' => true,
                     ]),
                     template::button('courseDelete' . $courseId, [
                         'class' => 'courseDelete buttonRed',
@@ -1330,54 +1330,76 @@ class course extends common
      * Sauvegarde d'un cours sans option
      */
 
-    public function courseBackup()
+    public function backup()
     {
-        $courseId = $this->getUrl(2);
 
-        // Participants avec historiques
-        $enrolment = $this->getData(['enrolment', $courseId]);
-        // Générer un fichier dans le dossier de l'espace
-        file_put_contents(self::DATA_DIR . $courseId . '/enrolment.json', json_encode([$courseId => $enrolment], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+        // Accès refusé
+        if (
+            $this->getUser('permission', __CLASS__, __FUNCTION__) !== true
+        ) {
+            // Valeurs en sortie
+            $this->addOutput([
+                'access' => false
+            ]);
+        } else {
+            $courseId = $this->getUrl(2);
 
-        // Idem pour les données du cours
-        $course = $this->getData(['course', $courseId]);
-        // Générer un fichier dans le dossier de l'espace
-        file_put_contents(self::DATA_DIR . $courseId . '/course.json', json_encode([$courseId => $course], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+            // Participants avec historiques
+            $enrolment = $this->getData(['enrolment', $courseId]);
+            // Générer un fichier dans le dossier de l'espace
+            file_put_contents(self::DATA_DIR . $courseId . '/enrolment.json', json_encode([$courseId => $enrolment], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
 
-        // Idem pour la catégorie
-        $category = $this->getData(['category', $this->getData(['course', $courseId, 'category'])]);
-        // Générer un fichier dans le dossier de l'espace
-        file_put_contents(self::DATA_DIR . $courseId . '/category.json', json_encode([$this->getData(['course', $courseId, 'category']) => $category], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+            // Idem pour les données du cours
+            $course = $this->getData(['course', $courseId]);
+            // Générer un fichier dans le dossier de l'espace
+            file_put_contents(self::DATA_DIR . $courseId . '/course.json', json_encode([$courseId => $course], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+
+            // Idem pour la catégorie
+            $category = $this->getData(['category', $this->getData(['course', $courseId, 'category'])]);
+            // Générer un fichier dans le dossier de l'espace
+            file_put_contents(self::DATA_DIR . $courseId . '/category.json', json_encode([$this->getData(['course', $courseId, 'category']) => $category], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
 
 
-        // Génère une archive ZIP
-        $this->makeZip(self::TEMP_DIR . $courseId . '-' . date('Y-m-d-H-i-s', time()) . '.zip', self::DATA_DIR . $courseId);
+            // Génère une archive ZIP
+            $this->makeZip(self::TEMP_DIR . $courseId . '-' . date('Y-m-d-H-i-s', time()) . '.zip', self::DATA_DIR . $courseId);
 
-        if (!is_dir(self::FILE_DIR . 'source/backup')) {
-            mkdir(self::FILE_DIR . 'source/backup');
-        }
-
-        $success = false;
-        $message = helper::translate('Erreur : sauvegarde non générée !');
-        // Transférer dans RFM
-        if (file_exists(self::TEMP_DIR . $courseId . '-' . date('Y-m-d-H-i-s', time()) . '.zip')) {
-            if (!is_dir(self::FILE_DIR . 'source/' . $courseId . '/backup/')) {
-                mkdir(self::FILE_DIR . 'source/' . $courseId . '/backup/');
-
+            $success = false;
+            $message = helper::translate('Erreur : sauvegarde non générée !');
+            // Transférer dans RFM
+            if (file_exists(self::TEMP_DIR . $courseId . '-' . date('Y-m-d-H-i-s', time()) . '.zip')) {
+                if (!is_dir(self::FILE_DIR . 'source/' . $courseId )) {
+                    mkdir(self::FILE_DIR . 'source/' . $courseId );
+                }
+                if (!is_dir(self::FILE_DIR . 'source/' . $courseId . '/backup/')) {
+                    mkdir(self::FILE_DIR . 'source/' . $courseId . '/backup/');
+                }
+                copy(self::TEMP_DIR . $courseId . '-' . date('Y-m-d-H-i-s', time()) . '.zip', self::FILE_DIR . 'source/' . $courseId . '/backup/' . $courseId . '-' . date('Y-m-d-H-i-s', time()) . '.zip');
+                unlink(self::TEMP_DIR . $courseId . '-' . date('Y-m-d-H-i-s', time()) . '.zip');
+                $success = true;
+                $message = helper::translate('Sauvegarde générée avec succès');
             }
-            copy(self::TEMP_DIR . $courseId . '-' . date('Y-m-d-H-i-s', time()) . '.zip', self::FILE_DIR . 'source/' . $courseId . '/backup/' . $courseId . '-' . date('Y-m-d-H-i-s', time()) . '.zip');
-            unlink(self::TEMP_DIR . $courseId . '-' . date('Y-m-d-H-i-s', time()) . '.zip');
-            $success = true;
-            $message = helper::translate('Sauvegarde générée avec succès');
+
+            // Valeurs en sortie
+            $this->addOutput([
+                'redirect' => helper::baseUrl() . 'course',
+                'state' => $success,
+                'notification' => $message,
+            ]);
         }
 
+    }
+
+    /**
+     * Sauvegarde d'un cours sans option
+     */
+
+    public function restore()
+    {
         // Valeurs en sortie
         $this->addOutput([
-            'redirect' => helper::baseUrl() . 'course',
-            'state' => $success,
-            'notification' => $message,
+            'title' => helper::translate('Restaurer un espace'),
+            'view' => 'restore'
         ]);
-
     }
 
 
