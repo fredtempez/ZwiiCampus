@@ -689,7 +689,7 @@ class user extends common
 					'rename' => $this->getInput('profilEditFolderRename', helper::FILTER_BOOLEAN),
 					'copycut' => $this->getInput('profilEditFolderCopycut', helper::FILTER_BOOLEAN),
 					'chmod' => $this->getInput('profilEditFolderChmod', helper::FILTER_BOOLEAN),
-					'path' => $this->getInput('profilEditPath'),
+					'path' => preg_replace('/^\\./', '', $this->getInput('profilEditPath')), // Supprime le point pour préserver le chemin
 				],
 				'page' => [
 					'add' => $this->getInput('profilEditPageAdd', helper::FILTER_BOOLEAN),
@@ -837,7 +837,7 @@ class user extends common
 						'rename' => $this->getInput('profilAddFolderRename', helper::FILTER_BOOLEAN),
 						'copycut' => $this->getInput('profilAddFolderCopycut', helper::FILTER_BOOLEAN),
 						'chmod' => $this->getInput('profilAddFolderChmod', helper::FILTER_BOOLEAN),
-						'path' => $this->getInput('profilAddPath'),
+						'path' => preg_replace('/^\\./', '', $this->getInput('profilEditPath')), // Supprime le point pour préserver le chemin,
 					],
 					'page' => [
 						'add' => $this->getInput('profilAddPageAdd', helper::FILTER_BOOLEAN),
