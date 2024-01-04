@@ -35,7 +35,7 @@ class course extends common
         'userHistory' => self::GROUP_EDITOR,
         'usersHistoryExport' => self::GROUP_EDITOR,
         'userHistoryExport' => self::GROUP_EDITOR,
-        'courseBackup' =>self::GROUP_ADMIN,
+        'courseBackup' => self::GROUP_ADMIN,
     ];
 
     public static $courseAccess = [
@@ -96,7 +96,7 @@ class course extends common
                 self::$courses[] = [
                     $courseValue['title'],
                     //$author,
-                    '<a href="' . $categorieUrl . '" target="_blank">' . $description. '</a>',
+                    '<a href="' . $categorieUrl . '" target="_blank">' . $description . '</a>',
                     template::button('categoryUser' . $courseId, [
                         'href' => helper::baseUrl() . 'course/users/' . $courseId,
                         'value' => template::ico('users'),
@@ -320,7 +320,7 @@ class course extends common
 
             }
             // Dossier du gestionnaire de fichier
-            if (is_dir(self::FILE_DIR . 'source/' . $courseId)) {                          
+            if (is_dir(self::FILE_DIR . 'source/' . $courseId)) {
                 $this->deleteDir(self::FILE_DIR . 'source/' . $courseId);
             }
 
@@ -493,7 +493,7 @@ class course extends common
         // Liste des pages contenues dans cet espace et exclure les barres et les pages masquées
         $sumPages = 0;
         $pages = json_decode(file_get_contents(self::DATA_DIR . $courseId . '/page.json'), true);
-        $pages = $pages ['page'];
+        $pages = $pages['page'];
         foreach ($pages as $pageId => $pageData) {
             if ($pageData['position'] > 0) {
                 $sumPages++;
@@ -1002,7 +1002,7 @@ class course extends common
                 ];
             }
         }
-        
+
         $floorTime = 99999999999;
         $topTime = 0;
 
@@ -1026,16 +1026,16 @@ class course extends common
                     helper::dateUTF8('%d %B %Y %H:%M', $times)
                 ];
                 $floorTime = $floorTime < $times ? $floorTime : $times;
-                $topTime = $topTime > $times ?$topTime : $times;
+                $topTime = $topTime > $times ? $topTime : $times;
             }
         }
 
-        self::$userStat['floor'] =  helper::dateUTF8('%d %B %Y %H:%M',$floorTime);
-        self::$userStat['top'] =  helper::dateUTF8('%d %B %Y %H:%M',$topTime);
+        self::$userStat['floor'] = helper::dateUTF8('%d %B %Y %H:%M', $floorTime);
+        self::$userStat['top'] = helper::dateUTF8('%d %B %Y %H:%M', $topTime);
         $d = $topTime - $floorTime;
         $d_hours = floor($d / 3600);
         $d_minutes = floor(($d % 3600) / 60);
-        self::$userStat['time'] =   $d_hours . ' heures, ' . $d_minutes . ' minutes ' ;
+        self::$userStat['time'] = $d_hours . ' heures, ' . $d_minutes . ' minutes ';
 
         // Valeurs en sortie
         $this->addOutput([
@@ -1054,7 +1054,7 @@ class course extends common
         $courseId = $this->getUrl(2);
 
         self::$courseUsers = [
-            0 => ['UserId', 'Prénom', 'Nom',  'Page Titre', 'Consultation Date', 'Consultation Heure', 'Progression']
+            0 => ['UserId', 'Prénom', 'Nom', 'Page Titre', 'Consultation Date', 'Consultation Heure', 'Progression']
         ];
 
         // Statistiques du contenu sélectionné calcul du nombre de pages
@@ -1114,7 +1114,7 @@ class course extends common
                 $pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])],
                 helper::dateUTF8('%d/%d/%Y', $this->getData(['enrolment', $courseId, $userId, 'datePageView'])),
                 helper::dateUTF8('%H:%M', $this->getData(['enrolment', $courseId, $userId, 'datePageView'])),
-                number_format(round(($viewPages * 100) / $sumPages, 1) / 100, 2, ',') 
+                number_format(round(($viewPages * 100) / $sumPages, 1) / 100, 2, ',')
             ];
 
             // Synthèse des historiques
@@ -1149,7 +1149,7 @@ class course extends common
         $courseId = $this->getUrl(2);
         $userId = $this->getUrl(3);
         $history = $this->getData(['enrolment', $courseId, $userId, 'history']);
-        self::$userHistory= [
+        self::$userHistory = [
             0 => ['Ordre', 'PageId', 'Page Titre', 'Consultation Date', 'Consultation Heure']
         ];
 
@@ -1330,33 +1330,52 @@ class course extends common
      * Sauvegarde d'un cours sans option
      */
 
-    public function courseBackup() {
+    public function courseBackup()
+    {
         $courseId = $this->getUrl(2);
 
         // Participants avec historiques
         $enrolment = $this->getData(['enrolment', $courseId]);
         // Générer un fichier dans le dossier de l'espace
-        file_put_contents(self::DATA_DIR . $courseId . '/enrolment.json', json_encode($enrolment, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+        file_put_contents(self::DATA_DIR . $courseId . '/enrolment.json', json_encode([$courseId => $enrolment], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+
+        // Idem pour les données du cours
+        $course = $this->getData(['course', $courseId]);
+        // Générer un fichier dans le dossier de l'espace
+        file_put_contents(self::DATA_DIR . $courseId . '/course.json', json_encode([$courseId => $course], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
 
         // Idem pour la catégorie
-        $enrolment = $this->getData(['category']);
+        $category = $this->getData(['category', $this->getData(['course', $courseId, 'category'])]);
         // Générer un fichier dans le dossier de l'espace
-        file_put_contents(self::DATA_DIR . $courseId . '/enrolment.json', json_encode($enrolment, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+        file_put_contents(self::DATA_DIR . $courseId . '/category.json', json_encode([$this->getData(['course', $courseId, 'category']) => $category], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+
 
         // Génère une archive ZIP
         $this->makeZip(self::TEMP_DIR . $courseId . '-' . date('Y-m-d-H-i-s', time()) . '.zip', self::DATA_DIR . $courseId);
 
-        if (!is_dir(self::FILE_DIR . 'source/backup')){
+        if (!is_dir(self::FILE_DIR . 'source/backup')) {
             mkdir(self::FILE_DIR . 'source/backup');
         }
 
-        copy (self::TEMP_DIR . $courseId . '-' . date('Y-m-d-H-i-s', time()) . '.zip', self::FILE_DIR . 'source/backup/' . $courseId . '-' . date('Y-m-d-H-i-s', time()) . '.zip' );
+        $success = false;
+        $message = helper::translate('Erreur : sauvegarde non générée !');
+        // Transférer dans RFM
+        if (file_exists(self::TEMP_DIR . $courseId . '-' . date('Y-m-d-H-i-s', time()) . '.zip')) {
+            if (!is_dir(self::FILE_DIR . 'source/' . $courseId . '/backup/')) {
+                mkdir(self::FILE_DIR . 'source/' . $courseId . '/backup/');
+
+            }
+            copy(self::TEMP_DIR . $courseId . '-' . date('Y-m-d-H-i-s', time()) . '.zip', self::FILE_DIR . 'source/' . $courseId . '/backup/' . $courseId . '-' . date('Y-m-d-H-i-s', time()) . '.zip');
+            unlink(self::TEMP_DIR . $courseId . '-' . date('Y-m-d-H-i-s', time()) . '.zip');
+            $success = true;
+            $message = helper::translate('Sauvegarde générée avec succès');
+        }
 
         // Valeurs en sortie
         $this->addOutput([
             'redirect' => helper::baseUrl() . 'course',
-            'state' => true,
-            'notification' => helper::translate('Sauvegarde générée avec succès'),
+            'state' => $success,
+            'notification' => $message,
         ]);
 
     }
