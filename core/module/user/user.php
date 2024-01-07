@@ -132,8 +132,8 @@ class user extends common
 					'accessUrl' => null,
 					'accessTimer' => null,
 					'accessCsrf' => null,
-					'language' => $this->getInput('userEditLanguage', helper::FILTER_STRING_SHORT),
-					'tags' => ''
+					'language' => $this->getInput('userAddLanguage', helper::FILTER_STRING_SHORT),
+					'tags' => $this->getInput('userAddTags', helper::FILTER_STRING_SHORT),
 				]
 			]);
 
