@@ -1367,8 +1367,8 @@ class course extends common
             $message = helper::translate('Erreur : sauvegarde non générée !');
             // Transférer dans RFM
             if (file_exists(self::TEMP_DIR . $courseId . '-' . date('Y-m-d-H-i-s', time()) . '.zip')) {
-                if (!is_dir(self::FILE_DIR . 'source/' . $courseId )) {
-                    mkdir(self::FILE_DIR . 'source/' . $courseId );
+                if (!is_dir(self::FILE_DIR . 'source/' . $courseId)) {
+                    mkdir(self::FILE_DIR . 'source/' . $courseId);
                 }
                 if (!is_dir(self::FILE_DIR . 'source/' . $courseId . '/backup/')) {
                     mkdir(self::FILE_DIR . 'source/' . $courseId . '/backup/');
@@ -1395,6 +1395,69 @@ class course extends common
 
     public function restore()
     {
+        // Soumission du formulaire
+        if (
+            $this->getUser('permission', __CLASS__, __FUNCTION__) === true &&
+            $this->isPost()
+        ) {
+
+            $zipName = $this->getInput('courseRestoreFile', null, true);
+            if (
+				$zipName !== '' &&
+				file_exists($zipName)
+			) {
+				// Init variables de retour
+				$success = false;
+				$notification = '';
+				// Dossier temporaire
+				$tempFolder = uniqid();
+				// Ouvrir le zip
+				$zip = new ZipArchive();
+				if ($zip->open($zipName) === TRUE) {
+					mkdir(self::TEMP_DIR . $tempFolder, 0755);
+					$zip->extractTo(self::TEMP_DIR . $tempFolder);
+					$modele = '';
+					// Archive de thème ?
+					if (
+						file_exists(self::TEMP_DIR . $tempFolder . '/site/data/custom.css')
+						and file_exists(self::TEMP_DIR . $tempFolder . '/site/data/theme.css')
+						and file_exists(self::TEMP_DIR . $tempFolder . '/site/data/theme.json')
+					) {
+						$modele = 'theme';
+					}
+					if (
+						file_exists(self::TEMP_DIR . $tempFolder . '/site/data/admin.json')
+						and file_exists(self::TEMP_DIR . $tempFolder . '/site/data/admin.css')
+					) {
+						$modele = 'admin';
+					}
+					if (!empty($modele)) {
+						// traiter l'archive
+						$success = $zip->extractTo('.');
+
+						// Traitement
+	
+						// traitement d'erreur
+						$notification = $success ? helper::translate('Thème importé') : helper::translate('Erreur lors de l\'extraction, vérifiez les permissions');
+					} else {
+						// pas une archive de thème
+						$success = false;
+						$notification = helper::translate('Archive de thème invalide');
+					}
+					// Supprimer le dossier temporaire même si le thème est invalide
+					$this->deleteDir(self::TEMP_DIR . $tempFolder);
+					$zip->close();
+				} else {
+					// erreur à l'ouverture
+					$success = false;
+					$notification = helper::translate('Impossible d\'ouvrir l\'archive');
+				}
+				return (['success' => $success, 'notification' => $notification]);
+			}
+
+			return (['success' => false, 'notification' => helper::translate('Archive non spécifiée ou introuvable')]);
+
+        }
         // Valeurs en sortie
         $this->addOutput([
             'title' => helper::translate('Restaurer un espace'),
