@@ -50,7 +50,7 @@ class common
 	const ACCESS_TIMER = 1800;
 
 	// Numéro de version
-	1404 const ZWII_VERSION = '1.4.04';
+	const ZWII_VERSION = '1.4.04';
 
 	// URL autoupdate
 	const ZWII_UPDATE_URL = 'https://forge.chapril.org/ZwiiCMS-Team/campus-update/raw/branch/master/';
