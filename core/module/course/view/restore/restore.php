@@ -21,7 +21,7 @@
             </h4>
             <div class="row">
                 <div class="col10 offset1">
-                    <?php echo template::file('courseRestoreCSVFile', [
+                    <?php echo template::file('courseRestoreFile', [
                         'language' => $this->getData(['course', $this->getUser('id'), 'language']),
                         //'label' => 'Fichier de sauvegarde :'
                     ]); ?>
