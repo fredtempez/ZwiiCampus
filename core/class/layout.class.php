@@ -506,7 +506,7 @@ class layout extends common
         }
         // Commandes pour les membres simples
         if (
-            $this->getUser('group') >= self::GROUP_MEMBER && $this->getUser('group') < self::GROUP_ADMIN
+            $this->getUser('group') === self::GROUP_MEMBER
             && $this->getData(['theme', 'menu', 'memberBar']) === true
         ) {
             if (
@@ -1036,7 +1036,7 @@ class layout extends common
                     // ZwiiCampus ------
                     self::$siteContent !== 'home'
                     // ZwiiCampus ------
-                    && $this->getUser('group') >= self::GROUP_EDITOR
+                    && $this->getUser('group') >= self::GROUP_MEMBER
                     && $this->getUser('permission', 'filemanager')
 
                 )
