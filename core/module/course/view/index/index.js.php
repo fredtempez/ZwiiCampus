@@ -47,11 +47,6 @@ $(document).ready(function () {
                 target: 5,
                 orderable: false,
                 searchable: false
-            },
-            {
-                target: 6,
-                orderable: false,
-                searchable: false
             }
         ]
     });

@@ -17,7 +17,7 @@
     <div class="col12">
         <div class="block">
             <h4>
-                <?php echo helper::translate('Sélectionner une archive'); ?>
+                <?php echo sprintf('%s : %s', helper::translate('Restaurer depuis le dossier de l\'espace id'), self::$siteContent ); ?>
             </h4>
             <div class="row">
                 <div class="col10 offset1">

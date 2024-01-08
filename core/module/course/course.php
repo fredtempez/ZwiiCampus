@@ -86,16 +86,16 @@ class course extends common
             && $this->getCoursesByUser($this->getUser('id'), $this->getUser('group'))
         ) {
             foreach ($this->getCoursesByUser($this->getUser('id'), $this->getUser('group')) as $courseId => $courseValue) {
-                $categorieUrl = helper::baseUrl() . 'course/swap/' . $courseId;
-                $authorId = $this->getData(['course', $courseId, 'author']);
                 $author = isset($authorId)
                     ? sprintf('%s %s', $this->getData(['user', $authorId, 'firstname']), $this->getData(['user', $authorId, 'lastname']))
                     : '';
+                $info = sprintf('<strong>%s<br /></strong>Auteur : %s<br />Id : %s<br />', $courseValue['title'], $author, $courseId);
+                $categorieUrl = helper::baseUrl() . 'course/swap/' . $courseId;
                 $access = self::$courseAccess[$courseValue['access']];
                 $enrolment = self::$courseEnrolment[$courseValue['enrolment']];
-                $description = sprintf('%s<br />%s<br />%s<br />', $courseValue['description'], $access, $enrolment);
+                $description = sprintf('<strong>%s</strong><br />Accès : %s<br />Inscription : %s<br />', $courseValue['description'], $access, $enrolment);
                 self::$courses[] = [
-                    $courseValue['title'],
+                    $info,
                     //$author,
                     '<a href="' . $categorieUrl . '" target="_blank">' . $description . '</a>',
                     template::button('categoryUser' . $courseId, [
@@ -112,11 +112,6 @@ class course extends common
                         'href' => helper::baseUrl() . 'course/backup/' . $courseId,
                         'value' => template::ico('download-cloud'),
                         'help' => 'Sauvegarder'
-                    ]),
-                    template::button('courseUpload' . $courseId, [
-                        'href' => helper::baseUrl() . 'course/restore/',
-                        'value' => template::ico('upload-cloud'),
-                        'help' => 'Restaurer',
                     ]),
                     template::button('courseDelete' . $courseId, [
                         'class' => 'courseDelete buttonRed',
@@ -1401,61 +1396,102 @@ class course extends common
             $this->isPost()
         ) {
 
-            $zipName = $this->getInput('courseRestoreFile', null, true);
+            // Récupérer le dossier du profil
+            $userPath = $this->getData(['profil', $this->getuser('group'), $this->getuser('profil'), 'folder', 'path']);
+            $userPath = $userPath === '' ? self::$siteContent : $userPath;
+            // Fichier avec le bon chemin selon le profil
+            $zipName = self::FILE_DIR . 'source/' . $userPath . '/' . $this->getInput('courseRestoreFile', null, true);
+
+            // Existence de l'archive
             if (
-				$zipName !== '' &&
-				file_exists($zipName)
-			) {
-				// Init variables de retour
-				$success = false;
-				$notification = '';
-				// Dossier temporaire
-				$tempFolder = uniqid();
-				// Ouvrir le zip
-				$zip = new ZipArchive();
-				if ($zip->open($zipName) === TRUE) {
-					mkdir(self::TEMP_DIR . $tempFolder, 0755);
-					$zip->extractTo(self::TEMP_DIR . $tempFolder);
-					$modele = '';
-					// Archive de thème ?
-					if (
-						file_exists(self::TEMP_DIR . $tempFolder . '/site/data/custom.css')
-						and file_exists(self::TEMP_DIR . $tempFolder . '/site/data/theme.css')
-						and file_exists(self::TEMP_DIR . $tempFolder . '/site/data/theme.json')
-					) {
-						$modele = 'theme';
-					}
-					if (
-						file_exists(self::TEMP_DIR . $tempFolder . '/site/data/admin.json')
-						and file_exists(self::TEMP_DIR . $tempFolder . '/site/data/admin.css')
-					) {
-						$modele = 'admin';
-					}
-					if (!empty($modele)) {
-						// traiter l'archive
-						$success = $zip->extractTo('.');
+                $zipName !== '' &&
+                file_exists($zipName)
+            ) {
+                // Init variables de retour
+                $success = false;
+                $notification = '';
+                // Dossier temporaire
+                $tempFolder = uniqid();
+                // Ouvrir le zip
+                $zip = new ZipArchive();
+                if ($zip->open($zipName) === TRUE) {
+                    mkdir(self::TEMP_DIR . $tempFolder, 0755);
+                    $zip->extractTo(self::TEMP_DIR . $tempFolder);
+                    // Drapeaux de gestion des erreurs
+                    $success = false;
+                    $notification = '';
+                    // Récupérer les données de base à intégrer
+                    $courseData = array();
+                    if (file_exists(self::TEMP_DIR . $tempFolder . '/course.json')) {
+                        $courseData = json_decode(file_get_contents(self::TEMP_DIR . $tempFolder . '/course.json'), true);
+                        // Lire l'id du cours
+                        $courseIds = array_keys($courseData);
+                        ;
+                        $courseId = $courseIds[0];
+                        $success = true;
+                    } else {
+                        // Pas une archive d'espace
+                        $notification = helper::translate('Archive invalide');
+                    }
+                    if ($success && $courseId) {
 
-						// Traitement
-	
-						// traitement d'erreur
-						$notification = $success ? helper::translate('Thème importé') : helper::translate('Erreur lors de l\'extraction, vérifiez les permissions');
-					} else {
-						// pas une archive de thème
-						$success = false;
-						$notification = helper::translate('Archive de thème invalide');
-					}
-					// Supprimer le dossier temporaire même si le thème est invalide
-					$this->deleteDir(self::TEMP_DIR . $tempFolder);
-					$zip->close();
-				} else {
-					// erreur à l'ouverture
-					$success = false;
-					$notification = helper::translate('Impossible d\'ouvrir l\'archive');
-				}
-				return (['success' => $success, 'notification' => $notification]);
-			}
+                        // récupérer les inscriptions disponibles
+                        $enrolmentData = array();
+                        if (file_exists(self::TEMP_DIR . $tempFolder . '/enrolment.json')) {
+                            $enrolmentData = json_decode(file_get_contents(self::TEMP_DIR . $tempFolder . '/enrolment.json'), true);
+                        }
 
-			return (['success' => false, 'notification' => helper::translate('Archive non spécifiée ou introuvable')]);
+                        // Créer le dossier absent
+                        if (!is_dir(self::DATA_DIR . $courseId)) {
+                            mkdir(self::DATA_DIR . $courseId);
+                            $notification = sprintf(helper::translate('Importation terminée : l\'espace %s a été créé'), $courseId);
+                        } else {
+                            $notification = sprintf(helper::translate('Importation terminée : l\'espace %s a été actualisé'), $courseId);
+                        }
+
+                        // traiter l'archive
+                        $success = $zip->extractTo(self::DATA_DIR . $courseId);
+                        $zip->close();
+
+                        // Effacer les données de transport
+                        unlink(self::DATA_DIR . $courseId . '/course.json');
+                        unlink(self::DATA_DIR . $courseId . '/enrolment.json');
+
+                        // Fusionne les deux tableaux
+                        $c = $this->getData(['course']);
+                        $courseData = array_merge($c, $courseData);
+                        $e = $this->getData(['enrolment']);
+                        $enrolmentData = array_merge($e, $enrolmentData);
+
+                        // Sauvegarde les bases
+                        $this->setData(['course', $courseData]);
+                        $this->setData(['enrolment', $enrolmentData]);
+
+                        // traitement d'erreur en cas de problème de désachivage
+                        $notification = $success ? $notification : helper::translate('Erreur lors de l\'extraction, vérifiez les permissions');
+                    }
+                    // Supprimer le dossier temporaire même si le thème est invalide
+                    $this->deleteDir(self::TEMP_DIR . $tempFolder);
+                } else {
+                    // erreur à l'ouverture
+                    $success = false;
+                    $notification = helper::translate('Impossible d\'ouvrir l\'archive');
+                }
+                // Valeurs en sortie
+                $this->addOutput([
+                    'redirect' => helper::baseUrl() . 'course',
+                    'state' => $success,
+                    'notification' => $notification,
+                ]);
+
+            }
+
+            // Valeurs en sortie
+            $this->addOutput([
+                'redirect' => helper::baseUrl() . 'course',
+                'state' => $success,
+                'notification' => $notification,
+            ]);
 
         }
         // Valeurs en sortie
@@ -1508,10 +1544,11 @@ class course extends common
         if ($courseId === 'home') {
             return true;
         }
-        // Si un utilisateur connecté est admin aou auteur, c'est autorisé
+        // Si un utilisateur connecté est admin ou auteur, c'est autorisé
         if (
             $this->getUser('password') === $this->getInput('ZWII_USER_PASSWORD') &&
-            $this->getUser('group') === self::GROUP_ADMIN || $this->getUser('id') === $this->getData(['user', $courseId, 'author'])
+            ($this->getUser('group') === self::GROUP_ADMIN ||
+                $this->getUser('id') === $this->getData(['course', $courseId, 'author']))
         ) {
             return true;
         }

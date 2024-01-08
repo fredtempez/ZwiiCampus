@@ -7,25 +7,40 @@
         ]); ?>
     </div>
     <?php if ($this->getUser('group') === self::GROUP_ADMIN): ?>
-    <div class="col1 offset9">
-		<?php echo template::button('courseCategory', [
-			'href' => helper::baseUrl() . 'course/category',
-			'value' => template::ico('table'),
-			'help' => 'Catégories'
-		]); ?>
-	</div>
-    <div class="col1 ">
-        <?php echo template::button('courseAdd', [
-            'class' => 'buttonGreen',
-            'href' => helper::baseUrl() . 'course/add',
-            'value' => template::ico('plus'),
-            'help' => 'Ajouter un espace'
-        ]); ?>
-    </div>
+        <div class="col1 offset8">
+            <?php echo template::button('courseUpload', [
+                'href' => helper::baseUrl() . 'course/restore/',
+                'value' => template::ico('upload-cloud'),
+                'help' => 'Restaurer'
+            ]); ?>
+        </div>
+        <div class="col1">
+            <?php echo template::button('courseCategory', [
+                'href' => helper::baseUrl() . 'course/category',
+                'value' => template::ico('table'),
+                'help' => 'Catégories'
+            ]); ?>
+        </div>
+        <div class="col1">
+            <?php echo template::button('courseAdd', [
+                'class' => 'buttonGreen',
+                'href' => helper::baseUrl() . 'course/add',
+                'value' => template::ico('plus'),
+                'help' => 'Ajouter un espace'
+            ]); ?>
+        </div>
+        <?php else: ?>
+            <div class="col1 offset10">
+            <?php echo template::button('courseUpload', [
+                'href' => helper::baseUrl() . 'course/restore/',
+                'value' => template::ico('upload-cloud'),
+                'help' => 'Restaurer depuis le dossier de l\'espace ' . self::$siteContent
+            ]); ?>
+        </div>
     <?php endif; ?>
 </div>
-<?php if($module::$courses): ?>
-	<?php echo template::table([3, 4, 1, 1, 1, 1, 1], $module::$courses, ['Titre court',  'Description', '', '', '', '', ''], ['id' => 'dataTables']); ?>
+<?php if ($module::$courses): ?>
+    <?php echo template::table([3, 4, 1, 1, 1, 1], $module::$courses, ['Titre court', 'Description', '', '', '', ''], ['id' => 'dataTables']); ?>
 <?php else: ?>
-	<?php echo template::speech('Aucun espace'); ?>
+    <?php echo template::speech('Aucun espace'); ?>
 <?php endif; ?>
