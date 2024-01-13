@@ -902,8 +902,8 @@ class layout extends common
                 if ($this->getCoursesByUser($this->getUser('id'), $this->getUser('group'))) {
                     $leftItems .= '<li><select id="barSelectCourse" >';
                     $leftItems .= '<option name="' . helper::translate('Accueil') . '" value="' . helper::baseUrl(true) . 'course/swap/home" ' . ('home' === self::$siteContent ? 'selected' : '') . '>' . helper::translate('Accueil') . '</option>';
-                    foreach ($this->getCoursesByUser($this->getUser('id'), $this->getUser('group')) as $key => $value) {
-                        $leftItems .= '<option name="' . $value['title'] . '" value="' . helper::baseUrl(true) . 'course/swap/' . $key . '" ' . ($key === self::$siteContent ? 'selected' : '') . '>' . $value['title'] . '</option>';
+                    foreach ($this->getCoursesByUser($this->getUser('id'), $this->getUser('group')) as $courseId => $value) {
+                        $leftItems .= '<option name="' . $this->getData(['course', $courseId, 'title']) . '" value="' . helper::baseUrl(true) . 'course/swap/' . $courseId . '" ' . ($courseId === self::$siteContent ? 'selected' : '') . '>' . $this->getData(['course', $courseId, 'title']) . '</option>';
                     }
                     $leftItems .= '</select></li>';
                 }
@@ -1033,7 +1033,7 @@ class layout extends common
             $rightItems = '';
             if (
                 (
-                    // ZwiiCampus ------
+                        // ZwiiCampus ------
                     self::$siteContent !== 'home'
                     // ZwiiCampus ------
                     && $this->getUser('group') >= self::GROUP_MEMBER

@@ -1424,6 +1424,7 @@ class common
 	public function getCoursesByUser($userId, $userStatus)
 	{
 		$c = $this->getData([('course')]);
+		$c = helper::arraycolumn($c, 'title', 'SORT_ASC');
 		switch ($userStatus) {
 			case self::GROUP_ADMIN:
 				return $c;

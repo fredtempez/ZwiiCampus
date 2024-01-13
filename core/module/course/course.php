@@ -89,11 +89,11 @@ class course extends common
                 $author = isset($authorId)
                     ? sprintf('%s %s', $this->getData(['user', $authorId, 'firstname']), $this->getData(['user', $authorId, 'lastname']))
                     : '';
-                $info = sprintf('<strong>%s<br /></strong>Auteur : %s<br />Id : <a href="%s" target="_blank">%s<br />', $courseValue['title'], $author, $categorieUrl, $courseId);
                 $categorieUrl = helper::baseUrl() . 'course/swap/' . $courseId;
-                $access = self::$courseAccess[$courseValue['access']];
-                $enrolment = self::$courseEnrolment[$courseValue['enrolment']];
-                $description = sprintf('<strong>%s</strong><br />Accès : %s<br />Inscription : %s<br />', $courseValue['description'], $access, $enrolment);
+                $info = sprintf('<strong>%s<br /></strong>Auteur : %s<br />Id : <a href="%s" target="_blank">%s<br />', $this->getData(['course', $courseId, 'title']), $author, $categorieUrl, $courseId);
+                $access = self::$courseAccess[$this->getData(['course', $courseId, 'access'])];
+                $enrolment = self::$courseEnrolment[$this->getData(['course', $courseId, 'enrolment'])];
+                $description = sprintf('<strong>%s</strong><br />Accès : %s<br />Inscription : %s<br />', $this->getData(['course', $courseId, 'description']), $access, $enrolment);
                 self::$courses[] = [
                     $info,
                     //$author,
