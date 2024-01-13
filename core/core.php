@@ -50,7 +50,7 @@ class common
 	const ACCESS_TIMER = 1800;
 
 	// Numéro de version
-	const ZWII_VERSION = '1.4.05';
+	const ZWII_VERSION = '1.4.06';
 
 	// URL autoupdate
 	const ZWII_UPDATE_URL = 'https://forge.chapril.org/ZwiiCMS-Team/campus-update/raw/branch/master/';
@@ -1071,7 +1071,7 @@ class common
 				foreach ($this->getData(['module', $parentPageId, 'posts']) as $articleId => $article) {
 					if ($this->getData(['module', $parentPageId, 'posts', $articleId, 'state']) === true) {
 						$date = $this->getData(['module', $parentPageId, 'posts', $articleId, 'publishedOn']);
-						$sitemap->addUrl('/' . $parentPageId . '/' . $articleId, new DateTime('@{$date}', new DateTimeZone($timezone)));
+						$sitemap->addUrl('/' . $parentPageId . '/' . $articleId, DateTime::createFromFormat('U', $date));
 						$flag = true;
 					}
 				}
@@ -1094,7 +1094,7 @@ class common
 					foreach ($this->getData(['module', $childKey, 'posts']) as $articleId => $article) {
 						if ($this->getData(['module', $childKey, 'posts', $articleId, 'state']) === true) {
 							$date = $this->getData(['module', $childKey, 'posts', $articleId, 'publishedOn']);
-							$sitemap->addUrl('/' . $childKey . '/' . $articleId, new DateTime('@{$date}', new DateTimeZone($timezone)));
+							$sitemap->addUrl('/' . $childKey . '/' . $articleId, DateTime::createFromFormat('U', $date));
 							$flag = true;
 						}
 					}
