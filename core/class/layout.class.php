@@ -291,8 +291,8 @@ class layout extends common
         $label = empty($this->getData(['config', 'poweredPageLabel'])) ? 'Motorisé par' : $this->getData(['config', 'poweredPageLabel']);
         $items .= '><wbr>&nbsp;' . $label . '&nbsp;</span>';
         // Toujours afficher le nom du CMS
-        $items .= '<span id="footerZwiiLMS">';
-        $items .= '<a href="https://forge.chapril.org/fredtempez/ZwiiLMS" onclick="window.open(this.href);return false" >ZwiiLMS</a>';
+        $items .= '<span id="footerZwiiCampus">';
+        $items .= '<a href="https://forge.chapril.org/fredtempez/ZwiiCampus" onclick="window.open(this.href);return false" >ZwiiCampus</a>';
         $items .= '</span>';
         // Affichage du numéro de version
         $items .= '<span id="footerDisplayVersion"';

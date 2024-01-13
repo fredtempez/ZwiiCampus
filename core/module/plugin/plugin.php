@@ -13,7 +13,7 @@
  * @license CC Attribution-NonCommercial-NoDerivatives 4.0 International
  * @link http://zwiicms.fr/
  *
- * THIS MODULE MUST ONLY BE USE WITH ZWIILMS, NOT ZWIICMS
+ * THIS MODULE MUST ONLY BE USE WITH ZwiiCampus, NOT ZWIICMS
  *
  */
 

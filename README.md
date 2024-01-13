@@ -1,6 +1,6 @@
-# ZwiiLMS 1.4.05
+# ZwiiCampus 1.4.05
 
-ZwiiLMS (Learning Management System) est logiciel auteur destiné à mettre en ligne des tutoriels. Il dispose de plusieurs modalités d'ouverture et d'accès des contenus. Basé sur la version 13 du CMS Zwii, la structure logicielle est solide, le framework de Zwii est éprouvé.
+ZwiiCampus (Learning Management System) est logiciel auteur destiné à mettre en ligne des tutoriels. Il dispose de plusieurs modalités d'ouverture et d'accès des contenus. Basé sur la version 13 du CMS Zwii, la structure logicielle est solide, le framework de Zwii est éprouvé.
 
 
 ## Configuration recommandée
@@ -96,7 +96,7 @@ A l'occasion de l'installation d'une version majeure, il est recommandé de réa
     [R] thumb              Miniatures des images
   [R] tmp                  Répertoire temporaire
 
-[F] index.php              Fichier d'initialisation de ZwiiLMS
+[F] index.php              Fichier d'initialisation de ZwiiCampus
 [F] robots.txt             Filtrage des répertoires accessibles aux robots des moteurs de recherche
 [F] sitemap.xml            Plan du site
 [F] sitemap.xml.gz         Version compressée
