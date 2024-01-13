@@ -89,7 +89,7 @@ class course extends common
                 $author = isset($authorId)
                     ? sprintf('%s %s', $this->getData(['user', $authorId, 'firstname']), $this->getData(['user', $authorId, 'lastname']))
                     : '';
-                $info = sprintf('<strong>%s<br /></strong>Auteur : %s<br />Id : %s<br />', $courseValue['title'], $author, $courseId);
+                $info = sprintf('<strong>%s<br /></strong>Auteur : %s<br />Id : <a href="%s" target="_blank">%s<br />', $courseValue['title'], $author, $categorieUrl, $courseId);
                 $categorieUrl = helper::baseUrl() . 'course/swap/' . $courseId;
                 $access = self::$courseAccess[$courseValue['access']];
                 $enrolment = self::$courseEnrolment[$courseValue['enrolment']];
@@ -97,7 +97,7 @@ class course extends common
                 self::$courses[] = [
                     $info,
                     //$author,
-                    '<a href="' . $categorieUrl . '" target="_blank">' . $description . '</a>',
+                    $description,
                     template::button('categoryUser' . $courseId, [
                         'href' => helper::baseUrl() . 'course/users/' . $courseId,
                         'value' => template::ico('users'),
