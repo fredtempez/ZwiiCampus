@@ -22,6 +22,7 @@ class course extends common
         'unsuscribe' => self::GROUP_MEMBER,
         'index' => self::GROUP_EDITOR,
         'edit' => self::GROUP_EDITOR,
+        'manage' => self::GROUP_EDITOR,
         'add' => self::GROUP_ADMIN,
         'delete' => self::GROUP_ADMIN,
         'category' => self::GROUP_ADMIN,
@@ -91,35 +92,16 @@ class course extends common
                     : '';
                 $categorieUrl = helper::baseUrl() . 'course/swap/' . $courseId;
                 $info = sprintf('<strong>%s<br /></strong>Auteur : %s<br />Id : <a href="%s" target="_blank">%s<br />', $this->getData(['course', $courseId, 'title']), $author, $categorieUrl, $courseId);
-                $access = self::$courseAccess[$this->getData(['course', $courseId, 'access'])];
-                $enrolment = self::$courseEnrolment[$this->getData(['course', $courseId, 'enrolment'])];
-                $description = sprintf('<strong>%s</strong><br />Accès : %s<br />Inscription : %s<br />', $this->getData(['course', $courseId, 'description']), $access, $enrolment);
+                $enrolment = sprintf('Accès : %s<br />Inscription : %s<br />', self::$courseAccess[$this->getData(['course', $courseId, 'access'])], self::$courseEnrolment[$this->getData(['course', $courseId, 'enrolment'])]);
                 self::$courses[] = [
                     $info,
-                    //$author,
-                    $description,
+                    $this->getData(['course', $courseId, 'description']),
+                    $enrolment,
                     template::button('categoryUser' . $courseId, [
-                        'href' => helper::baseUrl() . 'course/users/' . $courseId,
-                        'value' => template::ico('users'),
-                        'help' => 'Participants'
-                    ]),
-                    template::button('courseEdit' . $courseId, [
-                        'href' => helper::baseUrl() . 'course/edit/' . $courseId,
-                        'value' => template::ico('pencil'),
-                        'help' => 'Éditer'
-                    ]),
-                    template::button('courseDownload' . $courseId, [
-                        'href' => helper::baseUrl() . 'course/backup/' . $courseId,
-                        'value' => template::ico('download-cloud'),
-                        'help' => 'Sauvegarder'
-                    ]),
-                    template::button('courseDelete' . $courseId, [
-                        'class' => 'courseDelete buttonRed',
-                        'href' => helper::baseUrl() . 'course/delete/' . $courseId,
-                        'value' => template::ico('trash'),
-                        'help' => 'Supprimer'
+                        'href' => helper::baseUrl() . 'course/manage/' . $courseId,
+                        'value' => template::ico('eye'),
+                        'help' => 'Gérer'
                     ])
-
                 ];
             }
         }
@@ -223,7 +205,7 @@ class course extends common
     }
 
     /**
-     * Edite un contenu
+     * Edite un espace
      */
     public function edit()
     {
@@ -255,7 +237,7 @@ class course extends common
 
             // Valeurs en sortie
             $this->addOutput([
-                'redirect' => helper::baseUrl() . 'course',
+                'redirect' => helper::baseUrl() . 'course/manage/' . $this->getUrl(2),
                 'notification' => helper::translate('Espace modifié'),
                 'state' => true
             ]);
@@ -291,6 +273,43 @@ class course extends common
         ]);
     }
 
+    /**
+     * Affiche un contenu et pointe vers les utilitaires
+     */
+    public function manage()
+    {
+
+                // Liste des enseignants pour le sélecteur d'auteurs
+                $teachers = $this->getData(['user']);
+                foreach ($teachers as $teacherId => $teacherInfo) {
+                    if ($teacherInfo["group"] >= 2) {
+                        self::$courseTeachers[$teacherId] = $teacherInfo["firstname"] . ' ' . $teacherInfo["lastname"];
+                    }
+                }
+        
+                // Liste des catégories de contenu
+                self::$courseCategories = $this->getData(['category']);
+        
+                // Liste des pages disponibles
+                $this->initDB('page', $this->getUrl(2));
+                self::$pagesList = $this->getData(['page']);
+                foreach (self::$pagesList as $page => $pageId) {
+                    if (
+                        $this->getData(['page', $page, 'block']) === 'bar' ||
+                        $this->getData(['page', $page, 'disable']) === true
+                    ) {
+                        unset(self::$pagesList[$page]);
+                    }
+                }
+
+        // Valeurs en sortie
+        $this->addOutput([
+            'title' => helper::translate('Gérer un espace'),
+            'view' => 'manage'
+        ]);
+    }
+
+
     public function delete()
     {
         $courseId = $this->getUrl(2);
@@ -321,7 +340,7 @@ class course extends common
 
             // Valeurs en sortie
             $this->addOutput([
-                'redirect' => helper::baseUrl() . 'course',
+                'redirect' => helper::baseUrl() . 'course/manage',
                 'notification' => $success ? helper::translate('Espace supprimé') : helper::translate('Erreur de suppression'),
                 'state' => $success
             ]);
@@ -1376,7 +1395,7 @@ class course extends common
 
             // Valeurs en sortie
             $this->addOutput([
-                'redirect' => helper::baseUrl() . 'course',
+                'redirect' => helper::baseUrl() . 'course/manage/' . $this->getUrl(2),
                 'state' => $success,
                 'notification' => $message,
             ]);

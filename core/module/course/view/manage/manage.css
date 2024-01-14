@@ -1,5 +1,6 @@
 /**
  * This file is part of Zwii.
+ *
  * For full copyright and license information, please see the LICENSE
  * file that was distributed with this source code.
  *
@@ -11,18 +12,7 @@
  * @link http://zwiicms.fr/
  */
 
-$(document).ready(function () {
-    $('#dataTables').DataTable({
-        language: {
-            url: "core/vendor/datatables/french.json"
-        },
-        locale: 'fr',
-        "columnDefs": [
-            {
-                target: 2,
-                orderable: false,
-                searchable: false
-            }
-        ]
-    });
-});
+
+/** NE PAS EFFACER
+* admin.css
+*/
