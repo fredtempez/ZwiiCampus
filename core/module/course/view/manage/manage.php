@@ -6,37 +6,45 @@
             'value' => template::ico('left')
         ]); ?>
     </div>
-
-    <div class="col1 offset7">
+</div>
+<div class="row textAlignCenter">
+    <div class="col2">
         <?php echo template::button('categoryUser' . $this->getUrl(2), [
             'href' => helper::baseUrl() . 'course/users/' . $this->getUrl(2),
-            'value' => template::ico('users'),
-            'help' => 'Participants'
+            'value' => 'Participants',
+            'ico' => 'users'
         ]); ?>
     </div>
-    <div class="col1">
-        <?php echo
-            template::button('courseManageEdit' . $this->getUrl(2), [
+    <div class="col2">
+        <?php echo template::button('courseManageEdit' . $this->getUrl(2), [
                 'href' => helper::baseUrl() . 'course/edit/' . $this->getUrl(2),
-                'value' => template::ico('pencil'),
-                'help' => 'Éditer'
+                'value' => 'Éditer',
+                'ico' => 'pencil'
             ]); ?>
     </div>
-    <div class="col1">
+    <div class="col2">
+        <?php echo
+            template::button('courseManageDuplicate' . $this->getUrl(2), [
+                'href' => helper::baseUrl() . 'course/clone/' . $this->getUrl(2),
+                'value' => 'Cloner',
+                'ico' => 'clone'
+            ]); ?>
+    </div>
+    <div class="col2">
         <?php echo
             template::button('courseManageDownload' . $this->getUrl(2), [
                 'href' => helper::baseUrl() . 'course/backup/' . $this->getUrl(2),
-                'value' => template::ico('download-cloud'),
-                'help' => 'Sauvegarder'
+                'value' => 'Sauvegarder',
+                'ico' => 'download-cloud'
             ]); ?>
     </div>
-        <div class="col1 ">
+    <div class="col2 ">
         <?php echo
             template::button('courseManageDelete' . $this->getUrl(2), [
                 'class' => 'courseDelete buttonRed',
                 'href' => helper::baseUrl() . 'course/delete/' . $this->getUrl(2),
-                'value' => template::ico('trash'),
-                'help' => 'Supprimer'
+                'value' => 'Supprimer',
+                'ico' => 'trash'
             ]); ?>
     </div>
     <div class="row">

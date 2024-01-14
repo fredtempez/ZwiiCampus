@@ -38,6 +38,7 @@ class course extends common
         'userHistoryExport' => self::GROUP_EDITOR,
         'backup' => self::GROUP_EDITOR,
         'restore' => self::GROUP_EDITOR,
+        'clone' => self::GROUP_ADMIN
     ];
 
     public static $courseAccess = [
@@ -92,9 +93,11 @@ class course extends common
                     : '';
                 $categorieUrl = helper::baseUrl() . 'course/swap/' . $courseId;
                 $info = sprintf('<strong>%s<br /></strong>Auteur : %s<br />Id : <a href="%s" target="_blank">%s<br />', $this->getData(['course', $courseId, 'title']), $author, $categorieUrl, $courseId);
-                $enrolment = sprintf('Accès : %s<br />Inscription : %s<br />',
-                            self::$courseAccess[$this->getData(['course', $courseId, 'access'])],
-                            self::$courseEnrolment[$this->getData(['course', $courseId, 'enrolment'])]);
+                $enrolment = sprintf(
+                    'Accès : %s<br />Inscription : %s<br />',
+                    self::$courseAccess[$this->getData(['course', $courseId, 'access'])],
+                    self::$courseEnrolment[$this->getData(['course', $courseId, 'enrolment'])]
+                );
                 self::$courses[] = [
                     $info,
                     $this->getData(['course', $courseId, 'description']),
@@ -281,28 +284,28 @@ class course extends common
     public function manage()
     {
 
-                // Liste des enseignants pour le sélecteur d'auteurs
-                $teachers = $this->getData(['user']);
-                foreach ($teachers as $teacherId => $teacherInfo) {
-                    if ($teacherInfo["group"] >= 2) {
-                        self::$courseTeachers[$teacherId] = $teacherInfo["firstname"] . ' ' . $teacherInfo["lastname"];
-                    }
-                }
-        
-                // Liste des catégories de contenu
-                self::$courseCategories = $this->getData(['category']);
-        
-                // Liste des pages disponibles
-                $this->initDB('page', $this->getUrl(2));
-                self::$pagesList = $this->getData(['page']);
-                foreach (self::$pagesList as $page => $pageId) {
-                    if (
-                        $this->getData(['page', $page, 'block']) === 'bar' ||
-                        $this->getData(['page', $page, 'disable']) === true
-                    ) {
-                        unset(self::$pagesList[$page]);
-                    }
-                }
+        // Liste des enseignants pour le sélecteur d'auteurs
+        $teachers = $this->getData(['user']);
+        foreach ($teachers as $teacherId => $teacherInfo) {
+            if ($teacherInfo["group"] >= 2) {
+                self::$courseTeachers[$teacherId] = $teacherInfo["firstname"] . ' ' . $teacherInfo["lastname"];
+            }
+        }
+
+        // Liste des catégories de contenu
+        self::$courseCategories = $this->getData(['category']);
+
+        // Liste des pages disponibles
+        $this->initDB('page', $this->getUrl(2));
+        self::$pagesList = $this->getData(['page']);
+        foreach (self::$pagesList as $page => $pageId) {
+            if (
+                $this->getData(['page', $page, 'block']) === 'bar' ||
+                $this->getData(['page', $page, 'disable']) === true
+            ) {
+                unset(self::$pagesList[$page]);
+            }
+        }
 
         // Valeurs en sortie
         $this->addOutput([
@@ -311,6 +314,34 @@ class course extends common
         ]);
     }
 
+    /**
+     * Duplique un cours et l'affiche dans l'éditeur
+     */
+    public function clone()
+    {
+        // Cours à dupliquer
+        $courseId = $this->getUrl(2);
+
+        // Id du nouveau cours
+        $target = uniqid();
+
+        // Créer la structure de données
+        mkdir(self::DATA_DIR . $target);
+
+        $this->copyDir(self::DATA_DIR . $courseId, self::DATA_DIR . $target);
+
+        $data = $this->getData(['course', $courseId]);
+        $this->setData(['course', $target, $data]);
+
+        // Valeurs en sortie
+        $this->addOutput([
+            'redirect' => helper::baseUrl() . 'course/edit/' . $target,
+            'notification' => helper::translate('Espace dupliqué'),
+            'state' => true
+        ]);
+
+
+    }
 
     public function delete()
     {
@@ -342,9 +373,9 @@ class course extends common
 
             // Valeurs en sortie
             $this->addOutput([
-                'redirect' => helper::baseUrl() . 'course/manage',
+                'redirect' => helper::baseUrl() . 'course',
                 'notification' => $success ? helper::translate('Espace supprimé') : helper::translate('Erreur de suppression'),
-                'state' =>   $success
+                'state' => $success
             ]);
         }
 
