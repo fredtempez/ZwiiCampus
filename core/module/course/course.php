@@ -92,7 +92,9 @@ class course extends common
                     : '';
                 $categorieUrl = helper::baseUrl() . 'course/swap/' . $courseId;
                 $info = sprintf('<strong>%s<br /></strong>Auteur : %s<br />Id : <a href="%s" target="_blank">%s<br />', $this->getData(['course', $courseId, 'title']), $author, $categorieUrl, $courseId);
-                $enrolment = sprintf('Accès : %s<br />Inscription : %s<br />', self::$courseAccess[$this->getData(['course', $courseId, 'access'])], self::$courseEnrolment[$this->getData(['course', $courseId, 'enrolment'])]);
+                $enrolment = sprintf('Accès : %s<br />Inscription : %s<br />',
+                            self::$courseAccess[$this->getData(['course', $courseId, 'access'])],
+                            self::$courseEnrolment[$this->getData(['course', $courseId, 'enrolment'])]);
                 self::$courses[] = [
                     $info,
                     $this->getData(['course', $courseId, 'description']),
@@ -342,7 +344,7 @@ class course extends common
             $this->addOutput([
                 'redirect' => helper::baseUrl() . 'course/manage',
                 'notification' => $success ? helper::translate('Espace supprimé') : helper::translate('Erreur de suppression'),
-                'state' => $success
+                'state' =>   $success
             ]);
         }
 
@@ -1030,8 +1032,8 @@ class course extends common
                         html_entity_decode($pages[$pageId]['title']),
                         helper::dateUTF8('%d %B %Y %H:%M', $time)
                     ];
-                    $floorTime = $floorTime < $time ? $floorTime : $time;
-                    $TopTime = $TopTime > $time ? $TopTime : $time;
+                    $floorTime = isset($floorTime) && $floorTime < $time ? $floorTime : $time;
+                    $topTime = isset($topTime) && $topTime > $time ? $topTime : $time;
                 }
             } else {
                 self::$userHistory[] = [
@@ -1039,8 +1041,8 @@ class course extends common
                     html_entity_decode($pages[$pageId]['title']),
                     helper::dateUTF8('%d %B %Y %H:%M', $times)
                 ];
-                $floorTime = $floorTime < $times ? $floorTime : $times;
-                $topTime = $topTime > $times ? $topTime : $times;
+                $floorTime = isset($floorTime) && $floorTime < $times ? $floorTime : $times;
+                $topTime = isset($topTime) && $topTime > $times ? $topTime : $times;
             }
         }
 
