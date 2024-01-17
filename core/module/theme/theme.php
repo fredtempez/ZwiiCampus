@@ -630,8 +630,8 @@ class theme extends common
 
 		// Polices liées au thème admin
 		$admin = $this->getData(['admin']);
-		$fonts['Admin Titre (admin)'] = $this->getData(['admin', 'fontTitle']);
-		$fonts['Admin Texte (admin)'] = $this->getData(['admin', 'fontText']);
+		$fonts['Titre (admin)'] = $this->getData(['admin', 'fontTitle']);
+		$fonts['Texte (admin)'] = $this->getData(['admin', 'fontText']);
 		// Polices liées aux thèmes des espaces
 		foreach ($this->getData(['course']) as $courseId => $courseValue) {
 			$theme = json_decode(file_get_contents(self::DATA_DIR . $courseId . '/theme.json'), true);
