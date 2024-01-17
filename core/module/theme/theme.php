@@ -629,9 +629,9 @@ class theme extends common
 		$this->setFonts('all');
 
 		// Polices liées au thème
-		$admin = json_decode(file_get_contents(self::DATA_DIR . 'admin.json'), true);
-		$fonts['Admin Titre (admin)'] = $admin['admin']['fontTitle'];
-		$fonts['Admin Texte (admin)'] = $admin['admin']['fontText'];
+		$admin = $this->getData(['admin']);
+		$fonts['Admin Titre (admin)'] = $this->getData(['admin', 'fontTitle']);
+		$fonts['Admin Texte (admin)'] = $this->getData(['admin', 'fontText']);
 		// Polices liées aux thèmes des espaces
 		foreach ($this->getData(['course']) as $courseId => $courseValue) {
 			$theme = json_decode(file_get_contents(self::DATA_DIR . $courseId . '/theme.json'), true);
