@@ -629,15 +629,18 @@ class theme extends common
 		$this->setFonts('all');
 
 		// Polices liées au thème
-		$used = [
-			'Bannière' => $this->getData(['theme', 'header', 'font']),
-			'Menu' => $this->getData(['theme', 'menu', 'font']),
-			'Titre ' => $this->getData(['theme', 'title', 'font']),
-			'Texte' => $this->getData(['theme', 'text', 'font']),
-			'Pied de page' => $this->getData(['theme', 'footer', 'font']),
-			'Titre (admin)' => $this->getData(['admin', 'fontTitle']),
-			'Admin (texte)' => $this->getData(['admin', 'fontText'])
-		];
+		$admin = json_decode(file_get_contents(self::DATA_DIR . 'admin.json'), true);
+		$fonts['Admin Titre (admin)'] = $admin['admin']['fontTitle'];
+		$fonts['Admin Texte (admin)'] = $admin['admin']['fontText'];
+		// Polices liées aux thèmes des espaces
+		foreach ($this->getData(['course']) as $courseId => $courseValue) {
+			$theme = json_decode(file_get_contents(self::DATA_DIR . $courseId . '/theme.json'), true);
+			$fonts['Bannière ('. $courseId .')'] = $theme['theme']['header']['font'];
+			$fonts['Menu ('. $courseId .')'] = $theme['theme']['menu']['font'];
+			$fonts['Titre ('. $courseId .')'] = $theme['theme']['title']['font'];
+			$fonts['Texte ('. $courseId .')'] = $theme['theme']['text']['font'];
+			$fonts['Pied de page ('. $courseId .')'] = $theme['theme']['footer']['font'];
+		}
 
 		// Récupérer le détail des fontes installées
 		//$f = $this->getFonts();
@@ -645,22 +648,24 @@ class theme extends common
 		$f['imported'] = $this->getData(['font', 'imported']);
 		$f['websafe'] = self::$fontsWebSafe;
 
+		// Listes des espaces à parcourir pour bloquer la suppression d'une fonte utilisée
+		$courses = array_merge(['admin'], array_keys($this->getData(['course'])));
+
+
 		// Parcourir les fontes disponibles et construire le tableau pour le formulaire
 		foreach ($f as $type => $typeValue) {
 			if (is_array($typeValue)) {
 				foreach ($typeValue as $fontId => $fontValue) {
-					// Fontes utilisées par les thèmes
-					$fontUsed[$fontId] = '';
-					foreach ($used as $key => $value) {
-						if ($value === $fontId) {
-							$fontUsed[$fontId] .= $key . '<br/>';
-						}
-					}
+					// Recherche les correrspondances
+					$result = array_filter($fonts, function($value) use ($fontId) {
+						return $value == $fontId;
+					});
+					$keyResults = array_keys($result);
 					self::$fontsDetail[] = [
 						$fontId,
 						'<span style="font-family:' . $f[$type][$fontId]['font-family'] . '">' . $f[$type][$fontId]['name'] . '</span>',
 						$f[$type][$fontId]['font-family'],
-						$fontUsed[$fontId],
+						empty($keyResults) ? '' : '<span class="fontsList">' . implode('<br />', $keyResults) . '</span>',
 						$type,
 						$type !== 'websafe' ? template::button('themeFontEdit' . $fontId, [
 							'class' => 'themeFontEdit',
@@ -848,7 +853,7 @@ class theme extends common
 				file_exists($this->getData(['font', 'files', $this->getUrl(3), 'resource']))
 			) {
 
-				unlink($this->getData(['font',  'files', $this->getUrl(3), 'resource']));
+				unlink($this->getData(['font', 'files', $this->getUrl(3), 'resource']));
 			}
 
 			// Valeurs en sortie
@@ -1068,17 +1073,17 @@ class theme extends common
 						// Substitution des fontes Google
 						if ($modele = 'theme') {
 							// Déplacement des deux fichiers de theme dans le siteContent
-							copy (self::DATA_DIR . 'theme.css', self::DATA_DIR .  self::$siteContent . '/theme.css');
-							copy (self::DATA_DIR . 'theme.json', self::DATA_DIR .  self::$siteContent . '/theme.json');
+							copy(self::DATA_DIR . 'theme.css', self::DATA_DIR . self::$siteContent . '/theme.css');
+							copy(self::DATA_DIR . 'theme.json', self::DATA_DIR . self::$siteContent . '/theme.json');
 							unlink(self::DATA_DIR . 'theme.css');
 							unlink(self::DATA_DIR . 'theme.json');
-							$c = $this->subFont(self::DATA_DIR .  self::$siteContent . '/theme.json');
+							$c = $this->subFont(self::DATA_DIR . self::$siteContent . '/theme.json');
 							// Un remplacement nécessite la régénération de la feuille de style
 							if (
 								$c > 0
-								and file_exists(self::DATA_DIR .  self::$siteContent . '/theme.css')
+								and file_exists(self::DATA_DIR . self::$siteContent . '/theme.css')
 							) {
-								unlink(self::DATA_DIR .  self::$siteContent . '/theme.css');
+								unlink(self::DATA_DIR . self::$siteContent . '/theme.css');
 							}
 						}
 						if ($modele = 'admin') {
@@ -1203,8 +1208,8 @@ class theme extends common
 					}
 					break;
 				case 'theme':
-					$zip->addFile(self::DATA_DIR .  self::$siteContent . '/theme.json', self::DATA_DIR .   'theme.json');
-					$zip->addFile(self::DATA_DIR .  self::$siteContent . '/theme.css', self::DATA_DIR .  'theme.css');
+					$zip->addFile(self::DATA_DIR . self::$siteContent . '/theme.json', self::DATA_DIR . 'theme.json');
+					$zip->addFile(self::DATA_DIR . self::$siteContent . '/theme.css', self::DATA_DIR . 'theme.css');
 					$zip->addFile(self::DATA_DIR . 'custom.css', self::DATA_DIR . 'custom.css');
 					// Traite l'image dans le body
 					if ($this->getData(['theme', 'body', 'image']) !== '') {
