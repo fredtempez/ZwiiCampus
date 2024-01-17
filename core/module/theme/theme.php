@@ -628,7 +628,7 @@ class theme extends common
 		// Toutes les fontes installées sont chargées
 		$this->setFonts('all');
 
-		// Polices liées au thème
+		// Polices liées au thème admin
 		$admin = $this->getData(['admin']);
 		$fonts['Admin Titre (admin)'] = $this->getData(['admin', 'fontTitle']);
 		$fonts['Admin Texte (admin)'] = $this->getData(['admin', 'fontText']);
@@ -656,11 +656,12 @@ class theme extends common
 		foreach ($f as $type => $typeValue) {
 			if (is_array($typeValue)) {
 				foreach ($typeValue as $fontId => $fontValue) {
-					// Recherche les correrspondances
+					// Recherche les correspondances
 					$result = array_filter($fonts, function($value) use ($fontId) {
 						return $value == $fontId;
 					});
 					$keyResults = array_keys($result);
+					// Préparation du tableau
 					self::$fontsDetail[] = [
 						$fontId,
 						'<span style="font-family:' . $f[$type][$fontId]['font-family'] . '">' . $f[$type][$fontId]['name'] . '</span>',
