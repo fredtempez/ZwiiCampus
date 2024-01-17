@@ -138,7 +138,7 @@
                 </div>
                 <div class="col3">
                     <?php echo template::select('configLegalPageId', array_merge(['none' => 'Aucune'], helper::arrayColumn($module::$pagesList, 'title', 'SORT_ASC')), [
-                        'label' =>  helper::translate('Mentions légales') . '&nbsp;' . template::flag('selected', '20px'),
+                        'label' =>  helper::translate('Mentions légales') ,
                         'selected' => $this->getData(['config', 'legalPageId'])
                     ]); ?>
                 </div>
@@ -152,7 +152,7 @@
                 </div>
                 <div class="col3">
                     <?php echo template::select('configSearchPageId', array_merge(['none' => 'Aucune'], helper::arrayColumn($module::$pagesList, 'title', 'SORT_ASC')), [
-                        'label' =>  helper::translate('Rechercher dans le site') . '&nbsp;' . template::flag('selected', '20px'),
+                        'label' =>  helper::translate('Rechercher dans le site'),
                         'selected' => $this->getData(['config', 'searchPageId'])
                     ]); ?>
                 </div>
