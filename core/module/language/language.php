@@ -435,7 +435,7 @@ class language extends common
 
 		// La locale est-elle celle de la langue de l'UI ?
 		if ($lang === self::$siteContent) {
-			self::$locales[$lang]['locale'] = $this->getData(['locale']);
+			self::$locales[$lang]['locale'] = $this->getData(['config']);
 		} else {
 			// Lire les locales sans passer par les méthodes
 			self::$locales[$lang] = json_decode(file_get_contents(self::DATA_DIR . $lang . '/locale.json'), true);
