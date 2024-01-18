@@ -1438,8 +1438,8 @@ class common
 			case self::GROUP_MEMBER:
 			case self::GROUP_VISITOR:
 				foreach ($c as $courseId => $value) {
-					$students = $this->getData(['enrolment', $courseId, 'students']);
-					if (in_array($userId, $students) === false) {
+					$students = $this->getData(['enrolment', $courseId]);
+					if (is_array($students[$userId]) === false) {
 						unset($c[$courseId]);
 					}
 				}
