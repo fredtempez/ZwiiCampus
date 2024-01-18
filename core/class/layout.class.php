@@ -509,6 +509,14 @@ class layout extends common
             $this->getUser('group') === self::GROUP_MEMBER
             && $this->getData(['theme', 'menu', 'memberBar']) === true
         ) {
+            if ($this->getCoursesByUser($this->getUser('id'), $this->getUser('group'))) {
+                $itemsRight .= '<li><select id="barSelectCourse" >';
+                $itemsRight .= '<option name="' . helper::translate('Accueil') . '" value="' . helper::baseUrl(true) . 'course/swap/home" ' . ('home' === self::$siteContent ? 'selected' : '') . '>' . helper::translate('Accueil') . '</option>';
+                foreach ($this->getCoursesByUser($this->getUser('id'), $this->getUser('group')) as $courseId => $value) {
+                    $itemsRight .= '<option name="' . $this->getData(['course', $courseId, 'title']) . '" value="' . helper::baseUrl(true) . 'course/swap/' . $courseId . '" ' . ($courseId === self::$siteContent ? 'selected' : '') . '>' . $this->getData(['course', $courseId, 'title']) . '</option>';
+                }
+                $itemsRight .= '</select></li>';
+            }
             if (
                 ($this->getUser('group') >= self::GROUP_MEMBER &&
                     $this->getUser('permission', 'filemanager') === true)

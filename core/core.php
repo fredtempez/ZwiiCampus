@@ -50,7 +50,7 @@ class common
 	const ACCESS_TIMER = 1800;
 
 	// Numéro de version
-	const ZWII_VERSION = '1.4.08';
+	const ZWII_VERSION = '1.4.09';
 
 	// URL autoupdate
 	const ZWII_UPDATE_URL = 'https://forge.chapril.org/ZwiiCMS-Team/campus-update/raw/branch/master/';
@@ -1439,7 +1439,7 @@ class common
 			case self::GROUP_VISITOR:
 				foreach ($c as $courseId => $value) {
 					$students = $this->getData(['enrolment', $courseId]);
-					if (is_array($students[$userId]) === false) {
+					if (isset($students[$userId]) === false) {
 						unset($c[$courseId]);
 					}
 				}

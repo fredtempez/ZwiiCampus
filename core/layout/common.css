@@ -604,6 +604,18 @@ nav li ul li {
     text-align: left;
 }
 
+nav li ul #barSelectCourse {
+    text-align: left;
+}
+nav #barSelectCourse {
+    width: 150px;
+    border: 0;
+    color: #111112;
+    font-size: 1em;
+    background-color: rgba(255, 255, 255, 1);
+    padding: 8px;
+    margin-top: 5px;
+}
 
 /*
 nav .navSub a{
