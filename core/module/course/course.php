@@ -317,7 +317,7 @@ class course extends common
     /**
      * Duplique un cours et l'affiche dans l'éditeur
      */
-    public function clone()
+    public function clone ()
     {
         // Cours à dupliquer
         $courseId = $this->getUrl(2);
@@ -330,17 +330,14 @@ class course extends common
 
         $this->copyDir(self::DATA_DIR . $courseId, self::DATA_DIR . $target);
 
-        $data = $this->getData(['course', $courseId]);
-        $this->setData(['course', $target, $data]);
+        $this->setData(['course', $target, $this->getData(['course', $courseId])]);
 
         // Valeurs en sortie
         $this->addOutput([
-            'redirect' => helper::baseUrl() . 'course/edit/' . $target,
+            'redirect' => helper::baseUrl() . 'course',
             'notification' => helper::translate('Espace dupliqué'),
             'state' => true
         ]);
-
-
     }
 
     public function delete()
@@ -550,82 +547,87 @@ class course extends common
         // Liste des inscrits dans le contenu sélectionné.
         $users = $this->getData(['enrolment', $courseId]);
 
-        // Tri du tableau par défaut par $userId
-        ksort($users);
+        if (is_array($users)) {
+            // Tri du tableau par défaut par $userId
+            ksort($users);
+            foreach ($users as $userId => $userValue) {
 
-        foreach ($users as $userId => $userValue) {
-
-            // Date et heure de la dernière page vue
-            // Compatibilité anciennes versions
-            if (
-                $this->getData(['enrolment', $courseId, $userId, 'lastPageView']) === null
-                or $this->getData(['enrolment', $courseId, $userId, 'datePageView']) === null
-            ) {
-                if (!empty($userValue['history'])) {
-                    $maxTime = max($userValue['history']);
-                    $lastPageId = array_search($maxTime, $userValue['history']);
-                    $this->setData(['enrolment', $courseId, $userId, 'lastPageView', $lastPageId]);
-                    $this->setData(['enrolment', $courseId, $userId, 'datePageView', $maxTime]);
+                // Date et heure de la dernière page vue
+                // Compatibilité anciennes versions
+                if (
+                    $this->getData(['enrolment', $courseId, $userId, 'lastPageView']) === null
+                    or $this->getData(['enrolment', $courseId, $userId, 'datePageView']) === null
+                ) {
+                    if (!empty($userValue['history'])) {
+                        $maxTime = max($userValue['history']);
+                        $lastPageId = array_search($maxTime, $userValue['history']);
+                        $this->setData(['enrolment', $courseId, $userId, 'lastPageView', $lastPageId]);
+                        $this->setData(['enrolment', $courseId, $userId, 'datePageView', $maxTime]);
+                    }
                 }
+
+
+                // Compte les rôles valides
+                if (isset($profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])])) {
+                    $profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])]++;
+                }
+
+                // Filtres
+                if ($this->isPost()) {
+                    // Groupe et profils
+                    $group = (string) $this->getData(['user', $userId, 'group']);
+                    $profil = (string) $this->getData(['user', $userId, 'profil']);
+                    $firstName = $this->getData(['user', $userId, 'firstname']);
+                    $lastName = $this->getData(['user', $userId, 'lastname']);
+                    if (
+                        $this->getInput('courseFilterGroup', helper::FILTER_INT) > 0
+                        && $this->getInput('courseFilterGroup', helper::FILTER_STRING_SHORT) !== $group . $profil
+                    )
+                        continue;
+                    // Première lettre du prénom
+                    if (
+                        $this->getInput('courseFilterFirstName', helper::FILTER_STRING_SHORT) !== 'all'
+                        && $this->getInput('courseFilterFirstName', helper::FILTER_STRING_SHORT) !== strtoupper(substr($firstName, 0, 1))
+                    )
+                        continue;
+                    // Première lettre du nom
+                    if (
+                        $this->getInput('courseFilterLastName', helper::FILTER_STRING_SHORT) !== 'all'
+                        && $this->getInput('courseFilterLastName', helper::FILTER_STRING_SHORT) !== strtoupper(substr($lastName, 0, 1))
+                    )
+                        continue;
+                }
+
+                // Progression
+                $viewPages = $this->getData(['enrolment', $courseId, $userId, 'history']) !== null ?
+                    count(array_keys($this->getData(['enrolment', $courseId, $userId, 'history']))) :
+                    0;
+
+                // Construction du tableau
+                self::$courseUsers[] = [
+                    $userId,
+                    $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
+                    isset($pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])]['title'])
+                    ? $pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])]['title']
+                    : '',
+                    $this->getData(['enrolment', $courseId, $userId, 'datePageView'])
+                    ? helper::dateUTF8('%d %B %Y - %H:%M', $this->getData(['enrolment', $courseId, $userId, 'datePageView']))
+                    : '',
+                    $this->getData(['user', $userId, 'tags']),
+                    template::button('userHistory' . $userId, [
+                        'href' => helper::baseUrl() . 'course/userHistory/' . $courseId . '/' . $userId,
+                        'value' => !empty($userValue['history']) ? round(($viewPages * 100) / $sumPages, 1) . ' %' : '0%',
+                        'disable' => empty($userValue['history'])
+                    ]),
+                    template::button('userDelete' . $userId, [
+                        'class' => 'userDelete buttonRed',
+                        'href' => helper::baseUrl() . 'course/userDelete/' . $courseId . '/' . $userId,
+                        'value' => template::ico('user'),
+                        'help' => 'Désinscrire'
+                    ])
+                ];
+
             }
-
-
-            // Compte les rôles valides
-            if (isset($profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])])) {
-                $profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])]++;
-            }
-
-            // Filtres
-            if ($this->isPost()) {
-                // Groupe et profils
-                $group = (string) $this->getData(['user', $userId, 'group']);
-                $profil = (string) $this->getData(['user', $userId, 'profil']);
-                $firstName = $this->getData(['user', $userId, 'firstname']);
-                $lastName = $this->getData(['user', $userId, 'lastname']);
-                if (
-                    $this->getInput('courseFilterGroup', helper::FILTER_INT) > 0
-                    && $this->getInput('courseFilterGroup', helper::FILTER_STRING_SHORT) !== $group . $profil
-                )
-                    continue;
-                // Première lettre du prénom
-                if (
-                    $this->getInput('courseFilterFirstName', helper::FILTER_STRING_SHORT) !== 'all'
-                    && $this->getInput('courseFilterFirstName', helper::FILTER_STRING_SHORT) !== strtoupper(substr($firstName, 0, 1))
-                )
-                    continue;
-                // Première lettre du nom
-                if (
-                    $this->getInput('courseFilterLastName', helper::FILTER_STRING_SHORT) !== 'all'
-                    && $this->getInput('courseFilterLastName', helper::FILTER_STRING_SHORT) !== strtoupper(substr($lastName, 0, 1))
-                )
-                    continue;
-            }
-
-            // Progression
-            $viewPages = $this->getData(['enrolment', $courseId, $userId, 'history']) !== null ?
-                count(array_keys($this->getData(['enrolment', $courseId, $userId, 'history']))) :
-                0;
-
-            // Construction du tableau
-            self::$courseUsers[] = [
-                $userId,
-                $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
-                $pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])]['title'],
-                helper::dateUTF8('%d %B %Y - %H:%M', $this->getData(['enrolment', $courseId, $userId, 'datePageView'])),
-                $this->getData(['user', $userId, 'tags']),
-                template::button('userHistory' . $userId, [
-                    'href' => helper::baseUrl() . 'course/userHistory/' . $courseId . '/' . $userId,
-                    'value' => !empty($userValue['history']) ? round(($viewPages * 100) / $sumPages, 1) . ' %' : '0%',
-                    'disable' => empty($userValue['history'])
-                ]),
-                template::button('userDelete' . $userId, [
-                    'class' => 'userDelete buttonRed',
-                    'href' => helper::baseUrl() . 'course/userDelete/' . $courseId . '/' . $userId,
-                    'value' => template::ico('user'),
-                    'help' => 'Désinscrire'
-                ])
-            ];
-
         }
 
         // Ajoute les effectifs aux profils du sélecteur
@@ -696,11 +698,14 @@ class course extends common
         self::$alphabet = array_combine($alphabet, self::$alphabet);
         self::$alphabet = array_merge(['all' => 'Tout'], self::$alphabet);
 
-        // Liste des inscrits dans le contenu sélectionné.
+        // Liste des inscrits dans l'espace sélectionné afin de les supprimer de la liste des candidats
+        $users = $this->getData(['user']);
         $suscribers = $this->getData(['enrolment', $courseId]);
-        $suscribers = array_keys($suscribers);
+        if (is_array($suscribers)) {
+            $suscribers = array_keys($suscribers);
+            $users = array_diff_key($users, array_flip($suscribers));
 
-        $users = array_diff_key($this->getData(['user']), array_flip($suscribers));
+        }
 
         // Tri du tableau par défaut par $userId
         ksort($users);
@@ -852,56 +857,57 @@ class course extends common
         // Liste des inscrits dans le contenu sélectionné.
         $users = $this->getData(['enrolment', $courseId]);
 
-        // Tri du tableau par défaut par $userId
-        ksort($users);
+        if (is_array($users)) {
+            // Tri du tableau par défaut par $userId
+            ksort($users);
+            foreach ($users as $userId => $userValue) {
 
-        foreach ($users as $userId => $userValue) {
+                // Compte les rôles
+                if (isset($profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])])) {
+                    $profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])]++;
+                }
 
-            // Compte les rôles
-            if (isset($profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])])) {
-                $profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])]++;
+                // Filtres
+                if (
+                    isset($_POST['courseFilterGroup'])
+                    || isset($_POST['courseFilterFirstName'])
+                    || isset($_POST['courseFilterLastName'])
+                ) {
+
+                    // Groupe et profils
+                    $group = (string) $this->getData(['user', $userId, 'group']);
+                    $profil = (string) $this->getData(['user', $userId, 'profil']);
+                    $firstName = $this->getData(['user', $userId, 'firstname']);
+                    $lastName = $this->getData(['user', $userId, 'lastname']);
+                    if (
+                        $this->getInput('courseFilterGroup', helper::FILTER_INT) > 0
+                        && $this->getInput('courseFilterGroup', helper::FILTER_STRING_SHORT) !== $group . $profil
+                    )
+                        continue;
+                    // Première lettre du prénom
+                    if (
+                        $this->getInput('courseFilterFirstName', helper::FILTER_STRING_SHORT) !== 'all'
+                        && $this->getInput('courseFilterFirstName', helper::FILTER_STRING_SHORT) !== strtoupper(substr($firstName, 0, 1))
+                    )
+                        continue;
+                    // Première lettre du nom
+                    if (
+                        $this->getInput('courseFilterLastName', helper::FILTER_STRING_SHORT) !== 'all'
+                        && $this->getInput('courseFilterLastName', helper::FILTER_STRING_SHORT) !== strtoupper(substr($lastName, 0, 1))
+                    )
+                        continue;
+                }
+
+                // Construction du tableau
+                self::$courseUsers[] = [
+                    template::checkbox($userId, true, '', ['class' => 'checkboxSelect']),
+                    $userId,
+                    $this->getData(['user', $userId, 'firstname']),
+                    $this->getData(['user', $userId, 'lastname']),
+                    $this->getData(['user', $userId, 'tags']),
+                ];
+
             }
-
-            // Filtres
-            if (
-                isset($_POST['courseFilterGroup'])
-                || isset($_POST['courseFilterFirstName'])
-                || isset($_POST['courseFilterLastName'])
-            ) {
-
-                // Groupe et profils
-                $group = (string) $this->getData(['user', $userId, 'group']);
-                $profil = (string) $this->getData(['user', $userId, 'profil']);
-                $firstName = $this->getData(['user', $userId, 'firstname']);
-                $lastName = $this->getData(['user', $userId, 'lastname']);
-                if (
-                    $this->getInput('courseFilterGroup', helper::FILTER_INT) > 0
-                    && $this->getInput('courseFilterGroup', helper::FILTER_STRING_SHORT) !== $group . $profil
-                )
-                    continue;
-                // Première lettre du prénom
-                if (
-                    $this->getInput('courseFilterFirstName', helper::FILTER_STRING_SHORT) !== 'all'
-                    && $this->getInput('courseFilterFirstName', helper::FILTER_STRING_SHORT) !== strtoupper(substr($firstName, 0, 1))
-                )
-                    continue;
-                // Première lettre du nom
-                if (
-                    $this->getInput('courseFilterLastName', helper::FILTER_STRING_SHORT) !== 'all'
-                    && $this->getInput('courseFilterLastName', helper::FILTER_STRING_SHORT) !== strtoupper(substr($lastName, 0, 1))
-                )
-                    continue;
-            }
-
-            // Construction du tableau
-            self::$courseUsers[] = [
-                template::checkbox($userId, true, '', ['class' => 'checkboxSelect']),
-                $userId,
-                $this->getData(['user', $userId, 'firstname']),
-                $this->getData(['user', $userId, 'lastname']),
-                $this->getData(['user', $userId, 'tags']),
-            ];
-
         }
 
         // Ajoute les effectifs aux profils du sélecteur
@@ -1118,76 +1124,77 @@ class course extends common
         // Liste des inscrits dans le contenu sélectionné.
         $users = $this->getData(['enrolment', $courseId]);
 
-        // Tri du tableau par défaut par $userId
-        ksort($users);
+        if (is_array($users)) {
+            // Tri du tableau par défaut par $userId
+            ksort($users);
 
-        // Dossier temporaire
-        if (is_dir(self::FILE_DIR . 'source/export') === false) {
-            mkdir(self::FILE_DIR . 'source/export');
-        }
-        if (is_dir(self::FILE_DIR . 'source/export/' . $courseId) === false) {
-            mkdir(self::FILE_DIR . 'source/export/' . $courseId);
-        }
-        $path = self::FILE_DIR . 'source/export/';
+            // Dossier temporaire
+            if (is_dir(self::FILE_DIR . 'source/export') === false) {
+                mkdir(self::FILE_DIR . 'source/export');
+            }
+            if (is_dir(self::FILE_DIR . 'source/export/' . $courseId) === false) {
+                mkdir(self::FILE_DIR . 'source/export/' . $courseId);
+            }
+            $path = self::FILE_DIR . 'source/export/';
 
-        $filename = $path . $courseId . '/synthèse' . helper::dateUTF8('%Y%m%d', time()) . '.csv';
+            $filename = $path . $courseId . '/synthèse' . helper::dateUTF8('%Y%m%d', time()) . '.csv';
 
-        foreach ($users as $userId => $userValue) {
+            foreach ($users as $userId => $userValue) {
 
-            // Date et heure de la dernière page vue
-            // Compatibilité anciennes versions
-            if (
-                $this->getData(['enrolment', $courseId, $userId, 'lastPageView']) === null
-                or $this->getData(['enrolment', $courseId, $userId, 'datePageView']) === null
-            ) {
-                if (!empty($userValue['history'])) {
-                    $maxTime = max($userValue['history']);
-                    $lastPageId = array_search($maxTime, $userValue['history']);
-                    $this->setData(['enrolment', $courseId, $userId, 'lastPageView', $lastPageId]);
-                    $this->setData(['enrolment', $courseId, $userId, 'datePageView', $maxTime]);
+                // Date et heure de la dernière page vue
+                // Compatibilité anciennes versions
+                if (
+                    $this->getData(['enrolment', $courseId, $userId, 'lastPageView']) === null
+                    or $this->getData(['enrolment', $courseId, $userId, 'datePageView']) === null
+                ) {
+                    if (!empty($userValue['history'])) {
+                        $maxTime = max($userValue['history']);
+                        $lastPageId = array_search($maxTime, $userValue['history']);
+                        $this->setData(['enrolment', $courseId, $userId, 'lastPageView', $lastPageId]);
+                        $this->setData(['enrolment', $courseId, $userId, 'datePageView', $maxTime]);
+                    }
                 }
+
+                // Progression
+                $viewPages = $this->getData(['enrolment', $courseId, $userId, 'history']) !== null ?
+                    count(array_keys($this->getData(['enrolment', $courseId, $userId, 'history']))) :
+                    0;
+
+                // Construction du tableau
+                self::$courseUsers[] = [
+                    $userId,
+                    $this->getData(['user', $userId, 'firstname']),
+                    $this->getData(['user', $userId, 'lastname']),
+                    $pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])],
+                    helper::dateUTF8('%d/%d/%Y', $this->getData(['enrolment', $courseId, $userId, 'datePageView'])),
+                    helper::dateUTF8('%H:%M', $this->getData(['enrolment', $courseId, $userId, 'datePageView'])),
+                    number_format(round(($viewPages * 100) / $sumPages, 1) / 100, 2, ',')
+                ];
+
+                // Synthèse des historiques
+                // ------------------------
+                // Ouverture du fichier en écriture
+                $file = fopen($filename, 'w');
+
+                foreach (self::$courseUsers as $user) {
+                    // Décode les entités HTML dans chaque élément du tableau
+                    $decodedUser = array_map('html_entity_decode', $user);
+
+                    // Écrire la ligne dans le fichier CSV
+                    fputcsv($file, $decodedUser, ';');
+                }
+                // Fermeture du fichier
+                fclose($file);
+
+                // Valeurs en sortie
+                $this->addOutput([
+                    'redirect' => helper::baseUrl() . 'course/users/' . $courseId,
+                    'notification' => 'Création ' . basename($filename) . ' dans le dossier "Export"',
+                    'state' => true,
+                ]);
+
             }
-
-            // Progression
-            $viewPages = $this->getData(['enrolment', $courseId, $userId, 'history']) !== null ?
-                count(array_keys($this->getData(['enrolment', $courseId, $userId, 'history']))) :
-                0;
-
-            // Construction du tableau
-            self::$courseUsers[] = [
-                $userId,
-                $this->getData(['user', $userId, 'firstname']),
-                $this->getData(['user', $userId, 'lastname']),
-                $pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])],
-                helper::dateUTF8('%d/%d/%Y', $this->getData(['enrolment', $courseId, $userId, 'datePageView'])),
-                helper::dateUTF8('%H:%M', $this->getData(['enrolment', $courseId, $userId, 'datePageView'])),
-                number_format(round(($viewPages * 100) / $sumPages, 1) / 100, 2, ',')
-            ];
-
-            // Synthèse des historiques
-            // ------------------------
-            // Ouverture du fichier en écriture
-            $file = fopen($filename, 'w');
-
-            foreach (self::$courseUsers as $user) {
-                // Décode les entités HTML dans chaque élément du tableau
-                $decodedUser = array_map('html_entity_decode', $user);
-
-                // Écrire la ligne dans le fichier CSV
-                fputcsv($file, $decodedUser, ';');
-            }
-            // Fermeture du fichier
-            fclose($file);
-
-            // Valeurs en sortie
-            $this->addOutput([
-                'redirect' => helper::baseUrl() . 'course/users/' . $courseId,
-                'notification' => 'Création ' . basename($filename) . ' dans le dossier "Export"',
-                'state' => true,
-            ]);
-
         }
-
     }
 
     public function userHistoryExport()
