@@ -594,6 +594,7 @@ class theme extends common
 					'radius' => $this->getInput('themeMenuRadius'),
 					'burgerTitle' => $this->getInput('themeMenuBurgerTitle', helper::FILTER_BOOLEAN),
 					'memberBar' => $this->getInput('themeMenuMemberBar', helper::FILTER_BOOLEAN),
+					'selectSpace' => $this->getInput('themeMenuSelectSpace', helper::FILTER_BOOLEAN),
 					'burgerLogo' => $this->getInput('themeMenuBurgerLogo'),
 					'burgerContent' => $this->getInput('themeMenuBurgerContent')
 				]

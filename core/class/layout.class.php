@@ -504,10 +504,14 @@ class layout extends common
                 ]) .
                 '</li>';
         }
-        // Commandes pour les membres simples
+
+        /**
+         * Commandes pour les membres simples
+         * Affichage du sélecteur d'espaces
+         */ 
         if (
             $this->getUser('group') === self::GROUP_MEMBER
-            && $this->getData(['theme', 'menu', 'memberBar']) === true
+            && $this->getData(['theme', 'menu', 'selectSpace']) === true
         ) {
             if ($this->getCoursesByUser($this->getUser('id'), $this->getUser('group'))) {
                 $itemsRight .= '<li><select id="barSelectCourse" >';
@@ -517,6 +521,16 @@ class layout extends common
                 }
                 $itemsRight .= '</select></li>';
             }
+        }
+        /**
+         * Commandes pour les membres simples
+         * Affichage des boutons  gestionnaire de fichiers et mon compte
+         */ 
+        if (
+            $this->getUser('group') === self::GROUP_MEMBER
+            && $this->getData(['theme', 'menu', 'memberBar']) === true
+        ) {
+
             if (
                 ($this->getUser('group') >= self::GROUP_MEMBER &&
                     $this->getUser('permission', 'filemanager') === true)

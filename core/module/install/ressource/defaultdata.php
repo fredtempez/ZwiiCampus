@@ -835,7 +835,8 @@ class init extends common
 				'activeColor' => 'rgba(255, 255, 255, 1)',
 				'activeTextColor' => 'rgba(255, 255, 255, 1)',
 				'radius' => '0px',
-				'memberBar' => false,
+				'memberBar' => true,
+				'selectSpace' => true,
 				'burgerLogo' => '',
 				'burgerContent' => 'title',
 				'width' => 'container'
