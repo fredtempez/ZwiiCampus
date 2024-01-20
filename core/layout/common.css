@@ -551,6 +551,8 @@ body > nav {
 
 /* Items du menu */
 
+
+
 nav a>img {
     margin: -4px 0;
     vertical-align: middle;
@@ -587,6 +589,7 @@ nav ul {
 nav li {
     display: inline-block;
     position: relative;
+    align-self: center;
 }
 
 nav li ul {
@@ -613,9 +616,11 @@ nav #menuSelectCourse {
     border: 0;
     color: #111112;
     font-size: 1em;
-    background-color: rgba(255, 255, 255, 1);   
+    background-color: rgba(255, 255, 255, 1);
     line-height: 45px;
 }
+
+
 
 /*
 nav .navSub a{
