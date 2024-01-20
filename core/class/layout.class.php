@@ -498,9 +498,8 @@ class layout extends common
         $courses = $this->getData([('course')]);
 		$courses = helper::arraycolumn($courses, 'title', 'SORT_ASC');
         if (
-            //$this->getUser('group') === self::GROUP_MEMBER
-            // && 
-            $this->getData(['theme', 'menu', 'selectSpace']) === true
+            $this->getUser('group') < self::GROUP_MEMBER
+            && $this->getData(['theme', 'menu', 'selectSpace']) === true
         ) {
             if ($courses) {
                 $itemsRight .= '<li><select id="menuSelectCourse" >';
