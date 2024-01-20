@@ -50,7 +50,7 @@ class common
 	const ACCESS_TIMER = 1800;
 
 	// Numéro de version
-	const ZWII_VERSION = '1.4.09';
+	const ZWII_VERSION = '1.4.10';
 
 	// URL autoupdate
 	const ZWII_UPDATE_URL = 'https://forge.chapril.org/ZwiiCMS-Team/campus-update/raw/branch/master/';
@@ -1404,7 +1404,7 @@ class common
 	public function saveLog($message = '')
 	{
 		// Journalisation
-		$dataLog = helper::dateUTF8('%Y%m%d', time(), self::$siteContent) . ';' . helper::dateUTF8('%H:%M', time(), self::$siteContent). ';';
+		$dataLog = helper::dateUTF8('%Y%m%d', time(), self::$siteContent) . ';' . helper::dateUTF8('%H:%M', time(), self::$siteContent) . ';';
 		$dataLog .= helper::getIp($this->getData(['config', 'connect', 'anonymousIp'])) . ';';
 		$dataLog .= empty($this->getUser('id')) ? 'visitor;' : $this->getUser('id') . ';';
 		$dataLog .= $message ? $this->getUrl() . ';' . $message : $this->getUrl();
@@ -1427,19 +1427,36 @@ class common
 		$c = helper::arraycolumn($c, 'title', 'SORT_ASC');
 		switch ($userStatus) {
 			case self::GROUP_ADMIN:
+				// Affiche tout
 				return $c;
 			case self::GROUP_EDITOR:
 				foreach ($c as $courseId => $value) {
-					if ($this->getData(['course', $courseId, 'author']) !== $userId) {
+					$students = $this->getData(['enrolment', $courseId]);
+					// Affiche les espaces gérés par l'éditeur, les espaces où il participe et les espaces ouverts
+					if (
+						isset($students[$userId]) === false ||
+						$this->getData(['course', $courseId, 'author']) !== $userId ||
+						$this->getData(['course', $courseId, 'access']) !== self::COURSE_ENROLMENT_GUEST
+					) {
 						unset($c[$courseId]);
 					}
 				}
 				return $c;
 			case self::GROUP_MEMBER:
+				foreach ($c as $courseId => $value) {
+					// Affiche les espaces où le membre participe  et les espaces ouverts
+					$students = $this->getData(['enrolment', $courseId]);
+					if (
+						isset($students[$userId]) === false ||
+						$this->getData(['course', $courseId, 'access']) !== self::COURSE_ENROLMENT_GUEST
+					) {
+						unset($c[$courseId]);
+					}
+				}
 			case self::GROUP_VISITOR:
 				foreach ($c as $courseId => $value) {
-					$students = $this->getData(['enrolment', $courseId]);
-					if (isset($students[$userId]) === false) {
+					// Affiche les espaces ouverts
+					if ($this->getData(['course', $courseId, 'access']) !== self::COURSE_ENROLMENT_GUEST) {
 						unset($c[$courseId]);
 					}
 				}

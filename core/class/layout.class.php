@@ -490,6 +490,26 @@ class layout extends common
 
         // Menu extra
         $itemsRight = $this->formatMenu(true);
+
+        /**
+         * Commandes pour les membres simples
+         * Affichage du sélecteur d'espaces
+         */ 
+        if (
+            //$this->getUser('group') === self::GROUP_MEMBER
+            // && 
+            $this->getData(['theme', 'menu', 'selectSpace']) === true
+        ) {
+            if ($this->getCoursesByUser($this->getUser('id'), $this->getUser('group'))) {
+                $itemsRight .= '<li><select id="barSelectCourse" >';
+                $itemsRight .= '<option name="' . helper::translate('Accueil') . '" value="' . helper::baseUrl(true) . 'course/swap/home" ' . ('home' === self::$siteContent ? 'selected' : '') . '>' . helper::translate('Accueil') . '</option>';
+                foreach ($this->getCoursesByUser($this->getUser('id'), $this->getUser('group')) as $courseId => $value) {
+                    $itemsRight .= '<option name="' . $this->getData(['course', $courseId, 'title']) . '" value="' . helper::baseUrl(true) . 'course/swap/' . $courseId . '" ' . ($courseId === self::$siteContent ? 'selected' : '') . '>' . $this->getData(['course', $courseId, 'title']) . '</option>';
+                }
+                $itemsRight .= '</select></li>';
+            }
+        }
+
         // Lien de connexion
         if (
             ($this->getData(['theme', 'menu', 'loginLink'])
@@ -503,24 +523,6 @@ class layout extends common
                     'help' => "Connexion"
                 ]) .
                 '</li>';
-        }
-
-        /**
-         * Commandes pour les membres simples
-         * Affichage du sélecteur d'espaces
-         */ 
-        if (
-            $this->getUser('group') === self::GROUP_MEMBER
-            && $this->getData(['theme', 'menu', 'selectSpace']) === true
-        ) {
-            if ($this->getCoursesByUser($this->getUser('id'), $this->getUser('group'))) {
-                $itemsRight .= '<li><select id="barSelectCourse" >';
-                $itemsRight .= '<option name="' . helper::translate('Accueil') . '" value="' . helper::baseUrl(true) . 'course/swap/home" ' . ('home' === self::$siteContent ? 'selected' : '') . '>' . helper::translate('Accueil') . '</option>';
-                foreach ($this->getCoursesByUser($this->getUser('id'), $this->getUser('group')) as $courseId => $value) {
-                    $itemsRight .= '<option name="' . $this->getData(['course', $courseId, 'title']) . '" value="' . helper::baseUrl(true) . 'course/swap/' . $courseId . '" ' . ($courseId === self::$siteContent ? 'selected' : '') . '>' . $this->getData(['course', $courseId, 'title']) . '</option>';
-                }
-                $itemsRight .= '</select></li>';
-            }
         }
         /**
          * Commandes pour les membres simples
