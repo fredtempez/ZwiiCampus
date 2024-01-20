@@ -604,11 +604,11 @@ nav li ul li {
     text-align: left;
 }
 
-nav li ul #barSelectCourse {
+nav li ul #menuSelectCourse {
     text-align: left;
 }
 
-nav #barSelectCourse {
+nav #menuSelectCourse {
     width: 150px;
     border: 0;
     color: #111112;

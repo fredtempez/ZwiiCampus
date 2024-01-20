@@ -23,15 +23,15 @@ core.alert = function (text) {
             .append(
                 $("<span>").text(text),
                 $("<div>")
-                .addClass("lightboxButtons")
-                .append(
-                    $("<a>")
-                    .addClass("button")
-                    .text("Ok")
-                    .on("click", function () {
-                        lightbox.close();
-                    })
-                )
+                    .addClass("lightboxButtons")
+                    .append(
+                        $("<a>")
+                            .addClass("button")
+                            .text("Ok")
+                            .on("click", function () {
+                                lightbox.close();
+                            })
+                    )
             )
     }(jQuery));
     // Validation de la lightbox avec le bouton entrée
@@ -67,29 +67,29 @@ core.confirm = function (text, yesCallback, noCallback) {
             .append(
                 $("<span>").text(text),
                 $("<div>")
-                .addClass("lightboxButtons")
-                .append(
-                    $("<a>")
-                    .addClass("button grey")
-                    .text("<?php echo helper::translate('Non');?>")
-                    .on("click", function () {
-                        lightbox.options('button', true);
-                        lightbox.close();
-                        if (typeof noCallback !== "undefined") {
-                            noCallback();
-                        }
-                    }),
-                    $("<a>")
-                    .addClass("button")
-                    .text("<?php echo helper::translate('Oui');?>")
-                    .on("click", function () {
-                        lightbox.options('button', true);
-                        lightbox.close();
-                        if (typeof yesCallback !== "undefined") {
-                            yesCallback();
-                        }
-                    })
-                )
+                    .addClass("lightboxButtons")
+                    .append(
+                        $("<a>")
+                            .addClass("button grey")
+                            .text("<?php echo helper::translate('Non');?>")
+                            .on("click", function () {
+                                lightbox.options('button', true);
+                                lightbox.close();
+                                if (typeof noCallback !== "undefined") {
+                                    noCallback();
+                                }
+                            }),
+                        $("<a>")
+                            .addClass("button")
+                            .text("<?php echo helper::translate('Oui');?>")
+                            .on("click", function () {
+                                lightbox.options('button', true);
+                                lightbox.close();
+                                if (typeof yesCallback !== "undefined") {
+                                    yesCallback();
+                                }
+                            })
+                    )
             )
     }(jQuery));
     // Callback lors d'un clic sur le fond et sur la croix de fermeture
@@ -525,7 +525,7 @@ $(document).ready(function () {
 
 
     /**
-     * Sélection d'une langue du site
+     * Sélection d'un espace du site
      */
     $("select#barSelectCourse").on("change", function () {
         // La langue courante ne déclenche pas de chargement
@@ -538,14 +538,37 @@ $(document).ready(function () {
         var currentUrl = url.href.split("/");
         // Change si différent, corrige le problème avec le thème et le rechargement de la langue.
         if ((currentUrl !== "?theme" ||
-                currentUrl !== "theme") &&
+            currentUrl !== "theme") &&
             langSelected[6] !== langSession
         ) {
             //$(location).attr("href", langUrl);
             var select = document.getElementById("barSelectCourse");
             var selectedOption = select.options[select.selectedIndex];
             if (selectedOption.value !== "") {
-                window.location = selectedOption.value;            }
+                window.location = selectedOption.value;
+            }
+        }
+    });
+
+    $("select#menuSelectCourse").on("change", function () {
+        // La langue courante ne déclenche pas de chargement
+        var langSelected = $(this).val();
+        var langSelected = langSelected.split("/");
+        // Lit le cookie de langue
+        var langSession = "<?php echo isset($_SESSION['ZWII_SITE_CONTENT']) ? $_SESSION['ZWII_SITE_CONTENT'] : '';?>";
+        // Découpe l'URL pour exclure le changement de page avec le thème
+        var url = window.location;
+        var currentUrl = url.href.split("/");
+        // Change si différent, corrige le problème avec le thème et le rechargement de la langue.
+        if ((currentUrl !== "?theme" ||
+            currentUrl !== "theme") &&
+            langSelected[6] !== langSession
+        ) {
+            var select = document.getElementById("menuSelectCourse");
+            var selectedOption = select.options[select.selectedIndex];
+            if (selectedOption.value !== "") {
+                window.location = selectedOption.value;
+            }
         }
     });
 
