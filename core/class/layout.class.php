@@ -495,16 +495,14 @@ class layout extends common
          * Commandes pour les membres simples
          * Affichage du sélecteur d'espaces
          */
-        $courses = $this->getData([('course')]);
-		$courses = helper::arraycolumn($courses, 'title', 'SORT_ASC');
         if (
             $this->getUser('group') <= self::GROUP_MEMBER
             && $this->getData(['theme', 'menu', 'selectSpace']) === true
         ) {
-            if ($courses) {
+            if ($this->getCoursesByUser($this->getUser('id'), $this->getUser('group'))) {
                 $itemsRight .= '<li><select id="menuSelectCourse" >';
                 $itemsRight .= '<option name="' . helper::translate('Accueil') . '" value="' . helper::baseUrl(true) . 'course/swap/home" ' . ('home' === self::$siteContent ? 'selected' : '') . '>' . helper::translate('Accueil') . '</option>';
-                foreach ($courses as $courseId => $value) {
+                foreach ($this->getCoursesByUser($this->getUser('id'), $this->getUser('group')) as $courseId => $value) {
                     $itemsRight .= '<option name="' . $this->getData(['course', $courseId, 'title']) . '" value="' . helper::baseUrl(true) . 'course/swap/' . $courseId . '" ' . ($courseId === self::$siteContent ? 'selected' : '') . '>' . $this->getData(['course', $courseId, 'title']) . '</option>';
                 }
                 $itemsRight .= '</select></li>';
@@ -923,13 +921,11 @@ class layout extends common
              * Les admins voient tousles contenus
              * Les enseignants les contenus dont ils sont auteurs
              */
-            $courses = $this->getData([('course')]);
-            $courses = helper::arraycolumn($courses, 'title', 'SORT_ASC');
             if ($this->getUser('group') >= self::GROUP_EDITOR) {
-                if ($courses) {
+                if ($this->getCoursesByUser($this->getUser('id'), $this->getUser('group'))) {
                     $leftItems .= '<li><select id="barSelectCourse" >';
                     $leftItems .= '<option name="' . helper::translate('Accueil') . '" value="' . helper::baseUrl(true) . 'course/swap/home" ' . ('home' === self::$siteContent ? 'selected' : '') . '>' . helper::translate('Accueil') . '</option>';
-                    foreach ($courses as $courseId => $value) {
+                    foreach ($this->getCoursesByUser($this->getUser('id'), $this->getUser('group')) as $courseId => $value) {
                         $leftItems .= '<option name="' . $this->getData(['course', $courseId, 'title']) . '" value="' . helper::baseUrl(true) . 'course/swap/' . $courseId . '" ' . ($courseId === self::$siteContent ? 'selected' : '') . '>' . $this->getData(['course', $courseId, 'title']) . '</option>';
                     }
                     $leftItems .= '</select></li>';

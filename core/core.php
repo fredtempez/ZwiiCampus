@@ -1420,6 +1420,9 @@ class common
 	 * Retourne les contenus d'un utilisateur
 	 * @param string $userId identifiant
 	 * @param string $serStatus teacher ou student ou admin
+	 * 
+	 * CETTE FONCTION N'EST PAS UTILISEE
+	 * 
 	 */
 	public function getCoursesByUser($userId, $userStatus)
 	{
@@ -1430,6 +1433,7 @@ class common
 				// Affiche tout
 				return $c;
 			case self::GROUP_EDITOR:
+				/*
 				foreach ($c as $courseId => $value) {
 					$students = $this->getData(['enrolment', $courseId]);
 					// Affiche les espaces gérés par l'éditeur, les espaces où il participe et les espaces ouverts
@@ -1440,9 +1444,10 @@ class common
 					) {
 						unset($c[$courseId]);
 					}
-				}
+				} */
 				return $c;
 			case self::GROUP_MEMBER:
+				/*
 				foreach ($c as $courseId => $value) {
 					// Affiche les espaces où le membre participe  et les espaces ouverts
 					$students = $this->getData(['enrolment', $courseId]);
@@ -1453,6 +1458,8 @@ class common
 						unset($c[$courseId]);
 					}
 				}
+				*/
+				return $c;
 			case self::GROUP_VISITOR:
 				foreach ($c as $courseId => $value) {
 					// Affiche les espaces ouverts
