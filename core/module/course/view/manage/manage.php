@@ -64,7 +64,7 @@
                     <div class="col5">
                         <?php echo template::select('courseManageAuthor', $module::$courseTeachers, [
                             'label' => 'Auteur',
-                            'value' => $this->getdata(['course', $this->getUrl(2), 'author']),
+                            'selected' => $this->getdata(['course', $this->getUrl(2), 'author']),
                             'disabled' => true,
                         ]); ?>
                     </div>

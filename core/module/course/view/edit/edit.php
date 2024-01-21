@@ -27,7 +27,7 @@
                 <div class="col5">
                     <?php echo template::select('courseEditAuthor', $module::$courseTeachers, [
                         'label' => 'Auteur',
-                        'value' => $this->getdata(['course', $this->getUrl(2), 'author'])
+                        'selected' => $this->getdata(['course', $this->getUrl(2), 'author'])
                     ]); ?>
                 </div>
             </div>
