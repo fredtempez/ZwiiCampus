@@ -119,16 +119,14 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col4">
-                        <div class="col4">
+                    <div class="col6">
                             <?php echo template::select('courseManageEnrolment', $module::$courseEnrolment, [
                                 'label' => 'Participation',
                                 'selected' => $this->getdata(['course', $this->getUrl(2), 'enrolment']),
                                 'disabled' => true,
                             ]); ?>
-                        </div>
                     </div>
-                    <div class="col4">
+                    <div class="col6">
                         <?php echo template::text('courseManageEnrolmentKey', [
                             'label' => 'Clé',
                             'value' => $this->getdata(['course', $this->getUrl(2), 'enrolmentKey']),
@@ -137,14 +135,14 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col4">
+                    <div class="col6">
                         <?php echo template::checkbox('courseManageEnrolmentLimit', true, 'Date de fin d\'inscription', [
                             'checked' => $this->getdata(['course', $this->getUrl(2), 'limitEnrolment']),
                             'help' => 'Ne s\'applique pas à l\'inscription anonyme',
                             'disabled' => true,
                         ]); ?>
                     </div>
-                    <div class="col4">
+                    <div class="col6">
                         <?php echo template::date('courseManageEnrolmentLimitDate', [
                             'type' => 'datetime-local',
                             'label' => 'Fermeture',
