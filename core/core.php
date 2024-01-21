@@ -1424,50 +1424,50 @@ class common
 	 * CETTE FONCTION N'EST PAS UTILISEE
 	 * 
 	 */
-	public function getCoursesByUser($userId, $userStatus)
+	public function getCoursesByUser()
 	{
-		$c = $this->getData([('course')]);
-		$c = helper::arraycolumn($c, 'title', 'SORT_ASC');
-		switch ($userStatus) {
+		$courses = $this->getData([('course')]);
+		$courses = helper::arraycolumn($courses, 'title', 'SORT_ASC');
+		$filter = array();
+		$userId = $this->getUser('id');
+		switch ($this->getUser('group')) {
 			case self::GROUP_ADMIN:
 				// Affiche tout
-				return $c;
+				return $courses;
 			case self::GROUP_EDITOR:
-				/*
-				foreach ($c as $courseId => $value) {
+				foreach ($courses as $courseId => $value) {
 					$students = $this->getData(['enrolment', $courseId]);
 					// Affiche les espaces gérés par l'éditeur, les espaces où il participe et les espaces ouverts
 					if (
-						isset($students[$userId]) === false ||
-						$this->getData(['course', $courseId, 'author']) !== $userId ||
-						$this->getData(['course', $courseId, 'access']) !== self::COURSE_ENROLMENT_GUEST
+						isset($students[$userId]) === true ||
+						$this->getData(['course', $courseId, 'author']) === $userId ||
+						$this->getData(['course', $courseId, 'enrolment']) === self::COURSE_ENROLMENT_GUEST
 					) {
-						unset($c[$courseId]);
+						$filter[$courseId] = $courses[$courseId];
 					}
-				} */
-				return $c;
+				}
+				return $courses;
 			case self::GROUP_MEMBER:
-				/*
-				foreach ($c as $courseId => $value) {
-					// Affiche les espaces où le membre participe  et les espaces ouverts
+				foreach ($courses as $courseId => $value) {
+					// Affiche les espaces du participant et les espaces anonymes
 					$students = $this->getData(['enrolment', $courseId]);
 					if (
-						isset($students[$userId]) === false ||
-						$this->getData(['course', $courseId, 'access']) !== self::COURSE_ENROLMENT_GUEST
+						isset($students[$userId]) === true ||
+						$this->getData(['course', $courseId, 'enrolment']) === self::COURSE_ENROLMENT_GUEST
 					) {
-						unset($c[$courseId]);
+						$filter[$courseId] = $courses[$courseId];
 					}
 				}
-				*/
-				return $c;
+				return $filter;
 			case self::GROUP_VISITOR:
-				foreach ($c as $courseId => $value) {
-					// Affiche les espaces ouverts
-					if ($this->getData(['course', $courseId, 'access']) !== self::COURSE_ENROLMENT_GUEST) {
-						unset($c[$courseId]);
+				foreach ($courses as $courseId => $value) {
+					// Affiche les espaces anonymes
+					if ($this->getData(['course', $courseId, 'enrolment']) === self::COURSE_ENROLMENT_GUEST) {
+						echo $this->getData(['course', $courseId, 'access']) ;
+						$filter[$courseId] = $courses[$courseId];
 					}
 				}
-				return $c;
+				return $filter;
 			default:
 				return null;
 		}

@@ -88,6 +88,21 @@ class course extends common
             && $this->getCoursesByUser()
         ) {
             foreach ($this->getCoursesByUser() as $courseId => $courseValue) {
+
+                /**
+                 * Filtres :
+                 * Groupes acceptés :
+                 * admin : tous les espaces
+                 * editor : gère son espace
+                 */
+
+                if (
+                    $this->getUser('group') === self::GROUP_EDITOR
+                    && $this->getUser('id') != $this->getData(['course', $courseId, 'author'])
+                ) {
+                    continue;
+                }
+
                 $author = $this->getData(['course', $courseId, 'author'])
                     ? sprintf('%s %s', $this->getData(['user', $this->getData(['course', $courseId, 'author']), 'firstname']), $this->getData(['user', $this->getData(['course', $courseId, 'author']), 'lastname']))
                     : '';
@@ -215,6 +230,17 @@ class course extends common
     public function edit()
     {
 
+        // Profil limité au propriétaire ou admis
+        if (
+            $this->getUser('group') === self::GROUP_EDITOR
+            && $this->getUser('id') != $this->getData(['course', $this->getUrl(2), 'author'])
+        ) {
+            // Valeurs en sortie
+            $this->addOutput([
+                'access' => false
+            ]);
+        }
+
         // Soumission du formulaire
         if (
             $this->getUser('permission', __CLASS__, __FUNCTION__) === true &&
@@ -284,6 +310,18 @@ class course extends common
     public function manage()
     {
 
+        // Profil limité au propriétaire ou admis
+        if (
+            $this->getUser('group') === self::GROUP_EDITOR
+            && $this->getUser('id') != $this->getData(['course', $this->getUrl(2), 'author'])
+            || $this->getUser('permission', __CLASS__, __FUNCTION__) !== true
+        ) {
+            // Valeurs en sortie
+            $this->addOutput([
+                'access' => false
+            ]);
+        }
+
         // Liste des enseignants pour le sélecteur d'auteurs
         $teachers = $this->getData(['user']);
         foreach ($teachers as $teacherId => $teacherInfo) {
@@ -319,6 +357,19 @@ class course extends common
      */
     public function clone ()
     {
+
+        // Profil limité au propriétaire ou admis
+        if (
+            $this->getUser('group') === self::GROUP_EDITOR
+            && $this->getUser('id') != $this->getData(['course', $this->getUrl(2), 'author'])
+            || $this->getUser('permission', __CLASS__, __FUNCTION__) !== true
+        ) {
+            // Valeurs en sortie
+            $this->addOutput([
+                'access' => false
+            ]);
+        }
+
         // Cours à dupliquer
         $courseId = $this->getUrl(2);
 
@@ -503,6 +554,18 @@ class course extends common
     public function users()
     {
 
+        // Profil limité au propriétaire ou admis
+        if (
+            $this->getUser('group') === self::GROUP_EDITOR
+            && $this->getUser('id') != $this->getData(['course', $this->getUrl(2), 'author'])
+            || $this->getUser('permission', __CLASS__, __FUNCTION__) !== true
+        ) {
+            // Valeurs en sortie
+            $this->addOutput([
+                'access' => false
+            ]);
+        }
+
         // Contenu sélectionné
         $courseId = $this->getUrl(2);
 
@@ -652,6 +715,18 @@ class course extends common
     public function usersAdd()
     {
 
+        // Profil limité au propriétaire ou admis
+        if (
+            $this->getUser('group') === self::GROUP_EDITOR
+            && $this->getUser('id') != $this->getData(['course', $this->getUrl(2), 'author'])
+            || $this->getUser('permission', __CLASS__, __FUNCTION__) !== true
+        ) {
+            // Valeurs en sortie
+            $this->addOutput([
+                'access' => false
+            ]);
+        }
+
         // Contenu sélectionné
         $courseId = $this->getUrl(2);
 
@@ -783,9 +858,12 @@ class course extends common
      */
     public function userDelete()
     {
-        // Accès refusé
+
+        // Profil limité au propriétaire ou admis
         if (
-            $this->getUser('permission', __CLASS__, __FUNCTION__) !== true
+            $this->getUser('group') === self::GROUP_EDITOR
+            && $this->getUser('id') != $this->getData(['course', $this->getUrl(2), 'author'])
+            || $this->getUser('permission', __CLASS__, __FUNCTION__) !== true
         ) {
             // Valeurs en sortie
             $this->addOutput([
@@ -802,7 +880,7 @@ class course extends common
         }
     }
 
-    /** 
+    /**
      * Désinscription de tous les utilisateurs
      */
     public function usersDelete()
@@ -1300,8 +1378,7 @@ class course extends common
                         ]);
                         break;
                     case self::COURSE_ENROLMENT_SELF_KEY:
-                        if ($this->getInput('courseSwapEnrolmentKey', helper::FILTER_STRING_SHORT, true) === $this->getData(['course', $courseId, 'enrolmentKey'])) 
-                        {
+                        if ($this->getInput('courseSwapEnrolmentKey', helper::FILTER_STRING_SHORT, true) === $this->getData(['course', $courseId, 'enrolmentKey'])) {
                             $this->courseEnrolUser($courseId, $userId);
                             // Stocker la sélection
                             $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
@@ -1388,9 +1465,11 @@ class course extends common
     public function backup()
     {
 
-        // Accès refusé
+        // Profil limité au propriétaire ou admis
         if (
-            $this->getUser('permission', __CLASS__, __FUNCTION__) !== true
+            $this->getUser('group') === self::GROUP_EDITOR
+            && $this->getUser('id') != $this->getData(['course', $this->getUrl(2), 'author'])
+            || $this->getUser('permission', __CLASS__, __FUNCTION__) !== true
         ) {
             // Valeurs en sortie
             $this->addOutput([
