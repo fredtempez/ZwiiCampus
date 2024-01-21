@@ -85,11 +85,11 @@ class course extends common
         if (
             $this->getUser('id')
             && $this->getUser('group')
-            && $this->getCoursesByUser($this->getUser('id'), $this->getUser('group'))
+            && $this->getCoursesByUser()
         ) {
-            foreach ($this->getCoursesByUser($this->getUser('id'), $this->getUser('group')) as $courseId => $courseValue) {
-                $author = isset($authorId)
-                    ? sprintf('%s %s', $this->getData(['user', $authorId, 'firstname']), $this->getData(['user', $authorId, 'lastname']))
+            foreach ($this->getCoursesByUser() as $courseId => $courseValue) {
+                $author = $this->getData(['course', $courseId, 'author'])
+                    ? sprintf('%s %s', $this->getData(['user', $this->getData(['course', $courseId, 'author']), 'firstname']), $this->getData(['user', $this->getData(['course', $courseId, 'author']), 'lastname']))
                     : '';
                 $categorieUrl = helper::baseUrl() . 'course/swap/' . $courseId;
                 $info = sprintf('<strong>%s<br /></strong>Auteur : %s<br />Id : <a href="%s" target="_blank">%s<br />', $this->getData(['course', $courseId, 'title']), $author, $categorieUrl, $courseId);
@@ -229,7 +229,7 @@ class course extends common
                     'author' => $this->getInput('courseEditAuthor'),
                     'homePageId' => $this->getInput('courseEditHomePageId'),
                     'category' => $this->getInput('courseEditCategorie'),
-                    'description' => $this->getInput('courseEditDescription', helper::FILTER_STRING_SHORT, true),
+                    'description' => $this->getInput('courseEditDescription', helper::FILTER_STRING_LONG, true),
                     'access' => $this->getInput('courseEditAccess', helper::FILTER_INT),
                     'openingDate' => $this->getInput('courseOpeningDate', helper::FILTER_DATETIME),
                     'closingDate' => $this->getInput('courseClosingDate', helper::FILTER_DATETIME),
@@ -273,7 +273,7 @@ class course extends common
 
         // Valeurs en sortie
         $this->addOutput([
-            'title' => helper::translate('Editer un espace'),
+            'title' => sprintf('%s id : %s', helper::translate('Éditer l\'espace'), $this->getUrl(2)),
             'view' => 'edit'
         ]);
     }
@@ -309,7 +309,7 @@ class course extends common
 
         // Valeurs en sortie
         $this->addOutput([
-            'title' => helper::translate('Gérer un espace'),
+            'title' => sprintf('%s id : %s', helper::translate('Gérer l\'espace'), $this->getUrl(2)),
             'view' => 'manage'
         ]);
     }
