@@ -496,7 +496,7 @@ class layout extends common
          * Affichage du sélecteur d'espaces
          */
         if (
-            $this->getUser('group') <= self::GROUP_MEMBER
+            $this->getUser('group') >= self::GROUP_MEMBER
             && $this->getData(['theme', 'menu', 'selectSpace']) === true
         ) {
             if ($this->getCoursesByUser()) {
