@@ -496,7 +496,7 @@ class layout extends common
          * Affichage du sélecteur d'espaces
          */
         if (
-            $this->getUser('group') >= self::GROUP_MEMBER
+            $this->getUser('group') === self::GROUP_MEMBER
             && $this->getData(['theme', 'menu', 'selectSpace']) === true
         ) {
             if ($this->getCoursesByUser()) {
@@ -507,6 +507,39 @@ class layout extends common
                 }
                 $itemsRight .= '</select></li>';
             }
+        }
+
+        /**
+         * Commandes pour les membres simples
+         * Affichage des boutons  gestionnaire de fichiers et mon compte
+         */
+        if (
+            $this->getUser('group') === self::GROUP_MEMBER
+            && $this->getData(['theme', 'menu', 'memberBar']) === true
+        ) {
+
+            // Affiche l'icône RFM
+            if ($this->getUser('permission', 'filemanager') === true) {
+                $itemsRight .= '<li>' . template::ico('folder', [
+                    'href' => helper::baseUrl(false) . 'core/vendor/filemanager/dialog.php?type=0&akey=' . md5_file(self::DATA_DIR . 'core.json') . '&lang=' . $this->getData(['user', $this->getUser('id'), 'language']),
+                    'attr' => 'data-lity',
+                    'help' => 'Fichiers du site'
+                ]) . '</li>';
+            }
+            // Affiche l'icône d'édition du compte
+            if ($this->getUser('permission', 'user', 'edit') === true) {
+                $itemsRight .= '<li>' . template::ico('user', [
+                    'help' => 'Mon compte',
+                    'margin' => 'right',
+                    'href' => helper::baseUrl() . 'user/edit/' . $this->getUser('id')
+                ]) . '</li>';
+            }
+            $itemsRight .= '<li>' .
+                template::ico('logout', [
+                    'help' => 'Déconnecter',
+                    'href' => helper::baseUrl() . 'user/logout',
+                    'id' => 'barLogout'
+                ]) . '</li>';
         }
 
         // Lien de connexion
@@ -523,41 +556,7 @@ class layout extends common
                 ]) .
                 '</li>';
         }
-        /**
-         * Commandes pour les membres simples
-         * Affichage des boutons  gestionnaire de fichiers et mon compte
-         */ 
-        if (
-            $this->getUser('group') === self::GROUP_MEMBER
-            && $this->getData(['theme', 'menu', 'memberBar']) === true
-        ) {
 
-            if (
-                ($this->getUser('group') >= self::GROUP_MEMBER &&
-                    $this->getUser('permission', 'filemanager') === true)
-            ) {
-                $itemsRight .= '<li>' . template::ico('folder', [
-                    'href' => helper::baseUrl(false) . 'core/vendor/filemanager/dialog.php?type=0&akey=' . md5_file(self::DATA_DIR . 'core.json') . '&lang=' . $this->getData(['user', $this->getUser('id'), 'language']),
-                    'attr' => 'data-lity',
-                    'help' => 'Fichiers du site'
-                ]) . '</li>';
-            }
-            if (
-                $this->getUser('permission', 'user', 'edit') === true
-            ) {
-                $itemsRight .= '<li>' . template::ico('user', [
-                    'help' => 'Mon compte',
-                    'margin' => 'right',
-                    'href' => helper::baseUrl() . 'user/edit/' . $this->getUser('id')
-                ]) . '</li>';
-            }
-            $itemsRight .= '<li>' .
-                template::ico('logout', [
-                    'help' => 'Déconnecter',
-                    'href' => helper::baseUrl() . 'user/logout',
-                    'id' => 'barLogout'
-                ]) . '</li>';
-        }
         // Retourne les items du menu
         echo '<ul class="navMain" id="menuLeft">' . $itemsLeft . '</ul><ul class="navMain" id="menuRight">' . $itemsRight;
         echo '</ul>';
