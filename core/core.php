@@ -29,6 +29,7 @@ class common
 	const GROUP_MEMBER = 1;
 	const GROUP_EDITOR = 2;
 	// Groupe MODERATOR, compatibilité avec les anciens modules :
+	const GROUP_MODERATOR = 2;
 	const GROUP_ADMIN = 3;
 	const SIGNATURE_ID = 1;
 	const SIGNATURE_PSEUDO = 2;
@@ -50,7 +51,7 @@ class common
 	const ACCESS_TIMER = 1800;
 
 	// Numéro de version
-	const ZWII_VERSION = '1.4.13';
+	const ZWII_VERSION = '1.4.14';
 
 	// URL autoupdate
 	const ZWII_UPDATE_URL = 'https://forge.chapril.org/ZwiiCMS-Team/campus-update/raw/branch/master/';
