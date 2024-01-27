@@ -165,6 +165,16 @@ tinymce.init({
 	// Templates
 	templates: [
 		{
+			title: "Lien de retour",
+			url: baseUrl + "core/vendor/tinymce/templates/back_home.html",
+			description: "Insère un lien vers l'accueil de la plate-forme."
+		},
+		{
+			title: "Lien de désinscription",
+			url: baseUrl + "core/vendor/tinymce/templates/unsuscribe.html",
+			description: "Insère un lien de désinscription."
+		},
+		{
 			title: "Bloc de texte",
 			url: baseUrl + "core/vendor/tinymce/templates/block.html",
 			description: "Bloc de texte avec un titre."
