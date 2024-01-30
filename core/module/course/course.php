@@ -679,7 +679,7 @@ class course extends common
                     $this->getData(['user', $userId, 'tags']),
                     template::button('userHistory' . $userId, [
                         'href' => helper::baseUrl() . 'course/userHistory/' . $courseId . '/' . $userId,
-                        'value' => !empty($userValue['history']) ? round(($viewPages * 100) / $sumPages, 1) . ' %' : '0%',
+                        'value' => !empty($userValue['history']) ? min(round(($viewPages * 100) / $sumPages, 1), 100) . ' %' : '0%',
                         'disable' => empty($userValue['history'])
                     ]),
                     template::button('userDelete' . $userId, [
@@ -1142,22 +1142,26 @@ class course extends common
             if (is_array($times)) {
                 $d = array();
                 foreach ($times as $time) {
+                    if (isset($pages[$pageId]['number'])) {
+                        self::$userHistory[] = [
+                            $pages[$pageId]['number'],
+                            html_entity_decode($pages[$pageId]['title']),
+                            helper::dateUTF8('%d %B %Y %H:%M', $time)
+                        ];
+                        $floorTime = isset($floorTime) && $floorTime < $time ? $floorTime : $time;
+                        $topTime = isset($topTime) && $topTime > $time ? $topTime : $time;
+                    }
+                }
+            } else {
+                if (isset($pages[$pageId]['number'])) {
                     self::$userHistory[] = [
                         $pages[$pageId]['number'],
                         html_entity_decode($pages[$pageId]['title']),
-                        helper::dateUTF8('%d %B %Y %H:%M', $time)
+                        helper::dateUTF8('%d %B %Y %H:%M', $times)
                     ];
-                    $floorTime = isset($floorTime) && $floorTime < $time ? $floorTime : $time;
-                    $topTime = isset($topTime) && $topTime > $time ? $topTime : $time;
+                    $floorTime = isset($floorTime) && $floorTime < $times ? $floorTime : $times;
+                    $topTime = isset($topTime) && $topTime > $times ? $topTime : $times;
                 }
-            } else {
-                self::$userHistory[] = [
-                    $pages[$pageId]['number'],
-                    html_entity_decode($pages[$pageId]['title']),
-                    helper::dateUTF8('%d %B %Y %H:%M', $times)
-                ];
-                $floorTime = isset($floorTime) && $floorTime < $times ? $floorTime : $times;
-                $topTime = isset($topTime) && $topTime > $times ? $topTime : $times;
             }
         }
 
@@ -1243,10 +1247,12 @@ class course extends common
                     $userId,
                     $this->getData(['user', $userId, 'firstname']),
                     $this->getData(['user', $userId, 'lastname']),
-                    $pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])],
+                    isset($pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])])
+                        ? $pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])]
+                        : $this->getData(['enrolment', $courseId, $userId, 'lastPageView']) . ' (supprimée)',
                     helper::dateUTF8('%d/%d/%Y', $this->getData(['enrolment', $courseId, $userId, 'datePageView'])),
                     helper::dateUTF8('%H:%M', $this->getData(['enrolment', $courseId, $userId, 'datePageView'])),
-                    number_format(round(($viewPages * 100) / $sumPages, 1) / 100, 2, ',')
+                    number_format(min(round(($viewPages * 100) / $sumPages, 1) / 100, 1), 2, ',')
                 ];
 
                 // Synthèse des historiques
