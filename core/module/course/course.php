@@ -1210,16 +1210,14 @@ class course extends common
             // Tri du tableau par défaut par $userId
             ksort($users);
 
-            // Dossier temporaire
-            if (is_dir(self::FILE_DIR . 'source/export') === false) {
-                mkdir(self::FILE_DIR . 'source/export');
+            // Dossier d'export
+            if (is_dir(self::FILE_DIR . 'source/' . $courseId) === false) {
+                mkdir(self::FILE_DIR . 'source/' . $courseId);
             }
-            if (is_dir(self::FILE_DIR . 'source/export/' . $courseId) === false) {
-                mkdir(self::FILE_DIR . 'source/export/' . $courseId);
+            if (is_dir(self::FILE_DIR . 'source/' . $courseId . '/export/') === false) {
+                mkdir(self::FILE_DIR . 'source/' . $courseId . '/export/');
             }
-            $path = self::FILE_DIR . 'source/export/';
-
-            $filename = $path . $courseId . '/synthèse' . helper::dateUTF8('%Y%m%d', time()) . '.csv';
+            $filename = self::FILE_DIR . 'source/' . $courseId . '/export/' . '/synthèse' . helper::dateUTF8('%Y%m%d', time()) . '.csv';
 
             foreach ($users as $userId => $userValue) {
 
@@ -1248,8 +1246,8 @@ class course extends common
                     $this->getData(['user', $userId, 'firstname']),
                     $this->getData(['user', $userId, 'lastname']),
                     isset($pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])])
-                        ? $pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])]
-                        : $this->getData(['enrolment', $courseId, $userId, 'lastPageView']) . ' (supprimée)',
+                    ? $pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])]
+                    : $this->getData(['enrolment', $courseId, $userId, 'lastPageView']) . ' (supprimée)',
                     helper::dateUTF8('%d/%d/%Y', $this->getData(['enrolment', $courseId, $userId, 'datePageView'])),
                     helper::dateUTF8('%H:%M', $this->getData(['enrolment', $courseId, $userId, 'datePageView'])),
                     number_format(min(round(($viewPages * 100) / $sumPages, 1) / 100, 1), 2, ',')
@@ -1330,15 +1328,15 @@ class course extends common
             }
         }
 
-        // Dossier temporaire
-        if (is_dir(self::FILE_DIR . 'source/export') === false) {
-            mkdir(self::FILE_DIR . 'source/export');
+        // Dossier d'export
+        if (is_dir(self::FILE_DIR . 'source/' . $courseId) === false) {
+            mkdir(self::FILE_DIR . 'source/' . $courseId);
         }
-        if (is_dir(self::FILE_DIR . 'source/export/' . $courseId) === false) {
-            mkdir(self::FILE_DIR . 'source/export/' . $courseId);
+        if (is_dir(self::FILE_DIR . 'source/' . $courseId . '/export/') === false) {
+            mkdir(self::FILE_DIR . 'source/' . $courseId . '/export/');
         }
-        $path = self::FILE_DIR . 'source/export/';
-        $filename = $path . $courseId . '/' . $userId . '.csv';
+        $filename = self::FILE_DIR . 'source/' . $courseId . '/export/' . $userId . '.csv';
+
         $file = fopen($filename, 'w');
 
         foreach (self::$userHistory as $keys => $values) {
