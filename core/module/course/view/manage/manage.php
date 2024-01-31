@@ -58,7 +58,7 @@
                         <?php echo template::text('courseManageShortTitle', [
                             'label' => 'Titre',
                             'value' => $this->getdata(['course', $this->getUrl(2), 'title']),
-                            'readonly' => true,
+                            'disabled' => true,
                         ]); ?>
                     </div>
                     <div class="col5">
@@ -90,7 +90,7 @@
                         <?php echo template::textarea('courseManageDescription', [
                             'label' => 'Description',
                             'value' => $this->getdata(['course', $this->getUrl(2), 'description']),
-                            'readonly' => true,
+                            'disabled' => true,
                         ]); ?>
                     </div>
                 </div>
@@ -107,7 +107,7 @@
                             'type' => 'datetime-local',
                             'label' => 'Ouverture',
                             'value' => is_null($this->getdata(['course', $this->getUrl(2), 'openingDate'])) ? '' : floor($this->getdata(['course', $this->getUrl(2), 'openingDate']) / 60) * 60,
-                            'readonly' => true,
+                            'disabled' => true,
                         ]); ?>
                     </div>
                     <div class="col4">
@@ -115,6 +115,7 @@
                             'type' => 'datetime-local',
                             'label' => 'Fermeture',
                             'value' => is_null($this->getdata(['course', $this->getUrl(2), 'closingDate'])) ? '' : floor($this->getdata(['course', $this->getUrl(2), 'closingDate']) / 60) * 60,
+                            'disabled' => true,
                         ]); ?>
                     </div>
                 </div>
@@ -130,7 +131,7 @@
                         <?php echo template::text('courseManageEnrolmentKey', [
                             'label' => 'Clé',
                             'value' => $this->getdata(['course', $this->getUrl(2), 'enrolmentKey']),
-                            'readonly' => true,
+                            'disabled' => true,
                         ]); ?>
                     </div>
                 </div>
@@ -147,7 +148,7 @@
                             'type' => 'datetime-local',
                             'label' => 'Fermeture',
                             'value' => is_null($this->getdata(['course', $this->getUrl(2), 'limitEnrolmentDate'])) ? '' : floor($this->getdata(['course', $this->getUrl(2), 'limitEnrolmentDate']) / 60) * 60,
-                            'readonly' => true,
+                            'disabled' => true,
                         ]); ?>
                     </div>
                 </div>
