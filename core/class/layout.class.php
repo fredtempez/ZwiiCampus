@@ -1104,7 +1104,7 @@ class layout extends common
                         $this->setData(['core', 'lastAutoUpdate', $today]);
                         if (
                             helper::checkNewVersion(common::ZWII_UPDATE_CHANNEL)
-                        ) {
+                        ) { 
                             $this->setData(['core', 'updateAvailable', true]);
                         }
                     }
