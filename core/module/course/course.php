@@ -1168,9 +1168,13 @@ class course extends common
         self::$userStat['floor'] = helper::dateUTF8('%d %B %Y %H:%M', $floorTime);
         self::$userStat['top'] = helper::dateUTF8('%d %B %Y %H:%M', $topTime);
         $d = $topTime - $floorTime;
-        $d_hours = floor($d / 3600);
+        // Conversion de la différence en jours, heures et minutes
+        $d_days = floor($d / 86400);  // 1 jour = 86400 secondes (24 heures * 60 minutes * 60 secondes)
+        $d_hours = floor(($d % 86400) / 3600);
         $d_minutes = floor(($d % 3600) / 60);
-        self::$userStat['time'] = $d_hours . ' heures, ' . $d_minutes . ' minutes ';
+
+        // Affichage du résultat
+        self::$userStat['time'] = $d_days . ' jours, ' . $d_hours . ' heures, ' . $d_minutes . ' minutes ';
 
         // Valeurs en sortie
         $this->addOutput([
