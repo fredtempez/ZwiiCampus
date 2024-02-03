@@ -421,7 +421,7 @@ class install extends common
 			self::$newVersion = helper::getUrlContents(common::ZWII_UPDATE_URL . common::ZWII_UPDATE_CHANNEL . '/version');
 			// Variable de version
 			if (helper::checkNewVersion(common::ZWII_UPDATE_CHANNEL)) {
-				self::$updateButtonText = helper::translate('Mettre à jour');
+				self::$updateButtonText = helper::translate('Mise à jour');
 			}
 			// Valeurs en sortie
 			$this->addOutput([
