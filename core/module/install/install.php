@@ -256,6 +256,10 @@ class install extends common
 						$success = unlink(self::TEMP_DIR . 'update.tar');
 						$message = $success ? '' : 'Impossible d\'effacer la mise à jour précédente';
 					}
+					// Sauvegarde le message dans le journal
+					if (!empty($message)) {
+						$this->saveLog($message);
+					}
 					// Valeurs en sortie
 					$this->addOutput([
 						'display' => self::DISPLAY_JSON,
@@ -285,7 +289,10 @@ class install extends common
 							http_response_code(500);
 						}
 					}
-
+					// Sauvegarde le message dans le journal
+					if (!empty($message)) {
+						$this->saveLog($message);
+					}
 					// Valeurs en sortie
 					$this->addOutput([
 						'display' => self::DISPLAY_JSON,
@@ -325,7 +332,10 @@ class install extends common
 					if (file_exists(self::TEMP_DIR . 'update.tar')) {
 						unlink(self::TEMP_DIR . 'update.tar');
 					}
-					
+					// Sauvegarde le message dans le journal
+					if (!empty($message)) {
+						$this->saveLog($message);
+					}
 					// Valeurs en sortie
 					$this->addOutput([
 						'display' => self::DISPLAY_JSON,
@@ -399,7 +409,10 @@ class install extends common
 							$this->setData(['language', $key, $defaultLanguages[$key]]);
 						}
 					}
-
+					// Sauvegarde le message dans le journal
+					if (!empty($message)) {
+						$this->saveLog($message);
+					}
 					// Valeurs en sortie
 					$this->addOutput([
 						'display' => self::DISPLAY_JSON,
