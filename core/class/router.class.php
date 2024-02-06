@@ -822,8 +822,9 @@ class core extends common
 			} else {
 				if (
 					$this->getData(['config', 'page403']) !== 'none'
-					and $this->getData(['page', $this->getData(['config', 'page403'])])
+					//and $this->getData(['page', $this->getData(['config', 'page403'])])
 				) {
+					$_SESSION['ZWII_SITE_CONTENT'] = 'home';
 					header('Location:' . helper::baseUrl() . $this->getData(['config', 'page403']));
 				} else {
 					$this->addOutput([
@@ -836,8 +837,9 @@ class core extends common
 			http_response_code(404);
 			if (
 				$this->getData(['config', 'page404']) !== 'none'
-				and $this->getData(['page', $this->getData(['config', 'page404'])])
+				//and $this->getData(['page', $this->getData(['config', 'page404'])])
 			) {
+				$_SESSION['ZWII_SITE_CONTENT'] = 'home';
 				header('Location:' . helper::baseUrl() . $this->getData(['config', 'page404']));
 			} else {
 				$this->addOutput([

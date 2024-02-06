@@ -329,7 +329,7 @@ class common
 
 		// Extraction de la sesion
 		// $this->input['_SESSION'] = $_SESSION;
-
+echo $_SESSION['ZWII_SITE_CONTENT'];
 		// Déterminer le contenu du site
 		if (isset($_SESSION['ZWII_SITE_CONTENT'])) {
 			// Déterminé par la session présente
