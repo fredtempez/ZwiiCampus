@@ -45,8 +45,16 @@ if (!is_null($u) && !is_null($g) && !is_null($userId)) {
 			$folder['delete'] = true;
 			$folder['copycut'] = true;
 			$folder['chmod'] = true;
-			$uploadDir = '/site/file/source/';
-			$currentPath = '../../../site/file/source/';
+			// Pointe vers le dossier du cours 	
+			if (
+				isset($courseId)
+				&& $courseId != 'home'
+			) {
+				$uploadDir = './site/file/source/' . $courseId . '/';
+			} else {
+				$uploadDir = '/site/file/source/';
+			}
+			$currentPath = '../../../' . $uploadDir;
 			break;
 		case 2:
 		case 1:
@@ -69,7 +77,6 @@ if (!is_null($u) && !is_null($g) && !is_null($userId)) {
 				} else {
 					$uploadDir = $g['profil'][$group][$profil]['folder']['path'];
 				}
-
 				$currentPath = '../../../' . $uploadDir;
 				if (!is_dir($currentPath)) {
 					mkdir($currentPath);
