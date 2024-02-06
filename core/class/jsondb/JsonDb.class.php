@@ -143,6 +143,10 @@ class JsonDb extends \Prowebcraft\Dot
     public function save()
     {
         //$v = json_encode($this->data, JSON_UNESCAPED_UNICODE );
+        if ($this->data === null) {
+            error_log('Tentative d\'enregistrer de données nulles, enregistrement annulé.');
+            exit('Tentative d\'enregistrer de données nulles, enregistrement annulé.');
+        }
         $v = json_encode($this->data, JSON_UNESCAPED_UNICODE | JSON_FORCE_OBJECT);
         $l = strlen($v);
         $t = 0;
@@ -154,7 +158,8 @@ class JsonDb extends \Prowebcraft\Dot
             $t++;
         }
         if ($w !== $l) {
-            exit('Erreur d\'écriture, les données n\'ont pas été sauvegardées');
+            error_log('Erreur d\'écriture, les données n\'ont pas été sauvegardées.');
+            exit('Erreur d\'écriture, les données n\'ont pas été sauvegardées.');
         }
 
     }
