@@ -1055,12 +1055,8 @@ class layout extends common
             $rightItems = '';
             if (
                 (
-                        // ZwiiCampus ------
-                    self::$siteContent !== 'home'
-                    // ZwiiCampus ------
-                    && $this->getUser('group') >= self::GROUP_MEMBER
+                    $this->getUser('group') === self::GROUP_MEMBER
                     && $this->getUser('permission', 'filemanager')
-
                 )
                 || $this->getUser('group') == self::GROUP_ADMIN
             ) {
