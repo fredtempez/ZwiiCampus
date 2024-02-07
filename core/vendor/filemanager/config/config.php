@@ -50,39 +50,43 @@ if (!is_null($u) && !is_null($g) && !is_null($userId)) {
 				isset($courseId)
 				&& $courseId != 'home'
 			) {
-				$uploadDir = './site/file/source/' . $courseId . '/';
+				$uploadDir = 'site/file/source/' . $courseId;
+				$currentPath = '../../../site/file/source/' . $courseId . '/';
 			} else {
-				$uploadDir = '/site/file/source/';
+				$uploadDir = 'site/file/source/';
+				$currentPath = '../../../site/file/source/';
 			}
-			$currentPath = '../../../' . $uploadDir;
 			break;
 		case 2:
 		case 1:
 			// Accès contrôlés par le profil
 			$profil = $u['user'][$userId]['profil'];
-			if ($g['profil'][$group][$profil]['filemanager'] === false)
+			// membre sans profil déclaré ou accès interdit, pas d'accès
+			if (
+				is_null($profil)
+				|| $g['profil'][$group][$profil]['filemanager'] === false
+			)
 				exit('Accès interdit');
+
 			// lecture du profil
-			if (!is_null($profil)) {
-				$file = $g['profil'][$group][$profil]['file'];
-				$folder = $g['profil'][$group][$profil]['folder'];
-				$uploadDir = './site/file/source/';
-				// Pointe vers le dossier du cours 	
-				if (
-					isset($courseId)
-					&& $courseId != 'home'
-					&& $g['profil'][$group][$profil]['folder']['path'] === ''
-				) {
-					$uploadDir = './site/file/source/' . $courseId . '/';
-				} else {
-					$uploadDir = $g['profil'][$group][$profil]['folder']['path'];
-				}
-				$currentPath = '../../../' . $uploadDir;
-				if (!is_dir($currentPath)) {
-					mkdir($currentPath);
-				}
-				break;
+			$file = $g['profil'][$group][$profil]['file'];
+			$folder = $g['profil'][$group][$profil]['folder'];
+
+			if (
+				isset($courseId)
+				// Le membre est sur l'accueil
+				&& $courseId === 'home'
+			) {
+				// Le dossier affiché est celui du profil 
+				$uploadDir = $g['profil'][$group][$profil]['folder']['path'];
+				$currentPath = '../../../' . $g['profil'][$group][$profil]['folder']['path'];
+
+			} else {
+				// Le membre est dans un espace, forçage vers le dossier de l'espace
+				$uploadDir = 'site/file/source/' . $courseId;
+				$currentPath = '../../../site/file/source/' . $courseId . '/';
 			}
+			break;
 		default:
 			// Pas d'autorisation d'accès au gestionnaire de fichiers
 			exit('Accès interdit');
@@ -140,77 +144,77 @@ define('DEBUG_ERROR_MESSAGE', false); // TRUE or FALSE
 $config = array(
 
 	/*
-	   |--------------------------------------------------------------------------
-	   | DON'T TOUCH (base url (only domain) of site).
-	   |--------------------------------------------------------------------------
-	   |
-	   | without final / (DON'T TOUCH)
-	   |
-	   */
+		  |--------------------------------------------------------------------------
+		  | DON'T TOUCH (base url (only domain) of site).
+		  |--------------------------------------------------------------------------
+		  |
+		  | without final / (DON'T TOUCH)
+		  |
+		  */
 	'base_url' => ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] && !in_array(strtolower($_SERVER['HTTPS']), array('off', 'no'))) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . rtrim(str_replace('/core/vendor/filemanager', '', pathinfo($_SERVER['PHP_SELF'])['dirname']), ' /'),
 	/*
-	   |--------------------------------------------------------------------------
-	   | path from base_url to base of upload folder
-	   |--------------------------------------------------------------------------
-	   |
-	   | with start and final /
-	   |
-	   */
+		  |--------------------------------------------------------------------------
+		  | path from base_url to base of upload folder
+		  |--------------------------------------------------------------------------
+		  |
+		  | with start and final /
+		  |
+		  */
 	'upload_dir' => $uploadDir,
 	/*
-	   |--------------------------------------------------------------------------
-	   | relative path from filemanager folder to upload folder
-	   |--------------------------------------------------------------------------
-	   |
-	   | with final /
-	   |
-	   */
+		  |--------------------------------------------------------------------------
+		  | relative path from filemanager folder to upload folder
+		  |--------------------------------------------------------------------------
+		  |
+		  | with final /
+		  |
+		  */
 	'current_path' => $currentPath,
 
 	/*
-	   |--------------------------------------------------------------------------
-	   | relative path from filemanager folder to thumbs folder
-	   |--------------------------------------------------------------------------
-	   |
-	   | with final /
-	   | DO NOT put inside upload folder
-	   |
-	   */
+		  |--------------------------------------------------------------------------
+		  | relative path from filemanager folder to thumbs folder
+		  |--------------------------------------------------------------------------
+		  |
+		  | with final /
+		  | DO NOT put inside upload folder
+		  |
+		  */
 	'thumbs_base_path' => '../../../site/file/thumb/',
 
 	/*
-	   |--------------------------------------------------------------------------
-	   | path from base_url to base of thumbs folder
-	   |--------------------------------------------------------------------------
-	   |
-	   | with final /
-	   | DO NOT put inside upload folder
-	   |
-	   */
+		  |--------------------------------------------------------------------------
+		  | path from base_url to base of thumbs folder
+		  |--------------------------------------------------------------------------
+		  |
+		  | with final /
+		  | DO NOT put inside upload folder
+		  |
+		  */
 	'thumbs_upload_dir' => '/thumb/',
 
 
 	/*
-	   |--------------------------------------------------------------------------
-	   | mime file control to define files extensions
-	   |--------------------------------------------------------------------------
-	   |
-	   | If you want to be forced to assign the extension starting from the mime type
-	   |
-	   */
+		  |--------------------------------------------------------------------------
+		  | mime file control to define files extensions
+		  |--------------------------------------------------------------------------
+		  |
+		  | If you want to be forced to assign the extension starting from the mime type
+		  |
+		  */
 	'mime_extension_rename' => false,
 
 
 	/*
-	   |--------------------------------------------------------------------------
-	   | FTP configuration BETA VERSION
-	   |--------------------------------------------------------------------------
-	   |
-	   | If you want enable ftp use write these parametres otherwise leave empty
-	   | Remember to set base_url properly to point in the ftp server domain and
-	   | upload dir will be ftp_base_folder + upload_dir so without final /
-	   |
-	   */
+		  |--------------------------------------------------------------------------
+		  | FTP configuration BETA VERSION
+		  |--------------------------------------------------------------------------
+		  |
+		  | If you want enable ftp use write these parametres otherwise leave empty
+		  | Remember to set base_url properly to point in the ftp server domain and
+		  | upload dir will be ftp_base_folder + upload_dir so without final /
+		  |
+		  */
 	'ftp_host' => false,
 	//put the FTP host
 	'ftp_user' => "user",
@@ -220,52 +224,52 @@ $config = array(
 	// Directory where place files before to send to FTP with final /
 	'ftp_temp_folder' => "../temp/",
 	/*
-	   |---------------------------------------------------------------------------
-	   | path from ftp_base_folder to base of thumbs folder with start and final /
-	   |---------------------------------------------------------------------------
-	   */
+		  |---------------------------------------------------------------------------
+		  | path from ftp_base_folder to base of thumbs folder with start and final /
+		  |---------------------------------------------------------------------------
+		  */
 	'ftp_thumbs_dir' => '/thumbs/',
 	'ftp_ssl' => false,
 	'ftp_port' => 21,
 
 	/* EXAMPLE
-	   'ftp_host'         => "host.com",
-	   'ftp_user'         => "test@host.com",
-	   'ftp_pass'         => "pass.1",
-	   'ftp_base_folder'  => "",
-	   'ftp_base_url'     => "http://host.com/testFTP",
-	   */
+		  'ftp_host'         => "host.com",
+		  'ftp_user'         => "test@host.com",
+		  'ftp_pass'         => "pass.1",
+		  'ftp_base_folder'  => "",
+		  'ftp_base_url'     => "http://host.com/testFTP",
+		  */
 
 	/*
-	   |--------------------------------------------------------------------------
-	   | Multiple files selection
-	   |--------------------------------------------------------------------------
-	   | The user can delete multiple files, select all files , deselect all files
-	   */
+		  |--------------------------------------------------------------------------
+		  | Multiple files selection
+		  |--------------------------------------------------------------------------
+		  | The user can delete multiple files, select all files , deselect all files
+		  */
 	'multiple_selection' => true,
 	/*
-	   |
-	   | The user can have a select button that pass a json to external input or pass the first file selected to editor
-	   | If you use responsivefilemanager tinymce extension can copy into editor multiple object like images, videos, audios, links in the same time
-	   |
-	   */
+		  |
+		  | The user can have a select button that pass a json to external input or pass the first file selected to editor
+		  | If you use responsivefilemanager tinymce extension can copy into editor multiple object like images, videos, audios, links in the same time
+		  |
+		  */
 	'multiple_selection_action_button' => true,
 
 	/*
-	   |--------------------------------------------------------------------------
-	   | Access keys
-	   |--------------------------------------------------------------------------
-	   |
-	   | add access keys eg: array('myPrivateKey', 'someoneElseKey');
-	   | keys should only containt (a-z A-Z 0-9 \ . _ -) characters
-	   | if you are integrating lets say to a cms for admins, i recommend making keys randomized something like this:
-	   | $username = 'Admin';
-	   | $salt = 'dsflFWR9u2xQa' (a hard coded string)
-	   | $akey = md5($username.$salt);
-	   | DO NOT use 'key' as access key!
-	   | Keys are CASE SENSITIVE!
-	   |
-	   */
+		  |--------------------------------------------------------------------------
+		  | Access keys
+		  |--------------------------------------------------------------------------
+		  |
+		  | add access keys eg: array('myPrivateKey', 'someoneElseKey');
+		  | keys should only containt (a-z A-Z 0-9 \ . _ -) characters
+		  | if you are integrating lets say to a cms for admins, i recommend making keys randomized something like this:
+		  | $username = 'Admin';
+		  | $salt = 'dsflFWR9u2xQa' (a hard coded string)
+		  | $akey = md5($username.$salt);
+		  | DO NOT use 'key' as access key!
+		  | Keys are CASE SENSITIVE!
+		  |
+		  */
 
 	'access_keys' => array($privateKey),
 
@@ -274,51 +278,51 @@ $config = array(
 	//--------------------------------------------------------------------------------------------------------
 
 	/*
-	   |--------------------------------------------------------------------------
-	   | Maximum size of all files in source folder
-	   |--------------------------------------------------------------------------
-	   |
-	   | in Megabytes
-	   |
-	   */
+		  |--------------------------------------------------------------------------
+		  | Maximum size of all files in source folder
+		  |--------------------------------------------------------------------------
+		  |
+		  | in Megabytes
+		  |
+		  */
 	'MaxSizeTotal' => false,
 
 	/*
-	   |--------------------------------------------------------------------------
-	   | Maximum upload size
-	   |--------------------------------------------------------------------------
-	   |
-	   | in Megabytes
-	   |
-	   */
+		  |--------------------------------------------------------------------------
+		  | Maximum upload size
+		  |--------------------------------------------------------------------------
+		  |
+		  | in Megabytes
+		  |
+		  */
 	'MaxSizeUpload' => 20000,
 
 	/*
-	   |--------------------------------------------------------------------------
-	   | File and Folder permission
-	   |--------------------------------------------------------------------------
-	   |
-	   */
+		  |--------------------------------------------------------------------------
+		  | File and Folder permission
+		  |--------------------------------------------------------------------------
+		  |
+		  */
 	'filePermission' => 0755,
 	'folderPermission' => 0777,
 
 
 	/*
-	   |--------------------------------------------------------------------------
-	   | default language file name
-	   |--------------------------------------------------------------------------
-	   */
+		  |--------------------------------------------------------------------------
+		  | default language file name
+		  |--------------------------------------------------------------------------
+		  */
 	'default_language' => 'fr_FR',
 
 	/*
-	   |--------------------------------------------------------------------------
-	   | Icon theme
-	   |--------------------------------------------------------------------------
-	   |
-	   | Default available: ico and ico_dark
-	   | Can be set to custom icon inside filemanager/img
-	   |
-	   */
+		  |--------------------------------------------------------------------------
+		  | Icon theme
+		  |--------------------------------------------------------------------------
+		  |
+		  | Default available: ico and ico_dark
+		  | Can be set to custom icon inside filemanager/img
+		  |
+		  */
 	'icon_theme' => "ico",
 
 
@@ -356,12 +360,12 @@ $config = array(
 	'image_max_height' => 0,
 	'image_max_mode' => 'auto',
 	/*
-	   #  $option:  0 / exact = defined size;
-	   #            1 / portrait = keep aspect set height;
-	   #            2 / landscape = keep aspect set width;
-	   #            3 / auto = auto;
-	   #            4 / crop= resize and crop;
-	   */
+		  #  $option:  0 / exact = defined size;
+		  #            1 / portrait = keep aspect set height;
+		  #            2 / landscape = keep aspect set width;
+		  #            3 / auto = auto;
+		  #            4 / crop= resize and crop;
+		  */
 
 	//Automatic resizing //
 	// If you set $image_resizing to TRUE the script converts all uploaded images exactly to image_resizing_width x image_resizing_height dimension
@@ -496,13 +500,13 @@ $config = array(
 	'empty_filename' => false,
 
 	/*
-	   |--------------------------------------------------------------------------
-	   | accept files without extension
-	   |--------------------------------------------------------------------------
-	   |
-	   | If you want to accept files without extension, remember to add '' extension on allowed extension
-	   |
-	   */
+		  |--------------------------------------------------------------------------
+		  | accept files without extension
+		  |--------------------------------------------------------------------------
+		  |
+		  | If you want to accept files without extension, remember to add '' extension on allowed extension
+		  |
+		  */
 	'files_without_extension' => false,
 
 	/******************
@@ -623,12 +627,12 @@ $config = array(
 	'fixed_image_creation_height' => array(480),
 	//height of image
 	/*
-	   #             $option:     0 / exact = defined size;
-	   #                          1 / portrait = keep aspect set height;
-	   #                          2 / landscape = keep aspect set width;
-	   #                          3 / auto = auto;
-	   #                          4 / crop= resize and crop;
-	   */
+		  #             $option:     0 / exact = defined size;
+		  #                          1 / portrait = keep aspect set height;
+		  #                          2 / landscape = keep aspect set width;
+		  #                          3 / auto = auto;
+		  #                          4 / crop= resize and crop;
+		  */
 	'fixed_image_creation_option' => array('auto', 'crop'),
 	//set the type of the crop
 
@@ -651,12 +655,12 @@ $config = array(
 	'relative_image_creation_height' => array(200, 300),
 	//height of image
 	/*
-	   #             $option:     0 / exact = defined size;
-	   #                          1 / portrait = keep aspect set height;
-	   #                          2 / landscape = keep aspect set width;
-	   #                          3 / auto = auto;
-	   #                          4 / crop= resize and crop;
-	   */
+		  #             $option:     0 / exact = defined size;
+		  #                          1 / portrait = keep aspect set height;
+		  #                          2 / landscape = keep aspect set width;
+		  #                          3 / auto = auto;
+		  #                          4 / crop= resize and crop;
+		  */
 	'relative_image_creation_option' => array('crop', 'crop'),
 	//set the type of the crop
 
