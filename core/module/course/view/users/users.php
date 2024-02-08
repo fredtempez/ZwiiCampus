@@ -53,7 +53,7 @@
 </div>
 <?php echo template::formClose(); ?>
 <?php if ($module::$courseUsers): ?>
-    <?php echo template::table([2, 2, 2, 2, 2, 1, 1], $module::$courseUsers, ['Id', 'Nom Prénom', 'Dernière page vue', 'Date - Heure', 'Étiquettes', 'Progression', ''], ['id' => 'dataTables']); ?>
+    <?php echo template::table([2, 2, 3, 1, 1, 1 , 1, 1], $module::$courseUsers, ['Id', 'Nom Prénom', 'Dernière page vue', 'Date' , 'Heure', 'Étiquettes', 'Progression', ''], ['id' => 'dataTables']); ?>
 <?php else: ?>
     <?php echo template::speech('Aucun participant'); ?>
 <?php endif; ?>

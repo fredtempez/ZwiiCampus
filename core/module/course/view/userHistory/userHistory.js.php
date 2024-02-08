@@ -12,10 +12,12 @@
  */
 
 $(document).ready((function () {
+    $.fn.dataTable.moment( 'DD/MM/YYYY' );
     $('#dataTables').DataTable({
         language: {
             url: "core/vendor/datatables/french.json"
         },
+        order: [[0, 'asc']],
         locale: 'fr',
         searching: false,
         pageLength: 100,

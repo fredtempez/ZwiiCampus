@@ -32,7 +32,7 @@
     </div>
     <div class="row textAlignCenter">
         <div class="col8">
-            <?php echo template::table([1, 6, 5], $module::$userHistory, ['Ordre', 'Page', 'Consultation'], ['id' => 'dataTables']);?>
+            <?php echo template::table([1, 5, 3, 3], $module::$userHistory, ['#', 'Page', 'Date Consultation', 'Heure'], ['id' => 'dataTables']);?>
         </div>
     </div>
 <?php else: ?>

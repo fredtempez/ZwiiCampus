@@ -1,5 +1,6 @@
 [
 	"datatables.min.js",
-	"datatime.js",
+	"moment.min.js",
+	"datetime.min.js",
 	"datatables.min.css"
 ]

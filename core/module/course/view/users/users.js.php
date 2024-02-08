@@ -21,17 +21,14 @@ $(document).ready((function () {
             $(location).attr("href", _this.attr("href"))
         }))
     }));
-
+    $.fn.dataTable.moment( 'DD/MM/YYYY' );
     $('#dataTables').DataTable({
         language: {
             url: "core/vendor/datatables/french.json"
         },
+        order: [[3, 'desc']],
         locale: 'fr',
         "columnDefs": [
-            {
-                target: 3,
-                render: DataTable.render.moment( 'YYYY/MM/DD', 'Do MMM YY', 'fr' )
-            },
             {
                 target: 6,
                 orderable: false,

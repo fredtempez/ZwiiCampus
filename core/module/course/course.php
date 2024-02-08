@@ -674,8 +674,10 @@ class course extends common
                     ? $pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])]['title']
                     : '',
                     $this->getData(['enrolment', $courseId, $userId, 'datePageView'])
-                    ? $this->getData(['enrolment', $courseId, $userId, 'datePageView'])
-                    //? helper::dateUTF8('%d %B %Y - %H:%M', $this->getData(['enrolment', $courseId, $userId, 'datePageView']))
+                    ? helper::dateUTF8('%d/%m/%Y', $this->getData(['enrolment', $courseId, $userId, 'datePageView']))
+                    : '',
+                    $this->getData(['enrolment', $courseId, $userId, 'datePageView'])
+                    ? helper::dateUTF8('%H:%M', $this->getData(['enrolment', $courseId, $userId, 'datePageView']))
                     : '',
                     $this->getData(['user', $userId, 'tags']),
                     template::button('userHistory' . $userId, [
@@ -1147,7 +1149,8 @@ class course extends common
                         self::$userHistory[] = [
                             $pages[$pageId]['number'],
                             html_entity_decode($pages[$pageId]['title']),
-                            helper::dateUTF8('%d %B %Y %H:%M', $time)
+                            helper::dateUTF8('%d %B %Y', $time),
+                            helper::dateUTF8('%H:%M', $time)
                         ];
                         $floorTime = isset($floorTime) && $floorTime < $time ? $floorTime : $time;
                         $topTime = isset($topTime) && $topTime > $time ? $topTime : $time;
@@ -1158,7 +1161,8 @@ class course extends common
                     self::$userHistory[] = [
                         $pages[$pageId]['number'],
                         html_entity_decode($pages[$pageId]['title']),
-                        helper::dateUTF8('%d %B %Y %H:%M', $times)
+                        helper::dateUTF8('%d %B %Y', $times),
+                        helper::dateUTF8('%H:%M', $times)
                     ];
                     $floorTime = isset($floorTime) && $floorTime < $times ? $floorTime : $times;
                     $topTime = isset($topTime) && $topTime > $times ? $topTime : $times;
