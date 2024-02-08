@@ -29,6 +29,10 @@ $(document).ready((function () {
         locale: 'fr',
         "columnDefs": [
             {
+                target: 3,
+                render: DataTable.render.moment( 'YYYY/MM/DD', 'Do MMM YY', 'fr' )
+            },
+            {
                 target: 6,
                 orderable: false,
                 searchable: false

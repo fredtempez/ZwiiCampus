@@ -674,7 +674,8 @@ class course extends common
                     ? $pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])]['title']
                     : '',
                     $this->getData(['enrolment', $courseId, $userId, 'datePageView'])
-                    ? helper::dateUTF8('%d %B %Y - %H:%M', $this->getData(['enrolment', $courseId, $userId, 'datePageView']))
+                    ? $this->getData(['enrolment', $courseId, $userId, 'datePageView'])
+                    //? helper::dateUTF8('%d %B %Y - %H:%M', $this->getData(['enrolment', $courseId, $userId, 'datePageView']))
                     : '',
                     $this->getData(['user', $userId, 'tags']),
                     template::button('userHistory' . $userId, [
