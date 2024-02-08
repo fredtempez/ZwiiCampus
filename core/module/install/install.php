@@ -194,6 +194,11 @@ class install extends common
 					mkdir(self::I18N_DIR);
 				}
 
+				// Créer le dossier de l'accueil dans les fichiers
+				if (is_dir(self::FILE_DIR . 'source/home') === false) {
+					mkdir(self::FILE_DIR . 'source/home');
+				}
+
 				// Créer la base de données des langues
 				$this->copyDir('core/module/install/ressource/i18n', self::I18N_DIR);
 
