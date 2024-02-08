@@ -917,7 +917,7 @@ class layout extends common
             $leftItems = '';
             // Sélecteur de contenu
             /**
-             * Les admins voient tousles contenus
+             * Les admins voient tous les contenus
              * Les enseignants les contenus dont ils sont auteurs
              */
             if ($this->getUser('group') >= self::GROUP_EDITOR) {
@@ -940,8 +940,10 @@ class layout extends common
                     'href' => helper::baseUrl() . 'theme'
                 ]) . '</li>';
             }
-            // Liste des pages
-            if ($this->getUser('group') >= self::GROUP_EDITOR) {
+            // Liste des pages et bouton de gestion interdit pour l'accueil sauf admin
+            if (($this->getUser('group') === self::GROUP_EDITOR && self::$siteContent != 'home')
+                || $this->getUser('group') === self::GROUP_ADMIN 
+                ) {
                 $leftItems .= '<li><select id="barSelectPage">';
                 $leftItems .= '<option value="">' . helper::translate('Pages du site') . '</option>';
                 $leftItems .= '<optgroup label="' . helper::translate('Pages orphelines') . '">';
