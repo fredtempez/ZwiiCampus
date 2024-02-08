@@ -1149,7 +1149,7 @@ class course extends common
                         self::$userHistory[] = [
                             $pages[$pageId]['number'],
                             html_entity_decode($pages[$pageId]['title']),
-                            helper::dateUTF8('%d %B %Y', $time),
+                            helper::dateUTF8('%d/%m/%Y', $time),
                             helper::dateUTF8('%H:%M', $time)
                         ];
                         $floorTime = isset($floorTime) && $floorTime < $time ? $floorTime : $time;
@@ -1161,7 +1161,7 @@ class course extends common
                     self::$userHistory[] = [
                         $pages[$pageId]['number'],
                         html_entity_decode($pages[$pageId]['title']),
-                        helper::dateUTF8('%d %B %Y', $times),
+                        helper::dateUTF8('%d/%m/%Y', $times),
                         helper::dateUTF8('%H:%M', $times)
                     ];
                     $floorTime = isset($floorTime) && $floorTime < $times ? $floorTime : $times;
