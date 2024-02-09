@@ -12,15 +12,5 @@
  */
 
 $(document).ready((function () {
-    $.fn.dataTable.moment( 'DD/MM/YYYY' );
-    $('#dataTables').DataTable({
-        language: {
-            url: "core/vendor/datatables/french.json"
-        },
-        locale: 'fr',
-        searching: false,
-        pageLength: 100,
-        lengthChange: false,
-        paging: false
-    });
+
 }));

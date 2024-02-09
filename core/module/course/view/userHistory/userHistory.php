@@ -19,7 +19,7 @@
         <div class="col4 offset2">
             <?php if ($this->getData(['course', $this->getUrl(2), 'access']) === self::COURSE_ACCESS_DATE): ?>
                 <p>Espace ouvert le :
-                    <?php echo helper::dateUTF8('%d %B %Y %H:%M', $this->getData(['course', $this->getUrl(2), 'openingDate'])); ?></p
+                    <?php echo helper::dateUTF8('%d %B %Y %H:%M', $this->getData(['course', $this->getUrl(2), 'openingDate'])); ?></p>
                 <p>Espace fermé le :
                     <?php echo helper::dateUTF8('%d %B %Y %H:%M', $this->getData(['course', $this->getUrl(2), 'closingDate'])); ?></p>
                 <?php endif;?>
@@ -32,7 +32,7 @@
     </div>
     <div class="row textAlignCenter">
         <div class="col8">
-            <?php echo template::table([1, 5, 3, 3], $module::$userHistory, ['#', 'Page', 'Date Consultation', 'Heure'], ['id' => 'dataTables']);?>
+            <?php echo template::table([6, 3, 3], $module::$userHistory, ['Page', 'Début de Consultation', 'Temps consultation']);?>
         </div>
     </div>
 <?php else: ?>

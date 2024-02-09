@@ -1121,17 +1121,23 @@ class course extends common
 
         $courseId = $this->getUrl(2);
         $userId = $this->getUrl(3);
-        $history = $this->getData(['enrolment', $courseId, $userId, 'history']);
+        $h = $this->getData(['enrolment', $courseId, $userId, 'history']);
+
+        // Inversion des clés et des valeurs
+        $history = array();
+        foreach ($h as $key => $values) {
+            foreach ($values as $value) {
+                $history[$value] = $key;
+            }
+        }
+
+        ksort($history);
 
         // Liste des pages contenues dans cet espace et exclure les barres et les pages masquées
-        $data = json_decode(file_get_contents(self::DATA_DIR . $courseId . '/page.json'), true);
-        $data = $data['page'];
-        $count = 0;
-        foreach ($data as $pageId => $pageData) {
+        $p = json_decode(file_get_contents(self::DATA_DIR . $courseId . '/page.json'), true);
+        foreach ($p['page'] as $pageId => $pageData) {
             if ($pageData['position'] > 0) {
-                $count++;
                 $pages[$pageId] = [
-                    'number' => $count,
                     'title' => $pageData['title'],
                 ];
             }
@@ -1139,36 +1145,32 @@ class course extends common
 
         $floorTime = 99999999999;
         $topTime = 0;
+        $lastView = 0;
 
-        foreach ($history as $pageId => $times) {
-            // Dates de consultation de la page
-            if (is_array($times)) {
-                $d = array();
-                foreach ($times as $time) {
-                    if (isset($pages[$pageId]['number'])) {
-                        self::$userHistory[] = [
-                            $pages[$pageId]['number'],
-                            html_entity_decode($pages[$pageId]['title']),
-                            helper::dateUTF8('%d/%m/%Y', $time),
-                            helper::dateUTF8('%H:%M', $time)
-                        ];
-                        $floorTime = isset($floorTime) && $floorTime < $time ? $floorTime : $time;
-                        $topTime = isset($topTime) && $topTime > $time ? $topTime : $time;
-                    }
-                }
-            } else {
-                if (isset($pages[$pageId]['number'])) {
-                    self::$userHistory[] = [
-                        $pages[$pageId]['number'],
-                        html_entity_decode($pages[$pageId]['title']),
-                        helper::dateUTF8('%d/%m/%Y', $times),
-                        helper::dateUTF8('%H:%M', $times)
-                    ];
-                    $floorTime = isset($floorTime) && $floorTime < $times ? $floorTime : $times;
-                    $topTime = isset($topTime) && $topTime > $times ? $topTime : $times;
-                }
+        foreach ($history as $time => $pageId) {
+            if (isset($pages[$pageId]['title'])) {
+                $lastView = ($lastView === 0) ? $time : $lastView;
+                $diff = $time - $lastView;
+                self::$userHistory[] = [
+                    html_entity_decode($pages[$pageId]['title']),
+                    $time,
+                    ($diff < 1800) ? sprintf("%d' %d''", floor($diff / 60), $diff % 60) : "Non significatif",
+                ];
+                $lastView = $time;
+                $floorTime = isset($floorTime) && $floorTime < $time ? $floorTime : $time;
+                $topTime = isset($topTime) && $topTime > $time ? $topTime : $time;
             }
         }
+
+        // Décale les temps de consultation
+        for ($i = 0; $i < count(self::$userHistory) - 1; $i++) {
+            self::$userHistory[$i][2] = self::$userHistory[$i + 1][2];
+        }
+
+        // Formate le timestamp
+        array_walk(self::$userHistory, function (&$item) {
+            $item[1] = helper::dateUTF8('%d/%m/%Y %H:%M:%S', $item[1]);
+        });
 
         self::$userStat['floor'] = helper::dateUTF8('%d %B %Y %H:%M', $floorTime);
         self::$userStat['top'] = helper::dateUTF8('%d %B %Y %H:%M', $topTime);
@@ -1184,10 +1186,7 @@ class course extends common
         // Valeurs en sortie
         $this->addOutput([
             'title' => helper::translate('Historique ') . $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
-            'view' => 'userHistory',
-            'vendor' => [
-                'datatables'
-            ]
+            'view' => 'userHistory'
         ]);
 
     }
@@ -1293,49 +1292,59 @@ class course extends common
 
         $courseId = $this->getUrl(2);
         $userId = $this->getUrl(3);
-        $history = $this->getData(['enrolment', $courseId, $userId, 'history']);
-        self::$userHistory = [
-            0 => ['Ordre', 'PageId', 'Page Titre', 'Consultation Date', 'Consultation Heure']
-        ];
+
+        // Traitement de l'historique
+        $h = $this->getData(['enrolment', $courseId, $userId, 'history']);
+
+        // Inversion des clés et des valeurs
+        $history = array();
+        foreach ($h as $key => $values) {
+            foreach ($values as $value) {
+                $history[$value] = $key;
+            }
+        }
+
+        ksort($history);
 
         // Liste des pages contenues dans cet espace et exclure les barres et les pages masquées
-        $data = json_decode(file_get_contents(self::DATA_DIR . $courseId . '/page.json'), true);
-        $data = $data['page'];
-        $count = 0;
-        foreach ($data as $pageId => $pageData) {
+        $p = json_decode(file_get_contents(self::DATA_DIR . $courseId . '/page.json'), true);
+        foreach ($p['page'] as $pageId => $pageData) {
             if ($pageData['position'] > 0) {
-                $count++;
                 $pages[$pageId] = [
-                    'number' => $count,
                     'title' => $pageData['title'],
                 ];
             }
         }
 
-        foreach ($history as $pageId => $times) {
-            // Dates de consultation de la page
-            if (is_array($times)) {
-                $d = array();
-                foreach ($times as $time) {
-                    self::$userHistory[] = [
-                        $pages[$pageId]['number'],
-                        $pageId,
-                        html_entity_decode($pages[$pageId]['title']),
-                        helper::dateUTF8('%d/%d/%Y', $time),
-                        helper::dateUTF8('%H:%M:%S', $time),
-                    ];
-                }
-            } else {
+        $lastView = 0;
 
+        foreach ($history as $time => $pageId) {
+            if (isset($pages[$pageId]['title'])) {
+                $lastView = ($lastView === 0) ? $time : $lastView;
+                $diff = $time - $lastView;
                 self::$userHistory[] = [
-                    $pages[$pageId]['number'],
                     $pageId,
                     html_entity_decode($pages[$pageId]['title']),
-                    helper::dateUTF8('%d/%d/%Y', $times),
-                    helper::dateUTF8('%H:%M:%S', $time),
+                    $time,
+                    ($diff < 1800) ? sprintf("%d' %d''", floor($diff / 60), $diff % 60) : "Non significatif",
                 ];
+                $lastView = $time;
+                $floorTime = isset($floorTime) && $floorTime < $time ? $floorTime : $time;
+                $topTime = isset($topTime) && $topTime > $time ? $topTime : $time;
             }
         }
+
+        // Décale les temps de consultation
+        for ($i = 0; $i < count(self::$userHistory) - 1; $i++) {
+            self::$userHistory[$i][3] = self::$userHistory[$i + 1][3];
+        }
+        // Formate le timestamp
+        array_walk(self::$userHistory, function (&$item) {
+            $item[2] = helper::dateUTF8('%d/%m/%Y %H:%M:%S', $item[2]);
+        });
+
+        // Ajoute les entêtes
+        self::$userHistory = array_merge([0 => ['PageId', 'Page Titre', 'Consultation Date', 'Temps Consultation']], self::$userHistory);
 
         // Dossier d'export
         if (is_dir(self::FILE_DIR . 'source/' . $courseId) === false) {
