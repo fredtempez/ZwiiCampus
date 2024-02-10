@@ -7,20 +7,23 @@
             'value' => template::ico('left')
         ]); ?>
     </div>
-    <div class="col1 offset7">
+    <div class="col1 offset8">
         <?php echo template::button('courseUserDeleteSelectAll', [
-            'value' => 'Tout'
+            'value' => template::ico('check'),
+            'help' => 'Tout sélectionner'
         ]); ?>
     </div>
     <div class="col1">
         <?php echo template::button('courseUserDeleteSelectNone', [
-            'value' => 'Aucun'
+            'value' => template::ico('cancel'),
+            'help' => 'Tout désélectionner'
         ]); ?>
     </div>
-<div class="col2">
+<div class="col1">
         <?php echo template::submit('courseUsersDeleteSubmit', [
             'class' => 'buttonRed',
-            'value' => 'Désinscrire'
+            'ico' => '',
+            'value' => template::ico('minus'),
         ]); ?>
     </div>
     </div>

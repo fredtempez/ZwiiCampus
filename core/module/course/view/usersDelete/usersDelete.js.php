@@ -13,11 +13,11 @@
 
 $(document).ready((function () {
 
-    $('#courseUserDeleteSelectAll').on('click', function() {
+    $('#courseUserDeleteSelectAll').on('click', function () {
         $('.checkboxSelect').prop('checked', true);
         saveCheckboxState();
     });
-    $('#courseUserDeleteSelectNone').on('click', function() {
+    $('#courseUserDeleteSelectNone').on('click', function () {
         $('.checkboxSelect').prop('checked', false);
         saveCheckboxState();
     });
@@ -80,7 +80,7 @@ $(document).ready((function () {
     // Function to restore checkbox state
     function restoreCheckboxState() {
         var checkboxState = JSON.parse(localStorage.getItem('checkboxState')) || {};
-       // console.log(checkboxState);
+        // console.log(checkboxState);
         for (var checkboxId in checkboxState) {
             if (checkboxState.hasOwnProperty(checkboxId)) {
                 var checked = checkboxState[checkboxId];
