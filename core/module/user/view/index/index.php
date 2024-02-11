@@ -60,4 +60,4 @@
 	</div>
 </div>
 <?php echo template::formClose(); ?>
-<?php echo template::table([2, 2, 2, 2, 2, 1, 1], $module::$users, ['Identifiant', 'Nom', 'Groupe', 'Profil', 'Étiquettes',  '', ''], ['id' => 'dataTables']); ?>
+<?php echo template::table([3, 2, 2, 2, 2, 1, 1], $module::$users, [ 'Nom', 'Groupe', 'Profil', 'Étiquettes', 'Date dernière vue', '', ''], ['id' => 'dataTables']); ?>

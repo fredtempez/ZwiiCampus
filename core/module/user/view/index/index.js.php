@@ -22,7 +22,7 @@ $(document).ready((function () {
     $("#userFilterGroup, #userFilterFirstName, #userFilterLastName").change(function () {
         $("#userFilterUserForm").submit();
     });
-
+    $.fn.dataTable.moment( 'DD/MM/YYYY' );
     $('#dataTables').DataTable({
         language: {
             url: "core/vendor/datatables/french.json"

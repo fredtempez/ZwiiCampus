@@ -30,7 +30,7 @@ $(document).ready((function () {
         locale: 'fr',
         "columnDefs": [
             {
-                target: 7,
+                target: 6,
                 orderable: false,
                 searchable: false
             }

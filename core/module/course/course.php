@@ -668,7 +668,7 @@ class course extends common
 
                 // Construction du tableau
                 self::$courseUsers[] = [
-                    $userId,
+                    //$userId,
                     $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
                     isset($pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])]['title'])
                     ? $pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])]['title']

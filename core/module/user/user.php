@@ -518,13 +518,15 @@ class user extends common
 
 				// Formatage de la liste
 				self::$users[] = [
-					$userId,
+					//$userId,
 					$this->getData(['user', $userId, 'firstname']) . ' ' . $userLastNames,
 					helper::translate(self::$groups[(int) $this->getData(['user', $userId, 'group'])]),
 					empty($this->getData(['profil', $this->getData(['user', $userId, 'group']), $this->getData(['user', $userId, 'profil']), 'name']))
 					? helper::translate(self::$groups[(int) $this->getData(['user', $userId, 'group'])])
 					: $this->getData(['profil', $this->getData(['user', $userId, 'group']), $this->getData(['user', $userId, 'profil']), 'name']),
 					$this->getData(['user', $userId, 'tags']),
+				    helper::dateUTF8('%d/%m/%Y', $this->getData(['user', $userId, 'accessTimer']), self::$i18nUI),
+					//helper::dateUTF8('%H:%M', $this->getData(['user', $userId, 'accessTimer']), self::$i18nUI),
 					template::button('userEdit' . $userId, [
 						'href' => helper::baseUrl() . 'user/edit/' . $userId,
 						'value' => template::ico('pencil'),
