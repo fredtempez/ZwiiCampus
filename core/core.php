@@ -51,7 +51,7 @@ class common
 	const ACCESS_TIMER = 1800;
 
 	// Numéro de version
-	const ZWII_VERSION = '1.4.25';
+	const ZWII_VERSION = '1.4.26';
 
 	// URL autoupdate
 	const ZWII_UPDATE_URL = 'https://forge.chapril.org/ZwiiCMS-Team/campus-update/raw/branch/master/';
@@ -1402,7 +1402,7 @@ class common
 	public function saveLog($message = '')
 	{
 		// Journalisation
-		$dataLog = helper::dateUTF8('%Y%m%d', time(), self::$siteContent) . ';' . helper::dateUTF8('%H:%M', time(), self::$siteContent) . ';';
+		$dataLog = helper::dateUTF8('%Y%m%d', time(), self::$i18nUI) . ';' . helper::dateUTF8('%H:%M', time(), self::$i18nUI) . ';';
 		$dataLog .= helper::getIp($this->getData(['config', 'connect', 'anonymousIp'])) . ';';
 		$dataLog .= empty($this->getUser('id')) ? 'visitor;' : $this->getUser('id') . ';';
 		$dataLog .= $message ? $this->getUrl() . ';' . $message : $this->getUrl();
