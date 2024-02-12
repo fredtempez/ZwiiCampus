@@ -1427,23 +1427,25 @@ class common
 		$courses = $this->getData([('course')]);
 		$courses = helper::arraycolumn($courses, 'title', 'SORT_ASC');
 		$filter = array();
-		$userId = $this->getUser('id');
 		switch ($this->getUser('group')) {
 			case self::GROUP_ADMIN:
 				// Affiche tout
 				return $courses;
 			case self::GROUP_EDITOR:
 				foreach ($courses as $courseId => $value) {
-					// Affiche les espaces gérés par l'éditeur, les espaces où il participe et les espaces ouverts
+					// Affiche les espaces gérés par l'éditeur, les espaces où il participe et les espaces anonymes
 					if (
+						// le membre est inscrit
 						( $this->getData(['enrolment', $courseId]) &&  array_key_exists($this->getUser('id'),  $this->getData(['enrolment', $courseId])) )
+						// Il est l'auteur
 						|| $this->getUser('id') === $this->getData(['course', $courseId, 'author'])
+						// Le cours est ouvert
 						|| $this->getData(['course', $courseId, 'enrolment']) === self::COURSE_ENROLMENT_GUEST
 					) {
 						$filter[$courseId] = $courses[$courseId];
 					}
 				}
-				return $courses;
+				return $filter;
 			case self::GROUP_MEMBER:
 				foreach ($courses as $courseId => $value) {
 					// Affiche les espaces du participant et les espaces anonymes 
