@@ -224,7 +224,7 @@ class init extends common
 				'1' => [
 					'name' => 'Membre simple',
 					'readonly' => false,
-					'permanent' => true,
+					'permanent' => false,
 					'comment' => 'Accède aux pages réservées',
 					'filemanager' => false,
 					'file' => [
@@ -473,7 +473,7 @@ class init extends common
 				'2' => [
 					'name' => 'Rédacteur',
 					'readonly' => false,
-					'permanent' => false,
+					'permanent' => true,
 					'comment' => 'Tous les droits d\'édition des espaces',
 					'filemanager' => true,
 					'file' => [
