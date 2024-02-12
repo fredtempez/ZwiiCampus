@@ -23,12 +23,6 @@ class course extends common
         'index' => self::GROUP_EDITOR,
         'edit' => self::GROUP_EDITOR,
         'manage' => self::GROUP_EDITOR,
-        'add' => self::GROUP_ADMIN,
-        'delete' => self::GROUP_ADMIN,
-        'category' => self::GROUP_ADMIN,
-        'categoryAdd' => self::GROUP_ADMIN,
-        'categoryEdit' => self::GROUP_ADMIN,
-        'categoryDelete' => self::GROUP_ADMIN,
         'users' => self::GROUP_EDITOR,
         'usersAdd' => self::GROUP_EDITOR,
         'userDelete' => self::GROUP_EDITOR,
@@ -38,7 +32,13 @@ class course extends common
         'userHistoryExport' => self::GROUP_EDITOR,
         'backup' => self::GROUP_EDITOR,
         'restore' => self::GROUP_EDITOR,
-        'clone' => self::GROUP_ADMIN
+        'clone' => self::GROUP_ADMIN,
+        'add' => self::GROUP_ADMIN,
+        'delete' => self::GROUP_ADMIN,
+        'category' => self::GROUP_ADMIN,
+        'categoryAdd' => self::GROUP_ADMIN,
+        'categoryEdit' => self::GROUP_ADMIN,
+        'categoryDelete' => self::GROUP_ADMIN,
     ];
 
     public static $courseAccess = [
@@ -88,41 +88,37 @@ class course extends common
             && $this->getCoursesByUser()
         ) {
             foreach ($this->getCoursesByUser() as $courseId => $courseValue) {
-
                 /**
                  * Filtres :
                  * Groupes acceptés :
                  * admin : tous les espaces
-                 * editor : gère son espace
+                 * editor : gère son espace son espace dans lequel il est inscrit
                  */
-
-                if (
-                    $this->getUser('group') === self::GROUP_EDITOR
-                    && $this->getUser('id') != $this->getData(['course', $courseId, 'author'])
+                if ( 
+                    $this->permissionControl(__FUNCTION__, $courseId)
                 ) {
-                    continue;
-                }
 
-                $author = $this->getData(['course', $courseId, 'author'])
-                    ? sprintf('%s %s', $this->getData(['user', $this->getData(['course', $courseId, 'author']), 'firstname']), $this->getData(['user', $this->getData(['course', $courseId, 'author']), 'lastname']))
-                    : '';
-                $categorieUrl = helper::baseUrl() . 'course/swap/' . $courseId;
-                $info = sprintf('<strong>%s<br /></strong>Auteur : %s<br />Id : <a href="%s" target="_blank">%s<br />', $this->getData(['course', $courseId, 'title']), $author, $categorieUrl, $courseId);
-                $enrolment = sprintf(
-                    'Accès : %s<br />Inscription : %s<br />',
-                    self::$courseAccess[$this->getData(['course', $courseId, 'access'])],
-                    self::$courseEnrolment[$this->getData(['course', $courseId, 'enrolment'])]
-                );
-                self::$courses[] = [
-                    $info,
-                    $this->getData(['course', $courseId, 'description']),
-                    $enrolment,
-                    template::button('categoryUser' . $courseId, [
-                        'href' => helper::baseUrl() . 'course/manage/' . $courseId,
-                        'value' => template::ico('eye'),
-                        'help' => 'Gérer'
-                    ])
-                ];
+                    $author = $this->getData(['course', $courseId, 'author'])
+                        ? sprintf('%s %s', $this->getData(['user', $this->getData(['course', $courseId, 'author']), 'firstname']), $this->getData(['user', $this->getData(['course', $courseId, 'author']), 'lastname']))
+                        : '';
+                    $categorieUrl = helper::baseUrl() . 'course/swap/' . $courseId;
+                    $info = sprintf('<strong>%s<br /></strong>Auteur : %s<br />Id : <a href="%s" target="_blank">%s<br />', $this->getData(['course', $courseId, 'title']), $author, $categorieUrl, $courseId);
+                    $enrolment = sprintf(
+                        'Accès : %s<br />Inscription : %s<br />',
+                        self::$courseAccess[$this->getData(['course', $courseId, 'access'])],
+                        self::$courseEnrolment[$this->getData(['course', $courseId, 'enrolment'])]
+                    );
+                    self::$courses[] = [
+                        $info,
+                        $this->getData(['course', $courseId, 'description']),
+                        $enrolment,
+                        template::button('categoryUser' . $courseId, [
+                            'href' => helper::baseUrl() . 'course/manage/' . $courseId,
+                            'value' => template::ico('eye'),
+                            'help' => 'Gérer'
+                        ])
+                    ];
+                }
             }
         }
 
@@ -142,9 +138,18 @@ class course extends common
     public function add()
     {
 
+        // Accès limité aux admins
+        if (
+            $this->getUser('group') !== self::GROUP_ADMIN
+        ) {
+            // Valeurs en sortie
+            $this->addOutput([
+                'access' => false
+            ]);
+        }
+
         // Soumission du formulaire
         if (
-            $this->getUser('permission', __CLASS__, __FUNCTION__) === true &&
             $this->isPost()
         ) {
             $courseId = uniqid();
@@ -230,10 +235,12 @@ class course extends common
     public function edit()
     {
 
-        // Profil limité au propriétaire ou admis
+        // Espace sélectionné
+        $courseId = $this->getUrl(2);
+
+        // Accès limité aux admins, à l'auteur ou éditeurs inscrits
         if (
-            $this->getUser('group') === self::GROUP_EDITOR
-            && $this->getUser('id') != $this->getData(['course', $this->getUrl(2), 'author'])
+            $this->permissionControl(__FUNCTION__, $courseId) === false
         ) {
             // Valeurs en sortie
             $this->addOutput([
@@ -243,10 +250,10 @@ class course extends common
 
         // Soumission du formulaire
         if (
-            $this->getUser('permission', __CLASS__, __FUNCTION__) === true &&
+            //$this->getUser('permission', __CLASS__, __FUNCTION__) === true &&
             $this->isPost()
         ) {
-            $courseId = $this->getUrl(2);
+
             $this->setData([
                 'course',
                 $courseId,
@@ -310,11 +317,12 @@ class course extends common
     public function manage()
     {
 
-        // Profil limité au propriétaire ou admis
+        // Espace sélectionné
+        $courseId = $this->getUrl(2);
+
+        // Accès limité aux admins, à l'auteur ou éditeurs inscrits
         if (
-            $this->getUser('group') === self::GROUP_EDITOR
-            && $this->getUser('id') != $this->getData(['course', $this->getUrl(2), 'author'])
-            || $this->getUser('permission', __CLASS__, __FUNCTION__) !== true
+            $this->permissionControl(__FUNCTION__, $courseId) === false
         ) {
             // Valeurs en sortie
             $this->addOutput([
@@ -358,46 +366,47 @@ class course extends common
     public function clone ()
     {
 
-        // Profil limité au propriétaire ou admis
+        // Cours à dupliquer
+        $courseId = $this->getUrl(2);
+
+        // Accès limité aux admins, à l'auteur ou éditeurs inscrits
         if (
-            $this->getUser('group') === self::GROUP_EDITOR
-            && $this->getUser('id') != $this->getData(['course', $this->getUrl(2), 'author'])
-            || $this->getUser('permission', __CLASS__, __FUNCTION__) !== true
+            $this->getUser('group') !== self::$actions[__FUNCTION__]
         ) {
             // Valeurs en sortie
             $this->addOutput([
                 'access' => false
             ]);
+        } else {
+            // Id du nouveau cours
+            $target = uniqid();
+
+            // Créer la structure de données
+            mkdir(self::DATA_DIR . $target);
+
+            $this->copyDir(self::DATA_DIR . $courseId, self::DATA_DIR . $target);
+
+            $this->setData(['course', $target, $this->getData(['course', $courseId])]);
+
+            // Valeurs en sortie
+            $this->addOutput([
+                'redirect' => helper::baseUrl() . 'course',
+                'notification' => helper::translate('Espace dupliqué'),
+                'state' => true
+            ]);
         }
-
-        // Cours à dupliquer
-        $courseId = $this->getUrl(2);
-
-        // Id du nouveau cours
-        $target = uniqid();
-
-        // Créer la structure de données
-        mkdir(self::DATA_DIR . $target);
-
-        $this->copyDir(self::DATA_DIR . $courseId, self::DATA_DIR . $target);
-
-        $this->setData(['course', $target, $this->getData(['course', $courseId])]);
-
-        // Valeurs en sortie
-        $this->addOutput([
-            'redirect' => helper::baseUrl() . 'course',
-            'notification' => helper::translate('Espace dupliqué'),
-            'state' => true
-        ]);
     }
 
     public function delete()
     {
+        // Espace sélectionné
         $courseId = $this->getUrl(2);
+
         if (
-            ($this->getUser('permission', __CLASS__, __FUNCTION__) !== true
-                // Le contenu n'existe pas
-                || $this->getData(['course', $courseId]) === null)
+            // Accès limité aux admins
+            $this->getUser('group') !== self::$actions[__FUNCTION__]
+            // Le contenu n'existe pas
+            || $this->getData(['course', $courseId]) === null
         ) {
             // Valeurs en sortie
             $this->addOutput([
@@ -434,40 +443,55 @@ class course extends common
      */
     public function category()
     {
-        $categories = $this->getData(['category']);
-        ksort($categories);
-        foreach ($categories as $categoryId => $categoryTitle) {
-            self::$courseCategories[] = [
-                $categoryId,
-                $categoryTitle,
-                template::button('categoryEdit' . $categoryId, [
-                    'href' => helper::baseUrl() . 'course/categoryEdit/' . $categoryId,
-                    'value' => template::ico('pencil'),
-                    'help' => 'Éditer'
-                ]),
-                template::button('courseDelete' . $categoryId, [
-                    'class' => 'categoryDelete buttonRed',
-                    'href' => helper::baseUrl() . 'course/categoryDelete/' . $categoryId,
-                    'value' => template::ico('trash'),
-                    'help' => 'Supprimer'
-                ])
-            ];
+
+        if (
+            // Accès limité aux admins
+            $this->getUser('group') !== self::$actions[__FUNCTION__]
+        ) {
+            // Valeurs en sortie
+            $this->addOutput([
+                'access' => false
+            ]);
+        } else {
+            $categories = $this->getData(['category']);
+            ksort($categories);
+            foreach ($categories as $categoryId => $categoryTitle) {
+                self::$courseCategories[] = [
+                    $categoryId,
+                    $categoryTitle,
+                    template::button('categoryEdit' . $categoryId, [
+                        'href' => helper::baseUrl() . 'course/categoryEdit/' . $categoryId,
+                        'value' => template::ico('pencil'),
+                        'help' => 'Éditer'
+                    ]),
+                    template::button('courseDelete' . $categoryId, [
+                        'class' => 'categoryDelete buttonRed',
+                        'href' => helper::baseUrl() . 'course/categoryDelete/' . $categoryId,
+                        'value' => template::ico('trash'),
+                        'help' => 'Supprimer'
+                    ])
+                ];
+            }
+            // Valeurs en sortie
+            $this->addOutput([
+                'title' => helper::translate('Catégories'),
+                'view' => 'category'
+            ]);
         }
-        // Valeurs en sortie
-        $this->addOutput([
-            'title' => helper::translate('Catégories'),
-            'view' => 'category'
-        ]);
     }
 
     public function categoryAdd()
     {
 
-        // Soumission du formulaire
         if (
-            $this->getUser('permission', __CLASS__, __FUNCTION__) === true &&
-            $this->isPost()
+            // Accès limité aux admins
+            $this->getUser('group') !== self::$actions[__FUNCTION__]
         ) {
+            // Valeurs en sortie
+            $this->addOutput([
+                'access' => false
+            ]); // Soumission du formulaire
+        } elseif ($this->isPost()) {
             $categoryId = $this->getInput('categoryAddTitle', helper::FILTER_ID, true);
             $this->setData([
                 'category',
@@ -479,22 +503,27 @@ class course extends common
                 'redirect' => helper::baseUrl() . 'course/category',
                 'notification' => helper::translate('Catégorie créée'),
                 'state' => true
-            ]);
-        }
+            ]);        // Valeurs en sortie
 
-        // Valeurs en sortie
+        }
         $this->addOutput([
             'title' => helper::translate('Ajouter une catégorie'),
             'view' => 'categoryAdd'
         ]);
+
     }
 
     public function categoryEdit()
     {
-
-        // Soumission du formulaire
         if (
-            $this->getUser('permission', __CLASS__, __FUNCTION__) === true &&
+            // Accès limité aux admins
+            $this->getUser('group') !== self::$actions[__FUNCTION__]
+        ) {
+            // Valeurs en sortie
+            $this->addOutput([
+                'access' => false
+            ]); // Soumission du formulaire
+        } elseif (
             $this->isPost()
         ) {
             $categoryId = $this->getUrl(2);
@@ -521,9 +550,9 @@ class course extends common
     public function categoryDelete()
     {
 
-        // Accès refusé
         if (
-            $this->getUser('permission', __CLASS__, __FUNCTION__) !== true
+            // Accès limité aux admins
+            $this->getUser('group') !== self::$actions[__FUNCTION__]
         ) {
             // Valeurs en sortie
             $this->addOutput([
@@ -554,11 +583,12 @@ class course extends common
     public function users()
     {
 
-        // Profil limité au propriétaire ou admis
+        $courseId = $this->getUrl(2);
+
+        // Accès limité au propriétaire, admin ou éditeurs isncrits
+
         if (
-            $this->getUser('group') === self::GROUP_EDITOR
-            && $this->getUser('id') != $this->getData(['course', $this->getUrl(2), 'author'])
-            || $this->getUser('permission', __CLASS__, __FUNCTION__) !== true
+            $this->permissionControl(__FUNCTION__, $courseId) === false
         ) {
             // Valeurs en sortie
             $this->addOutput([
@@ -718,20 +748,18 @@ class course extends common
     public function usersAdd()
     {
 
-        // Profil limité au propriétaire ou admis
+        // Contenu sélectionné
+        $courseId = $this->getUrl(2);
+
+        // Accès limité au propriétaire ou éditeurs inscrits ou admin
         if (
-            $this->getUser('group') === self::GROUP_EDITOR
-            && $this->getUser('id') != $this->getData(['course', $this->getUrl(2), 'author'])
-            || $this->getUser('permission', __CLASS__, __FUNCTION__) !== true
+            $this->permissionControl(__FUNCTION__, $courseId) === false
         ) {
             // Valeurs en sortie
             $this->addOutput([
                 'access' => false
             ]);
         }
-
-        // Contenu sélectionné
-        $courseId = $this->getUrl(2);
 
         // Inscription des utilisateurs cochés
         if (
@@ -861,12 +889,12 @@ class course extends common
      */
     public function userDelete()
     {
+        // Contenu sélectionné
+        $courseId = $this->getUrl(2);
 
-        // Profil limité au propriétaire ou admis
+        // Accès limité au propriétaire ou admin ou éditeurs inscrits
         if (
-            $this->getUser('group') === self::GROUP_EDITOR
-            && $this->getUser('id') != $this->getData(['course', $this->getUrl(2), 'author'])
-            || $this->getUser('permission', __CLASS__, __FUNCTION__) !== true
+            $this->permissionControl(__FUNCTION__, $courseId) === false
         ) {
             // Valeurs en sortie
             $this->addOutput([
@@ -891,6 +919,16 @@ class course extends common
 
         // Contenu sélectionné
         $courseId = $this->getUrl(2);
+
+        // Accès limité aux admins, à l'auteur ou éditeurs inscrits
+        if (
+            $this->permissionControl(__FUNCTION__, $courseId) === false
+        ) {
+            // Valeurs en sortie
+            $this->addOutput([
+                'access' => false
+            ]);
+        }
 
         // Inscription des utilisateurs cochés
         if (
@@ -1119,7 +1157,19 @@ class course extends common
     public function userHistory()
     {
 
+        // Espace sélectionné
         $courseId = $this->getUrl(2);
+
+        // Accès limité au propriétaire ou éditeurs inscrits ou admin
+        if (
+            $this->permissionControl(__FUNCTION__, $courseId) === false
+        ) {
+            // Valeurs en sortie
+            $this->addOutput([
+                'access' => false
+            ]);
+        }
+
         $userId = $this->getUrl(3);
         $h = $this->getData(['enrolment', $courseId, $userId, 'history']);
 
@@ -1195,6 +1245,16 @@ class course extends common
     {
 
         $courseId = $this->getUrl(2);
+
+        // Accès limité au propriétaire ou éditeurs inscrits ou admin
+        if (
+            $this->permissionControl(__FUNCTION__, $courseId) === false
+        ) {
+            // Valeurs en sortie
+            $this->addOutput([
+                'access' => false
+            ]);
+        }
 
         self::$courseUsers = [
             0 => ['UserId', 'Prénom', 'Nom', 'Page Titre', 'Consultation Date', 'Consultation Heure', 'Progression']
@@ -1292,6 +1352,16 @@ class course extends common
 
         $courseId = $this->getUrl(2);
         $userId = $this->getUrl(3);
+
+        // Accès limité au propriétaire ou éditeur inscrit ou admin
+        if (
+            $this->permissionControl(__FUNCTION__, $courseId) === false
+        ) {
+            // Valeurs en sortie
+            $this->addOutput([
+                'access' => false
+            ]);
+        }
 
         // Traitement de l'historique
         $h = $this->getData(['enrolment', $courseId, $userId, 'history']);
@@ -1487,18 +1557,18 @@ class course extends common
     public function backup()
     {
 
-        // Profil limité au propriétaire ou admis
+        // Espace sélectionné
+        $courseId = $this->getUrl(2);
+
+        // Accès limité aux admins, à l'auteur ou éditeurs inscrits
         if (
-            $this->getUser('group') === self::GROUP_EDITOR
-            && $this->getUser('id') != $this->getData(['course', $this->getUrl(2), 'author'])
-            || $this->getUser('permission', __CLASS__, __FUNCTION__) !== true
+            $this->permissionControl(__FUNCTION__, $courseId) === false
         ) {
             // Valeurs en sortie
             $this->addOutput([
                 'access' => false
             ]);
         } else {
-            $courseId = $this->getUrl(2);
 
             // Participants avec historiques
             $enrolment = $this->getData(['enrolment', $courseId]);
@@ -1551,9 +1621,22 @@ class course extends common
 
     public function restore()
     {
+
+        // Espace sélectionné
+        $courseId = $this->getUrl(2);
+
+        // Accès limité aux admins, à l'auteur ou éditeurs inscrits
+        if (
+            $this->permissionControl(__FUNCTION__, $courseId) === false
+        ) {
+            // Valeurs en sortie
+            $this->addOutput([
+                'access' => false
+            ]);
+        }
+
         // Soumission du formulaire
         if (
-            $this->getUser('permission', __CLASS__, __FUNCTION__) === true &&
             $this->isPost()
         ) {
 
@@ -1663,36 +1746,31 @@ class course extends common
     }
 
 
+
     /**
-     * Autorise l'accès à un contenu
-     * @param @return bool le user a le droit d'entrée dans le contenu
-     * @param string $userId identifiant de l'utilisateur
-     * @param string $courseId identifiant du contenu sollicité
+     * Retourne false quand l'utilisateur ne dispose pas des droits d'accès à la fonction
+     * Règles d'accès à un espace :
+     * Admin : tous les droits
+     * Editor : Inscrits dans le cours ou propriétaire
      */
-    private function courseIsUserEnroled($courseId)
+    public function permissionControl($funtion, $courseId)
     {
-        $userId = $this->getUser('id');
-        $group = $userId ? $this->getData(['user', $userId, 'group']) : null;
-        switch ($group) {
+        switch (self::$actions[$funtion]) {
             case self::GROUP_ADMIN:
-                $r = true;
-                break;
+                return ($this->getUser('group') === self::$actions[$funtion]);
             case self::GROUP_EDITOR:
-                $r = in_array($userId, array_keys($this->getData(['enrolment', $courseId])));
-                break;
-            case self::GROUP_MEMBER:
-                $r = in_array($userId, array_keys($this->getData(['enrolment', $courseId])));
-                break;
-            // Visiteur non connecté
-            case self::GROUP_VISITOR:
-            case null:
-                $r = $this->getData(['course', $courseId, 'enrolment']) === self::COURSE_ENROLMENT_GUEST;
-                break;
+                return (
+                    $this->getUser('group') >= self::$actions[$funtion]
+                    && $this->getData(['enrolment', $courseId])
+                    && ($this->getUser('id') === $this->getData(['course', $courseId, 'author'])
+                        || array_key_exists($this->getUser('id'), $this->getData(['enrolment', $courseId])) )
+                );
             default:
-                $r = false;
+                return false;
         }
-        return $r;
     }
+
+
 
     /**
      * Autorise l'accès à un contenu
@@ -1750,6 +1828,37 @@ class course extends common
                 'history' => [],
             ]
         ]);
+    }
+
+    /**
+     * Autorise l'accès à un contenu
+     * @param @return bool le user a le droit d'entrée dans le contenu
+     * @param string $userId identifiant de l'utilisateur
+     * @param string $courseId identifiant du contenu sollicité
+     */
+    private function courseIsUserEnroled($courseId)
+    {
+        $userId = $this->getUser('id');
+        $group = $userId ? $this->getData(['user', $userId, 'group']) : null;
+        switch ($group) {
+            case self::GROUP_ADMIN:
+                $r = true;
+                break;
+            case self::GROUP_EDITOR:
+                $r = in_array($userId, array_keys($this->getData(['enrolment', $courseId])));
+                break;
+            case self::GROUP_MEMBER:
+                $r = in_array($userId, array_keys($this->getData(['enrolment', $courseId])));
+                break;
+            // Visiteur non connecté
+            case self::GROUP_VISITOR:
+            case null:
+                $r = $this->getData(['course', $courseId, 'enrolment']) === self::COURSE_ENROLMENT_GUEST;
+                break;
+            default:
+                $r = false;
+        }
+        return $r;
     }
 
 }

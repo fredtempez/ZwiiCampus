@@ -7,46 +7,53 @@
         ]); ?>
     </div>
 </div>
-<div class="row">
-    <div class="col2 offset1">
-        <?php echo template::button('categoryUser' . $this->getUrl(2), [
-            'href' => helper::baseUrl() . 'course/users/' . $this->getUrl(2),
-            'value' => 'Participants',
-            'ico' => 'users'
-        ]); ?>
-    </div>
-    <div class="col2">
-        <?php echo template::button('courseManageEdit' . $this->getUrl(2), [
+<div class="row textAlignCenter">
+    <?php if ($module->permissionControl('users', $this->getUrl(2))): ?>
+        <div class="col2 offset1">
+            <?php echo template::button('categoryUser' . $this->getUrl(2), [
+                'href' => helper::baseUrl() . 'course/users/' . $this->getUrl(2),
+                'value' => 'Participants',
+                'ico' => 'users'
+            ]); ?>
+        </div>
+    <?php endif; ?>
+    <?php if ($module->permissionControl('edit', $this->getUrl(2))): ?>
+        <div class="col2">
+            <?php echo template::button('courseManageEdit' . $this->getUrl(2), [
                 'href' => helper::baseUrl() . 'course/edit/' . $this->getUrl(2),
                 'value' => 'Éditer',
                 'ico' => 'pencil'
             ]); ?>
-    </div>
-    <div class="col2">
-        <?php echo
-            template::button('courseManageDuplicate' . $this->getUrl(2), [
-                'href' => helper::baseUrl() . 'course/clone/' . $this->getUrl(2),
-                'value' => 'Cloner',
-                'ico' => 'clone'
-            ]); ?>
-    </div>
-    <div class="col2">
-        <?php echo
-            template::button('courseManageDownload' . $this->getUrl(2), [
+        </div>
+    <?php endif; ?>
+    <?php if ($module->permissionControl('backup', $this->getUrl(2))): ?>
+        <div class="col2">
+            <?php echo template::button('courseManageDownload' . $this->getUrl(2), [
                 'href' => helper::baseUrl() . 'course/backup/' . $this->getUrl(2),
                 'value' => 'Sauvegarder',
                 'ico' => 'download-cloud'
             ]); ?>
-    </div>
-    <div class="col2 ">
-        <?php echo
-            template::button('courseManageDelete' . $this->getUrl(2), [
+        </div>
+    <?php endif; ?>
+    <?php if ($module->permissionControl('clone', $this->getUrl(2))): ?>
+        <div class="col2">
+            <?php echo template::button('courseManageDuplicate' . $this->getUrl(2), [
+                'href' => helper::baseUrl() . 'course/clone/' . $this->getUrl(2),
+                'value' => 'Cloner',
+                'ico' => 'clone'
+            ]); ?>
+        </div>
+    <?php endif; ?>
+    <?php if ($module->permissionControl('delete', $this->getUrl(2))): ?>
+        <div class="col2 ">
+            <?php echo template::button('courseManageDelete' . $this->getUrl(2), [
                 'class' => 'courseDelete buttonRed',
                 'href' => helper::baseUrl() . 'course/delete/' . $this->getUrl(2),
                 'value' => 'Supprimer',
                 'ico' => 'trash'
             ]); ?>
-    </div>
+        </div>
+    <?php endif; ?>
     <div class="row">
         <div class="col12">
             <div class="block">
@@ -121,11 +128,11 @@
                 </div>
                 <div class="row">
                     <div class="col4">
-                            <?php echo template::select('courseManageEnrolment', $module::$courseEnrolment, [
-                                'label' => 'Participation',
-                                'selected' => $this->getdata(['course', $this->getUrl(2), 'enrolment']),
-                                'disabled' => true,
-                            ]); ?>
+                        <?php echo template::select('courseManageEnrolment', $module::$courseEnrolment, [
+                            'label' => 'Participation',
+                            'selected' => $this->getdata(['course', $this->getUrl(2), 'enrolment']),
+                            'disabled' => true,
+                        ]); ?>
                     </div>
                     <div class="col4">
                         <?php echo template::text('courseManageEnrolmentKey', [
