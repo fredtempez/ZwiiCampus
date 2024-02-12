@@ -1057,7 +1057,7 @@ class layout extends common
             $rightItems = '';
             if (
                 (
-                    $this->getUser('group') === self::GROUP_MEMBER
+                    $this->getUser('group') === self::GROUP_EDITOR
                     && $this->getUser('permission', 'filemanager')
                 )
                 || $this->getUser('group') == self::GROUP_ADMIN
