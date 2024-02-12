@@ -1447,7 +1447,7 @@ class common
 				return $courses;
 			case self::GROUP_MEMBER:
 				foreach ($courses as $courseId => $value) {
-					// Affiche les espaces du participant et les espaces anonymes
+					// Affiche les espaces du participant et les espaces anonymes 
 					$students = $this->getData(['enrolment', $courseId]);
 					if (
 						isset($students[$userId]) === true ||
@@ -1461,7 +1461,6 @@ class common
 				foreach ($courses as $courseId => $value) {
 					// Affiche les espaces anonymes
 					if ($this->getData(['course', $courseId, 'enrolment']) === self::COURSE_ENROLMENT_GUEST) {
-						echo $this->getData(['course', $courseId, 'access']) ;
 						$filter[$courseId] = $courses[$courseId];
 					}
 				}
