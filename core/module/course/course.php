@@ -1755,12 +1755,12 @@ class course extends common
      */
     public function permissionControl($funtion, $courseId)
     {
-        switch (self::$actions[$funtion]) {
+        switch ($this->getUser('group') ) {
             case self::GROUP_ADMIN:
-                return ($this->getUser('group') === self::$actions[$funtion]);
+                return true;
             case self::GROUP_EDITOR:
                 return (
-                    $this->getUser('group') >= self::$actions[$funtion]
+                    $this->getUser('group') === self::$actions[$funtion]
                     && $this->getData(['enrolment', $courseId])
                     && ($this->getUser('id') === $this->getData(['course', $courseId, 'author'])
                         || array_key_exists($this->getUser('id'), $this->getData(['enrolment', $courseId])) )
