@@ -14,25 +14,39 @@
         ]) ?>
     </div>
 </div>
+<div class="row">
+    <div class="col10 offset1">
+        <div id="graph">
+        </div>
+    </div>
+</div>
 <?php if ($module::$userHistory): ?>
     <div class="row">
         <div class="col4 offset2">
             <?php if ($this->getData(['course', $this->getUrl(2), 'access']) === self::COURSE_ACCESS_DATE): ?>
                 <p>Espace ouvert le :
-                    <?php echo helper::dateUTF8('%d %B %Y %H:%M', $this->getData(['course', $this->getUrl(2), 'openingDate'])); ?></p>
+                    <?php echo helper::dateUTF8('%d %B %Y %H:%M', $this->getData(['course', $this->getUrl(2), 'openingDate'])); ?>
+                </p>
                 <p>Espace fermé le :
-                    <?php echo helper::dateUTF8('%d %B %Y %H:%M', $this->getData(['course', $this->getUrl(2), 'closingDate'])); ?></p>
-                <?php endif;?>
+                    <?php echo helper::dateUTF8('%d %B %Y %H:%M', $this->getData(['course', $this->getUrl(2), 'closingDate'])); ?>
+                </p>
+            <?php endif; ?>
         </div>
         <div class="col4">
-            <p>Commencé le : <?php echo $module::$userStat['floor'];?></p>
-            <p>Terminé le : <?php echo $module::$userStat['top'];?></p>
-            <p>Temps passé : <?php echo $module::$userStat['time'];?></p>
+            <p>Commencé le :
+                <?php echo $module::$userStat['floor']; ?>
+            </p>
+            <p>Terminé le :
+                <?php echo $module::$userStat['top']; ?>
+            </p>
+            <p>Temps passé :
+                <?php echo $module::$userStat['time']; ?>
+            </p>
         </div>
     </div>
     <div class="row textAlignCenter">
         <div class="col8">
-            <?php echo template::table([6, 3, 3], $module::$userHistory, ['Page', 'Début de Consultation', 'Temps consultation']);?>
+            <?php echo template::table([6, 3, 3], $module::$userHistory, ['Page', 'Début de Consultation', 'Temps consultation']); ?>
         </div>
     </div>
 <?php else: ?>

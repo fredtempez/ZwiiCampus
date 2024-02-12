@@ -13,4 +13,30 @@
 
 $(document).ready((function () {
 
+    var dataX = <?php echo json_encode(array_map(function ($item) { return $item[0]; }, $module::$userGraph)); ?>;
+    var dataY = <?php echo json_encode(array_map(function ($item) { return $item[1];}, $module::$userGraph)); ?>;
+
+    var data = [{
+        x: dataX,
+        y: dataY,
+        mode: 'markers', // Mode de tracé des points
+        type: 'scatter' // Type de graphe
+    }];
+
+    // Créer un objet layout et définir les propriétés du titre, des axes, etc.
+    var layout = {
+        title: 'Consultations par jour', // Titre du graphe
+        xaxis: {
+            title: 'Jours', // Titre de l'axe des abscisses
+            type: 'date' // Type de l'axe des abscisses
+        },
+        yaxis: {
+            title: 'Temps (en secondes)', // Titre de l'axe des ordonnées
+            type: 'linear' // Type de l'axe des ordonnées
+        }
+    };
+
+    // Créer et afficher le graphe dans l'élément <div>
+    Plotly.newPlot('graph', data, layout, {locale: 'fr-CH'});
+
 }));

@@ -76,6 +76,8 @@ class course extends common
 
     public static $userHistory = [];
 
+    public static $userGraph = [];
+
     public static $userStat = [];
 
     public function index()
@@ -94,7 +96,7 @@ class course extends common
                  * admin : tous les espaces
                  * editor : gère son espace son espace dans lequel il est inscrit
                  */
-                if ( 
+                if (
                     $this->permissionControl(__FUNCTION__, $courseId)
                 ) {
 
@@ -1206,6 +1208,12 @@ class course extends common
                     $time,
                     ($diff < 1800) ? sprintf("%d' %d''", floor($diff / 60), $diff % 60) : "Non significatif",
                 ];
+                if ($diff < 1800) {
+                    self::$userGraph[] = [
+                        helper::dateUTF8('%Y-%m-%d', $time),
+                        $diff,
+                    ];
+                }
                 $lastView = $time;
                 $floorTime = isset($floorTime) && $floorTime < $time ? $floorTime : $time;
                 $topTime = isset($topTime) && $topTime > $time ? $topTime : $time;
@@ -1236,7 +1244,10 @@ class course extends common
         // Valeurs en sortie
         $this->addOutput([
             'title' => helper::translate('Historique ') . $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
-            'view' => 'userHistory'
+            'view' => 'userHistory',
+            'vendor' => [
+                "plotly"
+            ]
         ]);
 
     }
@@ -1755,15 +1766,15 @@ class course extends common
      */
     public function permissionControl($funtion, $courseId)
     {
-        switch ($this->getUser('group') ) {
+        switch ($this->getUser('group')) {
             case self::GROUP_ADMIN:
                 return true;
             case self::GROUP_EDITOR:
                 return (
                     $this->getUser('group') === self::$actions[$funtion]
-                    && 
-                    ( $this->getData(['enrolment', $courseId]) && ($this->getUser('id') === $this->getData(['course', $courseId, 'author']) )
-                    || array_key_exists($this->getUser('id'), $this->getData(['enrolment', $courseId])) )
+                    &&
+                    ($this->getData(['enrolment', $courseId]) && ($this->getUser('id') === $this->getData(['course', $courseId, 'author']))
+                        || array_key_exists($this->getUser('id'), $this->getData(['enrolment', $courseId])))
                 );
             default:
                 return false;
