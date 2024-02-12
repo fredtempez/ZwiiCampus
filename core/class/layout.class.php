@@ -1060,7 +1060,7 @@ class layout extends common
                     $this->getUser('group') === self::GROUP_EDITOR
                     && $this->getUser('permission', 'filemanager')
                 )
-                || $this->getUser('group') == self::GROUP_ADMIN
+                || $this->getUser('group') === self::GROUP_ADMIN
             ) {
                 $rightItems .= '<li>' . template::ico('folder', [
                     'help' => 'Fichiers',
