@@ -499,10 +499,10 @@ class layout extends common
             $this->getUser('group') === self::GROUP_MEMBER
             && $this->getData(['theme', 'menu', 'selectSpace']) === true
         ) {
-            if ($this->getCoursesByUser()) {
+            if ($this->getCoursesByProfil()) {
                 $itemsRight .= '<li><select id="menuSelectCourse" >';
                 $itemsRight .= '<option name="' . helper::translate('Accueil') . '" value="' . helper::baseUrl(true) . 'course/swap/home" ' . ('home' === self::$siteContent ? 'selected' : '') . '>' . helper::translate('Accueil') . '</option>';
-                foreach ($this->getCoursesByUser() as $courseId => $value) {
+                foreach ($this->getCoursesByProfil() as $courseId => $value) {
                     $itemsRight .= '<option name="' . $this->getData(['course', $courseId, 'title']) . '" value="' . helper::baseUrl(true) . 'course/swap/' . $courseId . '" ' . ($courseId === self::$siteContent ? 'selected' : '') . '>' . $this->getData(['course', $courseId, 'title']) . '</option>';
                 }
                 $itemsRight .= '</select></li>';
@@ -921,10 +921,10 @@ class layout extends common
              * Les enseignants les contenus dont ils sont auteurs
              */
             if ($this->getUser('group') >= self::GROUP_EDITOR) {
-                if ($this->getCoursesByUser()) {
+                if ($this->getCoursesByProfil()) {
                     $leftItems .= '<li><select id="barSelectCourse" >';
                     $leftItems .= '<option name="' . helper::translate('Accueil') . '" value="' . helper::baseUrl(true) . 'course/swap/home" ' . ('home' === self::$siteContent ? 'selected' : '') . '>' . helper::translate('Accueil') . '</option>';
-                    foreach ($this->getCoursesByUser() as $courseId => $value) {
+                    foreach ($this->getCoursesByProfil() as $courseId => $value) {
                         $leftItems .= '<option name="' . $this->getData(['course', $courseId, 'title']) . '" value="' . helper::baseUrl(true) . 'course/swap/' . $courseId . '" ' . ($courseId === self::$siteContent ? 'selected' : '') . '>' . $this->getData(['course', $courseId, 'title']) . '</option>';
                     }
                     $leftItems .= '</select></li>';

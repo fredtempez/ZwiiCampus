@@ -1422,7 +1422,7 @@ class common
 	 * CETTE FONCTION N'EST PAS UTILISEE
 	 * 
 	 */
-	public function getCoursesByUser()
+	public function getCoursesByProfil()
 	{
 		$courses = $this->getData([('course')]);
 		$courses = helper::arraycolumn($courses, 'title', 'SORT_ASC');
@@ -1434,12 +1434,11 @@ class common
 				return $courses;
 			case self::GROUP_EDITOR:
 				foreach ($courses as $courseId => $value) {
-					$students = $this->getData(['enrolment', $courseId]);
 					// Affiche les espaces gérés par l'éditeur, les espaces où il participe et les espaces ouverts
 					if (
-						isset($students[$userId]) === true ||
-						$this->getData(['course', $courseId, 'author']) === $userId ||
-						$this->getData(['course', $courseId, 'enrolment']) === self::COURSE_ENROLMENT_GUEST
+						( $this->getData(['enrolment', $courseId]) &&  array_key_exists($this->getUser('id'),  $this->getData(['enrolment', $courseId])) )
+						|| $this->getUser('id') === $this->getData(['course', $courseId, 'author'])
+						|| $this->getData(['course', $courseId, 'enrolment']) === self::COURSE_ENROLMENT_GUEST
 					) {
 						$filter[$courseId] = $courses[$courseId];
 					}
@@ -1448,10 +1447,9 @@ class common
 			case self::GROUP_MEMBER:
 				foreach ($courses as $courseId => $value) {
 					// Affiche les espaces du participant et les espaces anonymes 
-					$students = $this->getData(['enrolment', $courseId]);
 					if (
-						isset($students[$userId]) === true ||
-						$this->getData(['course', $courseId, 'enrolment']) === self::COURSE_ENROLMENT_GUEST
+						($this->getData(['enrolment', $courseId]) && array_key_exists($this->getUser('id'), $this->getData(['enrolment', $courseId])) )
+						|| $this->getData(['course', $courseId, 'enrolment']) === self::COURSE_ENROLMENT_GUEST
 					) {
 						$filter[$courseId] = $courses[$courseId];
 					}

@@ -85,9 +85,9 @@ class course extends common
         if (
             $this->getUser('id')
             && $this->getUser('group')
-            && $this->getCoursesByUser()
+            && $this->getCoursesByProfil()
         ) {
-            foreach ($this->getCoursesByUser() as $courseId => $courseValue) {
+            foreach ($this->getCoursesByProfil() as $courseId => $courseValue) {
                 /**
                  * Filtres :
                  * Groupes acceptés :
@@ -1761,9 +1761,9 @@ class course extends common
             case self::GROUP_EDITOR:
                 return (
                     $this->getUser('group') === self::$actions[$funtion]
-                    && $this->getData(['enrolment', $courseId])
-                    && ($this->getUser('id') === $this->getData(['course', $courseId, 'author'])
-                        || array_key_exists($this->getUser('id'), $this->getData(['enrolment', $courseId])) )
+                    && 
+                    ( $this->getData(['enrolment', $courseId]) && ($this->getUser('id') === $this->getData(['course', $courseId, 'author']) )
+                    || array_key_exists($this->getUser('id'), $this->getData(['enrolment', $courseId])) )
                 );
             default:
                 return false;
