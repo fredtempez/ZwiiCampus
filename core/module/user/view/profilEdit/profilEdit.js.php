@@ -19,7 +19,7 @@ $(document).ready(function () {
     }
 
     // Désactive les éléments liés aux espaces
-    if (!$("#profilEditCourseIndex").prop("checked")) {
+    if (!$("#profilEditCourseIndex, #profilEditCourseAuthor").prop("checked")) {
         $("#courseContainer").slideUp();
     } else {
         $("#courseContainer").slideDown();
@@ -71,7 +71,7 @@ $(document).ready(function () {
     });
 
     // Gérer l'évènement sur les options des espaces
-    $("#profilEditCourseIndex").change(function () {
+    $("#profilEditCourseIndex, #profilEditCourseAuthor").change(function () {
         if (!$(this).is(':checked')) {
             $('.courseOptions input[type="checkbox"]').prop('checked', false);
             $("#courseContainer").slideUp();

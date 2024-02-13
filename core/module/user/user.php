@@ -707,8 +707,15 @@ class user extends common
 					'edit' => $this->getInput('profilEditUserEdit', helper::FILTER_BOOLEAN),
 				],
 				'course' => [
-					'index' => $this->getInput('profilEditCourseIndex', helper::FILTER_BOOLEAN),
-					'manage' => $this->getInput('profilEditCourseIndex', helper::FILTER_BOOLEAN), // Les deux fonctions sont groupées
+					/**
+					 * author vaut false lorsque l'éditeur a les droits de modifier uniquement ses espaces.
+					 * author vaut true lorsque l'éditeur a les droits de modifier uniquement TOUS les espaces.
+					 */
+					'author' => $this->getInput('profilEditCourseAuthor', helper::FILTER_BOOLEAN),
+					// On autorise l'accès à ces deux pages
+					'index' => $this->getInput('profilEditCourseIndex', helper::FILTER_BOOLEAN) && $this->getInput('profilEditCourseAuthor', helper::FILTER_BOOLEAN),
+					'manage' => $this->getInput('profilEditCourseIndex', helper::FILTER_BOOLEAN) && $this->getInput('profilEditCourseAuthor', helper::FILTER_BOOLEAN), // Les deux fonctions sont groupées
+					// La suite
 					'users' => $this->getInput('profilEditCourseUsers', helper::FILTER_BOOLEAN),
 					'userHistory' => $this->getInput('profilEditCourseUserHistory', helper::FILTER_BOOLEAN),
 					'userHistoryExport' => $this->getInput('profilEditCourseUserExport', helper::FILTER_BOOLEAN),

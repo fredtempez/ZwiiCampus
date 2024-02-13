@@ -24,8 +24,8 @@ class course extends common
         'edit' => self::GROUP_EDITOR, // Fait
         'manage' => self::GROUP_EDITOR, // Fait
         'users' => self::GROUP_EDITOR, // fait
-        'usersAdd' => self::GROUP_EDITOR,//Fait
-        'usersDelete' => self::GROUP_EDITOR,//Fait
+        'usersAdd' => self::GROUP_EDITOR, //Fait
+        'usersDelete' => self::GROUP_EDITOR, //Fait
         'usersHistoryExport' => self::GROUP_EDITOR, //fait
         'userDelete' => self::GROUP_EDITOR, //Fait
         'userHistory' => self::GROUP_EDITOR, //Fait
@@ -33,7 +33,7 @@ class course extends common
         'backup' => self::GROUP_EDITOR, // Fait
         'restore' => self::GROUP_EDITOR, //Fait
         'clone' => self::GROUP_ADMIN,
-        'add' => self::GROUP_ADMIN, 
+        'add' => self::GROUP_ADMIN,
         'delete' => self::GROUP_ADMIN,
         'category' => self::GROUP_ADMIN,
         'categoryAdd' => self::GROUP_ADMIN,
@@ -1212,7 +1212,7 @@ class course extends common
                     self::$userGraph[] = [
                         helper::dateUTF8('%Y-%m-%d %H:%M:%S', $time),
                         $diff,
-                        html_entity_decode($pages[$pageId]['title']) . ' ('. helper::dateUTF8('%M\'%S"', $diff) . ')'
+                        html_entity_decode($pages[$pageId]['title']) . ' (' . helper::dateUTF8('%M\'%S"', $diff) . ')'
                     ];
                 }
                 $lastView = $time;
@@ -1769,19 +1769,27 @@ class course extends common
      * Admin : tous les droits
      * Editor : Inscrits dans le cours ou propriétaire
      */
-    public function permissionControl($funtion, $courseId)
+    public function permissionControl($function, $courseId)
     {
         switch ($this->getUser('group')) {
             case self::GROUP_ADMIN:
                 return true;
             case self::GROUP_EDITOR:
                 return (
-                    $this->getUser('group') === self::$actions[$funtion]
+                    $this->getUser('permission', __CLASS__, $function)
                     &&
-                    ($this->getData(['enrolment', $courseId]) && ($this->getUser('id') === $this->getData(['course', $courseId, 'author']))
-                    || (// permission de gérer tous les espaces dans lesquels l'éditeur est inscrit. 
-                        $this->getUser('permission', __CLASS__, 'index') === true &&
-                        array_key_exists($this->getUser('id'), $this->getData(['enrolment', $courseId]))) )
+                    $this->getUser('group') === self::$actions[$function]
+                    &&
+                        // Permission d'accèder aux espaces dans lesquels le membre auteur
+                    (
+                        $this->getData(['enrolment', $courseId]) && ($this->getUser('id') === $this->getData(['course', $courseId, 'author']))
+                    )
+                    || 
+                    (  // Permission d'accèder aux esapces dans lesquels le membre est inscrits avec les 
+                        $this->getData(['enrolment', $courseId])
+                        && $this->getUser('permission', __CLASS__, 'author') === true
+                        && array_key_exists($this->getUser('id'), $this->getData(['enrolment', $courseId]))
+                    )
                 );
             default:
                 return false;
