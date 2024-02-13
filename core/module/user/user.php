@@ -705,6 +705,9 @@ class user extends common
 				],
 				'user' => [
 					'edit' => $this->getInput('profilEditUserEdit', helper::FILTER_BOOLEAN),
+				],
+				'course' => [
+					'index' => $this->getInput('profilEditCourseIndex', helper::FILTER_BOOLEAN),
 				]
 			];
 

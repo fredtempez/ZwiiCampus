@@ -83,6 +83,22 @@
     <div class="col12">
         <div class="block">
             <h4>
+                <?php echo helper::translate('Gestion des espaces'); ?>
+            </h4>
+            <div class="row">
+                <div class="col3">
+                    <?php echo template::checkbox('profilEditCourseIndex', true, 'Gérer tous les espaces', [
+                        'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'course', 'index'])
+                    ]); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col12">
+        <div class="block">
+            <h4>
                 <?php echo helper::translate('Gestionnaire de fichiers'); ?>
             </h4>
             <div class="row">

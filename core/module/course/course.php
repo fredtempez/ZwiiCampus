@@ -82,14 +82,14 @@ class course extends common
 
     public function index()
     {
-
+        // Tableau à transmettre à la fvue
         self::$courses = array();
+
         if (
             $this->getUser('id')
             && $this->getUser('group')
-            && $this->getCoursesByProfil()
         ) {
-            foreach ($this->getCoursesByProfil() as $courseId => $courseValue) {
+            foreach ($this->getData(['course']) as $courseId => $courseValue) {
                 /**
                  * Filtres :
                  * Groupes acceptés :
@@ -126,7 +126,7 @@ class course extends common
 
         // Valeurs en sortie
         $this->addOutput([
-            'title' => helper::translate('Espaces disponibles'),
+            'title' => helper::translate('Gestionnaire d\'espaces'),
             'view' => 'index',
             'vendor' => [
                 'datatables'
@@ -1779,7 +1779,9 @@ class course extends common
                     $this->getUser('group') === self::$actions[$funtion]
                     &&
                     ($this->getData(['enrolment', $courseId]) && ($this->getUser('id') === $this->getData(['course', $courseId, 'author']))
-                        || array_key_exists($this->getUser('id'), $this->getData(['enrolment', $courseId])))
+                    || (// permission de gérer tous les espaces dans lesquels l'éditeur est inscrit. 
+                        $this->getUser('permission', __CLASS__, 'index') === true &&
+                        array_key_exists($this->getUser('id'), $this->getData(['enrolment', $courseId]))) )
                 );
             default:
                 return false;

@@ -929,10 +929,12 @@ class layout extends common
                     }
                     $leftItems .= '</select></li>';
                 }
-                $leftItems .= '<li>' . template::ico('cubes', [
-                    'href' => helper::baseUrl() . 'course',
-                    'help' => 'Espaces'
-                ]) . '</li>';
+                if ($this->getUser('permission', 'course', 'index') === true) {
+                    $leftItems .= '<li>' . template::ico('cubes', [
+                        'href' => helper::baseUrl() . 'course',
+                        'help' => 'Gérer les espaces'
+                    ]) . '</li>';
+                }
             }
             if ($this->getUser('group') >= self::GROUP_ADMIN) {
                 $leftItems .= '<li>' . template::ico('brush', [
@@ -941,9 +943,10 @@ class layout extends common
                 ]) . '</li>';
             }
             // Liste des pages et bouton de gestion interdit pour l'accueil sauf admin
-            if (($this->getUser('group') === self::GROUP_EDITOR && self::$siteContent != 'home')
-                || $this->getUser('group') === self::GROUP_ADMIN 
-                ) {
+            if (
+                ($this->getUser('group') === self::GROUP_EDITOR && self::$siteContent != 'home')
+                || $this->getUser('group') === self::GROUP_ADMIN
+            ) {
                 $leftItems .= '<li><select id="barSelectPage">';
                 $leftItems .= '<option value="">' . helper::translate('Pages du site') . '</option>';
                 $leftItems .= '<optgroup label="' . helper::translate('Pages orphelines') . '">';
@@ -1102,7 +1105,7 @@ class layout extends common
                         $this->setData(['core', 'lastAutoUpdate', $today]);
                         if (
                             helper::checkNewVersion(common::ZWII_UPDATE_CHANNEL)
-                        ) { 
+                        ) {
                             $this->setData(['core', 'updateAvailable', true]);
                         }
                     }

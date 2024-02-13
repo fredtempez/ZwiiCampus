@@ -1419,7 +1419,7 @@ class common
 	 * @param string $userId identifiant
 	 * @param string $serStatus teacher ou student ou admin
 	 * 
-	 * CETTE FONCTION N'EST PAS UTILISEE
+	 * CETTE FONCTION EST UTILISEE PAR LAYOUT
 	 * 
 	 */
 	public function getCoursesByProfil()
