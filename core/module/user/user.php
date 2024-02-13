@@ -525,7 +525,7 @@ class user extends common
 					? helper::translate(self::$groups[(int) $this->getData(['user', $userId, 'group'])])
 					: $this->getData(['profil', $this->getData(['user', $userId, 'group']), $this->getData(['user', $userId, 'profil']), 'name']),
 					$this->getData(['user', $userId, 'tags']),
-				    helper::dateUTF8('%d/%m/%Y', $this->getData(['user', $userId, 'accessTimer']), self::$i18nUI),
+					helper::dateUTF8('%d/%m/%Y', $this->getData(['user', $userId, 'accessTimer']), self::$i18nUI),
 					//helper::dateUTF8('%H:%M', $this->getData(['user', $userId, 'accessTimer']), self::$i18nUI),
 					template::button('userEdit' . $userId, [
 						'href' => helper::baseUrl() . 'user/edit/' . $userId,
@@ -556,9 +556,9 @@ class user extends common
 		$this->addOutput([
 			'title' => helper::translate('Utilisateurs'),
 			'view' => 'index',
-            'vendor' => [
-                'datatables'
-            ]
+			'vendor' => [
+				'datatables'
+			]
 		]);
 	}
 
@@ -576,7 +576,7 @@ class user extends common
 		// Stoppe si le profil est affecté
 		foreach ($groups as $userId) {
 			if ((string) $this->getData(['user', $userId, 'profil']) === $this->getUrl(3)) {
-				$profilUsed= false;
+				$profilUsed = false;
 			}
 		}
 		foreach ($this->getData(['profil']) as $groupId => $groupData) {
@@ -707,19 +707,34 @@ class user extends common
 					'edit' => $this->getInput('profilEditUserEdit', helper::FILTER_BOOLEAN),
 				],
 				'course' => [
-					/**
-					 * author vaut false lorsque l'éditeur a les droits de modifier uniquement ses espaces.
-					 * author vaut true lorsque l'éditeur a les droits de modifier uniquement TOUS les espaces.
-					 */
 					'author' => $this->getInput('profilEditCourseAuthor', helper::FILTER_BOOLEAN),
-					// On autorise l'accès à ces deux pages
-					'index' => $this->getInput('profilEditCourseIndex', helper::FILTER_BOOLEAN) && $this->getInput('profilEditCourseAuthor', helper::FILTER_BOOLEAN),
-					'manage' => $this->getInput('profilEditCourseIndex', helper::FILTER_BOOLEAN) && $this->getInput('profilEditCourseAuthor', helper::FILTER_BOOLEAN), // Les deux fonctions sont groupées
+					'index' => $this->getInput('profilEditCourseUsers', helper::FILTER_BOOLEAN)
+						|| $this->getInput('profilEditCourseUserHistory', helper::FILTER_BOOLEAN)
+						|| $this->getInput('profilEditCourseUserExport', helper::FILTER_BOOLEAN)
+						|| $this->getInput('profilEditCourseUserAdd', helper::FILTER_BOOLEAN)
+						|| $this->getInput('profilEditCourseUsersAdd', helper::FILTER_BOOLEAN)
+						|| $this->getInput('profilEditCourseUserDelete', helper::FILTER_BOOLEAN)
+						|| $this->getInput('profilEditCourseUsersDelete', helper::FILTER_BOOLEAN)
+						|| $this->getInput('profilEditCourseEdit', helper::FILTER_BOOLEAN)
+						|| $this->getInput('profilEditCourseBackup', helper::FILTER_BOOLEAN)
+						|| $this->getInput('profilEditCourseRestore', helper::FILTER_BOOLEAN),
+
+					'manage' => $this->getInput('profilEditCourseUsers', helper::FILTER_BOOLEAN)
+						|| $this->getInput('profilEditCourseUserHistory', helper::FILTER_BOOLEAN)
+						|| $this->getInput('profilEditCourseUserExport', helper::FILTER_BOOLEAN)
+						|| $this->getInput('profilEditCourseUserAdd', helper::FILTER_BOOLEAN)
+						|| $this->getInput('profilEditCourseUsersAdd', helper::FILTER_BOOLEAN)
+						|| $this->getInput('profilEditCourseUserDelete', helper::FILTER_BOOLEAN)
+						|| $this->getInput('profilEditCourseUsersDelete', helper::FILTER_BOOLEAN)
+						|| $this->getInput('profilEditCourseEdit', helper::FILTER_BOOLEAN)
+						|| $this->getInput('profilEditCourseBackup', helper::FILTER_BOOLEAN)
+						|| $this->getInput('profilEditCourseRestore', helper::FILTER_BOOLEAN),
 					// La suite
 					'users' => $this->getInput('profilEditCourseUsers', helper::FILTER_BOOLEAN),
 					'userHistory' => $this->getInput('profilEditCourseUserHistory', helper::FILTER_BOOLEAN),
-					'userHistoryExport' => $this->getInput('profilEditCourseUserExport', helper::FILTER_BOOLEAN),
+					'userHistoryExport' => $this->getInput('profilEditCourseUserHistoryExport', helper::FILTER_BOOLEAN),
 					'userAdd' => $this->getInput('profilEditCourseUserAdd', helper::FILTER_BOOLEAN),
+					'usersAdd' => $this->getInput('profilEditCourseUsersAdd', helper::FILTER_BOOLEAN),
 					'userDelete' => $this->getInput('profilEditCourseUserDelete', helper::FILTER_BOOLEAN),
 					'usersDelete' => $this->getInput('profilEditCourseUsersDelete', helper::FILTER_BOOLEAN),
 					'edit' => $this->getInput('profilEditCourseEdit', helper::FILTER_BOOLEAN),
@@ -954,11 +969,11 @@ class user extends common
 		// recherche les membres du groupe 
 		$groups = helper::arrayColumn($this->getData(['user']), 'group');
 		$groups = array_keys($groups, $this->getUrl(2));
-		$flag= true;
+		$flag = true;
 		// Stoppe si le profil est affecté
 		foreach ($groups as $userId) {
 			if ((string) $this->getData(['user', $userId, 'profil']) === $this->getUrl(3)) {
-				$flag= false;
+				$flag = false;
 			}
 		}
 		if (
@@ -975,7 +990,7 @@ class user extends common
 			if ($flag) {
 				$this->deleteData(['profil', $this->getUrl(2), $this->getUrl(3)]);
 			}
-			
+
 			// Valeurs en sortie
 			$this->addOutput([
 				'redirect' => helper::baseUrl() . $this->getUrl(0) . '/profil',
@@ -1083,8 +1098,9 @@ class user extends common
 					} else {
 						$logStatus = 'Connexion réussie';
 						$pageId = $this->getUrl(2);
-						if ($this->getData(['config', 'page404']) === $pageId
-						 || $this->getData(['config', 'page403']) === $pageId
+						if (
+							$this->getData(['config', 'page404']) === $pageId
+							|| $this->getData(['config', 'page403']) === $pageId
 						) {
 							$pageId = '';
 						}

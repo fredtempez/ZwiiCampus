@@ -18,13 +18,6 @@ $(document).ready(function () {
         $(".filemanager").prop("disabled", true);
     }
 
-    // Désactive les éléments liés aux espaces
-    if (!$("#profilEditCourseIndex, #profilEditCourseAuthor").prop("checked")) {
-        $("#courseContainer").slideUp();
-    } else {
-        $("#courseContainer").slideDown();
-    }
-
     // Désactive les éléments liés au blog
     if (!$("#profilEditBlogComment").prop("checked")) {
         $(".blogEditCommentOptions").prop("disabled", true);
@@ -67,16 +60,6 @@ $(document).ready(function () {
             $(".filemanager").prop("disabled", true);
         } else {
             $(".filemanager").prop("disabled", false);
-        }
-    });
-
-    // Gérer l'évènement sur les options des espaces
-    $("#profilEditCourseIndex, #profilEditCourseAuthor").change(function () {
-        if (!$(this).is(':checked')) {
-            $('.courseOptions input[type="checkbox"]').prop('checked', false);
-            $("#courseContainer").slideUp();
-        } else {
-            $("#courseContainer").slideDown();
         }
     });
 

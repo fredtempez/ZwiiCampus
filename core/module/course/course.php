@@ -1787,7 +1787,7 @@ class course extends common
                     || 
                     (  // Permission d'accèder aux esapces dans lesquels le membre est inscrits avec les 
                         $this->getData(['enrolment', $courseId])
-                        && $this->getUser('permission', __CLASS__, 'author') === true
+                        && $this->getUser('permission', __CLASS__, 'author') === false
                         && array_key_exists($this->getUser('id'), $this->getData(['enrolment', $courseId]))
                     )
                 );
