@@ -1063,6 +1063,11 @@ class course extends common
         $redirect = helper::baseUrl();
         $state = true;
 
+        // Récupérer les pahes pour contrôler la dernière page vue
+        $p = json_decode(file_get_contents(self::DATA_DIR . $courseId . '/page.json'), true);
+        $pages = $p['page'];
+
+        // Routage
         if (
             // Sortir du contenu et afficher l'accueil
             $courseId === 'home'
@@ -1076,7 +1081,9 @@ class course extends common
             && $this->courseIsAvailable($courseId)
         ) {
             // Récupérer la dernière page visitée par cet utilisateur si elle existe
-            $redirect = $this->getData(['enrolment', $courseId, $userId, 'lastPageView'])
+            $redirect = ( $this->getData(['enrolment', $courseId, $userId, 'lastPageView'])
+                           && array_key_exists($this->getData(['enrolment', $courseId, $userId, 'lastPageView']), $pages) 
+                        )
                 ? helper::baseUrl() . $this->getData(['enrolment', $courseId, $userId, 'lastPageView'])
                 : helper::baseUrl() . $pageId;
             /*
