@@ -1210,7 +1210,7 @@ class course extends common
                 ];
                 if ($diff < 1800) {
                     self::$userGraph[] = [
-                        helper::dateUTF8('%Y-%m-%d', $time),
+                        helper::dateUTF8('%Y-%m-%d %H:%M:%S', $time),
                         $diff,
                     ];
                 }
