@@ -240,6 +240,20 @@ class init extends common
 						'copycut' => false,
 						'chmod' => false
 					],
+					'course' => [
+						"author" => false,
+						"index" => false,
+						"manage" => false,
+						"users" => false,
+						"userHistory" => false,
+						"userHistoryExport" => false,
+						"usersAdd" => false,
+						"userDelete" => false,
+						"usersDelete" => false,
+						"edit" => false,
+						"backup" => false,
+						"restore" => false
+					],
 					'folder' => [
 						'create' => false,
 						'delete' => false,
@@ -320,6 +334,20 @@ class init extends common
 						'extract' => false,
 						'copycut' => false,
 						'chmod' => false
+					],
+					'course' => [
+						"author" => false,
+						"index" => false,
+						"manage" => false,
+						"users" => false,
+						"userHistory" => false,
+						"userHistoryExport" => false,
+						"usersAdd" => false,
+						"userDelete" => false,
+						"usersDelete" => false,
+						"edit" => false,
+						"backup" => false,
+						"restore" => false
 					],
 					'folder' => [
 						'create' => false,
@@ -407,6 +435,20 @@ class init extends common
 						'copycut' => false,
 						'chmod' => false
 					],
+					'course' => [
+						"author" => true,
+						"index" => true,
+						"manage" => true,
+						"users" => true,
+						"userHistory" => true,
+						"userHistoryExport" => true,
+						"usersAdd" => true,
+						"userDelete" => false,
+						"usersDelete" => false,
+						"edit" => false,
+						"backup" => false,
+						"restore" => false
+					],
 					'folder' => [
 						'create' => false,
 						'delete' => false,
@@ -488,6 +530,20 @@ class init extends common
 						'extract' => true,
 						'copycut' => true,
 						'chmod' => true
+					],
+					'course' => [
+						"author" => false,
+						"index" => true,
+						"manage" => true,
+						"users" => true,
+						"userHistory" => true,
+						"userHistoryExport" => true,
+						"usersAdd" => true,
+						"userDelete" => true,
+						"usersDelete" => true,
+						"edit" => true,
+						"backup" => true,
+						"restore" => true
 					],
 					'folder' => [
 						'create' => true,
