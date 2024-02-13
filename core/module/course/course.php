@@ -1212,6 +1212,7 @@ class course extends common
                     self::$userGraph[] = [
                         helper::dateUTF8('%Y-%m-%d %H:%M:%S', $time),
                         $diff,
+                        html_entity_decode($pages[$pageId]['title']) . ' ('. helper::dateUTF8('%M\'%S"', $diff) . ')'
                     ];
                 }
                 $lastView = $time;
@@ -1223,6 +1224,10 @@ class course extends common
         // Décale les temps de consultation
         for ($i = 0; $i < count(self::$userHistory) - 1; $i++) {
             self::$userHistory[$i][2] = self::$userHistory[$i + 1][2];
+        }
+        // Décale les temps de consultation
+        for ($i = 0; $i < count(self::$userGraph) - 1; $i++) {
+            self::$userHistory[$i][1] = self::$userHistory[$i + 1][1];
         }
 
         // Formate le timestamp

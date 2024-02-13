@@ -15,10 +15,12 @@ $(document).ready((function () {
 
     var dataX = <?php echo json_encode(array_map(function ($item) { return $item[0]; }, $module::$userGraph)); ?>;
     var dataY = <?php echo json_encode(array_map(function ($item) { return $item[1];}, $module::$userGraph)); ?>;
+    var dataText = <?php echo json_encode(array_map(function ($item) { return $item[2];}, $module::$userGraph)); ?>;
 
     var data = [{
         x: dataX,
         y: dataY,
+        text: dataText,
         mode: 'markers', // Mode de tracé des points
         type: 'scatter' // Type de graphe
     }];
