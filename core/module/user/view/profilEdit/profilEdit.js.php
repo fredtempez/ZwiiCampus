@@ -18,6 +18,13 @@ $(document).ready(function () {
         $(".filemanager").prop("disabled", true);
     }
 
+    // Désactive les éléments liés aux espaces
+    if (!$("#profilEditCourseIndex").prop("checked")) {
+        $("#courseContainer").slideUp();
+    } else {
+        $("#courseContainer").slideDown();
+    }
+
     // Désactive les éléments liés au blog
     if (!$("#profilEditBlogComment").prop("checked")) {
         $(".blogEditCommentOptions").prop("disabled", true);
@@ -63,12 +70,22 @@ $(document).ready(function () {
         }
     });
 
+    // Gérer l'évènement sur les options des espaces
+    $("#profilEditCourseIndex").change(function () {
+        if (!$(this).is(':checked')) {
+            $('.courseOptions input[type="checkbox"]').prop('checked', false);
+            $("#courseContainer").slideUp();
+        } else {
+            $("#courseContainer").slideDown();
+        }
+    });
+
     // Gérer l'évènement sur les commentaires du blog
     $("#profilEditBlogComment").change(function () {
         if (!$(this).is(':checked')) {
             $(".blogEditCommentOptions").slideUp();
         } else {
-            $('.blogEditCommentOptions input[type="checkbox"]').prop('checked', false);
+            $('.blogEditCommentOptions input[type="checkbox"]').prop("disabled", true);
             $(".blogEditCommentOptions").slideDown();
         }
     });

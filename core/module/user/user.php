@@ -712,6 +712,12 @@ class user extends common
 					'users' => $this->getInput('profilEditCourseUsers', helper::FILTER_BOOLEAN),
 					'userHistory' => $this->getInput('profilEditCourseUserHistory', helper::FILTER_BOOLEAN),
 					'userHistoryExport' => $this->getInput('profilEditCourseUserExport', helper::FILTER_BOOLEAN),
+					'userAdd' => $this->getInput('profilEditCourseUserAdd', helper::FILTER_BOOLEAN),
+					'userDelete' => $this->getInput('profilEditCourseUserDelete', helper::FILTER_BOOLEAN),
+					'usersDelete' => $this->getInput('profilEditCourseUsersDelete', helper::FILTER_BOOLEAN),
+					'edit' => $this->getInput('profilEditCourseEdit', helper::FILTER_BOOLEAN),
+					'backup' => $this->getInput('profilEditCourseBackup', helper::FILTER_BOOLEAN),
+					'restore' => $this->getInput('profilEditCourseRestore', helper::FILTER_BOOLEAN),
 				]
 			];
 
