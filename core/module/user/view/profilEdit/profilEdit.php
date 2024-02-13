@@ -92,6 +92,47 @@
                     ]); ?>
                 </div>
             </div>
+            <div class="row">
+                <div class="col3">
+                    <?php echo template::checkbox('profilEditCourseEdit', true, 'Éditer', [
+                        'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'course', 'edit'])
+                    ]); ?>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col3">
+                    <?php echo template::checkbox('profilEditCourseUsers', true, 'Participants', [
+                        'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'course', 'users'])
+                    ]); ?>
+                </div>
+                <div class="col3">
+                    <?php echo template::checkbox('profilEditCourseUserHistory', true, 'Historique participant', [
+                        'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'course', 'userHistory'])
+                    ]); ?>
+                </div>
+                <div class="col3">
+                    <?php echo template::checkbox('profilEditCourseUserHistoryExport', true, 'Exporter historique participant', [
+                        'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'course', 'userHistoryExport'])
+                    ]); ?>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col3">
+                    <?php echo template::checkbox('profilEditCourseUsers', true, 'Participants', [
+                        'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'course', 'users'])
+                    ]); ?>
+                </div>
+                <div class="col3">
+                    <?php echo template::checkbox('profilEditCourseUserHistory', true, 'Historique participant', [
+                        'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'course', 'userHistory'])
+                    ]); ?>
+                </div>
+                <div class="col3">
+                    <?php echo template::checkbox('profilEditCourseUserHistoryExport', true, 'Cloner', [
+                        'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'course', 'userHistoryExport'])
+                    ]); ?>
+                </div>
+            </div>
         </div>
     </div>
 </div>

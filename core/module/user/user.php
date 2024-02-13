@@ -708,6 +708,10 @@ class user extends common
 				],
 				'course' => [
 					'index' => $this->getInput('profilEditCourseIndex', helper::FILTER_BOOLEAN),
+					'manage' => $this->getInput('profilEditCourseIndex', helper::FILTER_BOOLEAN), // Les deux fonctions sont groupées
+					'users' => $this->getInput('profilEditCourseUsers', helper::FILTER_BOOLEAN),
+					'userHistory' => $this->getInput('profilEditCourseUserHistory', helper::FILTER_BOOLEAN),
+					'userHistoryExport' => $this->getInput('profilEditCourseUserExport', helper::FILTER_BOOLEAN),
 				]
 			];
 
