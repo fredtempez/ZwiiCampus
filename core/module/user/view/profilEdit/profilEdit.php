@@ -88,8 +88,8 @@
                 </h4>
                 <div class="row">
                     <div class="col6">
-                        <?php echo template::checkbox('profilEditCourseAuthor', true, 'Gestion limitée aux espaces du propriétaire', [
-                            'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'course', 'author'])
+                        <?php echo template::checkbox('profilEditCourseTutor', true, 'Gestion étendue aux espaces du participant', [
+                            'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'course', 'tutor'])
                         ]); ?>
                     </div>
                 </div>

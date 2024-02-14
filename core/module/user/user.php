@@ -707,7 +707,7 @@ class user extends common
 					'edit' => $this->getInput('profilEditUserEdit', helper::FILTER_BOOLEAN),
 				],
 				'course' => [
-					'author' => $this->getInput('profilEditCourseAuthor', helper::FILTER_BOOLEAN),
+					'tutor' => $this->getInput('profilEditCourseTutor', helper::FILTER_BOOLEAN),
 					'index' => $this->getInput('profilEditCourseUsers', helper::FILTER_BOOLEAN)
 						|| $this->getInput('profilEditCourseUserHistory', helper::FILTER_BOOLEAN)
 						|| $this->getInput('profilEditCourseUserExport', helper::FILTER_BOOLEAN)
