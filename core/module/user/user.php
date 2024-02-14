@@ -888,6 +888,41 @@ class user extends common
 					],
 					'user' => [
 						'edit' => $this->getInput('profilAddUserEdit', helper::FILTER_BOOLEAN),
+					],
+					'course' => [
+						'tutor' => $this->getInput('profilAddCourseTutor', helper::FILTER_BOOLEAN),
+						'index' => $this->getInput('profilAddCourseUsers', helper::FILTER_BOOLEAN)
+							|| $this->getInput('profilAddCourseUserHistory', helper::FILTER_BOOLEAN)
+							|| $this->getInput('profilAddCourseUserExport', helper::FILTER_BOOLEAN)
+							|| $this->getInput('profilAddCourseUserAdd', helper::FILTER_BOOLEAN)
+							|| $this->getInput('profilAddCourseUsersAdd', helper::FILTER_BOOLEAN)
+							|| $this->getInput('profilAddCourseUserDelete', helper::FILTER_BOOLEAN)
+							|| $this->getInput('profilAddCourseUsersDelete', helper::FILTER_BOOLEAN)
+							|| $this->getInput('profilAddCourseEdit', helper::FILTER_BOOLEAN)
+							|| $this->getInput('profilAddCourseBackup', helper::FILTER_BOOLEAN)
+							|| $this->getInput('profilAddCourseRestore', helper::FILTER_BOOLEAN),
+	
+						'manage' => $this->getInput('profilAddCourseUsers', helper::FILTER_BOOLEAN)
+							|| $this->getInput('profilAddCourseUserHistory', helper::FILTER_BOOLEAN)
+							|| $this->getInput('profilAddCourseUserExport', helper::FILTER_BOOLEAN)
+							|| $this->getInput('profilAddCourseUserAdd', helper::FILTER_BOOLEAN)
+							|| $this->getInput('profilAddCourseUsersAdd', helper::FILTER_BOOLEAN)
+							|| $this->getInput('profilAddCourseUserDelete', helper::FILTER_BOOLEAN)
+							|| $this->getInput('profilAddCourseUsersDelete', helper::FILTER_BOOLEAN)
+							|| $this->getInput('profilAddCourseEdit', helper::FILTER_BOOLEAN)
+							|| $this->getInput('profilAddCourseBackup', helper::FILTER_BOOLEAN)
+							|| $this->getInput('profilAddCourseRestore', helper::FILTER_BOOLEAN),
+						// La suite
+						'users' => $this->getInput('profilAddCourseUsers', helper::FILTER_BOOLEAN),
+						'userHistory' => $this->getInput('profilAddCourseUserHistory', helper::FILTER_BOOLEAN),
+						'userHistoryExport' => $this->getInput('profilAddCourseUserHistoryExport', helper::FILTER_BOOLEAN),
+						'userAdd' => $this->getInput('profilAddCourseUserAdd', helper::FILTER_BOOLEAN),
+						'usersAdd' => $this->getInput('profilAddCourseUsersAdd', helper::FILTER_BOOLEAN),
+						'userDelete' => $this->getInput('profilAddCourseUserDelete', helper::FILTER_BOOLEAN),
+						'usersDelete' => $this->getInput('profilAddCourseUsersDelete', helper::FILTER_BOOLEAN),
+						'edit' => $this->getInput('profilAddCourseEdit', helper::FILTER_BOOLEAN),
+						'backup' => $this->getInput('profilAddCourseBackup', helper::FILTER_BOOLEAN),
+						'restore' => $this->getInput('profilAddCourseRestore', helper::FILTER_BOOLEAN),
 					]
 				];
 
