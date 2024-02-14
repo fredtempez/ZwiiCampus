@@ -374,6 +374,10 @@ class page extends common
 								$this->setData(['enrolment', self::$siteContent, $userId, 'lastPageView', $pageId]);
 							}
 						}
+						// Met à jour la homePage si nécessaire
+						if ($this->getUrl(2) === $this->getData(['course', self::$siteContent, 'homePageId'])) {
+							$this->setData(['course', self::$siteContent, 'homePageId', $pageId]);
+						}
 
 						// Si la page correspond à la page d'accueil, change l'id dans la configuration du site
 						if ($this->getData(['config', 'homePageId']) === $this->getUrl(2)) {
