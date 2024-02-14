@@ -68,10 +68,10 @@ class page extends common
 	public static $userProfils = [];
 
 	public static $navIconTemplate = [
-        'dir' => 'Petit triangle',
-        'open' => 'Grand triangle',
-        'big' => 'Flèche',
-    ];
+		'dir' => 'Petit triangle',
+		'open' => 'Grand triangle',
+		'big' => 'Flèche',
+	];
 
 	public static $navIconPosition = [
 		'none' => 'Masqué',
@@ -357,6 +357,24 @@ class page extends common
 								$this->setData(['module', $pageId, 'theme', 'style', $modulesData[$moduleId]['dataDirectory'] . $pageId]);
 							}
 						}
+						// Met à jour les historiques des utilisateurs
+						foreach ($this->getData(['enrolment', self::$siteContent]) as $userId => $userData) {
+							// Vérifier si l'utilisateur a un historique
+							if (
+								isset($userData["history"])
+								&& isset($userData['history'][$this->getUrl(2)])
+							) {
+								// Remplacer l'ancienne ID par la nouvelle
+								$datas = $this->getData(['enrolment', self::$siteContent, $userId, 'history', $this->getUrl(2)]);
+								$this->setData(['enrolment', self::$siteContent, $userId, 'history', $pageId, $datas]);
+								$this->deleteData(['enrolment', self::$siteContent, $userId, 'history', $this->getUrl(2)]);
+							}
+							// Mettre à jour la dernière page vue si nécessaire
+							if ($this->getData(['enrolment', self::$siteContent, $userId, 'lastPageView']) === $this->getUrl(2)) {
+								$this->setData(['enrolment', self::$siteContent, $userId, 'lastPageView', $pageId]);
+							}
+						}
+
 						// Si la page correspond à la page d'accueil, change l'id dans la configuration du site
 						if ($this->getData(['config', 'homePageId']) === $this->getUrl(2)) {
 							$this->setData(['config', 'homePageId', $pageId]);
@@ -538,7 +556,7 @@ class page extends common
 				}
 			}
 			// Construction du formulaire
-			
+
 			// Met à jour le sitemap
 			$this->updateSitemap();
 
@@ -602,7 +620,8 @@ class page extends common
 			$css = $this->getInput('pageCssEditorContent', helper::FILTER_STRING_LONG) === null ? '' : $this->getInput('pageCssEditorContent', helper::FILTER_STRING_LONG);
 			// Enregistre le CSS
 			$this->setData([
-				'page', $this->getUrl(2),
+				'page',
+				$this->getUrl(2),
 				'css',
 				$css
 			]);
@@ -636,7 +655,8 @@ class page extends common
 			$js = $this->getInput('pageJsEditorContent', helper::FILTER_STRING_LONG) === null ? '' : $this->getInput('pageJsEditorContent', helper::FILTER_STRING_LONG);
 			// Enregistre le JS
 			$this->setData([
-				'page', $this->getUrl(2),
+				'page',
+				$this->getUrl(2),
 				'js',
 				$js
 			]);
