@@ -214,8 +214,10 @@ class page extends common
 		elseif ($page === $this->homePageId()) {
 			// Valeurs en sortie
 			$this->addOutput([
-				'redirect' => helper::baseUrl() . 'config',
-				'notification' => helper::translate('Suppression interdite, page active dans la configuration de la langue du site')
+				'redirect' => helper::baseUrl() . $this->homePageId(),
+				'notification' => self::$siteContent === 'home' 
+									? helper::translate('Suppression interdite, cette page est définie comme page d\'accueil du site')
+									: helper::translate('Suppression interdite, cette page est définie comme page d\'accueil d\'un espace')
 			]);
 		}
 		// Impossible de supprimer la page affectée
@@ -223,7 +225,7 @@ class page extends common
 			// Valeurs en sortie
 			$this->addOutput([
 				'redirect' => helper::baseUrl() . 'config',
-				'notification' => helper::translate('Suppression interdite, page active dans la configuration de la langue du site')
+				'notification' => helper::translate('Suppression interdite, page active dans la configuration du site')
 			]);
 		}
 		// Impossible de supprimer la page  affectée
@@ -231,7 +233,7 @@ class page extends common
 			// Valeurs en sortie
 			$this->addOutput([
 				'redirect' => helper::baseUrl() . 'config',
-				'notification' => helper::translate('Suppression interdite, page active dans la configuration de la langue du site')
+				'notification' => helper::translate('Suppression interdite, page active dans la configuration du site')
 			]);
 		}
 		// Impossible de supprimer la page affectée
@@ -239,7 +241,7 @@ class page extends common
 			// Valeurs en sortie
 			$this->addOutput([
 				'redirect' => helper::baseUrl() . 'config',
-				'notification' => helper::translate('Suppression interdite, page active dans la configuration de la langue du site')
+				'notification' => helper::translate('Suppression interdite, page active dans la configuration du site')
 			]);
 		}
 		// Impossible de supprimer la page affectée
@@ -247,7 +249,7 @@ class page extends common
 			// Valeurs en sortie
 			$this->addOutput([
 				'redirect' => helper::baseUrl() . 'config',
-				'notification' => helper::translate('Suppression interdite, page active dans la configuration de la langue du site')
+				'notification' => helper::translate('Suppression interdite, page active dans la configuration du site')
 			]);
 		}
 		// Impossible de supprimer la page affectée
@@ -255,7 +257,7 @@ class page extends common
 			// Valeurs en sortie
 			$this->addOutput([
 				'redirect' => helper::baseUrl() . 'config',
-				'notification' => helper::translate('Suppression interdite, page active dans la configuration de la langue du site')
+				'notification' => helper::translate('Suppression interdite, page active dans la configuration du site')
 			]);
 		}
 		// Impossible de supprimer une page contenant des enfants
