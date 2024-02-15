@@ -1,3 +1,7 @@
+# Version 6.4
+- Corrige plussieurs bugs dans les fonctions de tri
+# Version 6.3
+- Corrige un tri non fonctionnel.
 # Version 6.2
 - Applique les profils
 # Version 6.1
