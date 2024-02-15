@@ -51,6 +51,7 @@ class common
 	const ACCESS_TIMER = 1800;
 
 	// Numéro de version
+	const ZWII_VERSION = '1.5.04';
 	const ZWII_VERSION = '1.6.00';
 
 	// URL autoupdate
