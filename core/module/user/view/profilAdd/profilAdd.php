@@ -155,7 +155,6 @@
     </div>
 </div>
 <div class="row containerPage">
-<div class="row">
     <div class="col12">
         <div class="block">
             <h4>
@@ -205,7 +204,6 @@
             </div>
         </div>
     </div>
-</div>
     <div class="col12">
         <div class="block">
             <h4>
