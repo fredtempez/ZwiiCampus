@@ -928,8 +928,6 @@ class layout extends common
                         $leftItems .= '<option name="' . $this->getData(['course', $courseId, 'title']) . '" value="' . helper::baseUrl(true) . 'course/swap/' . $courseId . '" ' . ($courseId === self::$siteContent ? 'selected' : '') . '>' . $this->getData(['course', $courseId, 'title']) . '</option>';
                     }
                     $leftItems .= '</select></li>';
-                }
-                if ($this->getUser('permission', 'course', 'index') === true) {
                     $leftItems .= '<li>' . template::ico('cubes', [
                         'href' => helper::baseUrl() . 'course',
                         'help' => 'Gérer les espaces'

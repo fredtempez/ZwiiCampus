@@ -707,29 +707,12 @@ class user extends common
 					'edit' => $this->getInput('profilEditUserEdit', helper::FILTER_BOOLEAN),
 				],
 				'course' => [
+					// Droit d'intervenir sur tous les espaces
 					'tutor' => $this->getInput('profilEditCourseTutor', helper::FILTER_BOOLEAN),
-					'index' => $this->getInput('profilEditCourseUsers', helper::FILTER_BOOLEAN)
-						|| $this->getInput('profilEditCourseUserHistory', helper::FILTER_BOOLEAN)
-						|| $this->getInput('profilEditCourseUserExport', helper::FILTER_BOOLEAN)
-						|| $this->getInput('profilEditCourseUserAdd', helper::FILTER_BOOLEAN)
-						|| $this->getInput('profilEditCourseUsersAdd', helper::FILTER_BOOLEAN)
-						|| $this->getInput('profilEditCourseUserDelete', helper::FILTER_BOOLEAN)
-						|| $this->getInput('profilEditCourseUsersDelete', helper::FILTER_BOOLEAN)
-						|| $this->getInput('profilEditCourseEdit', helper::FILTER_BOOLEAN)
-						|| $this->getInput('profilEditCourseBackup', helper::FILTER_BOOLEAN)
-						|| $this->getInput('profilEditCourseRestore', helper::FILTER_BOOLEAN),
-
-					'manage' => $this->getInput('profilEditCourseUsers', helper::FILTER_BOOLEAN)
-						|| $this->getInput('profilEditCourseUserHistory', helper::FILTER_BOOLEAN)
-						|| $this->getInput('profilEditCourseUserExport', helper::FILTER_BOOLEAN)
-						|| $this->getInput('profilEditCourseUserAdd', helper::FILTER_BOOLEAN)
-						|| $this->getInput('profilEditCourseUsersAdd', helper::FILTER_BOOLEAN)
-						|| $this->getInput('profilEditCourseUserDelete', helper::FILTER_BOOLEAN)
-						|| $this->getInput('profilEditCourseUsersDelete', helper::FILTER_BOOLEAN)
-						|| $this->getInput('profilEditCourseEdit', helper::FILTER_BOOLEAN)
-						|| $this->getInput('profilEditCourseBackup', helper::FILTER_BOOLEAN)
-						|| $this->getInput('profilEditCourseRestore', helper::FILTER_BOOLEAN),
-					// La suite
+					// Droit d'accéder à la fenêtre de gestion pour tous les éditeurs et plus
+					'index' => $this->getUser('group') >= self::GROUP_EDITOR,
+					'manage' => $this->getUser('group') >= self::GROUP_EDITOR,
+					// Droits spécifiques
 					'users' => $this->getInput('profilEditCourseUsers', helper::FILTER_BOOLEAN),
 					'userHistory' => $this->getInput('profilEditCourseUserHistory', helper::FILTER_BOOLEAN),
 					'userHistoryExport' => $this->getInput('profilEditCourseUserHistoryExport', helper::FILTER_BOOLEAN),

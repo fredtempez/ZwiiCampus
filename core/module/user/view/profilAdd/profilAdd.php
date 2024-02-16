@@ -58,58 +58,6 @@
         </div>
     </div>
 </div>
-<?php if ($this->getUrl(2) >= self::GROUP_EDITOR): ?>
-    <div class="row">
-        <div class="col12">
-            <div class="block">
-                <h4>
-                    <?php echo helper::translate('Gestion des espaces'); ?>
-                </h4>
-                <div class="row">
-                    <div class="col6">
-                        <?php echo template::checkbox('profilAddCourseTutor', true, 'Gestion étendue aux espaces du participant'); ?>
-                    </div>
-                </div>
-                <div id="courseContainer">
-                    <div class="row">
-                        <div class="col3">
-                            <?php echo template::checkbox('profilAddCourseEdit', true, 'Éditer un espace'); ?>
-                        </div>
-                        <div class="col3">
-                            <?php echo template::checkbox('profilAddCourseBackup', true, 'Sauvegarder un espace'); ?>
-                        </div>
-                        <div class="col3">
-                            <?php echo template::checkbox('profilAddCourseRestore', true, 'Restaurer un espace'); ?>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col3">
-                            <?php echo template::checkbox('profilAddCourseUsers', true, 'Voir les participants'); ?>
-                        </div>
-                        <div class="col3">
-                            <?php echo template::checkbox('profilAddCourseUserHistory', true, 'Voir historique d\'un participant'); ?>
-                        </div>
-                        <div class="col3">
-                            <?php echo template::checkbox('profilAddCourseUserHistoryExport', true, 'Exporter historique d\'un participant'); ?>
-                        </div>
-                        <div class="col3">
-                            <?php echo template::checkbox('profilAddCourseUserDelete', true, 'Désinscrire un participant'); ?>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col3">
-                            <?php echo template::checkbox('profilAddCourseUsersAdd', true, 'Inscrire en masse'); ?>
-                        </div>
-                        <div class="col3">
-                            <?php echo template::checkbox('profilAddCourseUsersDelete', true, 'Désinscrire en masse'); ?>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-<?php endif; ?>
 <div class="row">
     <div class="col12">
         <div class="block">
@@ -207,6 +155,57 @@
     </div>
 </div>
 <div class="row containerPage">
+<div class="row">
+    <div class="col12">
+        <div class="block">
+            <h4>
+                <?php echo helper::translate('Gestion des espaces'); ?>
+            </h4>
+            <div class="row">
+                <div class="col6">
+                    <?php echo template::checkbox('profilAddCourseTutor', true, 'Gère les espaces comme auteur  et participant'); ?>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col3">
+                    <?php echo template::checkbox('profilAddCourseEdit', true, 'Éditer un espace'); ?>
+                </div>
+                <div class="col3">
+                    <?php echo template::checkbox('profilAddCourseBackup', true, 'Sauvegarder un espace'); ?>
+                </div>
+                <div class="col3">
+                    <?php echo template::checkbox('profilAddCourseRestore', true, 'Restaurer un espace'); ?>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col6">
+                    <?php echo template::checkbox('profilAddCourseUsers', true, 'Gérer les participants'); ?>
+                </div>
+            </div>
+            <div id="courseContainer">
+                <div class="row">
+                    <div class="col3">
+                        <?php echo template::checkbox('profilAddCourseUserHistory', true, 'Voir historique d\'un participant'); ?>
+                    </div>
+                    <div class="col3">
+                        <?php echo template::checkbox('profilAddCourseUserHistoryExport', true, 'Exporter historique d\'un participant'); ?>
+                    </div>
+                    <div class="col3">
+                        <?php echo template::checkbox('profilAddCourseUserDelete', true, 'Désinscrire un participant'); ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col3">
+                        <?php echo template::checkbox('profilAddCourseUsersAdd', true, 'Inscrire en masse'); ?>
+                    </div>
+                    <div class="col3">
+                        <?php echo template::checkbox('profilAddCourseUsersDelete', true, 'Désinscrire en masse'); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
     <div class="col12">
         <div class="block">
             <h4>

@@ -1651,7 +1651,7 @@ class course extends common
 
         // Accès limité aux admins, à l'auteur ou éditeurs inscrits
         if (
-            $this->permissionControl(__FUNCTION__, $courseId) === false
+            $this->getUser('permission', __CLASS__, __FUNCTION__) === false
         ) {
             // Valeurs en sortie
             $this->addOutput([
@@ -1785,15 +1785,14 @@ class course extends common
             case self::GROUP_EDITOR:
                 return (
                     $this->getUser('permission', __CLASS__, $function)
+                    && $this->getUser('group') === self::$actions[$function]
                     &&
-                    $this->getUser('group') === self::$actions[$function]
-                    &&
-                        // Permission d'accèder aux espaces dans lesquels le membre auteur
+                        // Permission d'accéder aux espaces dans lesquels le membre auteur
                     (
                         $this->getData(['enrolment', $courseId]) && ($this->getUser('id') === $this->getData(['course', $courseId, 'author']))
                     )
                     || 
-                    (  // Permission d'accèder aux esapces dans lesquels le membre est inscrits avec les 
+                    (  // Permission d'accéder aux espaces dans lesquels le membre est inscrits
                         $this->getData(['enrolment', $courseId])
                         && $this->getUser('permission', __CLASS__, 'tutor') === true
                         && array_key_exists($this->getUser('id'), $this->getData(['enrolment', $courseId]))
