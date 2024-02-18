@@ -50,10 +50,10 @@ if (!is_null($u) && !is_null($g) && !is_null($userId)) {
 				isset($courseId)
 				&& $courseId != 'home'
 			) {
-				$uploadDir = 'site/file/source/' . $courseId;
+				$uploadDir = '/site/file/source/' . $courseId . '/';
 				$currentPath = '../../../site/file/source/' . $courseId . '/';
 			} else {
-				$uploadDir = 'site/file/source/';
+				$uploadDir = '/site/file/source/';
 				$currentPath = '../../../site/file/source/';
 			}
 			break;
@@ -83,7 +83,7 @@ if (!is_null($u) && !is_null($g) && !is_null($userId)) {
 
 			} else {
 				// Le membre est dans un espace, forçage vers le dossier de l'espace
-				$uploadDir = 'site/file/source/' . $courseId;
+				$uploadDir = '/site/file/source/' . $courseId . '/';
 				$currentPath = '../../../site/file/source/' . $courseId . '/';
 			}
 			break;
