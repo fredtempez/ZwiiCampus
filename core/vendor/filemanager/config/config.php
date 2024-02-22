@@ -303,7 +303,7 @@ $config = array(
 		  |--------------------------------------------------------------------------
 		  |
 		  */
-	'filePermission' => 0755,
+	'filePermission' => 0644,
 	'folderPermission' => 0777,
 
 
