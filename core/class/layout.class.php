@@ -921,18 +921,19 @@ class layout extends common
              * Les enseignants les contenus dont ils sont auteurs
              */
             if ($this->getUser('group') >= self::GROUP_EDITOR) {
-                if ($this->getCoursesByProfil()) {
+                if (is_array($this->getCoursesByProfil())) {
                     $leftItems .= '<li><select id="barSelectCourse" >';
                     $leftItems .= '<option name="' . helper::translate('Accueil') . '" value="' . helper::baseUrl(true) . 'course/swap/home" ' . ('home' === self::$siteContent ? 'selected' : '') . '>' . helper::translate('Accueil') . '</option>';
                     foreach ($this->getCoursesByProfil() as $courseId => $value) {
                         $leftItems .= '<option name="' . $this->getData(['course', $courseId, 'title']) . '" value="' . helper::baseUrl(true) . 'course/swap/' . $courseId . '" ' . ($courseId === self::$siteContent ? 'selected' : '') . '>' . $this->getData(['course', $courseId, 'title']) . '</option>';
                     }
                     $leftItems .= '</select></li>';
-                    $leftItems .= '<li>' . template::ico('cubes', [
-                        'href' => helper::baseUrl() . 'course',
-                        'help' => 'Gérer les espaces'
-                    ]) . '</li>';
                 }
+  
+                $leftItems .= '<li>' . template::ico('cubes', [
+                    'href' => helper::baseUrl() . 'course',
+                    'help' => 'Gérer les espaces'
+                ]) . '</li>';
             }
             if ($this->getUser('group') >= self::GROUP_ADMIN) {
                 $leftItems .= '<li>' . template::ico('brush', [
