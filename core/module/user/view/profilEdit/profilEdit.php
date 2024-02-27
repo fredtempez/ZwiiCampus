@@ -87,17 +87,23 @@
                 <?php echo helper::translate('Gestionnaire de fichiers'); ?>
             </h4>
             <div class="row">
-                <div class="col3">
+                <div class="col2">
                     <?php echo template::checkbox('profilEditFileManager', true, 'Autorisé', [
                         'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'filemanager'])
                     ]); ?>
                 </div>
-                <div class="col6">
-                    <?php echo template::select('profilEditPath', $module::$sharePath, [
-                        'label' => 'Dossier',
+                <div class="col5">
+                    <?php echo template::select('profilEditCoursePath', $module::$sharePath, [
+                        'label' => 'Dossier depuis un espace',
                         'class' => 'filemanager',
-                        'selected' => '.' . $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'folder', 'path']),
-                        'help' => 'Chaque espace dispose d\'un dossier spécifique, le choix \'Dossier de l\'espace actif\' le sélectionne automatiquement.'
+                        'selected' => '.' . $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'folder', 'coursePath']),
+                    ]); ?>
+                </div>
+                <div class="col5">
+                    <?php echo template::select('profilEditHomePath', $module::$sharePath, [
+                        'label' => 'Dossier depuis l\'accueil',
+                        'class' => 'filemanager',
+                        'selected' => '.' . $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'folder', 'homePath']),
                     ]); ?>
                 </div>
             </div>

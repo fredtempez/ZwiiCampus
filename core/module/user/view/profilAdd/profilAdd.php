@@ -68,11 +68,16 @@
                 <div class="col3">
                     <?php echo template::checkbox('profilAddFileManager', true, 'Autorisé'); ?>
                 </div>
-                <div class="col6">
-                    <?php echo template::select('profilAddPath', $module::$sharePath, [
-                        'label' => 'Dossier',
+                <div class="col5">
+                    <?php echo template::select('profilAddCoursePath', $module::$sharePath, [
+                        'label' => 'Dossier depuis un espace',
                         'class' => 'filemanager',
-                        'help' => 'Chaque espace dispose d\'un dossier spécifique, le choix "Dossier de l\'espace actif" le sélectionne automatiquement.'
+                    ]); ?>
+                </div>
+                <div class="col5">
+                    <?php echo template::select('profilAddHomePath', $module::$sharePath, [
+                        'label' => 'Dossier depuis l\'accueil',
+                        'class' => 'filemanager',
                     ]); ?>
                 </div>
             </div>
