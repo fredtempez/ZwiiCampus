@@ -79,7 +79,7 @@ if (!is_null($u) && !is_null($g) && !is_null($userId)) {
 			) {
 				// Le dossier affiché est celui du profil 
 				$uploadDir = $g['profil'][$group][$profil]['folder']['path']; // Le premier slash est dans la variable
-				$currentPath = '../../../' . $g['profil'][$group][$profil]['folder']['path'];
+				$currentPath = '../../..' . $g['profil'][$group][$profil]['folder']['path'];
 
 			} else {
 				// Le membre est dans un espace, forçage vers le dossier de l'espace
