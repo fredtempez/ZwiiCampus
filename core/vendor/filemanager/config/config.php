@@ -78,7 +78,7 @@ if (!is_null($u) && !is_null($g) && !is_null($userId)) {
 				&& $courseId === 'home'
 			) {
 				// Le dossier affiché est celui du profil 
-				$uploadDir = $g['profil'][$group][$profil]['folder']['path'];
+				$uploadDir = $g['profil'][$group][$profil]['folder']['path']; // Le premier slash est dans la variable
 				$currentPath = '../../../' . $g['profil'][$group][$profil]['folder']['path'];
 
 			} else {
