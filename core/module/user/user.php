@@ -758,9 +758,17 @@ class user extends common
 
 		// Chemin vers les dossiers du gestionnaire de fichier
 		self::$sharePath = $this->getSubdirectories('./site/file/source');
+
+		// Exclure les espaces des cours
+		foreach (array_keys($this->getData(['course'])) as $courseId) {
+			self::$sharePath = array_filter(self::$sharePath, function ($key) use ($courseId) {
+				return strpos($key, $courseId) === false;
+			});
+		}
+
 		self::$sharePath = array_flip(self::$sharePath);
 		self::$sharePath = array_merge(['./site/file/source/' => 'Tous les dossiers'], self::$sharePath);
-		//self::$sharePath = array_merge(['' => 'Aucun dossier'], self::$sharePath);
+		// self::$sharePath = array_merge(['' => 'Aucun dossier'], self::$sharePath);
 		self::$sharePath = array_merge(['' => 'Dossier de l\'espace actif'], self::$sharePath);
 
 		// Liste des modules installés
@@ -886,7 +894,7 @@ class user extends common
 							|| $this->getInput('profilAddCourseEdit', helper::FILTER_BOOLEAN)
 							|| $this->getInput('profilAddCourseBackup', helper::FILTER_BOOLEAN)
 							|| $this->getInput('profilAddCourseRestore', helper::FILTER_BOOLEAN),
-	
+
 						'manage' => $this->getInput('profilAddCourseUsers', helper::FILTER_BOOLEAN)
 							|| $this->getInput('profilAddCourseUserHistory', helper::FILTER_BOOLEAN)
 							|| $this->getInput('profilAddCourseUserExport', helper::FILTER_BOOLEAN)
@@ -950,6 +958,14 @@ class user extends common
 
 		// Chemin vers les dossiers du gestionnaire de fichier
 		self::$sharePath = $this->getSubdirectories('./site/file/source');
+
+		// Exclure les espaces des cours
+		foreach (array_keys($this->getData(['course'])) as $courseId) {
+			self::$sharePath = array_filter(self::$sharePath, function ($key) use ($courseId) {
+				return strpos($key, $courseId) === false;
+			});
+		}
+
 		self::$sharePath = array_flip(self::$sharePath);
 		self::$sharePath = array_merge(['./site/file/source/' => 'Tous les dossiers'], self::$sharePath);
 		//self::$sharePath = array_merge(['' => 'Aucun dossier'], self::$sharePath);
