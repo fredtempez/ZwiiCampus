@@ -767,9 +767,9 @@ class user extends common
 		}
 
 		self::$sharePath = array_flip(self::$sharePath);
-		self::$sharePath = array_merge(['./site/file/source/' => 'Tous les dossiers'], self::$sharePath);
+		self::$sharePath = array_merge(['./site/file/source/' => 'Tout le gestionnaire de fichiers'], self::$sharePath);
 		// self::$sharePath = array_merge(['' => 'Aucun dossier'], self::$sharePath);
-		self::$sharePath = array_merge(['' => 'Dossier de l\'espace actif'], self::$sharePath);
+		self::$sharePath = array_merge(['' => 'Confiné dans le dossier de l\'espace ouvert'], self::$sharePath);
 
 		// Liste des modules installés
 		self::$listModules = helper::getModules();
@@ -967,9 +967,9 @@ class user extends common
 		}
 
 		self::$sharePath = array_flip(self::$sharePath);
-		self::$sharePath = array_merge(['./site/file/source/' => 'Tous les dossiers'], self::$sharePath);
+		self::$sharePath = array_merge(['./site/file/source/' => 'Tout le gestionnaire de fichiers'], self::$sharePath);
 		//self::$sharePath = array_merge(['' => 'Aucun dossier'], self::$sharePath);
-		self::$sharePath = array_merge(['' => 'Dossier de l\'espace actif'], self::$sharePath);
+		self::$sharePath = array_merge(['' => 'Confiné dans le dossier de l\'espace ouvert'], self::$sharePath);
 
 		// Liste des modules installés
 		self::$listModules = helper::getModules();
