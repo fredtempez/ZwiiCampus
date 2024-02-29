@@ -352,7 +352,8 @@ class layout extends common
             $items .= $this->getData(['theme', 'footer', 'displaymemberAccount']) === false ? ' class="displayNone">' : '>';
             $items .= '<wbr>&nbsp;|&nbsp;';
             if (
-                $this->getUser('permission', 'filemanager') === true
+                $this->getUser('permission', 'filemanager') === true 
+                && $this->getUser('permission',  'folder', (self::$siteContent === 'home' ? 'homePath' : 'coursePath')) !== 'none'
             ) {
                 $items .= '<wbr>' . template::ico('folder', [
                     'href' => helper::baseUrl(false) . 'core/vendor/filemanager/dialog.php?type=0&akey=' . md5_file(self::DATA_DIR . 'core.json') . '&lang=' . $this->getData(['user', $this->getUser('id'), 'language']),
@@ -519,7 +520,8 @@ class layout extends common
         ) {
 
             // Affiche l'icône RFM
-            if ($this->getUser('permission', 'filemanager') === true) {
+            if ($this->getUser('permission', 'filemanager') === true
+                && $this->getUser('permission', 'folder', (self::$siteContent === 'home' ? 'homePath' : 'coursePath')) !== 'none') {
                 $itemsRight .= '<li>' . template::ico('folder', [
                     'href' => helper::baseUrl(false) . 'core/vendor/filemanager/dialog.php?type=0&akey=' . md5_file(self::DATA_DIR . 'core.json') . '&lang=' . $this->getData(['user', $this->getUser('id'), 'language']),
                     'attr' => 'data-lity',
@@ -1060,7 +1062,8 @@ class layout extends common
             if (
                 (
                     $this->getUser('group') === self::GROUP_EDITOR
-                    && $this->getUser('permission', 'filemanager')
+                    && $this->getUser('permission', 'filemanager') === true
+                    && $this->getUser('permission', 'folder', (self::$siteContent === 'home' ? 'homePath' : 'coursePath')) !== 'none'
                 )
                 || $this->getUser('group') === self::GROUP_ADMIN
             ) {

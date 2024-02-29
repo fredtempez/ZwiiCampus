@@ -142,6 +142,7 @@ class JsonDb extends \Prowebcraft\Dot
      */
     public function save()
     {
+        /// $v = json_encode($this->data, JSON_UNESCAPED_UNICODE | JSON_FORCE_OBJECT | JSON_PRETTY_PRINT);
         $v = json_encode($this->data, JSON_UNESCAPED_UNICODE | JSON_FORCE_OBJECT);
         $l = strlen($v);
         $t = 0;
