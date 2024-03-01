@@ -64,7 +64,7 @@ class init extends common
 			]
 		],
 		'core' => [
-			'dataVersion' => 1000,
+			'dataVersion' => 1700,
 			'lastBackup' => 0,
 			'lastClearTmp' => 0,
 			'lastAutoUpdate' => 0,
@@ -261,7 +261,8 @@ class init extends common
 						'copycut' => false,
 						'chmod' => false,
 						'share' => false,
-						'path' => null,
+						'coursePath' => '',
+						'homePath' => ''
 					],
 					'page' => [
 						'add' => false,
@@ -356,7 +357,8 @@ class init extends common
 						'copycut' => false,
 						'chmod' => false,
 						'share' => true,
-						'path' => '/site/file/source/partage/',
+						'coursePath' => '/site/file/source/partage/',
+						'homePath' => '/site/file/source/partage/'
 					],
 					'page' => [
 						'add' => false,
@@ -456,7 +458,8 @@ class init extends common
 						'copycut' => false,
 						'chmod' => false,
 						'share' => true,
-						'path' => '',
+						'coursePath' => '',
+						'homePath' => '/site/file/source/partage/'
 					],
 					'page' => [
 						'add' => false,
@@ -552,7 +555,8 @@ class init extends common
 						'copycut' => true,
 						'chmod' => true,
 						'share' => true,
-						'path' => '',
+						'coursePath' => '',
+						'homePath' => '/site/file/source/partage/'
 					],
 					'page' => [
 						'add' => true,

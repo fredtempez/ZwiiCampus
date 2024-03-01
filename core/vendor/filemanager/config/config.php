@@ -71,6 +71,8 @@ if (!is_null($u) && !is_null($g) && !is_null($userId)) {
 			$uploadDir = empty($sharedPath) ? '/site/file/source/' . $courseId . '/' : $sharedPath;
 
 			$currentPath = '../../..' . $uploadDir . '/';
+
+			// Affiche un message d'erreur du le dossier partagé a été supprimé.
 			if (is_dir($uploadDir) == false ) {
 				exit("<h1 style='color: red'>Le dossier partagé est inexistant, contactez l'administrateur.</h1>");
 			} 
