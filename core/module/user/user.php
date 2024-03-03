@@ -692,8 +692,8 @@ class user extends common
 					'rename' => $this->getInput('profilEditFolderRename', helper::FILTER_BOOLEAN),
 					'copycut' => $this->getInput('profilEditFolderCopycut', helper::FILTER_BOOLEAN),
 					'chmod' => $this->getInput('profilEditFolderChmod', helper::FILTER_BOOLEAN),
-					'coursePath' => preg_replace('/^\\./', '', $this->getInput('profilEditCoursePath')), // Supprime le point pour préserver le chemin
-					'homePath' => preg_replace('/^\\./', '', $this->getInput('profilEditHomePath')), // Supprime le point pour préserver le chemin
+					'coursePath' => $this->getInput('profilEditCoursePath'), // Supprime le point pour préserver le chemin
+					'homePath' => $this->getInput('profilEditHomePath'), // Supprime le point pour préserver le chemin
 				],
 				'page' => [
 					'add' => $this->getInput('profilEditPageAdd', helper::FILTER_BOOLEAN),
@@ -757,21 +757,20 @@ class user extends common
 		}
 
 		// Chemin vers les dossiers du gestionnaire de fichier
-		self::$sharePath = $this->getSubdirectories('./site/file/source');
+		self::$sharePath = $this->getSubdirectories('site/file/source');	
 
 		// Exclure les espaces des cours
-		/*
 		foreach (array_keys($this->getData(['course'])) as $courseId) {
 			self::$sharePath = array_filter(self::$sharePath, function ($key) use ($courseId) {
 				return strpos($key, $courseId) === false;
 			});
 		}
-		*/
+
 
 		self::$sharePath = array_flip(self::$sharePath);
 		self::$sharePath = array_merge(['none' => 'Aucun Accès'], self::$sharePath);
-		self::$sharePath = array_merge(['' => 'Confiné dans le dossier de l\'espace ouvert'], self::$sharePath);
-		self::$sharePath = array_merge(['./site/file/source/' => 'Tout le gestionnaire de fichiers'], self::$sharePath);
+		self::$sharePath = array_merge(['course' => 'Confiné dans le dossier de l\'espace ouvert'], self::$sharePath);
+		self::$sharePath = array_merge(['/site/file/source/' => 'Tout le gestionnaire de fichiers'], self::$sharePath);
 
 		// Liste des modules installés
 		self::$listModules = helper::getModules();
@@ -869,8 +868,8 @@ class user extends common
 						'rename' => $this->getInput('profilAddFolderRename', helper::FILTER_BOOLEAN),
 						'copycut' => $this->getInput('profilAddFolderCopycut', helper::FILTER_BOOLEAN),
 						'chmod' => $this->getInput('profilAddFolderChmod', helper::FILTER_BOOLEAN),
-						'coursePath' => preg_replace('/^\\./', '', $this->getInput('profilAddCoursePath')), // Supprime le point pour préserver le chemin
-						'homePath' => preg_replace('/^\\./', '', $this->getInput('profilAddHomePath')), // Supprime le point pour préserver le chemin
+						'coursePath' => $this->getInput('profilAddCoursePath'), // Supprime le point pour préserver le chemin
+						'homePath' => $this->getInput('profilAddHomePath'), // Supprime le point pour préserver le chemin
 					],
 					'page' => [
 						'add' => $this->getInput('profilAddPageAdd', helper::FILTER_BOOLEAN),
@@ -959,7 +958,7 @@ class user extends common
 		}
 
 		// Chemin vers les dossiers du gestionnaire de fichier
-		self::$sharePath = $this->getSubdirectories('./site/file/source');
+		self::$sharePath = $this->getSubdirectories('site/file/source');
 
 		// Exclure les espaces des cours
 		/*
@@ -972,7 +971,7 @@ class user extends common
 
 		self::$sharePath = array_flip(self::$sharePath);
 		self::$sharePath = array_merge(['none' => 'Aucun Accès'], self::$sharePath);
-		self::$sharePath = array_merge(['' => 'Confiné dans le dossier de l\'espace ouvert'], self::$sharePath);
+		self::$sharePath = array_merge(['course' => 'Confiné dans le dossier de l\'espace ouvert'], self::$sharePath);
 		self::$sharePath = array_merge(['./site/file/source/' => 'Tout le gestionnaire de fichiers'], self::$sharePath);
 
 		// Liste des modules installés

@@ -224,7 +224,7 @@ class init extends common
 				'1' => [
 					'name' => 'Membre simple',
 					'readonly' => false,
-					'permanent' => false,
+					'permanent' => true,
 					'comment' => 'Accède aux pages réservées',
 					'filemanager' => false,
 					'file' => [
@@ -261,8 +261,8 @@ class init extends common
 						'copycut' => false,
 						'chmod' => false,
 						'share' => false,
-						'coursePath' => '',
-						'homePath' => ''
+						'coursePath' => 'none',
+						'homePath' => 'none'
 					],
 					'page' => [
 						'add' => false,
@@ -357,7 +357,7 @@ class init extends common
 						'copycut' => false,
 						'chmod' => false,
 						'share' => true,
-						'coursePath' => '/site/file/source/partage/',
+						'coursePath' => 'none',
 						'homePath' => '/site/file/source/partage/'
 					],
 					'page' => [
@@ -458,7 +458,7 @@ class init extends common
 						'copycut' => false,
 						'chmod' => false,
 						'share' => true,
-						'coursePath' => '',
+						'coursePath' => 'none',
 						'homePath' => '/site/file/source/partage/'
 					],
 					'page' => [
@@ -518,7 +518,7 @@ class init extends common
 				'2' => [
 					'name' => 'Rédacteur',
 					'readonly' => false,
-					'permanent' => true,
+					'permanent' => false,
 					'comment' => 'Tous les droits d\'édition des espaces',
 					'filemanager' => true,
 					'file' => [
@@ -555,7 +555,7 @@ class init extends common
 						'copycut' => true,
 						'chmod' => true,
 						'share' => true,
-						'coursePath' => '',
+						'coursePath' => 'none',
 						'homePath' => '/site/file/source/partage/'
 					],
 					'page' => [

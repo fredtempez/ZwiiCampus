@@ -93,16 +93,14 @@
                     ]); ?>
                 </div>
                 <div class="col5">
-                    <?php echo template::select('profilEditCoursePath', $module::$sharePath, [
+                    <?php var_dump ($this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'folder', 'coursePath']));echo template::select('profilEditCoursePath', $module::$sharePath, [
                         'label' => 'Dossier depuis un espace',
                         'class' => 'filemanager',
                         /*
                         * 'none' interdit l'accès au gestionnaire de fichier
                         * Ce n'est pas un chemin donc on n'ajoute pas le .
                         */
-                        'selected' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'folder', 'coursePath']) !== 'none'
-                                    ? '.' . $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'folder', 'coursePath'])
-                                    : $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'folder', 'coursePath'])
+                        'selected' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'folder', 'coursePath'])
                     ]); ?>
                 </div>
                 <div class="col5">
@@ -110,9 +108,7 @@
                         'label' => 'Dossier depuis l\'accueil',
                         'class' => 'filemanager',
                         // 'none' interdit l'accès au gestionnaire de fichier au niveau de l'accueil
-                        'selected' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'folder', 'homePath']) !== 'none'
-                                    ? '.' . $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'folder', 'homePath'])
-                                    : $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'folder', 'homePath'])
+                        'selected' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'folder', 'homePath'])
                     ]); ?>
                 </div>
             </div>
