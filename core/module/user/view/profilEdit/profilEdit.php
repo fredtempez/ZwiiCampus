@@ -93,7 +93,7 @@
                     ]); ?>
                 </div>
                 <div class="col5">
-                    <?php var_dump ($this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'folder', 'coursePath']));echo template::select('profilEditCoursePath', $module::$sharePath, [
+                    <?php echo template::select('profilEditCoursePath', $module::$sharePath, [
                         'label' => 'Dossier depuis un espace',
                         'class' => 'filemanager',
                         /*
