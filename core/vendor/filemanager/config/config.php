@@ -58,16 +58,14 @@ if (!is_null($u) && !is_null($g) && !is_null($userId)) {
 			if (
 				is_null($profil)
 				|| $g['profil'][$group][$profil]['filemanager'] === false
-				|| $folder = $g['profil'][$group][$profil]['folder'] === 'none'
 			) {
 				exit("<h1 style='color: red'>Accès interdit au gestionnaire de fichiers !</h1>");
 			}
 
-			// Chemin du dossier partagé dans le profil
+			// Détermine la variable  du dossier partagé dans le profil
 			$sharedPathKey = ($courseId === 'home') ? 'homePath' : 'coursePath';
-			$sharedPath = isset($folder[$sharedPathKey]) ? $folder[$sharedPathKey] : '';
-
-			// Accès non partagé
+			$sharedPath = isset($folder[$sharedPathKey]) ? $folder[$sharedPathKey] : 'none';
+			// Interdit un accès non partagé
 			if (
 				$folder[$sharedPathKey] === 'none'
 			) {
@@ -76,7 +74,6 @@ if (!is_null($u) && !is_null($g) && !is_null($userId)) {
 
 			// Un dossier renvoie vers le dossier confiné
 			$uploadDir = $sharedPath === '' ? '/site/file/source/' . $courseId . '/' : $sharedPath;
-
 			$currentPath = '../../../' . $uploadDir;
 
 			// Affiche un message d'erreur du le dossier partagé a été supprimé.
