@@ -769,7 +769,7 @@ class user extends common
 
 		self::$sharePath = array_flip(self::$sharePath);
 		self::$sharePath = array_merge(['none' => 'Aucun Accès'], self::$sharePath);
-		self::$sharePath = array_merge(['course' => 'Confiné dans le dossier de l\'espace ouvert'], self::$sharePath);
+		self::$sharePath = array_merge(['' => 'Confiné dans le dossier de l\'espace ouvert'], self::$sharePath);
 		self::$sharePath = array_merge(['/site/file/source/' => 'Tout le gestionnaire de fichiers'], self::$sharePath);
 
 		// Liste des modules installés
@@ -971,7 +971,7 @@ class user extends common
 
 		self::$sharePath = array_flip(self::$sharePath);
 		self::$sharePath = array_merge(['none' => 'Aucun Accès'], self::$sharePath);
-		self::$sharePath = array_merge(['course' => 'Confiné dans le dossier de l\'espace ouvert'], self::$sharePath);
+		self::$sharePath = array_merge(['' => 'Confiné dans le dossier de l\'espace ouvert'], self::$sharePath);
 		self::$sharePath = array_merge(['./site/file/source/' => 'Tout le gestionnaire de fichiers'], self::$sharePath);
 
 		// Liste des modules installés

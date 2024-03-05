@@ -458,7 +458,7 @@ class init extends common
 						'copycut' => false,
 						'chmod' => false,
 						'share' => true,
-						'coursePath' => 'none',
+						'coursePath' => '',
 						'homePath' => '/site/file/source/partage/'
 					],
 					'page' => [
@@ -555,7 +555,7 @@ class init extends common
 						'copycut' => true,
 						'chmod' => true,
 						'share' => true,
-						'coursePath' => 'none',
+						'coursePath' => '',
 						'homePath' => '/site/file/source/partage/'
 					],
 					'page' => [

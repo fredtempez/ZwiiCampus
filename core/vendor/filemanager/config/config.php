@@ -75,7 +75,7 @@ if (!is_null($u) && !is_null($g) && !is_null($userId)) {
 			}
 
 			// Un dossier renvoie vers le dossier confiné
-			$uploadDir = $sharedPath === 'course' ? '/site/file/source/' . $courseId . '/' : $sharedPath;
+			$uploadDir = $sharedPath === '' ? '/site/file/source/' . $courseId . '/' : $sharedPath;
 
 			$currentPath = '../../../' . $uploadDir;
 
