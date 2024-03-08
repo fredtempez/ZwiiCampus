@@ -70,30 +70,30 @@
                         <?php echo template::text('courseManageShortTitle', [
                             'label' => 'Titre',
                             'value' => $this->getdata(['course', $this->getUrl(2), 'title']),
-                            'disabled' => true,
+                            'readonly' => true,
                         ]); ?>
                     </div>
                     <div class="col5">
-                        <?php echo template::select('courseManageAuthor', $module::$courseTeachers, [
-                            'label' => 'Auteur',
-                            'selected' => $this->getdata(['course', $this->getUrl(2), 'author']),
-                            'disabled' => true,
+                        <?php echo template::text('courseManageAuthor', [
+                            'label' => 'text',
+                            'value' => $this->signature( $this->getdata(['course', $this->getUrl(2), 'author']) ),
+                            'readonly' => true,
                         ]); ?>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col6">
-                        <?php echo template::select('courseManageHomePageId', helper::arrayColumn($module::$pagesList, 'title', 'SORT_ASC'), [
+                        <?php echo template::text('courseManageHomePageId', [
                             'label' => 'Page d\'accueil',
-                            'selected' => $this->getdata(['course', $this->getUrl(2), 'homePageId']),
-                            'disabled' => true,
+                            'value' => $module::$pagesList[$this->getdata(['course', $this->getUrl(2), 'homePageId'])]['shortTitle'],
+                            'readonly' => true,
                         ]); ?>
                     </div>
                     <div class="col6">
-                        <?php echo template::select('courseManageCategorie', $module::$courseCategories, [
+                        <?php echo template::text('courseManageCategorie', [
                             'label' => 'Catégorie',
-                            'selected' => $this->getdata(['course', $this->getUrl(2), 'category']),
-                            'disabled' => true,
+                            'value' => $module::$courseCategories[$this->getdata(['course', $this->getUrl(2), 'category'])],
+                            'readonly' => true,
                         ]); ?>
                     </div>
                 </div>
@@ -102,16 +102,16 @@
                         <?php echo template::textarea('courseManageDescription', [
                             'label' => 'Description',
                             'value' => $this->getdata(['course', $this->getUrl(2), 'description']),
-                            'disabled' => true,
+                            'readonly' => true,
                         ]); ?>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col4">
-                        <?php echo template::select('courseManageAccess', $module::$courseAccess, [
+                        <?php echo template::text('courseManageAccess', [
                             'label' => 'Disponibilité',
-                            'selected' => $this->getdata(['course', $this->getUrl(2), 'access']),
-                            'disabled' => true,
+                            'value' =>$module::$courseAccess [$this->getdata(['course', $this->getUrl(2), 'access'])],
+                            'readonly' => true,
                         ]); ?>
                     </div>
                     <div class="col4">
@@ -119,7 +119,7 @@
                             'type' => 'datetime-local',
                             'label' => 'Ouverture',
                             'value' => is_null($this->getdata(['course', $this->getUrl(2), 'openingDate'])) ? '' : floor($this->getdata(['course', $this->getUrl(2), 'openingDate']) / 60) * 60,
-                            'disabled' => true,
+                            'readonly' => true,
                         ]); ?>
                     </div>
                     <div class="col4">
@@ -127,23 +127,23 @@
                             'type' => 'datetime-local',
                             'label' => 'Fermeture',
                             'value' => is_null($this->getdata(['course', $this->getUrl(2), 'closingDate'])) ? '' : floor($this->getdata(['course', $this->getUrl(2), 'closingDate']) / 60) * 60,
-                            'disabled' => true,
+                            'readonly' => true,
                         ]); ?>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col4">
-                        <?php echo template::select('courseManageEnrolment', $module::$courseEnrolment, [
+                        <?php echo template::text('courseManageEnrolment', [
                             'label' => 'Participation',
-                            'selected' => $this->getdata(['course', $this->getUrl(2), 'enrolment']),
-                            'disabled' => true,
+                            'value' => $module::$courseEnrolment[$this->getdata(['course', $this->getUrl(2), 'enrolment'])],
+                            'readonly' => true,
                         ]); ?>
                     </div>
                     <div class="col4">
                         <?php echo template::text('courseManageEnrolmentKey', [
                             'label' => 'Clé',
                             'value' => $this->getdata(['course', $this->getUrl(2), 'enrolmentKey']),
-                            'disabled' => true,
+                            'readonly' => true,
                         ]); ?>
                     </div>
                 </div>
@@ -160,7 +160,7 @@
                             'type' => 'datetime-local',
                             'label' => 'Fermeture',
                             'value' => is_null($this->getdata(['course', $this->getUrl(2), 'limitEnrolmentDate'])) ? '' : floor($this->getdata(['course', $this->getUrl(2), 'limitEnrolmentDate']) / 60) * 60,
-                            'disabled' => true,
+                            'readonly' => true,
                         ]); ?>
                     </div>
                 </div>
