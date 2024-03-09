@@ -429,6 +429,17 @@ class config extends common
 	 */
 	public function index()
 	{
+
+		// Action interdite hors de l'espace accueil
+		if (
+			self::$siteContent !== 'home'
+		) {
+			// Valeurs en sortie
+			$this->addOutput([
+				'access' => false
+			]);
+		}
+
 		// Soumission du formulaire
 		if (
 			$this->getUser('permission', __CLASS__, __FUNCTION__) === true &&
