@@ -165,6 +165,11 @@ tinymce.init({
 	// Templates
 	templates: [
 		{
+			title: "Bloc de texte",
+			url: baseUrl + "core/vendor/tinymce/templates/block.html",
+			description: "Bloc de texte avec un titre."
+		},
+		{
 			title: "Lien de retour",
 			url: baseUrl + "core/vendor/tinymce/templates/back_home.html",
 			description: "Insère un lien vers l'accueil de la plate-forme."
@@ -175,14 +180,14 @@ tinymce.init({
 			description: "Insère un lien de désinscription."
 		},
 		{
-			title: "Bloc de texte",
-			url: baseUrl + "core/vendor/tinymce/templates/block.html",
-			description: "Bloc de texte avec un titre."
-		},
-		{
 			title: "Effet accordéon",
 			url: baseUrl + "core/vendor/tinymce/templates/accordion.html",
 			description: "Bloc de texte avec effet accordéon."
+		},
+		{
+			title: "Effet accordéon DHTML",
+			url: baseUrl + "core/vendor/tinymce/templates/details.html",
+			description: "Bloc de texte avec effet accordéon DHTML (details)."
 		},
 		{
 			title: "Grille symétrique : 6 - 6",

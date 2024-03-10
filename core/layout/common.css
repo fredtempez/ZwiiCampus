@@ -118,7 +118,7 @@ h3 {
     font-size: 1.4em;
 }
 
-h4 {
+h4, details {
     font-size: 1.0em;
 }
 
@@ -161,7 +161,8 @@ h4,
 p,
 hr,
 ul,
-ol {
+ol,
+details {
     margin: 15px 0;
 }
 
@@ -1127,7 +1128,7 @@ footer #footerSocials .zwiico-twitch:hover {
     margin-bottom: 0;
 }
 
-.block h4 {
+.block h4, details {
     margin: -20px -20px 10px -20px;
     padding: 10px;
     /*	background: #ECEFF1;*/
