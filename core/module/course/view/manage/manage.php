@@ -74,7 +74,7 @@
                 </div>
                 <div class="col5">
                     <?php echo template::text('courseManageAuthor', [
-                        'label' => 'text',
+                        'label' => 'Auteur',
                         'value' => $this->signature($this->getdata(['course', $this->getUrl(2), 'author'])),
                         'readonly' => true,
                     ]); ?>
