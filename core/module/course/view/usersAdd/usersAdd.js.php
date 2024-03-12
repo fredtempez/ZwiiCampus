@@ -27,7 +27,7 @@ $(document).ready((function () {
         $("#courseUsersAddForm").submit();
     });
 
-    v$('#dataTables').DataTable({ar table = 
+    var table = $('#dataTables').DataTable({
         language: {
             url: "core/vendor/datatables/french.json"
         },
