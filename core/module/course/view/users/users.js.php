@@ -28,6 +28,7 @@ $(document).ready((function () {
         },
         order: [[3, 'desc']],
         locale: 'fr',
+        stateSave: true,
         "columnDefs": [
             {
                 target: 6,

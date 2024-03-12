@@ -27,11 +27,12 @@ $(document).ready((function () {
         $("#courseUsersAddForm").submit();
     });
 
-    var table = $('#dataTables').DataTable({
+    v$('#dataTables').DataTable({ar table = 
         language: {
             url: "core/vendor/datatables/french.json"
         },
         locale: 'fr',
+        stateSave: true,
         "columnDefs": [
             {
                 target: 0,
