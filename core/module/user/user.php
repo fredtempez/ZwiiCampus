@@ -61,7 +61,7 @@ class user extends common
 	public static $languagesInstalled = [];
 
 	public static $sharePath = [
-		'/site/file/source/'
+		'site/file/source/'
 	];
 
 	public static $groupProfils = [
