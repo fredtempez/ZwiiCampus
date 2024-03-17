@@ -1,7 +1,7 @@
 <?php
 // Creation du ZIP
 $filter = $filter = ['backup', 'tmp'];
-$fileName = 'Campus-Rolling' . '-backup-' . date('Y-m-d-H-i-s', time()) . '.zip';
+$fileName =  date('Y-m-d-H-i-s', time()) . '-rolling-backup.zip';
 $zip = new ZipArchive();
 $zip->open('../../../../site/backup/' . $fileName, ZipArchive::CREATE | ZipArchive::OVERWRITE);
 $directory = '../../../../site';
