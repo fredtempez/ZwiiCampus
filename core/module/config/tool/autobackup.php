@@ -27,7 +27,8 @@ if (isset($_GET['key'])) {
     // Tableau de correspondance entre les valeurs de "filter" et les répertoires à inclure
     $filterDirectories = [
         'file' => ['backup', 'tmp', 'file'],
-        'data' => ['backup', 'tmp', 'data']
+        'data' => ['backup', 'tmp', 'data'],
+        'i18n' => ['backup', 'tmp', 'i18n'],
     ];
 
     // Vérification et traitement du paramètre "filter" en GET
