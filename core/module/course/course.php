@@ -104,7 +104,7 @@ class course extends common
                         ? sprintf('%s %s', $this->getData(['user', $this->getData(['course', $courseId, 'author']), 'firstname']), $this->getData(['user', $this->getData(['course', $courseId, 'author']), 'lastname']))
                         : '';
                     $categorieUrl = helper::baseUrl() . 'course/swap/' . $courseId;
-                    $info = sprintf(' <a href="%s" target="_blank">%s</a><br />Auteur : %s<br />Id : %s<br />', $categorieUrl,  $this->getData(['course', $courseId, 'title']), $author, $courseId,);
+                    $info = sprintf(' <a href="%s" target="_blank">%s</a><br />Auteur : %s<br />Id : %s<br />', $categorieUrl, $this->getData(['course', $courseId, 'title']), $author, $courseId, );
                     $enrolment = sprintf(
                         'Accès : %s<br />Inscription : %s<br />',
                         self::$courseAccess[$this->getData(['course', $courseId, 'access'])],
@@ -365,7 +365,7 @@ class course extends common
     /**
      * Duplique un cours et l'affiche dans l'éditeur
      */
-    public function clone ()
+    public function clone()
     {
 
         // Cours à dupliquer
@@ -653,7 +653,7 @@ class course extends common
                     $this->getData(['enrolment', $courseId, $userId, 'lastPageView']) === null
                     or $this->getData(['enrolment', $courseId, $userId, 'datePageView']) === null
                 ) {
-                    if (!empty($userValue['history'])) {
+                    if (!empty ($userValue['history'])) {
                         $maxTime = max($userValue['history']);
                         $lastPageId = array_search($maxTime, $userValue['history']);
                         $this->setData(['enrolment', $courseId, $userId, 'lastPageView', $lastPageId]);
@@ -663,7 +663,7 @@ class course extends common
 
 
                 // Compte les rôles valides
-                if (isset($profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])])) {
+                if (isset ($profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])])) {
                     $profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])]++;
                 }
 
@@ -702,7 +702,7 @@ class course extends common
                 self::$courseUsers[] = [
                     //$userId,
                     $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
-                    isset($pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])]['title'])
+                    isset ($pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])]['title'])
                     ? $pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])]['title']
                     : '',
                     $this->getData(['enrolment', $courseId, $userId, 'datePageView'])
@@ -714,8 +714,8 @@ class course extends common
                     $this->getData(['user', $userId, 'tags']),
                     template::button('userHistory' . $userId, [
                         'href' => helper::baseUrl() . 'course/userHistory/' . $courseId . '/' . $userId,
-                        'value' => !empty($userValue['history']) ? min(round(($viewPages * 100) / $sumPages, 1), 100) . ' %' : '0%',
-                        'disable' => empty($userValue['history'])
+                        'value' => !empty ($userValue['history']) ? min(round(($viewPages * 100) / $sumPages, 1), 100) . ' %' : '0%',
+                        'disable' => empty ($userValue['history'])
                     ]),
                     template::button('userDelete' . $userId, [
                         'class' => 'userDelete buttonRed',
@@ -765,7 +765,7 @@ class course extends common
 
         // Inscription des utilisateurs cochés
         if (
-            isset($_POST['courseUsersAddSubmit'])
+            isset ($_POST['courseUsersAddSubmit'])
         ) {
             foreach ($_POST as $keyPost => $valuePost) {
                 // Exclure les variables post qui ne sont pas des userId et ne traiter que les non inscrits
@@ -821,15 +821,15 @@ class course extends common
         foreach ($users as $userId => $userValue) {
 
             // Compte les rôles
-            if (isset($profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])])) {
+            if (isset ($profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])])) {
                 $profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])]++;
             }
 
             // Filtres
             if (
-                isset($_POST['courseFilterGroup'])
-                || isset($_POST['courseFilterFirstName'])
-                || isset($_POST['courseFilterLastName'])
+                isset ($_POST['courseFilterGroup'])
+                || isset ($_POST['courseFilterFirstName'])
+                || isset ($_POST['courseFilterLastName'])
             ) {
 
                 // Groupe et profils
@@ -934,7 +934,7 @@ class course extends common
 
         // Inscription des utilisateurs cochés
         if (
-            isset($_POST['courseUsersDeleteSubmit'])
+            isset ($_POST['courseUsersDeleteSubmit'])
         ) {
             foreach ($_POST as $keyPost => $valuePost) {
                 // Exclure les variables post qui ne sont pas des userId et ne traiter que les non inscrits
@@ -984,15 +984,15 @@ class course extends common
             foreach ($users as $userId => $userValue) {
 
                 // Compte les rôles
-                if (isset($profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])])) {
+                if (isset ($profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])])) {
                     $profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])]++;
                 }
 
                 // Filtres
                 if (
-                    isset($_POST['courseFilterGroup'])
-                    || isset($_POST['courseFilterFirstName'])
-                    || isset($_POST['courseFilterLastName'])
+                    isset ($_POST['courseFilterGroup'])
+                    || isset ($_POST['courseFilterFirstName'])
+                    || isset ($_POST['courseFilterLastName'])
                 ) {
 
                     // Groupe et profils
@@ -1079,19 +1079,19 @@ class course extends common
         elseif (
             $this->courseIsUserEnroled($courseId)
             && $this->courseIsAvailable($courseId)
-        ) { 
+        ) {
             // Récupérer la dernière page visitée par cet utilisateur si elle existe
-            $redirect = ( $this->getData(['enrolment', $courseId, $userId, 'lastPageView']) !== null
-                           && array_key_exists($this->getData(['enrolment', $courseId, $userId, 'lastPageView']), $pages) 
-                        )
+            $redirect = ($this->getData(['enrolment', $courseId, $userId, 'lastPageView']) !== null
+                && array_key_exists($this->getData(['enrolment', $courseId, $userId, 'lastPageView']), $pages)
+            )
                 ? helper::baseUrl() . $this->getData(['enrolment', $courseId, $userId, 'lastPageView'])
                 : helper::baseUrl();
 
-                /*            
-        $essage = $this->getData(['enrolment', $courseId, $userId, 'datePageView']) 
-            ? $this->getData(['enrolment', $courseId, $userId, 'datePageView']) 
-            : '';
-            */
+            /*            
+    $essage = $this->getData(['enrolment', $courseId, $userId, 'datePageView']) 
+        ? $this->getData(['enrolment', $courseId, $userId, 'datePageView']) 
+        : '';
+        */
             if ($this->getData(['course', $courseId, 'access']) === self::COURSE_ACCESS_DATE) {
                 $to = helper::dateUTF8('%d %B %Y', $this->getData(['course', $courseId, 'closingDate']), self::$i18nUI) . helper::translate(' à ') . helper::dateUTF8('%H:%M', $this->getData(['course', $courseId, 'closingDate']), self::$i18nUI);
                 $message .= sprintf(helper::translate('Ce contenu ferme le %s'), $to);
@@ -1208,7 +1208,7 @@ class course extends common
         $lastView = 0;
 
         foreach ($history as $time => $pageId) {
-            if (isset($pages[$pageId]['title'])) {
+            if (isset ($pages[$pageId]['title'])) {
                 $lastView = ($lastView === 0) ? $time : $lastView;
                 $diff = $time - $lastView;
                 self::$userHistory[] = [
@@ -1224,8 +1224,8 @@ class course extends common
                     ];
                 }
                 $lastView = $time;
-                $floorTime = isset($floorTime) && $floorTime < $time ? $floorTime : $time;
-                $topTime = isset($topTime) && $topTime > $time ? $topTime : $time;
+                $floorTime = isset ($floorTime) && $floorTime < $time ? $floorTime : $time;
+                $topTime = isset ($topTime) && $topTime > $time ? $topTime : $time;
             }
         }
 
@@ -1319,7 +1319,7 @@ class course extends common
                     $this->getData(['enrolment', $courseId, $userId, 'lastPageView']) === null
                     or $this->getData(['enrolment', $courseId, $userId, 'datePageView']) === null
                 ) {
-                    if (!empty($userValue['history'])) {
+                    if (!empty ($userValue['history'])) {
                         $maxTime = max($userValue['history']);
                         $lastPageId = array_search($maxTime, $userValue['history']);
                         $this->setData(['enrolment', $courseId, $userId, 'lastPageView', $lastPageId]);
@@ -1337,7 +1337,7 @@ class course extends common
                     $userId,
                     $this->getData(['user', $userId, 'firstname']),
                     $this->getData(['user', $userId, 'lastname']),
-                    isset($pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])])
+                    isset ($pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])])
                     ? $pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])]
                     : $this->getData(['enrolment', $courseId, $userId, 'lastPageView']) . ' (supprimée)',
                     helper::dateUTF8('%d/%d/%Y', $this->getData(['enrolment', $courseId, $userId, 'datePageView'])),
@@ -1413,7 +1413,7 @@ class course extends common
         $lastView = 0;
 
         foreach ($history as $time => $pageId) {
-            if (isset($pages[$pageId]['title'])) {
+            if (isset ($pages[$pageId]['title'])) {
                 $lastView = ($lastView === 0) ? $time : $lastView;
                 $diff = $time - $lastView;
                 self::$userHistory[] = [
@@ -1423,8 +1423,8 @@ class course extends common
                     ($diff < 1800) ? sprintf("%d' %d''", floor($diff / 60), $diff % 60) : "Non significatif",
                 ];
                 $lastView = $time;
-                $floorTime = isset($floorTime) && $floorTime < $time ? $floorTime : $time;
-                $topTime = isset($topTime) && $topTime > $time ? $topTime : $time;
+                $floorTime = isset ($floorTime) && $floorTime < $time ? $floorTime : $time;
+                $topTime = isset ($topTime) && $topTime > $time ? $topTime : $time;
             }
         }
 
@@ -1791,7 +1791,7 @@ class course extends common
                     (
                         $this->getData(['enrolment', $courseId]) && ($this->getUser('id') === $this->getData(['course', $courseId, 'author']))
                     )
-                    || 
+                    ||
                     (  // Permission d'accéder aux espaces dans lesquels le membre est inscrits
                         $this->getData(['enrolment', $courseId])
                         && $this->getUser('permission', __CLASS__, 'tutor') === true
@@ -1878,10 +1878,11 @@ class course extends common
                 $r = true;
                 break;
             case self::GROUP_EDITOR:
-                $r = in_array($userId, array_keys($this->getData(['enrolment', $courseId])));
-                break;
             case self::GROUP_MEMBER:
-                $r = in_array($userId, array_keys($this->getData(['enrolment', $courseId])));
+                $r = false;
+                if (!is_null($this->getData(['enrolment', $courseId]))) {
+                    $r = in_array($userId, array_keys($this->getData(['enrolment', $courseId])));
+                }
                 break;
             // Visiteur non connecté
             case self::GROUP_VISITOR:
