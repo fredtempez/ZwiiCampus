@@ -18,7 +18,8 @@ if (isset($_GET['key'])) {
     $storedKey = file_get_contents('data.key');
     if ($key !== $storedKey) {
         http_response_code(401); // Clé invalide, renvoie une réponse avec le code d'erreur 401 Unauthorized
-        exit();
+        echo 'Clé incorrecte';
+        exit;
     }
 
     // Définition du filtre par défaut
@@ -61,5 +62,7 @@ if (isset($_GET['key'])) {
     $zip->close();
 
     http_response_code(201); // Création de l'archive réussie, renvoie une réponse avec le code 201 Created
+    echo 'Sauvegarde terminée';
+    exit;
 }
 ?>

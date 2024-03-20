@@ -21,7 +21,8 @@ if (isset ($_GET['key'])) {
     // Vérification de correspondance entre les clés
     if ($key !== $storedKey) {
         http_response_code(401);
-        exit();
+        echo 'Clé incorrecte';
+        exit;
     }
 
     // Récupère le nombre de jours à partir de la variable GET 'days'
@@ -46,4 +47,6 @@ if (isset ($_GET['key'])) {
     }
     // Si la clé est manquante, affiche un message d'erreur et arrête l'exécution du script
     http_response_code(201);
+    echo 'Sauvegarde terminée';
+    exit;
 }
