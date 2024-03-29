@@ -51,7 +51,7 @@ class common
 	const ACCESS_TIMER = 1800;
 
 	// Numéro de version
-	const ZWII_VERSION = '1.7.07';
+	const ZWII_VERSION = '1.7.08';
 
 	// URL autoupdate
 	const ZWII_UPDATE_URL = 'https://forge.chapril.org/ZwiiCMS-Team/campus-update/raw/branch/master/';
@@ -705,65 +705,65 @@ class common
 	 * Fonction pour construire le tableau des pages
 	 */
 
-	private function buildHierarchy()
-	{
-
-		$pages = helper::arrayColumn($this->getData(['page']), 'position', 'SORT_ASC');
-		// Parents
-		foreach ($pages as $pageId => $pagePosition) {
-			if (
-				// Page parent
-				$this->getData(['page', $pageId, 'parentPageId']) === ''
-				// Ignore les pages dont l'utilisateur n'a pas accès
-				and ($this->getData(['page', $pageId, 'group']) === self::GROUP_VISITOR
-					or ($this->getUser('password') === $this->getInput('ZWII_USER_PASSWORD')
-						//and $this->getUser('group') >= $this->getData(['page', $pageId, 'group'])
-						// Modification qui tient compte du profil de la page
-						and ($this->getUser('group') * self::MAX_PROFILS + $this->getUser('profil')) >= ($this->getData(['page', $pageId, 'group']) * self::MAX_PROFILS + $this->getData(['page', $pageId, 'profil']))
-
-					)
-				)
-			) {
-				if ($pagePosition !== 0) {
-					$this->hierarchy['visible'][$pageId] = [];
-				}
-				if ($this->getData(['page', $pageId, 'block']) === 'bar') {
-					$this->hierarchy['bar'][$pageId] = [];
-				}
-				$this->hierarchy['all'][$pageId] = [];
-			}
-		}
-		// Enfants
-		foreach ($pages as $pageId => $pagePosition) {
-			if (
-				// Page parent
-				$parentId = $this->getData(['page', $pageId, 'parentPageId'])
-				// Ignore les pages dont l'utilisateur n'a pas accès
-				and (
-					($this->getData(['page', $pageId, 'group']) === self::GROUP_VISITOR
-						and $this->getData(['page', $parentId, 'group']) === self::GROUP_VISITOR
-					)
-					or ($this->getUser('password') === $this->getInput('ZWII_USER_PASSWORD')
-						//and $this->getUser('group') >= $this->getData(['page', $parentId, 'group'])
-						//and $this->getUser('group') >= $this->getData(['page', $pageId, 'group'])
-
-						// Modification qui tient compte du profil de la page
-						and ($this->getUser('group') * self::MAX_PROFILS + $this->getUser('profil')) >= ($this->getData(['page', $this->$parentId, 'group']) * self::MAX_PROFILS + $this->getData(['page', $this->$parentId, 'profil']))
-						and ($this->getUser('group') * self::MAX_PROFILS + $this->getUser('profil')) >= ($this->getData(['page', $this->$pageId, 'group']) * self::MAX_PROFILS + $this->getData(['page', $pageId, 'profil']))
-
-					)
-				)
-			) {
-				if ($pagePosition !== 0) {
-					$this->hierarchy['visible'][$parentId][] = $pageId;
-				}
-				if ($this->getData(['page', $pageId, 'block']) === 'bar') {
-					$this->hierarchy['bar'][$pageId] = [];
-				}
-				$this->hierarchy['all'][$parentId][] = $pageId;
-			}
-		}
-	}
+	 private function buildHierarchy()
+	 {
+ 
+		 $pages = helper::arrayColumn($this->getData(['page']), 'position', 'SORT_ASC');
+		 // Parents
+		 foreach ($pages as $pageId => $pagePosition) {
+			 if (
+				 // Page parent
+				 $this->getData(['page', $pageId, 'parentPageId']) === ""
+				 // Ignore les pages dont l'utilisateur n'a pas accès
+				 and ($this->getData(['page', $pageId, 'group']) === self::GROUP_VISITOR
+					 or ($this->getUser('password') === $this->getInput('ZWII_USER_PASSWORD')
+						 //and $this->getUser('group') >= $this->getData(['page', $pageId, 'group'])
+						 // Modification qui tient compte du profil de la page
+						 and ($this->getUser('group') * self::MAX_PROFILS + $this->getUser('profil')) >= ($this->getData(['page', $pageId, 'group']) * self::MAX_PROFILS + $this->getData(['page', $pageId, 'profil']))
+ 
+					 )
+				 )
+			 ) {
+				 if ($pagePosition !== 0) {
+					 $this->hierarchy['visible'][$pageId] = [];
+				 }
+				 if ($this->getData(['page', $pageId, 'block']) === 'bar') {
+					 $this->hierarchy['bar'][$pageId] = [];
+				 }
+				 $this->hierarchy['all'][$pageId] = [];
+			 }
+		 }
+		 // Enfants
+		 foreach ($pages as $pageId => $pagePosition) {
+ 
+			 if (
+				 // Page parent
+				 $parentId = $this->getData(['page', $pageId, 'parentPageId'])
+				 // Ignore les pages dont l'utilisateur n'a pas accès
+				 and (
+					 (
+						 $this->getData(['page', $pageId, 'group']) === self::GROUP_VISITOR
+						 and
+						 $this->getData(['page', $parentId, 'group']) === self::GROUP_VISITOR
+					 )
+					 or (
+						 $this->getUser('password') === $this->getInput('ZWII_USER_PASSWORD')
+						 and
+						 $this->getUser('group') * self::MAX_PROFILS + $this->getUser('profil')) >= ($this->getData(['page', $pageId, 'group']) * self::MAX_PROFILS + $this->getData(['page', $pageId, 'profil'])
+ 
+					 )
+				 )
+			 ) {
+				 if ($pagePosition !== 0) {
+					 $this->hierarchy['visible'][$parentId][] = $pageId;
+				 }
+				 if ($this->getData(['page', $pageId, 'block']) === 'bar') {
+					 $this->hierarchy['bar'][$pageId] = [];
+				 }
+				 $this->hierarchy['all'][$parentId][] = $pageId;
+			 }
+		 }
+	 }
 
 	/**
 	 * Génère un fichier json avec la liste des pages
