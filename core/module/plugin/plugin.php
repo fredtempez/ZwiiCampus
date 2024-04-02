@@ -317,7 +317,7 @@ class plugin extends common
 				mkdir(self::FILE_DIR . 'source/modules', 0755);
 			}
 			// Sauver les données du fichiers
-			$this->secureFilePutContents(self::FILE_DIR . 'source/modules/' . $moduleFile, $moduleData);
+			file_put_contents(self::FILE_DIR . 'source/modules/' . $moduleFile, $moduleData);
 
 			// Installation directe
 			if (file_exists(self::FILE_DIR . 'source/modules/' . $moduleFile)) {
@@ -597,7 +597,7 @@ class plugin extends common
 			$fileName = $moduleId . str_replace('.', '-', $infoModule[$moduleId]['version']) . '.zip';
 
 			// Régénération du descripteur du module
-			$this->secureFilePutContents(self::MODULE_DIR . $moduleId . '/enum.json',$infoModule[$moduleId]);
+			file_put_contents(self::MODULE_DIR . $moduleId . '/enum.json', json_encode($infoModule[$moduleId], JSON_UNESCAPED_UNICODE));
 
 			// Construire l'archive
 			$this->makeZip($tmpFolder . $fileName, self::MODULE_DIR . $moduleId);

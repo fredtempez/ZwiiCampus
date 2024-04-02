@@ -304,7 +304,7 @@ class theme extends common
 			$this->isPost()
 		) {
 			// Enregistre le CSS
-			$this->secureFilePutContents(self::DATA_DIR . 'custom.css', $this->getInput('themeAdvancedCss', null));
+			file_put_contents(self::DATA_DIR . 'custom.css', $this->getInput('themeAdvancedCss', null));
 			// Valeurs en sortie
 			$this->addOutput([
 				'notification' => helper::translate('Modifications enregistrées'),
@@ -1305,7 +1305,7 @@ class theme extends common
 		}
 		// Sauvegarder la chaîne modifiée
 		if ($count > 0) {
-			$this->secureFilePutContents($file, $data);
+			file_put_contents($file, $data);
 		}
 		// Retourner le nombre d'occurrences
 		return ($count);
@@ -1411,8 +1411,8 @@ class theme extends common
 		}
 
 		// Enregistre la personnalisation
-		$this->secureFilePutContents(self::DATA_DIR . 'font/font.html', $fileContent);
+		file_put_contents(self::DATA_DIR . 'font/font.html', $fileContent);
 		// Enregistre la personnalisation
-		$this->secureFilePutContents(self::DATA_DIR . 'font/font.css', $fileContentCss);
+		file_put_contents(self::DATA_DIR . 'font/font.css', $fileContentCss);
 	}
 }

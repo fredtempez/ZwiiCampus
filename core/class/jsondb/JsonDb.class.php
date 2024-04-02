@@ -18,12 +18,6 @@ class JsonDb extends \Prowebcraft\Dot
     protected $db = '';
     protected $data = null;
     protected $config = [];
-    // Tentative d'encodage après échec
-    const MAX_JSON_ENCODE_ATTEMPTS = 5;
-    // Tentative d'écriture après échec
-    const MAX_FILE_WRITE_ATTEMPTS = 5;
-    // Délais entre deux tentaives
-    const RETRY_DELAY_SECONDS = 1;
 
     public function __construct($config = [])
     {
@@ -135,9 +129,9 @@ class JsonDb extends \Prowebcraft\Dot
                 }
             }
             $this->data = json_decode(file_get_contents($this->db), true);
-            if (!$this->data === null) {
-                throw new \InvalidArgumentException('Database file ' . $this->db
-                    . ' contains invalid json object. Please validate or remove file');
+            if (!$this->data === null && json_last_error() !== JSON_ERROR_NONE) {
+                throw new \InvalidArgumentException('Le fichier ' . $this->db
+                    . ' contient des données invalides.');
             }
         }
         return $this->data;
@@ -148,54 +142,25 @@ class JsonDb extends \Prowebcraft\Dot
      */
     public function save()
     {
-        $jsonOptions = JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_FORCE_OBJECT;
-        $jsonData = json_encode($this->data, $jsonOptions);
-
-        $attempts = 0;
-        while ($attempts < self::MAX_JSON_ENCODE_ATTEMPTS) {
-            if ($jsonData !== false) {
-                break; // Sortir de la boucle si l'encodage réussit
-            }
-            $attempts++;
-            error_log('Erreur d\'encodage JSON (tentative ' . $attempts . ') : ' . json_last_error_msg());
-            $jsonData = json_encode($this->data, $jsonOptions); // Réessayer l'encodage
-            sleep(self::RETRY_DELAY_SECONDS); // Attendre avant de réessayer
+        $v = json_encode($this->data, JSON_UNESCAPED_UNICODE | JSON_FORCE_OBJECT | JSON_PRETTY_PRINT);
+        // $v = json_encode($this->data, JSON_UNESCAPED_UNICODE | JSON_FORCE_OBJECT);
+        $l = strlen($v);
+        $t = 0;
+        if ($v === false) {
+            error_log('Erreur d\'encodage JSON : ' . json_last_error_msg());
+            exit ('Erreur d\'encodage JSON : ' . json_last_error_msg());
         }
-
-        if ($jsonData === false) {
-            error_log('Impossible d\'encoder les données en format JSON.');
-            return false;
-        }
-        $lockHandle = fopen($this->db, 'r+');
-
-        if (flock($lockHandle, LOCK_EX)) {
-            $attempts = 0;
-            $bytesWritten = false;
-            while ($attempts < self::MAX_FILE_WRITE_ATTEMPTS && $bytesWritten === false) {
-                ftruncate($lockHandle, 0); // Vide le fichier
-                rewind($lockHandle); // Remet le pointeur au début du fichier
-                $bytesWritten = fwrite($lockHandle, $jsonData);
-                if ($bytesWritten === false) {
-                    $attempts++;
-                    error_log('Erreur d\'écriture (tentative ' . $attempts . ') : impossible de sauvegarder les données.');
-                    sleep(self::RETRY_DELAY_SECONDS); // Attendre avant de réessayer
-                }
+        while ($t < 5) {
+            $w = file_put_contents($this->db, $v); // Multi user get a locker
+            if ($w == $l) {
+                break;
             }
-            flock($lockHandle, LOCK_UN); // Libérer le verrouillage
-            fclose($lockHandle); // Fermer le fichier
-
-            if ($bytesWritten === false || $bytesWritten != strlen($jsonData)) {
-                error_log('Erreur d\'écriture, les données n\'ont pas été sauvegardées.');
-                return false;
-            }
-        } else {
-            error_log('Impossible d\'obtenir un verrouillage sur le fichier de base de données.');
-            fclose($lockHandle); // Fermer le fichier
-            return false;
+            $t++;
         }
-        return true;
-
+        if ($w !== $l) {
+            error_log('Erreur d\'écriture, les données n\'ont pas été sauvegardées.');
+            exit('Erreur d\'écriture, les données n\'ont pas été sauvegardées.');
+        }
 
     }
-
 }

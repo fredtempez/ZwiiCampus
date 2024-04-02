@@ -99,7 +99,7 @@ class language extends common
 				is_array($descripteur['language'][$lang])
 			) {
 				if ($this->setData(['language', $lang, $descripteur['language'][$lang]])) {
-					$success = $this->secureFilePutContents(self::I18N_DIR . $lang . '.json', $languageData);
+					$success = file_put_contents(self::I18N_DIR . $lang . '.json', json_encode($languageData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
 					$success = is_int($success) ? true : false;
 				}
 			}
@@ -419,7 +419,7 @@ class language extends common
 				$this->setData(['locale', $data['locale']]);
 			} else {
 				// Sauver sur le disque
-				$this->secureFilePutContents(self::DATA_DIR . $lang . '/locale.json', $data);
+				file_put_contents(self::DATA_DIR . $lang . '/locale.json', json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT), LOCK_EX);
 			}
 
 			// Valeurs en sortie
@@ -501,7 +501,7 @@ class language extends common
 					$data[$key] = $target;
 				}
 			}
-			$this->secureFilePutContents(self::I18N_DIR . $lang . '.json', $data);
+			file_put_contents(self::I18N_DIR . $lang . '.json', json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT), LOCK_EX);
 
 			// Mettre à jour le descripteur
 			$this->setData([
@@ -535,7 +535,7 @@ class language extends common
 				$data[$key] = '';
 			}
 		}
-		$this->secureFilePutContents(self::I18N_DIR . $lang . '.json', $data);
+		file_put_contents(self::I18N_DIR . $lang . '.json', json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT), LOCK_EX);
 
 		//  Tableau des chaines à traduire dans la langue sélectionnée
 		foreach ($data as $key => $value) {
