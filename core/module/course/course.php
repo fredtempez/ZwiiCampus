@@ -1551,7 +1551,6 @@ class course extends common
 
     /**
      * Désinscription d'un participant
-     * La désinscription ne supprime pas l'historique
      */
     public function unsuscribe()
     {
@@ -1563,7 +1562,7 @@ class course extends common
             && array_key_exists($courseId, $this->getData(['course']))
         ) {
             $userId = $this->getUser('id');
-            //$this->deleteData(['enrolment', $courseId, $userId]);
+            $this->deleteData(['enrolment', $courseId, $userId]);
             $_SESSION['ZWII_SITE_CONTENT'] = 'home';
             // Valeurs en sortie
             $this->addOutput([
