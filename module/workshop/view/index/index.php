@@ -4,7 +4,7 @@
     <?php if (
         $this->getData(['module', $this->getUrl(0), 'config', 'category']) !== 'all' &&
         $courseValue['category'] !== $this->getData(['module', $this->getUrl(0), 'config', 'category'])
-        ): ?>
+    ): ?>
         <?php continue; ?>
     <?php endif; ?>
     <?php if ($startRow === 0): ?>
@@ -53,7 +53,7 @@
                     <div class="workshopAccessContainer">
                         <p>
                             <span class="workshopAccess">
-                                <?php echo sprintf(helper::translate($module::$coursesAccess[$courseValue['access']]), helper::dateUTF8('%d %B %Y', $courseValue['openingDate']) . helper::translate(' à ') . helper::dateUTF8('%H:%M', $courseValue['openingDate']) , helper::dateUTF8('%d %B %Y', $courseValue['closingDate']) . helper::translate(' à ') . helper::dateUTF8('%H:%M', $courseValue['closingDate'])) ?>
+                                <?php echo sprintf(helper::translate($module::$coursesAccess[$courseValue['access']]), helper::dateUTF8('%d %B %Y', $courseValue['openingDate']) . helper::translate(' à ') . helper::dateUTF8('%H:%M', $courseValue['openingDate']), helper::dateUTF8('%d %B %Y', $courseValue['closingDate']) . helper::translate(' à ') . helper::dateUTF8('%H:%M', $courseValue['closingDate'])) ?>
                             </span>
                         </p>
                     </div>
@@ -92,7 +92,10 @@
                     </div>
                     <div class="col6 textAlignRight">
                         <!-- Lien désinscription-->
-                        <?php if ($this->getData(['enrolment', $courseId, $this->getUser('id')])): ?>
+                        <?php if (
+                            $this->getData(['enrolment', $courseId, $this->getUser('id')])
+                            && $this->getData(['module', $this->getUrl(0), 'config', 'unsuscribe']) === true
+                        ): ?>
                             <span class="workshopUnsuscribe">
                                 <a href="<?php echo helper::baseUrl(); ?>course/unsuscribe/<?php echo $courseId; ?>">
                                     <?php echo $this->getData(['module', $this->getUrl(0), 'caption', 'unsuscribe']); ?>

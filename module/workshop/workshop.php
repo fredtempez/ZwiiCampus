@@ -15,8 +15,8 @@
 
 class workshop extends common
 {
-	const VERSION = '1.0';
-	const REALNAME = 'Liste des contenus';
+	const VERSION = '1.01';
+	const REALNAME = 'Liste des espaces';
 	const DATADIRECTORY = ''; // Contenu localisé inclus par défaut (page.json et module.json)
 
 	public static $actions = [
@@ -49,7 +49,8 @@ class workshop extends common
 			'access' => true,
 			'enrolment' => true,
 			'layout' => 6,
-			'template' => true
+			'template' => true,
+			'unsuscribe' => false,
 		),
 		'caption' => array(
 			'accessopen' => 'Ouvert',
@@ -88,6 +89,7 @@ class workshop extends common
 					'title' => $this->getInput('coursesConfigShowTitle', helper::FILTER_BOOLEAN),
 					'author' => $this->getInput('coursesConfigShowAuthor', helper::FILTER_BOOLEAN),
 					'description' => $this->getInput('coursesConfigShowDescription', helper::FILTER_BOOLEAN),
+					'unsuscribe'=> $this->getInput('coursesConfigShowUnsuscribe', helper::FILTER_BOOLEAN),
 					'access' => $this->getInput('coursesConfigShowAccess', helper::FILTER_BOOLEAN),
 					'openingdate' => $this->getInput('coursesConfigShowOpeningDate', helper::FILTER_BOOLEAN),
 					'closingdate' => $this->getInput('coursesConfigShowClosingDate', helper::FILTER_BOOLEAN),

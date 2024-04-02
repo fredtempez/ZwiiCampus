@@ -26,15 +26,13 @@
 				<?php echo helper::translate('Elements à afficher'); ?>
 			</h4>
 			<div class="row">
-				<div class="col12">
+				<div class="col6">
 					<?php echo template::checkbox('coursesConfigShowTitle', true, 'Titre', [
 						'checked' => $this->getData(['module', $this->getUrl(0), 'config', 'title']),
 						'help' => 'Classe CSS de l\'élément en ligne : workshopTitle'
 					]); ?>
 				</div>
-			</div>
-			<div class="row">
-				<div class="col12">
+				<div class="col6">
 					<?php echo template::checkbox('coursesConfigShowAuthor', true, 'Signature de l\'auteur', [
 						'checked' => $this->getData(['module', $this->getUrl(0), 'config', 'author']),
 						'help' => 'Classe CSS de l\'élément en ligne : workshopTitle'
@@ -42,26 +40,30 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col12">
+				<div class="col6">
 					<?php echo template::checkbox('coursesConfigShowDescription', true, 'Description', [
 						'checked' => $this->getData(['module', $this->getUrl(0), 'config', 'description']),
 						'help' => 'Classe CSS de l\'élément en ligne : workshopDescription'
 					]); ?>
 				</div>
-			</div>
-			<div class="row">
-				<div class="col4">
+				<div class="col6">
 					<?php echo template::checkbox('coursesConfigShowAccess', true, 'Modalités d\'ouverture', [
 						'checked' => $this->getData(['module', $this->getUrl(0), 'config', 'access']),
-						'help' => 'Classes CSS de la division workshopAccessContainer, élément en ligne workshopAccess'
+						'help' => 'Classe CSS de la division : workshopAccessContainer, élément en ligne : workshopAccess'
 					]); ?>
 				</div>
 			</div>
 			<div class="row">
-				<div class="col12">
+				<div class="col6">
 					<?php echo template::checkbox('coursesConfigShowEnrolment', true, 'Modalités d\'inscription', [
 						'checked' => $this->getData(['module', $this->getUrl(0), 'config', 'enrolment']),
 						'help' => 'Classe CSS de l\'élément en ligne : workshopEnrolment'
+					]); ?>
+				</div>
+				<div class="col6">
+					<?php echo template::checkbox('coursesConfigShowUnsuscribe', true, 'Désinscription', [
+						'checked' => $this->getData(['module', $this->getUrl(0), 'config', 'unsuscribe']),
+						'help' => 'Classe CSS de l\'élément en ligne : workshopUnsuscribe'
 					]); ?>
 				</div>
 			</div>
