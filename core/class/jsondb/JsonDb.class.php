@@ -18,9 +18,9 @@ class JsonDb extends \Prowebcraft\Dot
     protected $db = '';
     protected $data = null;
     protected $config = [];
-// Tentative d'encodage après échec
+    // Tentative d'encodage après échec
     const MAX_JSON_ENCODE_ATTEMPTS = 5;
-// Tentative d'écriture après échec
+    // Tentative d'écriture après échec
     const MAX_FILE_WRITE_ATTEMPTS = 5;
     // Délais entre deux tentaives
     const RETRY_DELAY_SECONDS = 1;
@@ -197,8 +197,4 @@ class JsonDb extends \Prowebcraft\Dot
         return true;
     }
 
-
-
-
-    
 }
