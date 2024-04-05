@@ -60,18 +60,6 @@ class common
 	// Valeurs possibles multiple de 10, 10 autorise 9 profils, 100 autorise 99 profils
 	const MAX_PROFILS = 10;
 
-	const MAX_FILE_WRITE_ATTEMPTS = 5;
-	
-	/**
-	 * Nombre maximal de tentatives d'encodage JSON
-	 */
-	const MAX_JSON_ENCODE_ATTEMPTS = 3;
-
-	/**
-	 * Temps d'attente entre les tentatives en secondes
-	 */
-	const RETRY_DELAY_SECONDS = 1;
-
 	// Constantes pourles contenus
 
 	// Modalités d'ouverture
@@ -83,6 +71,18 @@ class common
 	const COURSE_ENROLMENT_SELF = 1; // Ouvert à tous les membres
 	const COURSE_ENROLMENT_SELF_KEY = 2; // Ouvert à tous les membres disposant de la clé
 	const COURSE_ENROLMENT_MANDATORY = 3;
+
+	const MAX_FILE_WRITE_ATTEMPTS = 5;
+	
+	/**
+	 * Nombre maximal de tentatives d'encodage JSON
+	 */
+	const MAX_JSON_ENCODE_ATTEMPTS = 3;
+
+	/**
+	 * Temps d'attente entre les tentatives en secondes
+	 */
+	const RETRY_DELAY_SECONDS = 1;
 
 
 	public static $actions = [];
