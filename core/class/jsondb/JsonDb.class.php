@@ -18,9 +18,12 @@ class JsonDb extends \Prowebcraft\Dot
     protected $db = '';
     protected $data = null;
     protected $config = [];
-
+// Tentative d'encodage après échec
     const MAX_JSON_ENCODE_ATTEMPTS = 5;
+// Tentative d'écriture après échec
     const MAX_FILE_WRITE_ATTEMPTS = 5;
+    // Délais entre deux tentaives
+    const RETRY_DELAY_SECONDS = 1;
 
     public function __construct($config = [])
     {
@@ -156,6 +159,7 @@ class JsonDb extends \Prowebcraft\Dot
             $attempts++;
             error_log('Erreur d\'encodage JSON (tentative ' . $attempts . ') : ' . json_last_error_msg());
             $jsonData = json_encode($this->data, $jsonOptions); // Réessayer l'encodage
+            sleep(self::RETRY_DELAY_SECONDS); // Attendre avant de réessayer
         }
 
         if ($jsonData === false) {
@@ -174,6 +178,7 @@ class JsonDb extends \Prowebcraft\Dot
                 if ($bytesWritten === false) {
                     $attempts++;
                     error_log('Erreur d\'écriture (tentative ' . $attempts . ') : impossible de sauvegarder les données.');
+                    sleep(self::RETRY_DELAY_SECONDS); // Attendre avant de réessayer
                 }
             }
             flock($lockHandle, LOCK_UN);
@@ -191,6 +196,9 @@ class JsonDb extends \Prowebcraft\Dot
 
         return true;
     }
+
+
+
 
     
 }
