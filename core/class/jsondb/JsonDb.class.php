@@ -19,6 +19,9 @@ class JsonDb extends \Prowebcraft\Dot
     protected $data = null;
     protected $config = [];
 
+    const MAX_JSON_ENCODE_ATTEMPTS = 5;
+    const MAX_FILE_WRITE_ATTEMPTS = 5;
+
     public function __construct($config = [])
     {
         $this->config = array_merge([
@@ -142,21 +145,52 @@ class JsonDb extends \Prowebcraft\Dot
      */
     public function save()
     {
-        $v = json_encode($this->data, JSON_UNESCAPED_UNICODE | JSON_FORCE_OBJECT );
-        // $v = json_encode($this->data, JSON_UNESCAPED_UNICODE | JSON_FORCE_OBJECT);
-        $l = strlen($v);
-        $t = 0;
-        while ($t < 5) {
-            $w = file_put_contents($this->db, $v); // Multi user get a locker
-            if ($w == $l) {
-                break;
+        $jsonOptions = JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_FORCE_OBJECT;
+        $jsonData = json_encode($this->data, $jsonOptions);
+
+        $attempts = 0;
+        while ($attempts < self::MAX_JSON_ENCODE_ATTEMPTS) {
+            if ($jsonData !== false) {
+                break; // Sortir de la boucle si l'encodage réussit
             }
-            $t++;
-        }
-        if ($w !== $l) {
-            error_log('Erreur d\'écriture, les données n\'ont pas été sauvegardées.');
-            exit('Erreur d\'écriture, les données n\'ont pas été sauvegardées.');
+            $attempts++;
+            error_log('Erreur d\'encodage JSON (tentative ' . $attempts . ') : ' . json_last_error_msg());
+            $jsonData = json_encode($this->data, $jsonOptions); // Réessayer l'encodage
         }
 
+        if ($jsonData === false) {
+            error_log('Impossible d\'encoder les données en format JSON.');
+            return false;
+        }
+
+        $lockFile = $this->db . '.lock';
+        $lockHandle = fopen($lockFile, 'w');
+
+        if (flock($lockHandle, LOCK_EX)) {
+            $attempts = 0;
+            $bytesWritten = false;
+            while ($attempts < self::MAX_FILE_WRITE_ATTEMPTS && $bytesWritten === false) {
+                $bytesWritten = file_put_contents($this->db, $jsonData);
+                if ($bytesWritten === false) {
+                    $attempts++;
+                    error_log('Erreur d\'écriture (tentative ' . $attempts . ') : impossible de sauvegarder les données.');
+                }
+            }
+            flock($lockHandle, LOCK_UN);
+            fclose($lockHandle);
+
+            if ($bytesWritten === false || $bytesWritten != strlen($jsonData)) {
+                error_log('Erreur d\'écriture, les données n\'ont pas été sauvegardées.');
+                return false;
+            }
+        } else {
+            error_log('Impossible d\'obtenir un verrouillage sur le fichier de base de données.');
+            fclose($lockHandle);
+            return false;
+        }
+
+        return true;
     }
+
+    
 }
