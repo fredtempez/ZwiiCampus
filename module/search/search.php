@@ -106,7 +106,7 @@ class search extends common
 			// Générer la feuille de CSS
 			$style = '.keywordColor {background: ' . $this->getData(['module', $this->getUrl(0), 'theme', 'keywordColor']) . ';}';
 			// Sauver la feuille de style
-			$this->secureFilePutContents(self::DATADIRECTORY . $this->getUrl(0) . '/theme.css', $style);
+			file_put_contents(self::DATADIRECTORY . $this->getUrl(0) . '/theme.css', $style);
 			// Stocker le nom de la feuille de style
 			$this->setData(['module', $this->getUrl(0), 'theme', 'style', $fileCSS]);
 		}
@@ -128,7 +128,7 @@ class search extends common
 			// Générer la feuille de CSS
 			$style = '.keywordColor {background:' . $this->getInput('searchKeywordColor') . ';}';
 
-			$success = is_int($this->secureFilePutContents(self::DATADIRECTORY . $this->getUrl(0) . '/theme.css', $style));
+			$success = is_int(file_put_contents(self::DATADIRECTORY . $this->getUrl(0) . '/theme.css', $style));
 			// Fin feuille de style
 
 			// Soumission du formulaire

@@ -260,7 +260,7 @@ class gallery extends common
 			$content = str_replace('#legendBgColor#', $this->getData(['module', $this->getUrl(0), 'theme', 'legendBgColor']), $content);
 
 			// Ecriture de la feuille de style
-			$this->secureFilePutContents(self::DATADIRECTORY . $this->getUrl(0) . '/theme.css', $content . $themeCss);
+			file_put_contents(self::DATADIRECTORY . $this->getUrl(0) . '/theme.css', $content . $themeCss);
 			// Nom de la feuille de style
 			$this->setData(['module', $this->getUrl(0), 'theme', 'style', $fileCSS]);
 		}
@@ -894,7 +894,7 @@ class gallery extends common
 			$content = str_replace('#legendHeight#', $this->getinput('galleryThemeLegendHeight'), $content);
 			$content = str_replace('#legendTextColor#', $this->getinput('galleryThemeLegendTextColor'), $content);
 			$content = str_replace('#legendBgColor#', $this->getinput('galleryThemeLegendBgColor'), $content);
-			$success = is_int($this->secureFilePutContents(self::DATADIRECTORY . $this->getUrl(0) . '/theme.css', $content . $themeCss));
+			$success = is_int(file_put_contents(self::DATADIRECTORY . $this->getUrl(0) . '/theme.css', $content . $themeCss));
 			// Valeurs en sortie
 			$this->addOutput([
 				'redirect' => helper::baseUrl() . $this->getUrl() . '/theme',
