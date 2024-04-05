@@ -834,6 +834,9 @@ class common
                 }
             } else {
                 fclose($lockHandle);
+				if (file_exists($lockHandle)) {
+					unlink($lockHandle);
+				}
             }
             $attempts++;
             error_log('Erreur d\'écriture (tentative ' . $attempts . ') : impossible de sauvegarder les données dans ' . $filename);
