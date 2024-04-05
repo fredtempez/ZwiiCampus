@@ -60,6 +60,18 @@ class common
 	// Valeurs possibles multiple de 10, 10 autorise 9 profils, 100 autorise 99 profils
 	const MAX_PROFILS = 10;
 
+	const MAX_FILE_WRITE_ATTEMPTS = 5;
+	
+	/**
+	 * Nombre maximal de tentatives d'encodage JSON
+	 */
+	const MAX_JSON_ENCODE_ATTEMPTS = 3;
+
+	/**
+	 * Temps d'attente entre les tentatives en secondes
+	 */
+	const RETRY_DELAY_SECONDS = 1;
+
 	// Constantes pourles contenus
 
 	// Modalités d'ouverture
@@ -447,7 +459,7 @@ class common
 		}
 
 		// Mise à jour des données core
-		include('core/include/update.inc.php');
+		include ('core/include/update.inc.php');
 
 	}
 
@@ -595,7 +607,7 @@ class common
 	public function setPage($page, $value, $path)
 	{
 
-		return file_put_contents(self::DATA_DIR . $path . '/content/' . $page . '.html', $value);
+		return $this->secureFilePutContents(self::DATA_DIR . $path . '/content/' . $page . '.html', $value);
 	}
 
 
@@ -634,7 +646,7 @@ class common
 	{
 
 		// Tableau avec les données vierges
-		require_once('core/module/install/ressource/defaultdata.php');
+		require_once ('core/module/install/ressource/defaultdata.php');
 
 		// L'arborescence
 		if (!file_exists(self::DATA_DIR . $path)) {
@@ -669,7 +681,7 @@ class common
 	public function saveConfig($module)
 	{
 		// Tableau avec les données vierges
-		require_once('core/module/install/ressource/defaultdata.php');
+		require_once ('core/module/install/ressource/defaultdata.php');
 		// Installation des données des autres modules cad theme profil font config, admin et core
 		$this->setData([$module, init::$defaultData[$module]]);
 		common::$coreNotices[] = $module;
@@ -705,65 +717,134 @@ class common
 	 * Fonction pour construire le tableau des pages
 	 */
 
-	 private function buildHierarchy()
-	 {
- 
-		 $pages = helper::arrayColumn($this->getData(['page']), 'position', 'SORT_ASC');
-		 // Parents
-		 foreach ($pages as $pageId => $pagePosition) {
-			 if (
-				 // Page parent
-				 $this->getData(['page', $pageId, 'parentPageId']) === ""
-				 // Ignore les pages dont l'utilisateur n'a pas accès
-				 and ($this->getData(['page', $pageId, 'group']) === self::GROUP_VISITOR
-					 or ($this->getUser('password') === $this->getInput('ZWII_USER_PASSWORD')
-						 //and $this->getUser('group') >= $this->getData(['page', $pageId, 'group'])
-						 // Modification qui tient compte du profil de la page
-						 and ($this->getUser('group') * self::MAX_PROFILS + $this->getUser('profil')) >= ($this->getData(['page', $pageId, 'group']) * self::MAX_PROFILS + $this->getData(['page', $pageId, 'profil']))
- 
-					 )
-				 )
-			 ) {
-				 if ($pagePosition !== 0) {
-					 $this->hierarchy['visible'][$pageId] = [];
-				 }
-				 if ($this->getData(['page', $pageId, 'block']) === 'bar') {
-					 $this->hierarchy['bar'][$pageId] = [];
-				 }
-				 $this->hierarchy['all'][$pageId] = [];
-			 }
-		 }
-		 // Enfants
-		 foreach ($pages as $pageId => $pagePosition) {
- 
-			 if (
-				 // Page parent
-				 $parentId = $this->getData(['page', $pageId, 'parentPageId'])
-				 // Ignore les pages dont l'utilisateur n'a pas accès
-				 and (
-					 (
-						 $this->getData(['page', $pageId, 'group']) === self::GROUP_VISITOR
-						 and
-						 $this->getData(['page', $parentId, 'group']) === self::GROUP_VISITOR
-					 )
-					 or (
-						 $this->getUser('password') === $this->getInput('ZWII_USER_PASSWORD')
-						 and
-						 $this->getUser('group') * self::MAX_PROFILS + $this->getUser('profil')) >= ($this->getData(['page', $pageId, 'group']) * self::MAX_PROFILS + $this->getData(['page', $pageId, 'profil'])
- 
-					 )
-				 )
-			 ) {
-				 if ($pagePosition !== 0) {
-					 $this->hierarchy['visible'][$parentId][] = $pageId;
-				 }
-				 if ($this->getData(['page', $pageId, 'block']) === 'bar') {
-					 $this->hierarchy['bar'][$pageId] = [];
-				 }
-				 $this->hierarchy['all'][$parentId][] = $pageId;
-			 }
-		 }
-	 }
+	private function buildHierarchy()
+	{
+
+		$pages = helper::arrayColumn($this->getData(['page']), 'position', 'SORT_ASC');
+		// Parents
+		foreach ($pages as $pageId => $pagePosition) {
+			if (
+				// Page parent
+				$this->getData(['page', $pageId, 'parentPageId']) === ""
+				// Ignore les pages dont l'utilisateur n'a pas accès
+				and ($this->getData(['page', $pageId, 'group']) === self::GROUP_VISITOR
+					or ($this->getUser('password') === $this->getInput('ZWII_USER_PASSWORD')
+						//and $this->getUser('group') >= $this->getData(['page', $pageId, 'group'])
+						// Modification qui tient compte du profil de la page
+						and ($this->getUser('group') * self::MAX_PROFILS + $this->getUser('profil')) >= ($this->getData(['page', $pageId, 'group']) * self::MAX_PROFILS + $this->getData(['page', $pageId, 'profil']))
+
+					)
+				)
+			) {
+				if ($pagePosition !== 0) {
+					$this->hierarchy['visible'][$pageId] = [];
+				}
+				if ($this->getData(['page', $pageId, 'block']) === 'bar') {
+					$this->hierarchy['bar'][$pageId] = [];
+				}
+				$this->hierarchy['all'][$pageId] = [];
+			}
+		}
+		// Enfants
+		foreach ($pages as $pageId => $pagePosition) {
+
+			if (
+				// Page parent
+				$parentId = $this->getData(['page', $pageId, 'parentPageId'])
+				// Ignore les pages dont l'utilisateur n'a pas accès
+				and (
+					(
+						$this->getData(['page', $pageId, 'group']) === self::GROUP_VISITOR
+						and
+						$this->getData(['page', $parentId, 'group']) === self::GROUP_VISITOR
+					)
+					or (
+						$this->getUser('password') === $this->getInput('ZWII_USER_PASSWORD')
+						and
+						$this->getUser('group') * self::MAX_PROFILS + $this->getUser('profil')) >= ($this->getData(['page', $pageId, 'group']) * self::MAX_PROFILS + $this->getData(['page', $pageId, 'profil'])
+
+					)
+				)
+			) {
+				if ($pagePosition !== 0) {
+					$this->hierarchy['visible'][$parentId][] = $pageId;
+				}
+				if ($this->getData(['page', $pageId, 'block']) === 'bar') {
+					$this->hierarchy['bar'][$pageId] = [];
+				}
+				$this->hierarchy['all'][$parentId][] = $pageId;
+			}
+		}
+	}
+
+	/**
+	 * Nombre maximal de tentatives d'écriture dans le fichier
+	 */
+
+
+   /**
+     * Écriture sécurisée dans un fichier en utilisant un verrouillage de fichier pour éviter les accès concurrents.
+     * Les données sont encodées au format JSON si l'extension du fichier est JSON.
+     *
+     * @param string $filename Le chemin du fichier dans lequel écrire les données.
+     * @param mixed  $data     Les données à écrire dans le fichier.
+     * @param int    $options  Les options pour la fonction file_put_contents, par défaut 0.
+     *
+     * @return bool            Retourne true si l'écriture dans le fichier est réussie, false sinon.
+     */
+    public static function secureFilePutContents($filename, $data, $options = 0)
+    {
+        // Vérifier si l'extension du fichier est JSON
+        $extension = pathinfo($filename, PATHINFO_EXTENSION);
+        $encodeJson = strtolower($extension) === 'json';
+
+        // Tentatives d'encodage JSON si nécessaire
+        if ($encodeJson) {
+            $jsonData = null;
+            $attempts = 0;
+            while ($attempts < self::MAX_JSON_ENCODE_ATTEMPTS) {
+                $jsonData = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+                if ($jsonData !== false) {
+                    break; // Sortir de la boucle si l'encodage réussit
+                }
+                $attempts++;
+                error_log('Erreur d\'encodage JSON (tentative ' . $attempts . ') : ' . json_last_error_msg());
+                sleep(self::RETRY_DELAY_SECONDS); // Attendre avant de réessayer
+            }
+
+            if ($jsonData === false) {
+                error_log('Impossible d\'encoder les données en format JSON.');
+                return false;
+            }
+        } else {
+            // Pas d'encodage JSON nécessaire
+            $jsonData = $data;
+        }
+
+        // Écriture sécurisée dans le fichier avec un verrouillage
+        $attempts = 0;
+        while ($attempts < self::MAX_FILE_WRITE_ATTEMPTS) {
+            $lockHandle = fopen($filename . '.lock', 'w');
+            if (flock($lockHandle, LOCK_EX)) {
+                $bytesWritten = file_put_contents($filename, $jsonData, $options);
+                flock($lockHandle, LOCK_UN);
+                fclose($lockHandle);
+                if ($bytesWritten !== false && $bytesWritten === strlen($jsonData)) {
+                    return true; // Écriture réussie
+                }
+            } else {
+                fclose($lockHandle);
+            }
+            $attempts++;
+            error_log('Erreur d\'écriture (tentative ' . $attempts . ') : impossible de sauvegarder les données dans ' . $filename);
+            sleep(self::RETRY_DELAY_SECONDS); // Attendre avant de réessayer
+        }
+
+        error_log('Impossible d\'écrire dans le fichier ' . $filename . ' après ' . self::MAX_FILE_WRITE_ATTEMPTS . ' tentatives.');
+        return false;
+    }
+
+
 
 	/**
 	 * Génère un fichier json avec la liste des pages
@@ -826,7 +907,7 @@ class common
 
 		// Enregistrement : 3 tentatives
 		for ($i = 0; $i < 3; $i++) {
-			if (file_put_contents('core/vendor/tinymce/link_list.json', json_encode($parents, JSON_UNESCAPED_UNICODE), LOCK_EX) !== false) {
+			if ($this->secureFilePutContents('core/vendor/tinymce/link_list.json', json_encode($parents, JSON_UNESCAPED_UNICODE), LOCK_EX) !== false) {
 				break;
 			}
 			// Pause de 10 millisecondes
@@ -1118,7 +1199,7 @@ class common
 			}
 			$sitemap->updateRobots();
 		} else {
-			file_put_contents('robots.txt', 'User-agent: *' . PHP_EOL . 'Disallow: /');
+			$this->secureFilePutContents('robots.txt', 'User-agent: *' . PHP_EOL . 'Disallow: /');
 		}
 
 		// Submit your sitemaps to Google, Yahoo, Bing and Ask.com
@@ -1408,7 +1489,7 @@ class common
 		$dataLog .= $message ? $this->getUrl() . ';' . $message : $this->getUrl();
 		$dataLog .= PHP_EOL;
 		if ($this->getData(['config', 'connect', 'log'])) {
-			file_put_contents(self::DATA_DIR . 'journal.log', $dataLog, FILE_APPEND);
+			$this->secureFilePutContents(self::DATA_DIR . 'journal.log', $dataLog, FILE_APPEND);
 		}
 	}
 
@@ -1435,8 +1516,8 @@ class common
 				foreach ($courses as $courseId => $value) {
 					// Affiche les espaces gérés par l'éditeur, les espaces où il participe et les espaces anonymes
 					if (
-						// le membre est inscrit
-						( $this->getData(['enrolment', $courseId]) &&  array_key_exists($this->getUser('id'),  $this->getData(['enrolment', $courseId])) )
+							// le membre est inscrit
+						($this->getData(['enrolment', $courseId]) && array_key_exists($this->getUser('id'), $this->getData(['enrolment', $courseId])))
 						// Il est l'auteur
 						|| $this->getUser('id') === $this->getData(['course', $courseId, 'author'])
 						// Le cours est ouvert
@@ -1450,7 +1531,7 @@ class common
 				foreach ($courses as $courseId => $value) {
 					// Affiche les espaces du participant et les espaces anonymes 
 					if (
-						($this->getData(['enrolment', $courseId]) && array_key_exists($this->getUser('id'), $this->getData(['enrolment', $courseId])) )
+						($this->getData(['enrolment', $courseId]) && array_key_exists($this->getUser('id'), $this->getData(['enrolment', $courseId])))
 						|| $this->getData(['course', $courseId, 'enrolment']) === self::COURSE_ENROLMENT_GUEST
 					) {
 						$filter[$courseId] = $courses[$courseId];

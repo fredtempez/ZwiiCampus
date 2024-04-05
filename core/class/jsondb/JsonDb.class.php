@@ -193,7 +193,10 @@ class JsonDb extends \Prowebcraft\Dot
             fclose($lockHandle);
             return false;
         }
-
+        // Supprimer le fichier de verrouillage
+        if (file_exists($lockFile)) {
+            unlink($lockFile);
+        }
         return true;
     }
 

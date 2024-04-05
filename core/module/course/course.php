@@ -1597,17 +1597,17 @@ class course extends common
             // Participants avec historiques
             $enrolment = $this->getData(['enrolment', $courseId]);
             // Générer un fichier dans le dossier de l'espace
-            file_put_contents(self::DATA_DIR . $courseId . '/enrolment.json', json_encode([$courseId => $enrolment], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+            $this->secureFilePutContents(self::DATA_DIR . $courseId . '/enrolment.json', [$courseId => $enrolment]);
 
             // Idem pour les données du cours
             $course = $this->getData(['course', $courseId]);
             // Générer un fichier dans le dossier de l'espace
-            file_put_contents(self::DATA_DIR . $courseId . '/course.json', json_encode([$courseId => $course], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+            $this->secureFilePutContents(self::DATA_DIR . $courseId . '/course.json',[$courseId => $course]);
 
             // Idem pour la catégorie
             $category = $this->getData(['category', $this->getData(['course', $courseId, 'category'])]);
             // Générer un fichier dans le dossier de l'espace
-            file_put_contents(self::DATA_DIR . $courseId . '/category.json', json_encode([$this->getData(['course', $courseId, 'category']) => $category], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+            $this->secureFilePutContents(self::DATA_DIR . $courseId . '/category.json', [$this->getData(['course', $courseId, 'category']) => $category]);
 
 
             // Génère une archive ZIP

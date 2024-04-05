@@ -281,7 +281,7 @@ class news extends common
 				mkdir(self::DATADIRECTORY . $this->getUrl(0) . '/theme.css', 0755, true);
 			}
 
-			$success = is_int(file_put_contents(self::DATADIRECTORY . $this->getUrl(0) . '/theme.css', $style));
+			$success = is_int($this->secureFilePutContents(self::DATADIRECTORY . $this->getUrl(0) . '/theme.css', $style));
 
 			// Fin feuille de style
 
@@ -643,7 +643,7 @@ class news extends common
 			$style .= '}';
 
 			// Sauver la feuille de style
-			file_put_contents(self::DATADIRECTORY . $this->getUrl(0) . '/theme.css', $style);
+			$this->secureFilePutContents(self::DATADIRECTORY . $this->getUrl(0) . '/theme.css', $style);
 			// Stocker le nom de la feuille de style
 			$this->setData(['module', $this->getUrl(0), 'theme', 'style', self::DATADIRECTORY . $this->getUrl(0) . '/theme.css']);
 		}
