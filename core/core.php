@@ -847,9 +847,6 @@ class common
 		error_log('Impossible d\'écrire dans le fichier ' . $filename . ' après ' . self::MAX_FILE_WRITE_ATTEMPTS . ' tentatives.');
 		return false;
 	}
-	
-
-
 
 	/**
 	 * Génère un fichier json avec la liste des pages
