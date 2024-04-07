@@ -183,7 +183,7 @@ class JsonDb extends \Prowebcraft\Dot
             }
             flock($lockHandle, LOCK_UN); // Libérer le verrouillage
             fclose($lockHandle); // Fermer le fichier
-        
+
             if ($bytesWritten === false || $bytesWritten != strlen($jsonData)) {
                 error_log('Erreur d\'écriture, les données n\'ont pas été sauvegardées.');
                 return false;
@@ -194,8 +194,8 @@ class JsonDb extends \Prowebcraft\Dot
             return false;
         }
         return true;
-        
-        
+
+
     }
 
 }

@@ -73,7 +73,7 @@ class common
 	const COURSE_ENROLMENT_MANDATORY = 3;
 
 	const MAX_FILE_WRITE_ATTEMPTS = 5;
-	
+
 	/**
 	 * Nombre maximal de tentatives d'encodage JSON
 	 */
@@ -347,11 +347,11 @@ class common
 		// Instanciation de la classe des entrées / sorties
 		// Les fichiers de configuration
 		foreach ($this->configFiles as $module => $value) {
-			$this->initDB($module,self::DATA_DIR);
+			$this->initDB($module, self::DATA_DIR);
 		}
 		// Les fichiers des contenus
 		foreach ($this->contentFiles as $module => $value) {
-			$this->initDB($module,self::DATA_DIR . self::$siteContent . '/');
+			$this->initDB($module, self::DATA_DIR . self::$siteContent . '/');
 		}
 
 
@@ -629,7 +629,7 @@ class common
 		// Constructeur  JsonDB;
 		$this->dataFiles[$module] = new \Prowebcraft\JsonDb([
 			'name' => $module . '.json',
-			'dir' =>  $path,
+			'dir' => $path,
 			'backup' => file_exists('site/data/.backup')
 		]);
 
@@ -782,22 +782,22 @@ class common
 	 */
 
 
-   /**
-     * Écriture sécurisée dans un fichier en utilisant un verrouillage de fichier pour éviter les accès concurrents.
-     * Les données sont encodées au format JSON si l'extension du fichier est JSON.
-     *
-     * @param string $filename Le chemin du fichier dans lequel écrire les données.
-     * @param mixed  $data     Les données à écrire dans le fichier.
-     * @param int    $options  Les options pour la fonction file_put_contents, par défaut 0.
-     *
-     * @return bool            Retourne true si l'écriture dans le fichier est réussie, false sinon.
-     */
+	/**
+	 * Écriture sécurisée dans un fichier en utilisant un verrouillage de fichier pour éviter les accès concurrents.
+	 * Les données sont encodées au format JSON si l'extension du fichier est JSON.
+	 *
+	 * @param string $filename Le chemin du fichier dans lequel écrire les données.
+	 * @param mixed  $data     Les données à écrire dans le fichier.
+	 * @param int    $options  Les options pour la fonction file_put_contents, par défaut 0.
+	 *
+	 * @return bool            Retourne true si l'écriture dans le fichier est réussie, false sinon.
+	 */
 	public static function secureFilePutContents($filename, $data, $options = 0)
 	{
 		// Vérifier si l'extension du fichier est JSON
 		$extension = pathinfo($filename, PATHINFO_EXTENSION);
 		$encodeJson = strtolower($extension) === 'json';
-	
+
 		// Tentatives d'encodage JSON si nécessaire
 		if ($encodeJson) {
 			$jsonData = null;
@@ -811,7 +811,7 @@ class common
 				error_log('Erreur d\'encodage JSON (tentative ' . $attempts . ') : ' . json_last_error_msg());
 				sleep(self::RETRY_DELAY_SECONDS); // Attendre avant de réessayer
 			}
-	
+
 			if ($jsonData === false) {
 				error_log('Impossible d\'encoder les données en format JSON.');
 				return false;
@@ -820,7 +820,7 @@ class common
 			// Pas d'encodage JSON nécessaire
 			$jsonData = $data;
 		}
-	
+
 		// Écriture sécurisée dans le fichier avec un verrouillage
 		$attempts = 0;
 		while ($attempts < self::MAX_FILE_WRITE_ATTEMPTS) {
@@ -843,7 +843,7 @@ class common
 			error_log('Erreur d\'écriture (tentative ' . $attempts . ') : impossible de sauvegarder les données dans ' . $filename);
 			sleep(self::RETRY_DELAY_SECONDS); // Attendre avant de réessayer
 		}
-	
+
 		error_log('Impossible d\'écrire dans le fichier ' . $filename . ' après ' . self::MAX_FILE_WRITE_ATTEMPTS . ' tentatives.');
 		return false;
 	}
