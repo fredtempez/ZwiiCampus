@@ -99,7 +99,7 @@ class language extends common
 				is_array($descripteur['language'][$lang])
 			) {
 				if ($this->setData(['language', $lang, $descripteur['language'][$lang]])) {
-					$success = file_put_contents(self::I18N_DIR . $lang . '.json', json_encode($languageData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+					$success = $this->secure_file_put_contents(self::I18N_DIR . $lang . '.json', json_encode($languageData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
 					$success = is_int($success) ? true : false;
 				}
 			}
