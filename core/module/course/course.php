@@ -104,7 +104,7 @@ class course extends common
                         ? sprintf('%s %s', $this->getData(['user', $this->getData(['course', $courseId, 'author']), 'firstname']), $this->getData(['user', $this->getData(['course', $courseId, 'author']), 'lastname']))
                         : '';
                     $categorieUrl = helper::baseUrl() . 'course/swap/' . $courseId;
-                    $info = sprintf(' <a href="%s" target="_blank">%s</a><br />Auteur : %s<br />Id : %s<br />', $categorieUrl, $this->getData(['course', $courseId, 'title']), $author, $courseId, );
+                    $info = sprintf(' <a href="%s" >%s</a><br />Auteur : %s<br />Id : %s<br />', $categorieUrl, $this->getData(['course', $courseId, 'title']), $author, $courseId, );
                     $enrolment = sprintf(
                         'Accès : %s<br />Inscription : %s<br />',
                         self::$courseAccess[$this->getData(['course', $courseId, 'access'])],
