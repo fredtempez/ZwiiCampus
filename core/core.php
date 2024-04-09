@@ -446,7 +446,7 @@ class common
 		}
 
 		// Mise à jour des données core
-		include('core/include/update.inc.php');
+		include ('core/include/update.inc.php');
 
 	}
 
@@ -594,7 +594,7 @@ class common
 	public function setPage($page, $value, $path)
 	{
 
-		return file_put_contents(self::DATA_DIR . $path . '/content/' . $page . '.html', $value);
+		return $this->secure_file_put_contents(self::DATA_DIR . $path . '/content/' . $page . '.html', $value);
 	}
 
 
@@ -607,6 +607,92 @@ class common
 	public function deletePage($page, $course)
 	{
 		return unlink(self::DATA_DIR . $course . '/content/' . $this->getData(['page', $page, 'content']));
+	}
+
+
+	/**
+	 * Écrit les données dans un fichier avec plusieurs tentatives d'écriture et verrouillage
+	 *
+	 * @param string $filename Le nom du fichier
+	 * @param string $data Les données à écrire dans le fichier
+	 * @param int $flags Les drapeaux optionnels à passer à la fonction $this->secure_file_put_contents
+	 * @return bool True si l'écriture a réussi, sinon false
+	 */
+	function secure_file_put_contents($filename, $data, $flags = 0)
+	{
+		// Vérifie si le fichier existe
+		if (!file_exists($filename)) {
+			// Crée le fichier s'il n'existe pas
+			$handle = fopen($filename, 'w');
+			fclose($handle);
+		}
+
+		// Initialise le compteur de tentatives
+		$attempts = 0;
+
+		// Vérifie la longueur des données
+		$data_length = strlen($data);
+
+		// Effectue jusqu'à 5 tentatives d'écriture
+		while ($attempts < 5) {
+			// Essaye d'écrire les données dans le fichier avec verrouillage exclusif
+			$write_result = $this->secure_file_put_contents($filename, $data, LOCK_EX | $flags);
+
+			// Vérifie si l'écriture a réussi
+			if ($write_result !== false && $write_result === $data_length) {
+				// Sort de la boucle si l'écriture a réussi
+				return true;
+			}
+
+			// Incrémente le compteur de tentatives
+			$attempts++;
+		}
+
+		// Échec de l'écriture après plusieurs tentatives
+		return false;
+	}
+
+
+	/**
+	 * Écrit les données dans un fichier avec plusieurs tentatives d'écriture et verrouillage
+	 *
+	 * @param string $filename Le nom du fichier
+	 * @param string $data Les données à écrire dans le fichier
+	 * @param int $flags Les drapeaux optionnels à passer à la fonction $this->secure_file_put_contents
+	 * @return bool True si l'écriture a réussi, sinon false
+	 */
+	function secure_file_put_contents($filename, $data, $flags = 0)
+	{
+		// Vérifie si le fichier existe
+		if (!file_exists($filename)) {
+			// Crée le fichier s'il n'existe pas
+			$handle = fopen($filename, 'w');
+			fclose($handle);
+		}
+
+		// Initialise le compteur de tentatives
+		$attempts = 0;
+
+		// Vérifie la longueur des données
+		$data_length = strlen($data);
+
+		// Effectue jusqu'à 5 tentatives d'écriture
+		while ($attempts < 5) {
+			// Essaye d'écrire les données dans le fichier avec verrouillage exclusif
+			$write_result = $this->secure_file_put_contents($filename, $data, LOCK_EX | $flags);
+
+			// Vérifie si l'écriture a réussi
+			if ($write_result !== false && $write_result === $data_length) {
+				// Sort de la boucle si l'écriture a réussi
+				return true;
+			}
+
+			// Incrémente le compteur de tentatives
+			$attempts++;
+		}
+
+		// Échec de l'écriture après plusieurs tentatives
+		return false;
 	}
 
 
@@ -632,7 +718,7 @@ class common
 	{
 
 		// Tableau avec les données vierges
-		require_once('core/module/install/ressource/defaultdata.php');
+		require_once ('core/module/install/ressource/defaultdata.php');
 
 		// L'arborescence
 		if (!file_exists(self::DATA_DIR . $path)) {
@@ -667,7 +753,7 @@ class common
 	public function saveConfig($module)
 	{
 		// Tableau avec les données vierges
-		require_once('core/module/install/ressource/defaultdata.php');
+		require_once ('core/module/install/ressource/defaultdata.php');
 		// Installation des données des autres modules cad theme profil font config, admin et core
 		$this->setData([$module, init::$defaultData[$module]]);
 		common::$coreNotices[] = $module;
@@ -703,65 +789,65 @@ class common
 	 * Fonction pour construire le tableau des pages
 	 */
 
-	 private function buildHierarchy()
-	 {
- 
-		 $pages = helper::arrayColumn($this->getData(['page']), 'position', 'SORT_ASC');
-		 // Parents
-		 foreach ($pages as $pageId => $pagePosition) {
-			 if (
-				 // Page parent
-				 $this->getData(['page', $pageId, 'parentPageId']) === ""
-				 // Ignore les pages dont l'utilisateur n'a pas accès
-				 and ($this->getData(['page', $pageId, 'group']) === self::GROUP_VISITOR
-					 or ($this->getUser('password') === $this->getInput('ZWII_USER_PASSWORD')
-						 //and $this->getUser('group') >= $this->getData(['page', $pageId, 'group'])
-						 // Modification qui tient compte du profil de la page
-						 and ($this->getUser('group') * self::MAX_PROFILS + $this->getUser('profil')) >= ($this->getData(['page', $pageId, 'group']) * self::MAX_PROFILS + $this->getData(['page', $pageId, 'profil']))
- 
-					 )
-				 )
-			 ) {
-				 if ($pagePosition !== 0) {
-					 $this->hierarchy['visible'][$pageId] = [];
-				 }
-				 if ($this->getData(['page', $pageId, 'block']) === 'bar') {
-					 $this->hierarchy['bar'][$pageId] = [];
-				 }
-				 $this->hierarchy['all'][$pageId] = [];
-			 }
-		 }
-		 // Enfants
-		 foreach ($pages as $pageId => $pagePosition) {
- 
-			 if (
-				 // Page parent
-				 $parentId = $this->getData(['page', $pageId, 'parentPageId'])
-				 // Ignore les pages dont l'utilisateur n'a pas accès
-				 and (
-					 (
-						 $this->getData(['page', $pageId, 'group']) === self::GROUP_VISITOR
-						 and
-						 $this->getData(['page', $parentId, 'group']) === self::GROUP_VISITOR
-					 )
-					 or (
-						 $this->getUser('password') === $this->getInput('ZWII_USER_PASSWORD')
-						 and
-						 $this->getUser('group') * self::MAX_PROFILS + $this->getUser('profil')) >= ($this->getData(['page', $pageId, 'group']) * self::MAX_PROFILS + $this->getData(['page', $pageId, 'profil'])
- 
-					 )
-				 )
-			 ) {
-				 if ($pagePosition !== 0) {
-					 $this->hierarchy['visible'][$parentId][] = $pageId;
-				 }
-				 if ($this->getData(['page', $pageId, 'block']) === 'bar') {
-					 $this->hierarchy['bar'][$pageId] = [];
-				 }
-				 $this->hierarchy['all'][$parentId][] = $pageId;
-			 }
-		 }
-	 }
+	private function buildHierarchy()
+	{
+
+		$pages = helper::arrayColumn($this->getData(['page']), 'position', 'SORT_ASC');
+		// Parents
+		foreach ($pages as $pageId => $pagePosition) {
+			if (
+				// Page parent
+				$this->getData(['page', $pageId, 'parentPageId']) === ""
+				// Ignore les pages dont l'utilisateur n'a pas accès
+				and ($this->getData(['page', $pageId, 'group']) === self::GROUP_VISITOR
+					or ($this->getUser('password') === $this->getInput('ZWII_USER_PASSWORD')
+						//and $this->getUser('group') >= $this->getData(['page', $pageId, 'group'])
+						// Modification qui tient compte du profil de la page
+						and ($this->getUser('group') * self::MAX_PROFILS + $this->getUser('profil')) >= ($this->getData(['page', $pageId, 'group']) * self::MAX_PROFILS + $this->getData(['page', $pageId, 'profil']))
+
+					)
+				)
+			) {
+				if ($pagePosition !== 0) {
+					$this->hierarchy['visible'][$pageId] = [];
+				}
+				if ($this->getData(['page', $pageId, 'block']) === 'bar') {
+					$this->hierarchy['bar'][$pageId] = [];
+				}
+				$this->hierarchy['all'][$pageId] = [];
+			}
+		}
+		// Enfants
+		foreach ($pages as $pageId => $pagePosition) {
+
+			if (
+				// Page parent
+				$parentId = $this->getData(['page', $pageId, 'parentPageId'])
+				// Ignore les pages dont l'utilisateur n'a pas accès
+				and (
+					(
+						$this->getData(['page', $pageId, 'group']) === self::GROUP_VISITOR
+						and
+						$this->getData(['page', $parentId, 'group']) === self::GROUP_VISITOR
+					)
+					or (
+						$this->getUser('password') === $this->getInput('ZWII_USER_PASSWORD')
+						and
+						$this->getUser('group') * self::MAX_PROFILS + $this->getUser('profil')) >= ($this->getData(['page', $pageId, 'group']) * self::MAX_PROFILS + $this->getData(['page', $pageId, 'profil'])
+
+					)
+				)
+			) {
+				if ($pagePosition !== 0) {
+					$this->hierarchy['visible'][$parentId][] = $pageId;
+				}
+				if ($this->getData(['page', $pageId, 'block']) === 'bar') {
+					$this->hierarchy['bar'][$pageId] = [];
+				}
+				$this->hierarchy['all'][$parentId][] = $pageId;
+			}
+		}
+	}
 
 	/**
 	 * Génère un fichier json avec la liste des pages
@@ -1433,8 +1519,8 @@ class common
 				foreach ($courses as $courseId => $value) {
 					// Affiche les espaces gérés par l'éditeur, les espaces où il participe et les espaces anonymes
 					if (
-						// le membre est inscrit
-						( $this->getData(['enrolment', $courseId]) &&  array_key_exists($this->getUser('id'),  $this->getData(['enrolment', $courseId])) )
+							// le membre est inscrit
+						($this->getData(['enrolment', $courseId]) && array_key_exists($this->getUser('id'), $this->getData(['enrolment', $courseId])))
 						// Il est l'auteur
 						|| $this->getUser('id') === $this->getData(['course', $courseId, 'author'])
 						// Le cours est ouvert
@@ -1448,7 +1534,7 @@ class common
 				foreach ($courses as $courseId => $value) {
 					// Affiche les espaces du participant et les espaces anonymes 
 					if (
-						($this->getData(['enrolment', $courseId]) && array_key_exists($this->getUser('id'), $this->getData(['enrolment', $courseId])) )
+						($this->getData(['enrolment', $courseId]) && array_key_exists($this->getUser('id'), $this->getData(['enrolment', $courseId])))
 						|| $this->getData(['course', $courseId, 'enrolment']) === self::COURSE_ENROLMENT_GUEST
 					) {
 						$filter[$courseId] = $courses[$courseId];

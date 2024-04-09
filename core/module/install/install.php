@@ -387,7 +387,7 @@ class install extends common
 								'</IfModule>' . PHP_EOL .
 								'# URL rewriting' . PHP_EOL;
 							$fileContent = str_replace('# URL rewriting', $rewriteData, $fileContent);
-							$success = file_put_contents(
+							$success = $this->secure_file_put_contents(
 								'.htaccess',
 								$fileContent
 							);

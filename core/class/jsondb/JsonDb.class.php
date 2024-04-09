@@ -142,25 +142,38 @@ class JsonDb extends \Prowebcraft\Dot
      */
     public function save()
     {
-        $v = json_encode($this->data, JSON_UNESCAPED_UNICODE | JSON_FORCE_OBJECT | JSON_PRETTY_PRINT);
-        // $v = json_encode($this->data, JSON_UNESCAPED_UNICODE | JSON_FORCE_OBJECT);
-        $l = strlen($v);
-        $t = 0;
-        if ($v === false) {
-            error_log('Erreur d\'encodage JSON : ' . json_last_error_msg());
-            exit ('Erreur d\'encodage JSON : ' . json_last_error_msg());
-        }
-        while ($t < 5) {
-            $w = file_put_contents($this->db, $v); // Multi user get a locker
-            if ($w == $l) {
+        // Encode les données au format JSON avec les options spécifiées
+        $encoded_data = json_encode($this->data, JSON_UNESCAPED_UNICODE | JSON_FORCE_OBJECT | JSON_PRETTY_PRINT);
+
+        // Vérifie la longueur de la chaîne JSON encodée
+        $encoded_length = strlen($encoded_data);
+
+        // Initialise le compteur de tentatives
+        $attempt = 0;
+
+        // Tente d'encoder les données en JSON et de les sauvegarder jusqu'à 5 fois en cas d'échec
+        while ($attempt < 5) {
+            // Essaye d'écrire les données encodées dans le fichier de base de données
+            $write_result = file_put_contents($this->db, $encoded_data, LOCK_EX); // Les utilisateurs multiples obtiennent un verrou
+
+            // Vérifie si l'écriture a réussi
+            if ($write_result === $encoded_length) {
+                // Sort de la boucle si l'écriture a réussi
                 break;
             }
-            $t++;
-        }
-        if ($w !== $l) {
-            error_log('Erreur d\'écriture, les données n\'ont pas été sauvegardées.');
-            exit('Erreur d\'écriture, les données n\'ont pas été sauvegardées.');
+
+            // Incrémente le compteur de tentatives
+            $attempt++;
         }
 
+        // Vérifie si l'écriture a échoué même après plusieurs tentatives
+        if ($write_result !== $encoded_length) {
+            // Enregistre un message d'erreur dans le journal des erreurs
+            error_log('Erreur d\'écriture, les données n\'ont pas été sauvegardées.');
+
+            // Affiche un message d'erreur et termine le script
+            exit('Erreur d\'écriture, les données n\'ont pas été sauvegardées.');
+        }
     }
+
 }
