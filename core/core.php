@@ -176,6 +176,8 @@ class common
 	public static $i18nUI = 'fr_FR';
 	// Langues de contenu
 	public static $siteContent = 'home';
+
+	public static $sessionId = null;
 	public static $languages = [
 		'de' => 'Deutsch',
 		'en_EN' => 'English',
@@ -328,10 +330,20 @@ class common
 		}
 
 		// Déterminer le contenu du site
+		if (isset($_SESSION['ZWII_SESSION_ID'])) {
+			// Déterminé par la session présente
+			self::$sessionId = $_SESSION['ZWII_SESSION_ID'];
+		} else {
+			self::$sessionId = session_id();
+			$_SESSION['ZWII_SESSION_ID'] = self::$sessionId;
+		}
+
+		// Déterminer le contenu du site
 		if (isset($_SESSION['ZWII_SITE_CONTENT'])) {
 			// Déterminé par la session présente
 			self::$siteContent = $_SESSION['ZWII_SITE_CONTENT'];
 		}
+
 		// Instanciation de la classe des entrées / sorties
 		// Les fichiers de configuration
 		foreach ($this->configFiles as $module => $value) {
@@ -341,7 +353,7 @@ class common
 		foreach ($this->contentFiles as $module => $value) {
 			$this->initDB($module, self::$siteContent);
 		}
-
+echo self::$sessionId;
 
 		// Installation fraîche, initialisation de la configuration inexistante
 		// Nécessaire pour le constructeur
