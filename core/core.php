@@ -353,7 +353,6 @@ class common
 		foreach ($this->contentFiles as $module => $value) {
 			$this->initDB($module, self::$siteContent);
 		}
-echo self::$sessionId;
 
 		// Installation fraîche, initialisation de la configuration inexistante
 		// Nécessaire pour le constructeur
