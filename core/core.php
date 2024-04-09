@@ -647,7 +647,7 @@ class common
 		// Effectue jusqu'à 5 tentatives d'écriture
 		while ($attempts < 5) {
 			// Essaye d'écrire les données dans le fichier avec verrouillage exclusif
-			$write_result = $this->secure_file_put_contents($filename, $data, LOCK_EX | $flags);
+			$write_result = file_put_contents($filename, $data, LOCK_EX | $flags);
 
 			// Vérifie si l'écriture a réussi
 			if ($write_result !== false && $write_result === $data_length) {
