@@ -347,11 +347,11 @@ class common
 		// Instanciation de la classe des entrées / sorties
 		// Les fichiers de configuration
 		foreach ($this->configFiles as $module => $value) {
-			$this->initDB($module,self::DATA_DIR);
+			$this->initDB($module);
 		}
 		// Les fichiers des contenus
 		foreach ($this->contentFiles as $module => $value) {
-			$this->initDB($module,self::DATA_DIR . self::$siteContent . '/');
+			$this->initDB($module, self::$siteContent);
 		}
 
 		// Installation fraîche, initialisation de la configuration inexistante
@@ -371,6 +371,7 @@ class common
 					$this->initData($stageId, self::$siteContent);
 				}
 			}
+
 		}
 
 		// Récupère un utilisateur connecté
@@ -664,15 +665,16 @@ class common
 	}
 
 
-	public function initDB($module, $path)
+	public function initDB($module, $path = '')
 	{
 		// Instanciation de la classe des entrées / sorties
 		// Constructeur  JsonDB;
 		$this->dataFiles[$module] = new \Prowebcraft\JsonDb([
 			'name' => $module . '.json',
-			'dir' =>  $path,
+			'dir' => self::DATA_DIR . $path . '/',
 			'backup' => file_exists('site/data/.backup')
 		]);
+
 	}
 
 	/**
