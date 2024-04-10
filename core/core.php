@@ -177,7 +177,6 @@ class common
 	// Langues de contenu
 	public static $siteContent = 'home';
 
-	public static $sessionId = null;
 	public static $languages = [
 		'de' => 'Deutsch',
 		'en_EN' => 'English',
@@ -327,15 +326,6 @@ class common
 		}
 		if (isset($_COOKIE)) {
 			$this->input['_COOKIE'] = $_COOKIE;
-		}
-
-		// Déterminer le contenu du site
-		if (isset($_SESSION['ZWII_SESSION_ID'])) {
-			// Déterminé par la session présente
-			self::$sessionId = $_SESSION['ZWII_SESSION_ID'];
-		} else {
-			self::$sessionId = session_id();
-			$_SESSION['ZWII_SESSION_ID'] = self::$sessionId;
 		}
 
 		// Déterminer le contenu du site
