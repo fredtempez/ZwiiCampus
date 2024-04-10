@@ -622,41 +622,35 @@ class common
 	 */
 	function secure_file_put_contents($filename, $data, $flags = 0)
 	{
-		// Convertit les données en chaîne de caractères
-		$serialized_data = serialize($data);
-	
-		// Vérifie si le fichier existe
-		if (!file_exists($filename)) {
-			// Crée le fichier s'il n'existe pas
-			$handle = fopen($filename, 'w');
-			fclose($handle);
-		}
-	
+
 		// Initialise le compteur de tentatives
 		$attempts = 0;
-	
+
+		// Convertit les données en chaîne de caractères
+		$serialized_data = serialize($data);
+
 		// Vérifie la longueur des données
 		$data_length = strlen($serialized_data);
-	
+
 		// Effectue jusqu'à 5 tentatives d'écriture
 		while ($attempts < 5) {
 			// Essaye d'écrire les données dans le fichier avec verrouillage exclusif
-			$write_result = file_put_contents($filename, $serialized_data, LOCK_EX | $flags);
-	
+			$write_result = file_put_contents($filename, $data, LOCK_EX | $flags);
+
 			// Vérifie si l'écriture a réussi
 			if ($write_result !== false && $write_result === $data_length) {
 				// Sort de la boucle si l'écriture a réussi
 				return true;
 			}
-	
+
 			// Incrémente le compteur de tentatives
 			$attempts++;
 		}
-	
+
 		// Échec de l'écriture après plusieurs tentatives
 		return false;
 	}
-	
+
 
 
 	public function initDB($module, $path = '')
@@ -665,7 +659,7 @@ class common
 		// Constructeur  JsonDB;
 		$this->dataFiles[$module] = new \Prowebcraft\JsonDb([
 			'name' => $module . '.json',
-			'dir' =>  empty($path) ? self::DATA_DIR : self::DATA_DIR . $path . '/',
+			'dir' => empty($path) ? self::DATA_DIR : self::DATA_DIR . $path . '/',
 			'backup' => file_exists('site/data/.backup')
 		]);
 
