@@ -423,13 +423,22 @@ class core extends common
 			)
 		) {
 			// Stocke l'historique des pages vues
+			/*
 			$data = is_array($this->getData(['enrolment', self::$siteContent, $this->getUser('id'), 'history', $this->getUrl(0)]))
 				? array_merge([time()], $this->getData(['enrolment', self::$siteContent, $this->getUser('id'), 'history', $this->getUrl(0)]))
 				: [time()];
+			
 			$this->setData(['enrolment', self::$siteContent, $this->getUser('id'), 'history', $this->getUrl(0), $data]);
+			*/
 			// Stocke la dernière page vue et sa date de consultation
 			$this->setData(['enrolment', self::$siteContent, $this->getUser('id'), 'lastPageView', $this->getUrl(0)]);
 			$this->setData(['enrolment', self::$siteContent, $this->getUser('id'), 'datePageView', time()]);
+
+			// Stocke le rapport en CSV
+			$file = fopen(self::DATA_DIR . self::$siteContent . 'report.csv', 'a+');
+			fputcsv($file,  [ self::$siteContent, $this->getUser('id'), $this->getUrl(0) ,time()], ';');
+			fclose($file);
+
 		}
 
 		// Journalisation
