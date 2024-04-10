@@ -20,11 +20,3 @@
 #courseUsersDeleteSubmit {
     background-color: rgba(217, 95, 78, 1);
 }
-
-#courseUserDeleteSelectAll {
-    color: lightgreen;
-}
-
-#courseUserDeleteSelectNone {
-    color: lightcoral;
-}
