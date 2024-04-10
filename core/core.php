@@ -675,7 +675,7 @@ class common
 		// Constructeur  JsonDB;
 		$this->dataFiles[$module] = new \Prowebcraft\JsonDb([
 			'name' => $module . '.json',
-			'dir' => self::DATA_DIR . $path . '/',
+			'dir' =>  empty($path) ? self::DATA_DIR : self::DATA_DIR . $path . '/',
 			'backup' => file_exists('site/data/.backup')
 		]);
 
