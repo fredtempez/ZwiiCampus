@@ -436,7 +436,7 @@ class core extends common
 
 			// Stocke le rapport en CSV
 			$file = fopen(self::DATA_DIR . self::$siteContent . '/report.csv', 'a+');
-			fputcsv($file,  [ self::$siteContent, $this->getUser('id'), $this->getUrl(0) ,time()], ';');
+			fputcsv($file,  [ $this->getUser('id'), $this->getUrl(0) ,time()], ';');
 			fclose($file);
 
 		}
