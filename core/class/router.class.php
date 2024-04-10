@@ -435,7 +435,7 @@ class core extends common
 			$this->setData(['enrolment', self::$siteContent, $this->getUser('id'), 'datePageView', time()]);
 
 			// Stocke le rapport en CSV
-			$file = fopen(self::DATA_DIR . self::$siteContent . 'report.csv', 'a+');
+			$file = fopen(self::DATA_DIR . self::$siteContent . '/report.csv', 'a+');
 			fputcsv($file,  [ self::$siteContent, $this->getUser('id'), $this->getUrl(0) ,time()], ';');
 			fclose($file);
 
