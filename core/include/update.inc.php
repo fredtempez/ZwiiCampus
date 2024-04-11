@@ -44,8 +44,19 @@ if (
             } 
         }
         // Stocke le rapport en CSV
-        $file = fopen(self::DATA_DIR . $courseId . '/report.csv', 'a+');
-        fputcsv($file,  [$data], ';');
+        $file = fopen(self::DATA_DIR . $courseId . '/report.csv', 'w');
+
+        // Parcourir les données
+        foreach ($data as $name => $userData) {
+            foreach ($userData as $pageId => $timestamps) {
+                foreach ($timestamps as $timestamp) {
+                    // Écrire chaque ligne dans le fichier CSV
+                    fputcsv($file, array($name, $pageId, $timestamp), ';');
+                }
+            }
+        }
+    
+        // Fermer le fichier
         fclose($file);
     } 
     //$this->setData(['core', 'dataVersion', 1800]);
