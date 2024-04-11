@@ -26,10 +26,10 @@ class course extends common
         'users' => self::GROUP_EDITOR, // fait
         'usersAdd' => self::GROUP_EDITOR, //Fait
         'usersDelete' => self::GROUP_EDITOR, //Fait
-        'usersHistoryExport' => self::GROUP_EDITOR, //fait
+        'usersReportExport' => self::GROUP_EDITOR, //fait
         'userDelete' => self::GROUP_EDITOR, //Fait
         'userReport' => self::GROUP_EDITOR, //Fait
-        'userHistoryExport' => self::GROUP_EDITOR, //Fait
+        'userReportExport' => self::GROUP_EDITOR, //Fait
         'backup' => self::GROUP_EDITOR, // Fait
         'restore' => self::GROUP_EDITOR, //Fait
         'clone' => self::GROUP_ADMIN,
@@ -1265,7 +1265,7 @@ class course extends common
 
     }
 
-    public function usersHistoryExport()
+    public function usersReportExport()
     {
 
         $courseId = $this->getUrl(2);
@@ -1371,7 +1371,7 @@ class course extends common
         }
     }
 
-    public function userHistoryExport()
+    public function userReportExport()
     {
 
         $courseId = $this->getUrl(2);
