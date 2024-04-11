@@ -28,7 +28,7 @@ class course extends common
         'usersDelete' => self::GROUP_EDITOR, //Fait
         'usersHistoryExport' => self::GROUP_EDITOR, //fait
         'userDelete' => self::GROUP_EDITOR, //Fait
-        'userHistory' => self::GROUP_EDITOR, //Fait
+        'userReport' => self::GROUP_EDITOR, //Fait
         'userHistoryExport' => self::GROUP_EDITOR, //Fait
         'backup' => self::GROUP_EDITOR, // Fait
         'restore' => self::GROUP_EDITOR, //Fait
@@ -74,7 +74,7 @@ class course extends common
     public static $pagesList = ['accueil' => 'Accueil'];
 
 
-    public static $userHistory = [];
+    public static $userReport = [];
 
     public static $userGraph = [];
 
@@ -712,8 +712,8 @@ class course extends common
                     ? helper::dateUTF8('%H:%M', $this->getData(['enrolment', $courseId, $userId, 'datePageView']))
                     : '',
                     $this->getData(['user', $userId, 'tags']),
-                    template::button('userHistory' . $userId, [
-                        'href' => helper::baseUrl() . 'course/userHistory/' . $courseId . '/' . $userId,
+                    template::button('userReport' . $userId, [
+                        'href' => helper::baseUrl() . 'course/userReport/' . $courseId . '/' . $userId,
                         'value' => !empty ($userValue['history']) ? min(round(($viewPages * 100) / $sumPages, 1), 100) . ' %' : '0%',
                         'disable' => empty ($userValue['history'])
                     ]),
@@ -1164,7 +1164,7 @@ class course extends common
     /**
      * Liste les pages consultées par un utilisateur
      */
-    public function userHistory()
+    public function userReport()
     {
 
         // Espace sélectionné
@@ -1211,7 +1211,7 @@ class course extends common
             if (isset ($pages[$pageId]['title'])) {
                 $lastView = ($lastView === 0) ? $time : $lastView;
                 $diff = $time - $lastView;
-                self::$userHistory[] = [
+                self::$userReport[] = [
                     html_entity_decode($pages[$pageId]['title']),
                     $time,
                     ($diff < 1800) ? sprintf("%d' %d''", floor($diff / 60), $diff % 60) : "Non significatif",
@@ -1230,16 +1230,16 @@ class course extends common
         }
 
         // Décale les temps de consultation
-        for ($i = 0; $i < count(self::$userHistory) - 1; $i++) {
-            self::$userHistory[$i][2] = self::$userHistory[$i + 1][2];
+        for ($i = 0; $i < count(self::$userReport) - 1; $i++) {
+            self::$userReport[$i][2] = self::$userReport[$i + 1][2];
         }
         // Décale les temps de consultation
         for ($i = 0; $i < count(self::$userGraph) - 1; $i++) {
-            self::$userHistory[$i][1] = self::$userHistory[$i + 1][1];
+            self::$userReport[$i][1] = self::$userReport[$i + 1][1];
         }
 
         // Formate le timestamp
-        array_walk(self::$userHistory, function (&$item) {
+        array_walk(self::$userReport, function (&$item) {
             $item[1] = helper::dateUTF8('%d/%m/%Y %H:%M:%S', $item[1]);
         });
 
@@ -1257,7 +1257,7 @@ class course extends common
         // Valeurs en sortie
         $this->addOutput([
             'title' => helper::translate('Historique ') . $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
-            'view' => 'userHistory',
+            'view' => 'userReport',
             'vendor' => [
                 "plotly"
             ]
@@ -1416,7 +1416,7 @@ class course extends common
             if (isset ($pages[$pageId]['title'])) {
                 $lastView = ($lastView === 0) ? $time : $lastView;
                 $diff = $time - $lastView;
-                self::$userHistory[] = [
+                self::$userReport[] = [
                     $pageId,
                     html_entity_decode($pages[$pageId]['title']),
                     $time,
@@ -1429,16 +1429,16 @@ class course extends common
         }
 
         // Décale les temps de consultation
-        for ($i = 0; $i < count(self::$userHistory) - 1; $i++) {
-            self::$userHistory[$i][3] = self::$userHistory[$i + 1][3];
+        for ($i = 0; $i < count(self::$userReport) - 1; $i++) {
+            self::$userReport[$i][3] = self::$userReport[$i + 1][3];
         }
         // Formate le timestamp
-        array_walk(self::$userHistory, function (&$item) {
+        array_walk(self::$userReport, function (&$item) {
             $item[2] = helper::dateUTF8('%d/%m/%Y %H:%M:%S', $item[2]);
         });
 
         // Ajoute les entêtes
-        self::$userHistory = array_merge([0 => ['PageId', 'Page Titre', 'Consultation Date', 'Temps Consultation']], self::$userHistory);
+        self::$userReport = array_merge([0 => ['PageId', 'Page Titre', 'Consultation Date', 'Temps Consultation']], self::$userReport);
 
         // Dossier d'export
         if (is_dir(self::FILE_DIR . 'source/' . $courseId) === false) {
@@ -1451,7 +1451,7 @@ class course extends common
 
         $file = fopen($filename, 'w');
 
-        foreach (self::$userHistory as $keys => $values) {
+        foreach (self::$userReport as $keys => $values) {
             $data = $values;
             // Écrire la ligne dans le fichier CSV
             fputcsv($file, $data, ';');
@@ -1461,7 +1461,7 @@ class course extends common
 
         // Valeurs en sortie
         $this->addOutput([
-            'redirect' => helper::baseUrl() . 'course/userHistory/' . $courseId . '/' . $userId,
+            'redirect' => helper::baseUrl() . 'course/userReport/' . $courseId . '/' . $userId,
             'notification' => 'Création ' . basename($filename) . ' dans le dossier "Export"',
             'state' => true,
         ]);
@@ -1893,6 +1893,47 @@ class course extends common
                 $r = false;
         }
         return $r;
+    }
+
+    /**
+     * Lit le contenu des fichiers de traces au format CS et renvoie un tableau associatif
+     */
+    private function getReport($courseId, $userId = null) {
+        // Remplacez 'chemin/vers/votre/fichier.csv' par le chemin réel de votre fichier CSV
+        $file =  fopen( self::DATA_DIR . $courseId . '/report.csv', "r");
+        
+        $data = array();
+        
+        // Lire ligne par ligne
+        while (($line = fgetcsv($file, 1000, ";")) !== false) {
+            $name = $line[0];
+            $pageId = $line[1];
+            $timestamp = $line[2];
+        
+            // Initialiser le tableau si nécessaire
+            if (!isset($data[$name][$pageId])) {
+                $data[$name][$pageId] = array();
+            }
+        
+            // Ajouter le timestamp
+            $data[$name][$pageId][] = $timestamp;
+        }
+        
+        // Fermer le fichier
+        fclose($file);
+        
+        // Trier les timestamps
+        foreach ($data as &$userData) {
+            foreach ($userData as &$pageData) {
+                sort($pageData);
+            }
+        }
+        
+        // Convertir en JSON
+        $json = json_encode($data, JSON_PRETTY_PRINT);
+        
+        // Afficher le JSON;
+        return $json;
     }
 
 }

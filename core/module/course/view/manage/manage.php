@@ -59,52 +59,6 @@
     <?php endif; ?>
 </div>
 
-<?php
-// Remplacez 'chemin/vers/votre/fichier.csv' par le chemin réel de votre fichier CSV
-$file =  fopen('site\data\654b7816dc22a\report.csv', "r");
-
-$data = array();
-
-// Lire ligne par ligne
-while (($line = fgetcsv($file, 1000, ";")) !== false) {
-    $name = $line[0];
-    $pageId = $line[1];
-    $timestamp = $line[2];
-
-    // Initialiser le tableau si nécessaire
-    if (!isset($data[$name][$pageId])) {
-        $data[$name][$pageId] = array();
-    }
-
-    // Ajouter le timestamp
-    $data[$name][$pageId][] = $timestamp;
-}
-
-// Fermer le fichier
-fclose($file);
-
-// Trier les timestamps
-foreach ($data as &$userData) {
-    foreach ($userData as &$pageData) {
-        sort($pageData);
-    }
-}
-
-// Convertir en JSON
-$json = json_encode($data, JSON_PRETTY_PRINT);
-
-// Afficher le JSON;
-echo "<pre>";
-var_dump ($json);
-?>
-
-
-// Affichez le tableau pour vérifier
-echo '<pre>';
-print_r($tableauAssociatif);
-echo '</pre>';
-?>
-
 <div class="row">
     <div class="col12">
         <div class="block">
