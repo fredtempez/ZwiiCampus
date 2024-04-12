@@ -639,31 +639,19 @@ class course extends common
             }
         }
 
+
         // Liste des inscrits dans le contenu sélectionné.
         $users = $this->getData(['enrolment', $courseId]);
+
+        $reports = $this->getReport($courseId);
 
         if (is_array($users)) {
             // Tri du tableau par défaut par $userId
             ksort($users);
             foreach ($users as $userId => $userValue) {
 
-                // Date et heure de la dernière page vue
-                // Compatibilité anciennes versions
-                if (
-                    $this->getData(['enrolment', $courseId, $userId, 'lastPageView']) === null
-                    or $this->getData(['enrolment', $courseId, $userId, 'datePageView']) === null
-                ) {
-                    if (!empty ($userValue['history'])) {
-                        $maxTime = max($userValue['history']);
-                        $lastPageId = array_search($maxTime, $userValue['history']);
-                        $this->setData(['enrolment', $courseId, $userId, 'lastPageView', $lastPageId]);
-                        $this->setData(['enrolment', $courseId, $userId, 'datePageView', $maxTime]);
-                    }
-                }
-
-
                 // Compte les rôles valides
-                if (isset ($profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])])) {
+                if (isset($profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])])) {
                     $profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])]++;
                 }
 
@@ -694,28 +682,28 @@ class course extends common
                 }
 
                 // Progression
-                $viewPages = $this->getData(['enrolment', $courseId, $userId, 'history']) !== null ?
-                    count(array_keys($this->getData(['enrolment', $courseId, $userId, 'history']))) :
+                $viewPages = array_key_exists($userId, $reports) ?
+                    count($reports[$userId]) :
                     0;
 
                 // Construction du tableau
                 self::$courseUsers[] = [
                     //$userId,
                     $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
-                    isset ($pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])]['title'])
-                    ? $pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])]['title']
+                    isset($pages[$userValue['lastPageView']]['title'])
+                    ? $pages[$userValue['lastPageView']]['title']
                     : '',
-                    $this->getData(['enrolment', $courseId, $userId, 'datePageView'])
-                    ? helper::dateUTF8('%d/%m/%Y', $this->getData(['enrolment', $courseId, $userId, 'datePageView']))
+                    $userValue['datePageView']
+                    ? helper::dateUTF8('%d/%m/%Y', $userValue['datePageView'])
                     : '',
-                    $this->getData(['enrolment', $courseId, $userId, 'datePageView'])
-                    ? helper::dateUTF8('%H:%M', $this->getData(['enrolment', $courseId, $userId, 'datePageView']))
+                    $userValue['datePageView']
+                    ? helper::dateUTF8('%H:%M', $userValue['datePageView'])
                     : '',
                     $this->getData(['user', $userId, 'tags']),
                     template::button('userReport' . $userId, [
                         'href' => helper::baseUrl() . 'course/userReport/' . $courseId . '/' . $userId,
-                        'value' => !empty ($userValue['history']) ? min(round(($viewPages * 100) / $sumPages, 1), 100) . ' %' : '0%',
-                        'disable' => empty ($userValue['history'])
+                        'value' => $viewPages ? min(round(($viewPages * 100) / $sumPages, 1), 100) . ' %' : '0%',
+                        'disable' => empty($viewPages)
                     ]),
                     template::button('userDelete' . $userId, [
                         'class' => 'userDelete buttonRed',
@@ -765,7 +753,7 @@ class course extends common
 
         // Inscription des utilisateurs cochés
         if (
-            isset ($_POST['courseUsersAddSubmit'])
+            isset($_POST['courseUsersAddSubmit'])
         ) {
             foreach ($_POST as $keyPost => $valuePost) {
                 // Exclure les variables post qui ne sont pas des userId et ne traiter que les non inscrits
@@ -821,15 +809,15 @@ class course extends common
         foreach ($users as $userId => $userValue) {
 
             // Compte les rôles
-            if (isset ($profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])])) {
+            if (isset($profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])])) {
                 $profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])]++;
             }
 
             // Filtres
             if (
-                isset ($_POST['courseFilterGroup'])
-                || isset ($_POST['courseFilterFirstName'])
-                || isset ($_POST['courseFilterLastName'])
+                isset($_POST['courseFilterGroup'])
+                || isset($_POST['courseFilterFirstName'])
+                || isset($_POST['courseFilterLastName'])
             ) {
 
                 // Groupe et profils
@@ -934,7 +922,7 @@ class course extends common
 
         // Inscription des utilisateurs cochés
         if (
-            isset ($_POST['courseUsersDeleteSubmit'])
+            isset($_POST['courseUsersDeleteSubmit'])
         ) {
             foreach ($_POST as $keyPost => $valuePost) {
                 // Exclure les variables post qui ne sont pas des userId et ne traiter que les non inscrits
@@ -984,15 +972,15 @@ class course extends common
             foreach ($users as $userId => $userValue) {
 
                 // Compte les rôles
-                if (isset ($profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])])) {
+                if (isset($profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])])) {
                     $profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])]++;
                 }
 
                 // Filtres
                 if (
-                    isset ($_POST['courseFilterGroup'])
-                    || isset ($_POST['courseFilterFirstName'])
-                    || isset ($_POST['courseFilterLastName'])
+                    isset($_POST['courseFilterGroup'])
+                    || isset($_POST['courseFilterFirstName'])
+                    || isset($_POST['courseFilterLastName'])
                 ) {
 
                     // Groupe et profils
@@ -1208,7 +1196,7 @@ class course extends common
         $lastView = 0;
 
         foreach ($history as $time => $pageId) {
-            if (isset ($pages[$pageId]['title'])) {
+            if (isset($pages[$pageId]['title'])) {
                 $lastView = ($lastView === 0) ? $time : $lastView;
                 $diff = $time - $lastView;
                 self::$userReport[] = [
@@ -1224,8 +1212,8 @@ class course extends common
                     ];
                 }
                 $lastView = $time;
-                $floorTime = isset ($floorTime) && $floorTime < $time ? $floorTime : $time;
-                $topTime = isset ($topTime) && $topTime > $time ? $topTime : $time;
+                $floorTime = isset($floorTime) && $floorTime < $time ? $floorTime : $time;
+                $topTime = isset($topTime) && $topTime > $time ? $topTime : $time;
             }
         }
 
@@ -1319,7 +1307,7 @@ class course extends common
                     $this->getData(['enrolment', $courseId, $userId, 'lastPageView']) === null
                     or $this->getData(['enrolment', $courseId, $userId, 'datePageView']) === null
                 ) {
-                    if (!empty ($userValue['history'])) {
+                    if (!empty($userValue['history'])) {
                         $maxTime = max($userValue['history']);
                         $lastPageId = array_search($maxTime, $userValue['history']);
                         $this->setData(['enrolment', $courseId, $userId, 'lastPageView', $lastPageId]);
@@ -1337,7 +1325,7 @@ class course extends common
                     $userId,
                     $this->getData(['user', $userId, 'firstname']),
                     $this->getData(['user', $userId, 'lastname']),
-                    isset ($pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])])
+                    isset($pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])])
                     ? $pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])]
                     : $this->getData(['enrolment', $courseId, $userId, 'lastPageView']) . ' (supprimée)',
                     helper::dateUTF8('%d/%d/%Y', $this->getData(['enrolment', $courseId, $userId, 'datePageView'])),
@@ -1413,7 +1401,7 @@ class course extends common
         $lastView = 0;
 
         foreach ($history as $time => $pageId) {
-            if (isset ($pages[$pageId]['title'])) {
+            if (isset($pages[$pageId]['title'])) {
                 $lastView = ($lastView === 0) ? $time : $lastView;
                 $diff = $time - $lastView;
                 self::$userReport[] = [
@@ -1423,8 +1411,8 @@ class course extends common
                     ($diff < 1800) ? sprintf("%d' %d''", floor($diff / 60), $diff % 60) : "Non significatif",
                 ];
                 $lastView = $time;
-                $floorTime = isset ($floorTime) && $floorTime < $time ? $floorTime : $time;
-                $topTime = isset ($topTime) && $topTime > $time ? $topTime : $time;
+                $floorTime = isset($floorTime) && $floorTime < $time ? $floorTime : $time;
+                $topTime = isset($topTime) && $topTime > $time ? $topTime : $time;
             }
         }
 
@@ -1898,42 +1886,43 @@ class course extends common
     /**
      * Lit le contenu des fichiers de traces au format CS et renvoie un tableau associatif
      */
-    private function getReport($courseId, $userId = null) {
+    private function getReport($courseId, $userId = null)
+    {
         // Remplacez 'chemin/vers/votre/fichier.csv' par le chemin réel de votre fichier CSV
-        $file =  fopen( self::DATA_DIR . $courseId . '/report.csv', "r");
-        
+        $file = fopen(self::DATA_DIR . $courseId . '/report.csv', "r");
+
         $data = array();
-        
+
         // Lire ligne par ligne
         while (($line = fgetcsv($file, 1000, ";")) !== false) {
             $name = $line[0];
             $pageId = $line[1];
             $timestamp = $line[2];
-        
-            // Initialiser le tableau si nécessaire
-            if (!isset($data[$name][$pageId])) {
-                $data[$name][$pageId] = array();
-            }
-        
-            // Ajouter le timestamp
-            $data[$name][$pageId][] = $timestamp;
+            // Filtre userId
+         //   if (!is_null($userId) && $name === $userId) {
+                // Initialiser le tableau si nécessaire
+                if (!isset($data[$name][$pageId])) {
+                    $data[$name][$pageId] = array();
+                }
+                // Ajouter le timestamp
+                $data[$name][$pageId][] = $timestamp;
+        //    }
         }
-        
+
         // Fermer le fichier
         fclose($file);
-        
+
         // Trier les timestamps
         foreach ($data as &$userData) {
             foreach ($userData as &$pageData) {
                 sort($pageData);
             }
         }
-        
-        // Convertir en JSON
-        $json = json_encode($data, JSON_PRETTY_PRINT);
-        
+
         // Afficher le JSON;
-        return $json;
+        return $data;
     }
+
+
 
 }
