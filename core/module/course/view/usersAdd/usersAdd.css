@@ -17,10 +17,6 @@
 * admin.css
 */
 
-#courseUserAddSelectAll {
-    color: lightgreen;
-}
-
-#courseUserAddSelectNone {
-    color: lightcoral;
+tr {
+    cursor: pointer;
 }

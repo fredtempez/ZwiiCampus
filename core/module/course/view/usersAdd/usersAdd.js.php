@@ -13,6 +13,13 @@
 
 $(document).ready((function () {
 
+    $('tr').click(function(){
+        // Cochez ou décochez la case à cocher dans cette ligne
+        $(this).find('input[type="checkbox"]').prop('checked', function(i, val){
+            return !val; // Inverse l'état actuel de la case à cocher
+        });
+    });
+
     $('#courseUserAddSelectAll').on('click', function() {
         $('.checkboxSelect').prop('checked', true);
         saveCheckboxState();
