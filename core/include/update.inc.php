@@ -40,8 +40,9 @@ if (
                     }
                 }
             }
+            $this->deleteData(['enrolment', $courseId, $userId, 'history']);
         }
         fclose($fp);
     }
-    //$this->setData(['core', 'dataVersion', 1800]);
+    $this->setData(['core', 'dataVersion', 1800]);
 }
