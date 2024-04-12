@@ -9,13 +9,13 @@
     </div>
     <div class="col1 offset8">
         <?php echo template::button('courseUserDeleteSelectAll', [
-            'value' => template::ico('check'),
+            'value' => template::ico('square-check'),
             'help' => 'Tout sélectionner'
         ]); ?>
     </div>
     <div class="col1">
         <?php echo template::button('courseUserDeleteSelectNone', [
-            'value' => template::ico('cancel'),
+            'value' => template::ico('square-check-empty'),
             'help' => 'Tout désélectionner'
         ]); ?>
     </div>

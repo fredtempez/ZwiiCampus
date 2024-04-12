@@ -1,6 +1,7 @@
 @charset "UTF-8";
 
 .zwiico-plus-circled:before { content: '\2191'; } /* '↑' */
+.zwiico-square-check:before { content: '\e800'; } /* '' */
 .zwiico-plus:before { content: '\e801'; } /* '' */
 .zwiico-cancel:before { content: '\e802'; } /* '' */
 .zwiico-help:before { content: '\e803'; } /* '' */
@@ -48,6 +49,7 @@
 .zwiico-right-dir:before { content: '\e82d'; } /* '' */
 .zwiico-chart-line:before { content: '\e82e'; } /* '' */
 .zwiico-book:before { content: '\e82f'; } /* '' */
+.zwiico-square-check-empty:before { content: '\e830'; } /* '' */
 .zwiico-spin:before { content: '\e831'; } /* '' */
 .zwiico-twitter:before { content: '\f099'; } /* '' */
 .zwiico-facebook:before { content: '\f09a'; } /* '' */
