@@ -30,16 +30,17 @@ if (
     foreach ($this->getData(['enrolment']) as $courseId => $users) {
         $filename = self::DATA_DIR . $courseId . '/report.csv';
         $fp = fopen($filename, 'w');
-
         foreach ($users as $userId => $userData) {
-            $history = $userData['history'];
-            foreach ($history as $pageId => $timestamps) {
-                foreach ($timestamps as $timestamp) {
-                    fputcsv($fp, [$userId, $pageId, $timestamp]);
+            $history = array_key_exists('history', $userData) ? $userData['history'] : null;
+
+            if (is_array($history)) {
+                foreach ($history as $pageId => $timestamps) {
+                    foreach ($timestamps as $timestamp) {
+                        fputcsv($fp, [$userId, $pageId, $timestamp], ';');
+                    }
                 }
             }
         }
-
         fclose($fp);
     }
     //$this->setData(['core', 'dataVersion', 1800]);
