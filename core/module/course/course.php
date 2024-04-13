@@ -1169,17 +1169,18 @@ class course extends common
         }
 
         $userId = $this->getUrl(3);
-        $h = $this->getData(['enrolment', $courseId, $userId, 'history']);
+        $h = $this->getReport($courseId, $userId);
+        $h = $h[$userId];
 
         // Inversion des clés et des valeurs
-        $history = array();
+        $report = array();
         foreach ($h as $key => $values) {
             foreach ($values as $value) {
-                $history[$value] = $key;
+                $report[$value] = $key;
             }
         }
 
-        ksort($history);
+        ksort($report);
 
         // Liste des pages contenues dans cet espace et exclure les barres et les pages masquées
         $p = json_decode(file_get_contents(self::DATA_DIR . $courseId . '/page.json'), true);
@@ -1195,7 +1196,7 @@ class course extends common
         $topTime = 0;
         $lastView = 0;
 
-        foreach ($history as $time => $pageId) {
+        foreach ($report as $time => $pageId) {
             if (isset($pages[$pageId]['title'])) {
                 $lastView = ($lastView === 0) ? $time : $lastView;
                 $diff = $time - $lastView;
@@ -1376,17 +1377,18 @@ class course extends common
         }
 
         // Traitement de l'historique
-        $h = $this->getData(['enrolment', $courseId, $userId, 'history']);
+        $h = $this->getReport($courseId, $userId);
+        $h = $h[$userId];
 
         // Inversion des clés et des valeurs
-        $history = array();
+        $report = array();
         foreach ($h as $key => $values) {
             foreach ($values as $value) {
-                $history[$value] = $key;
+                $report[$value] = $key;
             }
         }
 
-        ksort($history);
+        ksort($report);
 
         // Liste des pages contenues dans cet espace et exclure les barres et les pages masquées
         $p = json_decode(file_get_contents(self::DATA_DIR . $courseId . '/page.json'), true);
@@ -1400,7 +1402,7 @@ class course extends common
 
         $lastView = 0;
 
-        foreach ($history as $time => $pageId) {
+        foreach ($report as $time => $pageId) {
             if (isset($pages[$pageId]['title'])) {
                 $lastView = ($lastView === 0) ? $time : $lastView;
                 $diff = $time - $lastView;
