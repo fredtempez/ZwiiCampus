@@ -85,7 +85,7 @@ A l'occasion de l'installation d'une version majeure, il est recommandé de réa
     [F] core.json          Configuration du noyau
     [F] course.json        Données de contenus
     [F] custom.css         Feuille de style de la personnalisation avancée
-    [F] enrolment.json     Données des inscriptions et des statistiques par contenu
+    [F] enrolment.json     Inscriptions dans les espaces, dernière page vue et timetamp
     [F] font.json          Descripteur des fontes personnalisées
     [F] journal.log        Journalisation des activités
     [F] language.json      Langues de l'interface
