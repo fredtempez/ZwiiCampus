@@ -68,6 +68,7 @@ A l'occasion de l'installation d'une version majeure, il est recommandé de réa
       [F] module.json      Données des modules de pages
       [F] theme.css        Thème de ce contenu
       [F] theme.json       Thème de ce contenu
+      [F] report.csv       Rapport de participation
       [R] content          Dossier des contenus de page
         [F] accueil.html   Exemple contenu de la page d'accueil
     [R] fonts              Dossier contenant les fontes installées
