@@ -206,9 +206,7 @@
                         <?php echo template::checkbox('profilAddCourseUsersDelete', true, 'Désinscrire en masse'); ?>
                     </div>
                     <div class="col3">
-                        <?php echo template::checkbox('profilAddCourseReset', true, 'Réinitialiser un espace', [
-                            'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'course', 'reset']),
-                        ]); ?>
+                        <?php echo template::checkbox('profilAddCourseReset', true, 'Réinitialiser un espace'); ?>
                     </div>
                 </div>
             </div>

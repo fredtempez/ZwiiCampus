@@ -54,6 +54,19 @@ $(document).ready(function () {
         $(".containerModule").slideDown();
     }
 
+    if ($('#profilEditCourseUsers').is(':checked')) {
+        // Activer les autres checkboxes
+        $('#profilEditCourseUserHistory, #profilEditCourseUserHistoryExport, #profilEditCourseUserDelete, #profilEditCourseUsersAdd, #profilEditCourseUsersDelete, #profilEditCourseReset').prop('disabled', false);
+    } else {
+        // Désactiver les autres checkboxes
+        $('#profilEditCourseUserHistory, #profilEditCourseUserHistoryExport, #profilEditCourseUserDelete, #profilEditCourseUsersAdd, #profilEditCourseUsersDelete, #profilEditCourseReset').prop('checked', false).prop('disabled', true);
+        // Désactiver les modules et tout décocher
+        $(".courseContainer").slideUp();
+        $('.courseContainer input[type="checkbox"]').prop('checked', false);
+    }
+
+    // EVENEMENTS
+
     // À chaque inversion de l'état du checkbox avec l'id "profilEditFileManager", désactive ou active tous les éléments de la classe "filemanager" en fonction de l'état
     $("#profilEditFileManager").change(function () {
         if (!$(this).is(':checked')) {
@@ -117,5 +130,21 @@ $(document).ready(function () {
             $('.containerModule input[type="checkbox"]').prop('checked', false);
         }
     });
+
+    // Gérer l’évènement de modification de la checkbox #profilEditCourse
+    $('#profilEditCourseUsers').change(function () {
+        if ($(this).is(':checked')) {
+            // Activer les autres checkboxes
+            $('#profilEditCourseUserHistory, #profilEditCourseUserHistoryExport, #profilEditCourseUserDelete, #profilEditCourseUsersAdd, #profilEditCourseUsersDelete, #profilEditCourseReset').prop('disabled', false);
+            
+        } else {
+            // Désactiver les autres checkboxes
+            $('#profilEditCourseUserHistory, #profilEditCourseUserHistoryExport, #profilEditCourseUserDelete, #profilEditCourseUsersAdd, #profilEditCourseUsersDelete, #profilEditCourseReset').prop('checked', false).prop('disabled', true);
+            // Désactiver les modules et tout décocher
+            $(".courseContainer").slideUp();
+            $('.courseContainer input[type="checkbox"]').prop('checked', false);
+        }
+    });
+
 
 });
