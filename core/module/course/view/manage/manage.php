@@ -18,6 +18,16 @@
             ]); ?>
         </div>
     <?php endif; ?>
+    <?php if ($this->getUser('permission', 'course', 'reset') === true): ?>
+        <div class="col2 ">
+            <?php echo template::button('courseManageReset' . $this->getUrl(2), [
+                'class' => 'courseReset buttonRed',
+                'href' => helper::baseUrl() . 'course/reset/' . $this->getUrl(2),
+                'value' => 'Réinitaliser',
+                'ico' => 'cancel'
+            ]); ?>
+        </div>
+    <?php endif; ?>
     <?php if ($this->getUser('permission', 'course', 'backup') === true): ?>
         <div class="col2">
             <?php echo template::button('courseManageDownload' . $this->getUrl(2), [

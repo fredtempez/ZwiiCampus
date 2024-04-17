@@ -724,6 +724,7 @@ class user extends common
 					'edit' => $this->getInput('profilEditCourseEdit', helper::FILTER_BOOLEAN),
 					'backup' => $this->getInput('profilEditCourseBackup', helper::FILTER_BOOLEAN),
 					'restore' => $this->getInput('profilEditCourseRestore', helper::FILTER_BOOLEAN),
+					'reset' => $this->getInput('profilEditCourseReset', helper::FILTER_BOOLEAN),
 				]
 			];
 
@@ -905,7 +906,8 @@ class user extends common
 							|| $this->getInput('profilAddCourseUsersDelete', helper::FILTER_BOOLEAN)
 							|| $this->getInput('profilAddCourseEdit', helper::FILTER_BOOLEAN)
 							|| $this->getInput('profilAddCourseBackup', helper::FILTER_BOOLEAN)
-							|| $this->getInput('profilAddCourseRestore', helper::FILTER_BOOLEAN),
+							|| $this->getInput('profilAddCourseRestore', helper::FILTER_BOOLEAN)
+							|| $this->getInput('profilAddCourseReset', helper::FILTER_BOOLEAN),
 						// La suite
 						'users' => $this->getInput('profilAddCourseUsers', helper::FILTER_BOOLEAN),
 						'userHistory' => $this->getInput('profilAddCourseUserHistory', helper::FILTER_BOOLEAN),
@@ -917,6 +919,7 @@ class user extends common
 						'edit' => $this->getInput('profilAddCourseEdit', helper::FILTER_BOOLEAN),
 						'backup' => $this->getInput('profilAddCourseBackup', helper::FILTER_BOOLEAN),
 						'restore' => $this->getInput('profilAddCourseRestore', helper::FILTER_BOOLEAN),
+						'reset' => $this->getInput('profilAddCourseReset', helper::FILTER_BOOLEAN),
 					]
 				];
 

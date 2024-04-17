@@ -252,7 +252,8 @@ class init extends common
 						'usersDelete' => false,
 						'edit' => false,
 						'backup' => false,
-						'restore' => false
+						'restore' => false,
+						'reset' => false,
 					],
 					'folder' => [
 						'create' => false,
@@ -348,7 +349,8 @@ class init extends common
 						'usersDelete' => false,
 						'edit' => false,
 						'backup' => false,
-						'restore' => false
+						'restore' => false,
+						'reset' => false,
 					],
 					'folder' => [
 						'create' => false,
@@ -449,7 +451,8 @@ class init extends common
 						'usersDelete' => false,
 						'edit' => false,
 						'backup' => false,
-						'restore' => false
+						'restore' => false,
+						'reset' => false,
 					],
 					'folder' => [
 						'create' => false,
@@ -546,7 +549,8 @@ class init extends common
 						'usersDelete' => true,
 						'edit' => true,
 						'backup' => true,
-						'restore' => true
+						'restore' => true,
+						'reset' => true,
 					],
 					'folder' => [
 						'create' => true,

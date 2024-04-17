@@ -32,6 +32,7 @@ class course extends common
         'userReportExport' => self::GROUP_EDITOR, //Fait
         'backup' => self::GROUP_EDITOR, // Fait
         'restore' => self::GROUP_EDITOR, //Fait
+        'reset' => self::GROUP_EDITOR,
         'clone' => self::GROUP_ADMIN,
         'add' => self::GROUP_ADMIN,
         'delete' => self::GROUP_ADMIN,
@@ -690,13 +691,13 @@ class course extends common
                 self::$courseUsers[] = [
                     //$userId,
                     $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
-                    isset($pages[$userValue['lastPageView']]['title'])
+                    array_key_exists('lastPageView', $userValue) && isset($pages[$userValue['lastPageView']]['title'])
                     ? $pages[$userValue['lastPageView']]['title']
                     : '',
-                    $userValue['datePageView']
+                    array_key_exists('lastPageView', $userValue)
                     ? helper::dateUTF8('%d/%m/%Y', $userValue['datePageView'])
                     : '',
-                    $userValue['datePageView']
+                    array_key_exists('datePageView', $userValue)
                     ? helper::dateUTF8('%H:%M', $userValue['datePageView'])
                     : '',
                     $this->getData(['user', $userId, 'tags']),
@@ -903,6 +904,7 @@ class course extends common
 
     /**
      * Désinscription de tous les utilisateurs
+     * Les désinscriptions ne suppriment pas les historiques
      */
     public function usersDelete()
     {
@@ -1036,6 +1038,47 @@ class course extends common
                 'datatables'
             ]
         ]);
+    }
+
+    /**
+     * Désincription de tous les utilisateurs hors les éditeurs
+     * Effacement des historiques
+     */
+    public function reset()
+    {
+
+        // Contenu sélectionné
+        $courseId = $this->getUrl(2);
+
+        // Accès limité aux admins, à l'auteur ou éditeurs inscrits
+        if (
+            $this->permissionControl(__FUNCTION__, $courseId) === false
+        ) {
+            // Valeurs en sortie
+            $this->addOutput([
+                'access' => false
+            ]);
+        }
+
+
+        // Active l'accueil
+        $_SESSION['ZWII_SITE_CONTENT'] = 'home';
+
+        // Efface les inscriptions
+        $success = $this->setData(['enrolment', $courseId, []]);
+
+        // Efface les rapports
+        if (file_exists(self::DATA_DIR . $courseId . '/report.csv')) {
+            unlink(self::DATA_DIR . $courseId . '/report.csv');
+        }
+
+        // Valeurs en sortie
+        $this->addOutput([
+            'redirect' => helper::baseUrl() . 'course',
+            'notification' => helper::translate('Espace réinitialisé'),
+            'state' => true
+        ]);
+
     }
 
     /*
@@ -1377,7 +1420,7 @@ class course extends common
         }
 
         // Traitement de l'historique
-        $h = $this->getReport($courseId, $userId);
+        $h = $this->getReport($courseId);
         $h = $h[$userId];
 
         // Inversion des clés et des valeurs
@@ -1541,6 +1584,7 @@ class course extends common
 
     /**
      * Désinscription d'un participant
+     * La désinscription ne supprime pas les historiques, 
      */
     public function unsuscribe()
     {
@@ -1890,34 +1934,38 @@ class course extends common
      */
     private function getReport($courseId, $userId = null)
     {
-        // Remplacez 'chemin/vers/votre/fichier.csv' par le chemin réel de votre fichier CSV
-        $file = fopen(self::DATA_DIR . $courseId . '/report.csv', "r");
 
-        $data = array();
+        $data = [];
+        if (file_exists(self::DATA_DIR . $courseId . '/report.csv')) {
+            // Remplacez 'chemin/vers/votre/fichier.csv' par le chemin réel de votre fichier CSV
+            $file = fopen(self::DATA_DIR . $courseId . '/report.csv', "r");
 
-        // Lire ligne par ligne
-        while (($line = fgetcsv($file, 1000, ";")) !== false) {
-            $name = $line[0];
-            $pageId = $line[1];
-            $timestamp = $line[2];
-            // Filtre userId
-         //   if (!is_null($userId) && $name === $userId) {
+            $data = array();
+
+            // Lire ligne par ligne
+            while (($line = fgetcsv($file, 1000, ";")) !== false) {
+                $name = $line[0];
+                $pageId = $line[1];
+                $timestamp = $line[2];
+                // Filtre userId
+                // if (!is_null($userId) && $name === $userId) {
                 // Initialiser le tableau si nécessaire
                 if (!isset($data[$name][$pageId])) {
                     $data[$name][$pageId] = array();
                 }
                 // Ajouter le timestamp
                 $data[$name][$pageId][] = $timestamp;
-        //    }
-        }
+                //}
+            }
 
-        // Fermer le fichier
-        fclose($file);
+            // Fermer le fichier
+            fclose($file);
 
-        // Trier les timestamps
-        foreach ($data as &$userData) {
-            foreach ($userData as &$pageData) {
-                sort($pageData);
+            // Trier les timestamps
+            foreach ($data as &$userData) {
+                foreach ($userData as &$pageData) {
+                    sort($pageData);
+                }
             }
         }
 

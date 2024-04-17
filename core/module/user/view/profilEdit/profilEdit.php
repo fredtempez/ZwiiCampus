@@ -307,6 +307,11 @@
                                 'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'course', 'usersDelete']),
                             ]); ?>
                         </div>
+                        <div class="col3">
+                            <?php echo template::checkbox('profilEditCourseReset', true, 'Réinitialiser un espace', [
+                                'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'course', 'reset']),
+                            ]); ?>
+                        </div>
                     </div>
                 </div>
             </div>

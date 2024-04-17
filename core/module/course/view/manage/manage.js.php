@@ -21,3 +21,14 @@ $(".courseDelete").on("click", function () {
         $(location).attr("href", _this.attr("href"));
     });
 });
+
+/**
+  * Confirmation de suppression
+  */
+ $(".courseReset").on("click", function () {
+  var _this = $(this);
+  var message = "<?php echo helper::translate('Réinitialiser cet espace ?'); ?>";
+  return core.confirm(message, function () {
+      $(location).attr("href", _this.attr("href"));
+  });
+});
