@@ -8,19 +8,27 @@
 	</div>
 	<div class="col1">
 		<?php /**echo template::button('userHelp', [
-			 'href' => 'https://doc.zwiicms.fr/gestion-des-utilisateurs',
-			 'target' => '_blank',
-			 'value' => template::ico('help'),
-			 'class' => 'buttonHelp',
-			 'help' => 'Consulter l\'aide en ligne'
-		 ]);*/?>
+			  'href' => 'https://doc.zwiicms.fr/gestion-des-utilisateurs',
+			  'target' => '_blank',
+			  'value' => template::ico('help'),
+			  'class' => 'buttonHelp',
+			  'help' => 'Consulter l\'aide en ligne'
+		  ]);*/ ?>
 	</div>
-	<div class="col1 offset7">
+	<div class="col1 offset6">
 		<?php echo template::button('userImport', [
 			'href' => helper::baseUrl() . 'user/import',
-			'value' => template::ico('upload'),
+			'value' => template::ico('users'),
 			'help' => 'Importer des utilisateurs en masse'
 		]); ?>
+	</div>
+	<div class="col1">
+	<?php echo template::button('userDeleteAll', [
+		'class' => 'userDeleteAll buttonRed',
+		'href' => helper::baseUrl() . 'user/usersDelete/' . $this->getUrl(2),
+		'value' => template::ico('users'),
+		'help' => 'Désinscrire en masse',
+	]) ?>
 	</div>
 	<div class="col1">
 		<?php echo template::button('userGroup', [
@@ -60,4 +68,4 @@
 	</div>
 </div>
 <?php echo template::formClose(); ?>
-<?php echo template::table([3, 2, 2, 2, 2, 1, 1], $module::$users, [ 'Nom', 'Groupe', 'Profil', 'Étiquettes', 'Date dernière vue', '', ''], ['id' => 'dataTables']); ?>
+<?php echo template::table([3, 2, 2, 2, 2, 1, 1], $module::$users, ['Nom', 'Groupe', 'Profil', 'Étiquettes', 'Date dernière vue', '', ''], ['id' => 'dataTables']); ?>

@@ -19,6 +19,7 @@ class user extends common
 	public static $actions = [
 		'add' => self::GROUP_ADMIN,
 		'delete' => self::GROUP_ADMIN,
+		'usersDelete' => self::GROUP_ADMIN,
 		'import' => self::GROUP_ADMIN,
 		'index' => self::GROUP_ADMIN,
 		'template' => self::GROUP_ADMIN,
@@ -228,6 +229,145 @@ class user extends common
 			]);
 		}
 	}
+
+    /**
+     * Désinscription de tous les utilisateurs
+     * Les désinscriptions ne suppriment pas les historiques
+     */
+    public function usersDelete()
+    {
+
+        // Contenu sélectionné
+        $courseId = $this->getUrl(2);
+
+        // Accès limité aux admins, à l'auteur ou éditeurs inscrits
+        if (
+            $this->getUser('permission', __CLASS__, __FUNCTION__) !== true
+        ) {
+            // Valeurs en sortie
+            $this->addOutput([
+                'access' => false
+            ]);
+        }
+
+        // Inscription des utilisateurs cochés
+        if (
+            isset($_POST['usersDeleteSubmit'])
+        ) {
+            foreach ($_POST as $keyPost => $valuePost) {
+                // Exclure les variables post qui ne sont pas des userId et ne traiter que les non inscrits
+                if (
+                    $this->getData(['user', $keyPost]) !== null
+                    && $this->getData(['user', $keyPost]) !== null
+                ) {
+                    $this->deleteData(['user', $keyPost]);
+                }
+            }
+        }
+
+        // Liste des groupes et des profils
+        $usersGroups = $this->getData(['profil']);
+
+        foreach ($usersGroups as $groupId => $groupValue) {
+            switch ($groupId) {
+                case "-1":
+                case "0":
+                    break;
+                case "3":
+                    self::$usersGroups['30'] = 'Administrateur';
+                    $profils['30'] = 0;
+                    break;
+                case "1":
+                case "2":
+                    foreach ($groupValue as $profilId => $profilValue) {
+                        if ($profilId) {
+                            self::$usersGroups[$groupId . $profilId] = sprintf(helper::translate('Groupe %s - Profil %s'), self::$groupPublics[$groupId], $profilValue['name']);
+                            $profils[$groupId . $profilId] = 0;
+                        }
+                    }
+            }
+        }
+
+        // Liste alphabétique
+        self::$alphabet = range('A', 'Z');
+        $alphabet = range('A', 'Z');
+        self::$alphabet = array_combine($alphabet, self::$alphabet);
+        self::$alphabet = array_merge(['all' => 'Tout'], self::$alphabet);
+
+        // Liste des inscrits dans le contenu sélectionné.
+        $users = $this->getData(['user']);
+        if (is_array($users)) {
+            // Tri du tableau par défaut par $userId
+            ksort($users);
+            foreach ($users as $userId => $userValue) {
+
+                // Compte les rôles
+                if (isset($profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])])) {
+                    $profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])]++;
+                }
+
+                // Filtres
+                if (
+                    isset($_POST['usersFilterGroup'])
+                    || isset($_POST['usersFilterFirstName'])
+                    || isset($_POST['usersFilterLastName'])
+                ) {
+
+                    // Groupe et profils
+                    $group = (string) $this->getData(['user', $userId, 'group']);
+                    $profil = (string) $this->getData(['user', $userId, 'profil']);
+                    $firstName = $this->getData(['user', $userId, 'firstname']);
+                    $lastName = $this->getData(['user', $userId, 'lastname']);
+                    if (
+                        $this->getInput('usersFilterGroup', helper::FILTER_INT) > 0
+                        && $this->getInput('usersFilterGroup', helper::FILTER_STRING_SHORT) !== $group . $profil
+                    )
+                        continue;
+                    // Première lettre du prénom
+                    if (
+                        $this->getInput('usersFilterFirstName', helper::FILTER_STRING_SHORT) !== 'all'
+                        && $this->getInput('usersFilterFirstName', helper::FILTER_STRING_SHORT) !== strtoupper(substr($firstName, 0, 1))
+                    )
+                        continue;
+                    // Première lettre du nom
+                    if (
+                        $this->getInput('usersFilterLastName', helper::FILTER_STRING_SHORT) !== 'all'
+                        && $this->getInput('usersFilterLastName', helper::FILTER_STRING_SHORT) !== strtoupper(substr($lastName, 0, 1))
+                    )
+                        continue;
+                }
+
+                // Construction du tableau
+                self::$users[] = [
+                    template::checkbox($userId, true, '', ['class' => 'checkboxSelect']),
+                    $userId,
+                    $this->getData(['user', $userId, 'firstname']),
+                    $this->getData(['user', $userId, 'lastname']),
+                    $this->getData(['user', $userId, 'tags']),
+                ];
+
+            }
+        }
+
+        // Ajoute les effectifs aux profils du sélecteur
+        foreach (self::$usersGroups as $groupId => $groupValue) {
+            if ($groupId === 'all') {
+                self::$usersGroups['all'] = self::$usersGroups['all'] . ' (' . array_sum($profils) . ')';
+            } else {
+                self::$usersGroups[$groupId] = self::$usersGroups[$groupId] . ' (' . $profils[$groupId] . ')';
+            }
+        }
+
+        // Valeurs en sortie
+        $this->addOutput([
+            'title' => helper::translate('Désincription en masse'),
+            'view' => 'usersDelete',
+            'vendor' => [
+                'datatables'
+            ]
+        ]);
+    }
+
 
 	/**
 	 * Édition
