@@ -89,9 +89,12 @@ class page extends common
 		$page = $this->getUrl(2);
 		// La page n'existe pas
 		if (
-			$this->getUser('permission', __CLASS__, __FUNCTION__) !== true ||
-			$this->getData(['page', $page]) === null
-		) {
+			$this->getUser('permission', __CLASS__, __FUNCTION__) !== true
+			|| $this->getData(['page', $page]) === null
+			|| $this->getUrl(3) != self::$siteContent
+
+		) { 
+			
 			// Valeurs en sortie
 			$this->addOutput([
 				'access' => false
@@ -131,7 +134,10 @@ class page extends common
 	 */
 	public function add()
 	{
-		if ($this->getUser('permission', __CLASS__, __FUNCTION__) !== true) {
+		if (
+			$this->getUser('permission', __CLASS__, __FUNCTION__) !== true
+			|| $this->getUrl(2) != self::$siteContent
+		) {
 			// Valeurs en sortie
 			$this->addOutput([
 				'access' => false
@@ -202,8 +208,9 @@ class page extends common
 		$page = $this->getUrl(2);
 		// La page n'existe pas
 		if (
-			$this->getUser('permission', __CLASS__, __FUNCTION__) !== true ||
-			$this->getData(['page', $page]) === null
+			$this->getUser('permission', __CLASS__, __FUNCTION__) !== true
+			|| $this->getData(['page', $page]) === null
+			|| $this->getUrl(3) != self::$siteContent
 		) {
 			// Valeurs en sortie
 			$this->addOutput([
@@ -215,9 +222,9 @@ class page extends common
 			// Valeurs en sortie
 			$this->addOutput([
 				'redirect' => helper::baseUrl() . $this->homePageId(),
-				'notification' => self::$siteContent === 'home' 
-									? helper::translate('Suppression interdite, cette page est définie comme page d\'accueil du site')
-									: helper::translate('Suppression interdite, cette page est définie comme page d\'accueil d\'un espace')
+				'notification' => self::$siteContent === 'home'
+					? helper::translate('Suppression interdite, cette page est définie comme page d\'accueil du site')
+					: helper::translate('Suppression interdite, cette page est définie comme page d\'accueil d\'un espace')
 			]);
 		}
 		// Impossible de supprimer la page affectée
@@ -306,8 +313,9 @@ class page extends common
 	{
 		// La page n'existe pas
 		if (
-			$this->getUser('permission', __CLASS__, __FUNCTION__) !== true ||
-			$this->getData(['page', $this->getUrl(2)]) === null
+			$this->getUser('permission', __CLASS__, __FUNCTION__) !== true
+			|| $this->getData(['page', $this->getUrl(2)]) === null
+			|| $this->getUrl(3) != self::$siteContent
 		) {
 			// Valeurs en sortie
 			$this->addOutput([
@@ -691,7 +699,7 @@ class page extends common
 	{
 		$p = $this->getData(['page']);
 		$d = array_map(function ($d) {
-			unset($d["css"], $d["js"]);
+			unset ($d["css"], $d["js"]);
 			return $d;
 		}, $p);
 		return json_encode($d);
