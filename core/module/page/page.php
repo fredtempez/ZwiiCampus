@@ -91,9 +91,13 @@ class page extends common
 		if (
 			$this->getUser('permission', __CLASS__, __FUNCTION__) !== true
 			|| $this->getData(['page', $page]) === null
-			|| $this->getUrl(3) != self::$siteContent
+			// Contrôle la présence de l'id d'espace uniquement si l'id est fourni afin de ne pas bloquer les modules non mis à jour
+			|| (
+				$this->getUrl(3)
+				&& $this->getUrl(3) != self::$siteContent
+			)
 
-		) { 			
+		) {
 			// Valeurs en sortie
 			$this->addOutput([
 				'access' => false
@@ -209,7 +213,11 @@ class page extends common
 		if (
 			$this->getUser('permission', __CLASS__, __FUNCTION__) !== true
 			|| $this->getData(['page', $page]) === null
-			|| $this->getUrl(3) != self::$siteContent
+			// Contrôle la présence de l'id d'espace uniquement si l'id est fourni afin de ne pas bloquer les modules non mis à jour
+			|| (
+				$this->getUrl(3)
+				&& $this->getUrl(3) != self::$siteContent
+			)
 		) {
 			// Valeurs en sortie
 			$this->addOutput([
@@ -270,7 +278,7 @@ class page extends common
 		elseif ($this->getHierarchy($page, null)) {
 			// Valeurs en sortie
 			$this->addOutput([
-				'redirect' => helper::baseUrl() . 'page/edit/' . $page  . '/' . self::$siteContent,
+				'redirect' => helper::baseUrl() . 'page/edit/' . $page . '/' . self::$siteContent,
 				'notification' => helper::translate('Impossible de supprimer une page contenant des pages enfants')
 			]);
 		}
@@ -314,7 +322,11 @@ class page extends common
 		if (
 			$this->getUser('permission', __CLASS__, __FUNCTION__) !== true
 			|| $this->getData(['page', $this->getUrl(2)]) === null
-			|| $this->getUrl(3) != self::$siteContent
+			// Contrôle la présence de l'id d'espace uniquement si l'id est fourni afin de ne pas bloquer les modules non mis à jour
+			|| (
+				$this->getUrl(3)
+				&& $this->getUrl(3) != self::$siteContent
+			)
 		) {
 			// Valeurs en sortie
 			$this->addOutput([
@@ -641,7 +653,7 @@ class page extends common
 			// Valeurs en sortie
 			$this->addOutput([
 				'notification' => helper::translate('Modifications enregistrées'),
-				'redirect' => helper::baseUrl() . 'page/edit/' . $this->getUrl(2)  . '/' . self::$siteContent,
+				'redirect' => helper::baseUrl() . 'page/edit/' . $this->getUrl(2) . '/' . self::$siteContent,
 				'state' => true
 			]);
 		}
@@ -676,7 +688,7 @@ class page extends common
 			// Valeurs en sortie
 			$this->addOutput([
 				'notification' => helper::translate('Modifications enregistrées'),
-				'redirect' => helper::baseUrl() . 'page/edit/' . $this->getUrl(2)  . '/' . self::$siteContent,
+				'redirect' => helper::baseUrl() . 'page/edit/' . $this->getUrl(2) . '/' . self::$siteContent,
 				'state' => true
 			]);
 		}
