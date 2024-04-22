@@ -19,7 +19,7 @@
   	core.confirm(
   		message,
    		function() {
-  			$(location).attr("href", "<?php echo helper::baseUrl(); ?>page/edit/<?php echo $this->getUrl(0); ?>");
+  			$(location).attr("href", "<?php echo helper::baseUrl(); ?>page/edit/<?php echo $this->getUrl(0)  . '/' . self::$siteContent; ?>");
   		},
   		function() {
   			$(location).attr("href", "<?php echo helper::baseUrl() . $this->getUrl(); ?>/force");

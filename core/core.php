@@ -1105,8 +1105,9 @@ class common
 			}
 			// Articles du blog
 			if (
-				$this->getData(['page', $parentPageId, 'moduleId']) === 'blog' &&
-				!empty($this->getData(['module', $parentPageId]))
+				$this->getData(['page', $parentPageId, 'moduleId']) === 'blog'
+				&& !empty($this->getData(['module', $parentPageId]))
+				&& $this->getData(['module', $parentPageId, 'posts'])
 			) {
 				foreach ($this->getData(['module', $parentPageId, 'posts']) as $articleId => $article) {
 					if ($this->getData(['module', $parentPageId, 'posts', $articleId, 'state']) === true) {

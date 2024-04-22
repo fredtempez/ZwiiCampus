@@ -93,8 +93,7 @@ class page extends common
 			|| $this->getData(['page', $page]) === null
 			|| $this->getUrl(3) != self::$siteContent
 
-		) { 
-			
+		) { 			
 			// Valeurs en sortie
 			$this->addOutput([
 				'access' => false
@@ -121,7 +120,7 @@ class page extends common
 
 			// Valeurs en sortie
 			$this->addOutput([
-				'redirect' => helper::baseUrl() . 'page/edit/' . $pageId,
+				'redirect' => helper::baseUrl() . 'page/edit/' . $pageId . '/' . self::$siteContent,
 				'notification' => $notification,
 				'state' => true
 			]);
@@ -271,7 +270,7 @@ class page extends common
 		elseif ($this->getHierarchy($page, null)) {
 			// Valeurs en sortie
 			$this->addOutput([
-				'redirect' => helper::baseUrl() . 'page/edit/' . $page,
+				'redirect' => helper::baseUrl() . 'page/edit/' . $page  . '/' . self::$siteContent,
 				'notification' => helper::translate('Impossible de supprimer une page contenant des pages enfants')
 			]);
 		}
@@ -642,7 +641,7 @@ class page extends common
 			// Valeurs en sortie
 			$this->addOutput([
 				'notification' => helper::translate('Modifications enregistrées'),
-				'redirect' => helper::baseUrl() . 'page/edit/' . $this->getUrl(2),
+				'redirect' => helper::baseUrl() . 'page/edit/' . $this->getUrl(2)  . '/' . self::$siteContent,
 				'state' => true
 			]);
 		}
@@ -677,7 +676,7 @@ class page extends common
 			// Valeurs en sortie
 			$this->addOutput([
 				'notification' => helper::translate('Modifications enregistrées'),
-				'redirect' => helper::baseUrl() . 'page/edit/' . $this->getUrl(2),
+				'redirect' => helper::baseUrl() . 'page/edit/' . $this->getUrl(2)  . '/' . self::$siteContent,
 				'state' => true
 			]);
 		}
