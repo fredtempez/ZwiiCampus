@@ -734,7 +734,7 @@ class page extends common
 
 	/**
 	 * Retourne les informations sur les pages en omettant les clés CSS et JS qui occasionnent des bugs d'affichage dans l'éditeur de page
-	 * @return array tableau associatif des pages dans le menu 
+	 * @return string tableau associatif des pages dans le menu 
 	 */
 	public function getPageInfo()
 	{
@@ -743,9 +743,7 @@ class page extends common
 			unset ($d["css"], $d["js"]);
 			return $d;
 		}, $p);
-		$d = json_encode($d);
-		return $d;
-
+		return json_encode($d);
 	}
 
 }
