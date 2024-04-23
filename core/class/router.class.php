@@ -15,12 +15,12 @@ class core extends common
 		}
 
 		// Fuseau horaire
-		self::$timezone = $this->getData(['config', 'timezone']); // Utile pour transmettre le timezone à la classe helper
-		date_default_timezone_set(self::$timezone);
+		common::$timezone = $this->getData(['config', 'timezone']); // Utile pour transmettre le timezone à la classe helper
+		date_default_timezone_set(common::$timezone);
 		// Supprime les fichiers temporaires
 		$lastClearTmp = mktime(0, 0, 0);
 		if ($lastClearTmp > $this->getData(['core', 'lastClearTmp']) + 86400) {
-			$iterator = new DirectoryIterator(self::TEMP_DIR);
+			$iterator = new DirectoryIterator(common::TEMP_DIR);
 			foreach ($iterator as $fileInfos) {
 				if (
 					$fileInfos->isFile() &&
@@ -43,11 +43,11 @@ class core extends common
 			and $this->getData(['user']) // Pas de backup pendant l'installation
 		) {
 			// Copie des fichier de données
-			helper::autoBackup(self::BACKUP_DIR, ['backup', 'tmp', 'file']);
+			helper::autoBackup(common::BACKUP_DIR, ['backup', 'tmp', 'file']);
 			// Date du dernier backup
 			$this->setData(['core', 'lastBackup', $lastBackup]);
 			// Supprime les backups de plus de 30 jours
-			$iterator = new DirectoryIterator(self::BACKUP_DIR);
+			$iterator = new DirectoryIterator(common::BACKUP_DIR);
 			foreach ($iterator as $fileInfos) {
 				if (
 					$fileInfos->isFile()
@@ -60,23 +60,23 @@ class core extends common
 		}
 
 		// Crée le fichier de personnalisation avancée
-		if (file_exists(self::DATA_DIR . 'custom.css') === false) {
-			file_put_contents(self::DATA_DIR . 'custom.css', ('core/module/theme/resource/custom.css'));
-			chmod(self::DATA_DIR . 'custom.css', 0755);
+		if (file_exists(common::DATA_DIR . 'custom.css') === false) {
+			file_put_contents(common::DATA_DIR . 'custom.css', ('core/module/theme/resource/custom.css'));
+			chmod(common::DATA_DIR . 'custom.css', 0755);
 		}
 		// Crée le fichier de personnalisation
-		if (file_exists(self::DATA_DIR . self::$siteContent . '/theme.css') === false) {
-			file_put_contents(self::DATA_DIR . self::$siteContent . '/theme.css', '');
-			chmod(self::DATA_DIR . self::$siteContent . '/theme.css', 0755);
+		if (file_exists(common::DATA_DIR . common::$siteContent . '/theme.css') === false) {
+			file_put_contents(common::DATA_DIR . common::$siteContent . '/theme.css', '');
+			chmod(common::DATA_DIR . common::$siteContent . '/theme.css', 0755);
 		}
 		// Crée le fichier de personnalisation de l'administration
-		if (file_exists(self::DATA_DIR . 'admin.css') === false) {
-			file_put_contents(self::DATA_DIR . 'admin.css', '');
-			chmod(self::DATA_DIR . 'admin.css', 0755);
+		if (file_exists(common::DATA_DIR . 'admin.css') === false) {
+			file_put_contents(common::DATA_DIR . 'admin.css', '');
+			chmod(common::DATA_DIR . 'admin.css', 0755);
 		}
 
 		// Check la version rafraichissement du theme
-		$cssVersion = preg_split('/\*+/', file_get_contents(self::DATA_DIR . self::$siteContent . '/theme.css'));
+		$cssVersion = preg_split('/\*+/', file_get_contents(common::DATA_DIR . common::$siteContent . '/theme.css'));
 		if (empty($cssVersion[1]) or $cssVersion[1] !== md5(json_encode($this->getData(['theme'])))) {
 			// Version
 			$css = '/*' . md5(json_encode($this->getData(['theme']))) . '*/';
@@ -92,7 +92,7 @@ class core extends common
 			// Fonts disponibles
 			$fontsAvailable['files'] = $this->getData(['font', 'files']);
 			$fontsAvailable['imported'] = $this->getData(['font', 'imported']);
-			$fontsAvailable['websafe'] = self::$fontsWebSafe;
+			$fontsAvailable['websafe'] = common::$fontsWebSafe;
 
 			// Fontes installées
 			$fonts = [
@@ -273,7 +273,7 @@ class core extends common
 			$css .= '#footerCopyright{text-align:' . $this->getData(['theme', 'footer', 'copyrightAlign']) . '}';
 
 			// Enregistre la personnalisation
-			file_put_contents(self::DATA_DIR . self::$siteContent . '/theme.css', $css);
+			file_put_contents(common::DATA_DIR . common::$siteContent . '/theme.css', $css);
 
 			// Effacer le cache pour tenir compte de la couleur de fond TinyMCE
 			header("Expires: Tue, 01 Jan 2000 00:00:00 GMT");
@@ -284,7 +284,7 @@ class core extends common
 		}
 
 		// Check la version rafraichissement du theme admin
-		$cssVersion = preg_split('/\*+/', file_get_contents(self::DATA_DIR . 'admin.css'));
+		$cssVersion = preg_split('/\*+/', file_get_contents(common::DATA_DIR . 'admin.css'));
 		if (empty($cssVersion[1]) or $cssVersion[1] !== md5(json_encode($this->getData(['admin'])))) {
 
 			// Version
@@ -293,7 +293,7 @@ class core extends common
 			// Fonts disponibles
 			$fontsAvailable['files'] = $this->getData(['font', 'files']);
 			$fontsAvailable['imported'] = $this->getData(['font', 'imported']);
-			$fontsAvailable['websafe'] = self::$fontsWebSafe;
+			$fontsAvailable['websafe'] = common::$fontsWebSafe;
 
 			/**
 			 * Import des polices de caractères
@@ -368,7 +368,7 @@ class core extends common
 			// Bordure du contour TinyMCE
 			$css .= '.mce-tinymce{border: 1px solid ' . $this->getData(['admin', 'borderBlockColor']) . '!important;}';
 			// Enregistre la personnalisation
-			file_put_contents(self::DATA_DIR . 'admin.css', $css);
+			file_put_contents(common::DATA_DIR . 'admin.css', $css);
 		}
 	}
 	/**
@@ -384,8 +384,8 @@ class core extends common
 			require 'core/module/' . $classPath;
 		}
 		// Module
-		elseif (is_readable(self::MODULE_DIR . $classPath)) {
-			require self::MODULE_DIR . $classPath;
+		elseif (is_readable(common::MODULE_DIR . $classPath)) {
+			require common::MODULE_DIR . $classPath;
 		}
 		// Librairie
 		elseif (is_readable('core/vendor/' . $classPath)) {
@@ -414,20 +414,20 @@ class core extends common
 		// Sauvegarde la dernière page visitée par l'utilisateur connecté et enregistre l'historique des consultations
 		if (
 			$this->getUser('id')
-			&& self::$siteContent !== 'home'
+			&& common::$siteContent !== 'home'
 			&& in_array($this->getUrl(0), array_keys($this->getData(['page'])))
 			// Le userId n'est pas celui d'un admis ni le prof du contenu
 			&& (
-				$this->getUser('group') < self::GROUP_ADMIN
-				|| $this->getUser('id') !== $this->getData(['course', self::$siteContent, 'author'])
+				$this->getUser('group') < common::GROUP_ADMIN
+				|| $this->getUser('id') !== $this->getData(['course', common::$siteContent, 'author'])
 			)
 		) {
 			// Stocke la dernière page vue et sa date de consultation
-			$this->setData(['enrolment', self::$siteContent, $this->getUser('id'), 'lastPageView', $this->getUrl(0)]);
-			$this->setData(['enrolment', self::$siteContent, $this->getUser('id'), 'datePageView', time()]);
+			$this->setData(['enrolment', common::$siteContent, $this->getUser('id'), 'lastPageView', $this->getUrl(0)]);
+			$this->setData(['enrolment', common::$siteContent, $this->getUser('id'), 'datePageView', time()]);
 
 			// Stocke le rapport en CSV
-			$file = fopen(self::DATA_DIR . self::$siteContent . '/report.csv', 'a+');
+			$file = fopen(common::DATA_DIR . common::$siteContent . '/report.csv', 'a+');
 			fputcsv($file,  [ $this->getUser('id'), $this->getUrl(0) ,time()], ';');
 			fclose($file);
 
@@ -439,7 +439,7 @@ class core extends common
 		// Force la déconnexion des membres bannis ou d'une seconde session
 		if (
 			$this->getUser('password') === $this->getInput('ZWII_USER_PASSWORD')
-			and ($this->getUser('group') === self::GROUP_BANNED
+			and ($this->getUser('group') === common::GROUP_BANNED
 				or ($_SESSION['csrf'] !== $this->getData(['user', $this->getUser('id'), 'accessCsrf'])
 					and $this->getData(['config', 'connect', 'autoDisconnect']) === true)
 			)
@@ -454,7 +454,7 @@ class core extends common
 			and $this->getUrl(1) !== 'login'
 			and ($this->getUser('password') !== $this->getInput('ZWII_USER_PASSWORD')
 				or ($this->getUser('password') === $this->getInput('ZWII_USER_PASSWORD')
-					and $this->getUser('group') < self::GROUP_ADMIN
+					and $this->getUser('group') < common::GROUP_ADMIN
 				)
 			)
 		) {
@@ -467,30 +467,11 @@ class core extends common
 			exit();
 		}
 
-		// Pour éviter une 404 sur une langue étrangère, bascule dans la langue correcte.
-		if (is_null($this->getData(['page', $this->getUrl(0)]))) {
-			foreach ($this->getData(['course']) as $key => $value) {;
-				if (
-					is_dir(self::DATA_DIR . $key) &&
-					file_exists(self::DATA_DIR . $key . '/page.json')
-				) {
-					$pagesId = json_decode(file_get_contents(self::DATA_DIR . $key . '/page.json'), true);
-					if (
-						is_array($pagesId['page']) &&
-						array_key_exists($this->getUrl(0), $pagesId['page'])
-					) {
-						header('Refresh:0; url=' . helper::baseUrl() . 'course/swap/' . $key . '/' . $this->getUrl(0));
-						exit();
-					}
-				}
-			}
-		}
-
 		// Check l'accès à la page
 		$access = null;
 		if ($this->getData(['page', $this->getUrl(0)]) !== null) {
 			if (
-				$this->getData(['page', $this->getUrl(0), 'group']) === self::GROUP_VISITOR
+				$this->getData(['page', $this->getUrl(0), 'group']) === common::GROUP_VISITOR
 				or ($this->getUser('password') === $this->getInput('ZWII_USER_PASSWORD')
 					// and $this->getUser('group') >= $this->getData(['page', $this->getUrl(0), 'group'])
 					// Modification qui tient compte du profil de la page
@@ -511,7 +492,7 @@ class core extends common
 					and $this->getUser('password') !== $this->getInput('ZWII_USER_PASSWORD')
 				) or ($this->getData(['page', $this->getUrl(0), 'disable']) === true
 					and $this->getUser('password') === $this->getInput('ZWII_USER_PASSWORD')
-					and $this->getUser('group') < self::GROUP_EDITOR
+					and $this->getUser('group') < common::GROUP_EDITOR
 				)
 			) {
 				$access = false;
@@ -537,9 +518,9 @@ class core extends common
 					$this->getUser('id') &&
 					$userId !== $this->getUser('id') &&
 					$this->getData(['user', $userId, 'accessUrl']) === $this->getUrl() &&
-					array_intersect($t, self::$concurrentAccess) &&
-					//array_intersect($t, self::$accessExclude) !== false &&
-					time() < $this->getData(['user', $userId, 'accessTimer']) + self::ACCESS_TIMER
+					array_intersect($t, common::$concurrentAccess) &&
+					//array_intersect($t, common::$accessExclude) !== false &&
+					time() < $this->getData(['user', $userId, 'accessTimer']) + common::ACCESS_TIMER
 				) {
 					$access = false;
 					$accessInfo['userName'] = $this->getData(['user', $userId, 'lastname']) . ' ' . $this->getData(['user', $userId, 'firstname']);
@@ -576,10 +557,10 @@ class core extends common
 		$inlineScript[] = $this->getData(['page', $this->getUrl(0), 'js']) === null ? '' : $this->getData(['page', $this->getUrl(0), 'js']);
 
 		// Importe le contenu, le CSS et le script des barres
-		$contentRight = $this->getData(['page', $this->getUrl(0), 'barRight']) ? $this->getPage($this->getData(['page', $this->getUrl(0), 'barRight']), self::$siteContent) : '';
+		$contentRight = $this->getData(['page', $this->getUrl(0), 'barRight']) ? $this->getPage($this->getData(['page', $this->getUrl(0), 'barRight']), common::$siteContent) : '';
 		$inlineStyle[] = $this->getData(['page', $this->getData(['page', $this->getUrl(0), 'barRight']), 'css']) === null ? '' : $this->getData(['page', $this->getData(['page', $this->getUrl(0), 'barRight']), 'css']);
 		$inlineScript[] = $this->getData(['page', $this->getData(['page', $this->getUrl(0), 'barRight']), 'js']) === null ? '' : $this->getData(['page', $this->getData(['page', $this->getUrl(0), 'barRight']), 'js']);
-		$contentLeft = $this->getData(['page', $this->getUrl(0), 'barLeft']) ? $this->getPage($this->getData(['page', $this->getUrl(0), 'barLeft']), self::$siteContent) : '';
+		$contentLeft = $this->getData(['page', $this->getUrl(0), 'barLeft']) ? $this->getPage($this->getData(['page', $this->getUrl(0), 'barLeft']), common::$siteContent) : '';
 		$inlineStyle[] = $this->getData(['page', $this->getData(['page', $this->getUrl(0), 'barLeft']), 'css']) === null ? '' : $this->getData(['page', $this->getData(['page', $this->getUrl(0), 'barLeft']), 'css']);
 		$inlineScript[] = $this->getData(['page', $this->getData(['page', $this->getUrl(0), 'barLeft']), 'js']) === null ? '' : $this->getData(['page', $this->getData(['page', $this->getUrl(0), 'barLeft']), 'js']);
 
@@ -597,7 +578,7 @@ class core extends common
 
 			$this->addOutput([
 				'title' => $title,
-				'content' => $this->getPage($this->getUrl(0), self::$siteContent),
+				'content' => $this->getPage($this->getUrl(0), common::$siteContent),
 				'metaDescription' => $this->getData(['page', $this->getUrl(0), 'metaDescription']),
 				'metaTitle' => $this->getData(['page', $this->getUrl(0), 'metaTitle']),
 				'typeMenu' => $this->getData(['page', $this->getUrl(0), 'typeMenu']),
@@ -623,7 +604,7 @@ class core extends common
 					: $this->getData(['page', $this->getUrl(0), 'metaDescription']);
 
 				// Importe le CSS de la page principale
-				$pageContent = $this->getPage($this->getUrl(0), self::$siteContent);
+				$pageContent = $this->getPage($this->getUrl(0), common::$siteContent);
 
 				$this->addOutput([
 					'title' => $title,
@@ -668,7 +649,7 @@ class core extends common
 					$output = $module->output;
 					// Check le groupe de l'utilisateur
 					if (
-						($module::$actions[$action] === self::GROUP_VISITOR
+						($module::$actions[$action] === common::GROUP_VISITOR
 							or ($this->getUser('password') === $this->getInput('ZWII_USER_PASSWORD')
 								and $this->getUser('group') >= $module::$actions[$action]
 								and $this->getUser('permission', $moduleId, $action)
@@ -681,10 +662,10 @@ class core extends common
 							foreach ($_POST as $postId => $postValue) {
 								if (is_array($postValue)) {
 									foreach ($postValue as $subPostId => $subPostValue) {
-										self::$inputBefore[$postId . '_' . $subPostId] = $subPostValue;
+										common::$inputBefore[$postId . '_' . $subPostId] = $subPostValue;
 									}
 								} else {
-									self::$inputBefore[$postId] = $postValue;
+									common::$inputBefore[$postId] = $postValue;
 								}
 							}
 						}
@@ -724,9 +705,9 @@ class core extends common
 						// Contenu par vue
 						elseif ($output['view']) {
 							// Chemin en fonction d'un module du coeur ou d'un module
-							$modulePath = in_array($moduleId, self::$coreModuleIds) ? 'core/' : '';
+							$modulePath = in_array($moduleId, common::$coreModuleIds) ? 'core/' : '';
 							// CSS
-							$stylePath = $modulePath . self::MODULE_DIR . $moduleId . '/view/' . $output['view'] . '/' . $output['view'] . '.css';
+							$stylePath = $modulePath . common::MODULE_DIR . $moduleId . '/view/' . $output['view'] . '/' . $output['view'] . '.css';
 							if (file_exists($stylePath)) {
 								$this->addOutput([
 									'style' => file_get_contents($stylePath)
@@ -739,7 +720,7 @@ class core extends common
 							}
 
 							// JS
-							$scriptPath = $modulePath . self::MODULE_DIR . $moduleId . '/view/' . $output['view'] . '/' . $output['view'] . '.js.php';
+							$scriptPath = $modulePath . common::MODULE_DIR . $moduleId . '/view/' . $output['view'] . '/' . $output['view'] . '.js.php';
 							if (file_exists($scriptPath)) {
 								ob_start();
 								include $scriptPath;
@@ -748,7 +729,7 @@ class core extends common
 								]);
 							}
 							// Vue
-							$viewPath = $modulePath . self::MODULE_DIR . $moduleId . '/view/' . $output['view'] . '/' . $output['view'] . '.php';
+							$viewPath = $modulePath . common::MODULE_DIR . $moduleId . '/view/' . $output['view'] . '/' . $output['view'] . '.php';
 							if (file_exists($viewPath)) {
 								ob_start();
 								include $viewPath;
@@ -834,14 +815,40 @@ class core extends common
 				}
 			}
 		} elseif ($this->output['content'] === '') {
+
+			// Pour éviter une 404, bascule dans l'espace correct si la page existe dans cet espace.
+			// Parcourir les espaces y compris l'accueil
+			foreach (array_merge(['home'=> []], $this->getData(['course'])) as $courseId => $value) {;
+				if (
+					// l'espace existe
+					is_dir(common::DATA_DIR . $courseId) &&
+					file_exists(common::DATA_DIR . $courseId . '/page.json')
+				) {
+					// Lire les données des pages
+					$pagesId = json_decode(file_get_contents(common::DATA_DIR . $courseId . '/page.json'), true);
+					if (
+						// La page existe
+						is_array($pagesId['page']) &&
+						array_key_exists($this->getUrl(0), $pagesId['page'])
+					) {
+						// Basculer
+						$_SESSION['ZWII_SITE_CONTENT'] = $courseId;
+						header('Refresh:0; url=' . helper::baseUrl() . $this->getUrl());
+						exit();
+					}
+				}
+			}
+			// La page n'existe pas dans les esapces, on génére une erreur 404
 			http_response_code(404);
 			if (
+				// une page est définie dans la configuration mais dans home
 				$this->getData(['config', 'page404']) !== 'none'
-				//and $this->getData(['page', $this->getData(['config', 'page404'])])
 			) {
+				// Bascule sur l'acccueil et rediriger
 				$_SESSION['ZWII_SITE_CONTENT'] = 'home';
 				header('Location:' . helper::baseUrl() . $this->getData(['config', 'page404']));
 			} else {
+				// Page par défaut
 				$this->addOutput([
 					'title' => 'Page indisponible',
 					'content' => template::speech('<p>' . helper::translate('La page demandée n\'existe pas ou est introuvable (erreur 404)') . '</p><p><a style="color:inherit" href="javascript:history.back()">'. helper::translate('Retour') . '</a></p>')
@@ -867,25 +874,25 @@ class core extends common
 		}
 		switch ($this->output['display']) {
 			// Layout brut
-			case self::DISPLAY_RAW:
+			case common::DISPLAY_RAW:
 				echo $this->output['content'];
 				break;
 			// Layout vide
-			case self::DISPLAY_LAYOUT_BLANK:
+			case common::DISPLAY_LAYOUT_BLANK:
 				require 'core/layout/blank.php';
 				break;
 			// Affichage en JSON
-			case self::DISPLAY_JSON:
+			case common::DISPLAY_JSON:
 				header('Content-Type: application/json');
 				echo json_encode($this->output['content']);
 				break;
 			// RSS feed
-			case self::DISPLAY_RSS:
+			case common::DISPLAY_RSS:
 				header('Content-type: application/rss+xml; charset=UTF-8');
 				echo $this->output['content'];
 				break;
 			// Layout allégé
-			case self::DISPLAY_LAYOUT_LIGHT:
+			case common::DISPLAY_LAYOUT_LIGHT:
 				ob_start();
 				require 'core/layout/light.php';
 				$content = ob_get_clean();
@@ -896,7 +903,7 @@ class core extends common
 				echo $content;
 				break;
 			// Layout principal
-			case self::DISPLAY_LAYOUT_MAIN:
+			case common::DISPLAY_LAYOUT_MAIN:
 				ob_start();
 				require 'core/layout/main.php';
 				$content = ob_get_clean();
