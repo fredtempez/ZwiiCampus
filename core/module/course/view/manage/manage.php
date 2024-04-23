@@ -55,15 +55,6 @@
             ]); ?>
         </div>
     <?php endif; ?>
-    <?php if ($this->getUser('permission', 'course', 'users') === true): ?>
-        <div class="col2">
-            <?php echo template::button('categoryUser' . $this->getUrl(2), [
-                'href' => helper::baseUrl() . 'course/users/' . $this->getUrl(2),
-                'value' => 'Participants',
-                'ico' => 'users'
-            ]); ?>
-        </div>
-    <?php endif; ?>
 </div>
 
 <div class="row">

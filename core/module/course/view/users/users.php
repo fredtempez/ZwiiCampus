@@ -2,7 +2,7 @@
     <div class="col1">
         <?php echo template::button('courseUserBack', [
             'class' => 'buttonGrey',
-            'href' => helper::baseUrl() . 'course/manage/' . $this->getUrl(2),
+            'href' => helper::baseUrl() . 'course/' . $this->getUrl(2),
             'value' => template::ico('left')
         ]); ?>
     </div>
