@@ -51,7 +51,7 @@ class common
 	const ACCESS_TIMER = 1800;
 
 	// Numéro de version
-	const ZWII_VERSION = '1.9.01';
+	const ZWII_VERSION = '1.10.00';
 
 	// URL autoupdate
 	const ZWII_UPDATE_URL = 'https://forge.chapril.org/ZwiiCMS-Team/campus-update/raw/branch/master/';
@@ -1105,8 +1105,9 @@ class common
 			}
 			// Articles du blog
 			if (
-				$this->getData(['page', $parentPageId, 'moduleId']) === 'blog' &&
-				!empty($this->getData(['module', $parentPageId]))
+				$this->getData(['page', $parentPageId, 'moduleId']) === 'blog'
+				&& !empty($this->getData(['module', $parentPageId]))
+				&& $this->getData(['module', $parentPageId, 'posts'])
 			) {
 				foreach ($this->getData(['module', $parentPageId, 'posts']) as $articleId => $article) {
 					if ($this->getData(['module', $parentPageId, 'posts', $articleId, 'state']) === true) {

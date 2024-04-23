@@ -111,13 +111,20 @@ class course extends common
                         self::$courseAccess[$this->getData(['course', $courseId, 'access'])],
                         self::$courseEnrolment[$this->getData(['course', $courseId, 'enrolment'])]
                     );
+                    if ($this->getUser('permission', 'course', 'users') === true) {
+                        $users = template::button('categoryUser' . $this->getUrl(2), [
+                            'href' => helper::baseUrl() . 'course/users/' . $courseId,
+                            'value' => template::ico('users'),
+                        ]);
+                    }
                     self::$courses[] = [
                         $info,
                         $this->getData(['course', $courseId, 'description']),
                         $enrolment,
+                        $users,
                         template::button('categoryUser' . $courseId, [
                             'href' => helper::baseUrl() . 'course/manage/' . $courseId,
-                            'value' => template::ico('eye'),
+                            'value' => template::ico('sliders'),
                             'help' => 'Gérer'
                         ])
                     ];

@@ -85,12 +85,23 @@ class page extends common
 	 */
 	public function duplicate()
 	{
+		// La session ne correspond pas au site ouvert dans cet onglet
+		if (
+			// Contrôle la présence de l'id d'espace uniquement si l'id est fourni afin de ne pas bloquer les modules non mis à jour
+			$this->getUrl(3) && $this->getUrl(3) != self::$siteContent
+		) {
+			$_SESSION['ZWII_SITE_CONTENT'] = $this->getUrl(3);
+			header('Refresh:0; url=' . helper::baseUrl() . $this->getUrl());
+			exit();
+		}
+
 		// Adresse sans le token
 		$page = $this->getUrl(2);
+
 		// La page n'existe pas
 		if (
-			$this->getUser('permission', __CLASS__, __FUNCTION__) !== true ||
-			$this->getData(['page', $page]) === null
+			$this->getUser('permission', __CLASS__, __FUNCTION__) !== true
+			|| $this->getData(['page', $page]) === null
 		) {
 			// Valeurs en sortie
 			$this->addOutput([
@@ -118,7 +129,7 @@ class page extends common
 
 			// Valeurs en sortie
 			$this->addOutput([
-				'redirect' => helper::baseUrl() . 'page/edit/' . $pageId,
+				'redirect' => helper::baseUrl() . 'page/edit/' . $pageId . '/' . self::$siteContent,
 				'notification' => $notification,
 				'state' => true
 			]);
@@ -131,7 +142,19 @@ class page extends common
 	 */
 	public function add()
 	{
-		if ($this->getUser('permission', __CLASS__, __FUNCTION__) !== true) {
+		// La session ne correspond pas au site ouvert dans cet onglet
+		if (
+			// Contrôle la présence de l'id d'espace uniquement si l'id est fourni afin de ne pas bloquer les modules non mis à jour
+			$this->getUrl(3) && $this->getUrl(3) != self::$siteContent
+		) {
+			$_SESSION['ZWII_SITE_CONTENT'] = $this->getUrl(3);
+			header('Refresh:0; url=' . helper::baseUrl() . $this->getUrl());
+			exit();
+		}
+
+		if (
+			$this->getUser('permission', __CLASS__, __FUNCTION__) !== true
+		) {
 			// Valeurs en sortie
 			$this->addOutput([
 				'access' => false
@@ -198,12 +221,24 @@ class page extends common
 	 */
 	public function delete()
 	{
+
+		// La session ne correspond pas au site ouvert dans cet onglet
+		if (
+			// Contrôle la présence de l'id d'espace uniquement si l'id est fourni afin de ne pas bloquer les modules non mis à jour
+			$this->getUrl(3) && $this->getUrl(3) != self::$siteContent
+		) {
+			$_SESSION['ZWII_SITE_CONTENT'] = $this->getUrl(3);
+			header('Refresh:0; url=' . helper::baseUrl() . $this->getUrl());
+			exit();
+		}
+
 		// $url prend l'adresse sans le token
 		$page = $this->getUrl(2);
+
 		// La page n'existe pas
 		if (
-			$this->getUser('permission', __CLASS__, __FUNCTION__) !== true ||
-			$this->getData(['page', $page]) === null
+			$this->getUser('permission', __CLASS__, __FUNCTION__) !== true
+			|| $this->getData(['page', $page]) === null
 		) {
 			// Valeurs en sortie
 			$this->addOutput([
@@ -215,9 +250,9 @@ class page extends common
 			// Valeurs en sortie
 			$this->addOutput([
 				'redirect' => helper::baseUrl() . $this->homePageId(),
-				'notification' => self::$siteContent === 'home' 
-									? helper::translate('Suppression interdite, cette page est définie comme page d\'accueil du site')
-									: helper::translate('Suppression interdite, cette page est définie comme page d\'accueil d\'un espace')
+				'notification' => self::$siteContent === 'home'
+					? helper::translate('Suppression interdite, cette page est définie comme page d\'accueil du site')
+					: helper::translate('Suppression interdite, cette page est définie comme page d\'accueil d\'un espace')
 			]);
 		}
 		// Impossible de supprimer la page affectée
@@ -264,7 +299,7 @@ class page extends common
 		elseif ($this->getHierarchy($page, null)) {
 			// Valeurs en sortie
 			$this->addOutput([
-				'redirect' => helper::baseUrl() . 'page/edit/' . $page,
+				'redirect' => helper::baseUrl() . 'page/edit/' . $page . '/' . self::$siteContent,
 				'notification' => helper::translate('Impossible de supprimer une page contenant des pages enfants')
 			]);
 		}
@@ -304,10 +339,24 @@ class page extends common
 	 */
 	public function edit()
 	{
+		// La session ne correspond pas au site ouvert dans cet onglet
+		if (
+			// Contrôle la présence de l'id d'espace uniquement si l'id est fourni afin de ne pas bloquer les modules non mis à jour
+			$this->getUrl(3) && $this->getUrl(3) != self::$siteContent
+		) {
+			$_SESSION['ZWII_SITE_CONTENT'] = $this->getUrl(3);
+			header('Refresh:0; url=' . helper::baseUrl() . $this->getUrl());
+			exit();
+		}
 		// La page n'existe pas
 		if (
-			$this->getUser('permission', __CLASS__, __FUNCTION__) !== true ||
-			$this->getData(['page', $this->getUrl(2)]) === null
+			$this->getUser('permission', __CLASS__, __FUNCTION__) !== true
+			|| $this->getData(['page', $this->getUrl(2)]) === null
+			// Contrôle la présence de l'id d'espace uniquement si l'id est fourni afin de ne pas bloquer les modules non mis à jour
+			|| (
+				$this->getUrl(3)
+				&& $this->getUrl(3) != self::$siteContent
+			)
 		) {
 			// Valeurs en sortie
 			$this->addOutput([
@@ -634,7 +683,7 @@ class page extends common
 			// Valeurs en sortie
 			$this->addOutput([
 				'notification' => helper::translate('Modifications enregistrées'),
-				'redirect' => helper::baseUrl() . 'page/edit/' . $this->getUrl(2),
+				'redirect' => helper::baseUrl() . 'page/edit/' . $this->getUrl(2) . '/' . self::$siteContent,
 				'state' => true
 			]);
 		}
@@ -669,7 +718,7 @@ class page extends common
 			// Valeurs en sortie
 			$this->addOutput([
 				'notification' => helper::translate('Modifications enregistrées'),
-				'redirect' => helper::baseUrl() . 'page/edit/' . $this->getUrl(2),
+				'redirect' => helper::baseUrl() . 'page/edit/' . $this->getUrl(2) . '/' . self::$siteContent,
 				'state' => true
 			]);
 		}
@@ -685,16 +734,16 @@ class page extends common
 
 	/**
 	 * Retourne les informations sur les pages en omettant les clés CSS et JS qui occasionnent des bugs d'affichage dans l'éditeur de page
-	 * @return array tableau associatif des pages dans le menu 
+	 * @return string tableau associatif des pages dans le menu 
 	 */
 	public function getPageInfo()
 	{
 		$p = $this->getData(['page']);
 		$d = array_map(function ($d) {
-			unset($d["css"], $d["js"]);
+			unset ($d["css"], $d["js"]);
 			return $d;
 		}, $p);
 		return json_encode($d);
-
 	}
+
 }

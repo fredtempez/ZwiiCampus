@@ -4,7 +4,7 @@
     <div class="col2">
         <?php echo template::button('registrationConfigBack', [
             'class' => '',
-            'href' => helper::baseUrl() .'page/edit/' . $this->getUrl(0) ,
+            'href' => helper::baseUrl() .'page/edit/' . $this->getUrl(0)  . '/' . self::$siteContent,
             'ico' => 'left',
             'value' => 'Retour'
         ]); ?>
