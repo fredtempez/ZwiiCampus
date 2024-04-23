@@ -85,18 +85,23 @@ class page extends common
 	 */
 	public function duplicate()
 	{
+		// La session ne correspond pas au site ouvert dans cet onglet
+		if (
+			// Contrôle la présence de l'id d'espace uniquement si l'id est fourni afin de ne pas bloquer les modules non mis à jour
+			$this->getUrl(3) && $this->getUrl(3) != self::$siteContent
+		) {
+			$_SESSION['ZWII_SITE_CONTENT'] = $this->getUrl(3);
+			header('Refresh:0; url=' . helper::baseUrl() . $this->getUrl());
+			exit();
+		}
+
 		// Adresse sans le token
 		$page = $this->getUrl(2);
+
 		// La page n'existe pas
 		if (
 			$this->getUser('permission', __CLASS__, __FUNCTION__) !== true
 			|| $this->getData(['page', $page]) === null
-			// Contrôle la présence de l'id d'espace uniquement si l'id est fourni afin de ne pas bloquer les modules non mis à jour
-			|| (
-				$this->getUrl(3)
-				&& $this->getUrl(3) != self::$siteContent
-			)
-
 		) {
 			// Valeurs en sortie
 			$this->addOutput([
@@ -137,9 +142,18 @@ class page extends common
 	 */
 	public function add()
 	{
+		// La session ne correspond pas au site ouvert dans cet onglet
+		if (
+			// Contrôle la présence de l'id d'espace uniquement si l'id est fourni afin de ne pas bloquer les modules non mis à jour
+			$this->getUrl(3) && $this->getUrl(3) != self::$siteContent
+		) {
+			$_SESSION['ZWII_SITE_CONTENT'] = $this->getUrl(3);
+			header('Refresh:0; url=' . helper::baseUrl() . $this->getUrl());
+			exit();
+		}
+
 		if (
 			$this->getUser('permission', __CLASS__, __FUNCTION__) !== true
-			|| $this->getUrl(2) != self::$siteContent
 		) {
 			// Valeurs en sortie
 			$this->addOutput([
@@ -207,17 +221,24 @@ class page extends common
 	 */
 	public function delete()
 	{
+
+		// La session ne correspond pas au site ouvert dans cet onglet
+		if (
+			// Contrôle la présence de l'id d'espace uniquement si l'id est fourni afin de ne pas bloquer les modules non mis à jour
+			$this->getUrl(3) && $this->getUrl(3) != self::$siteContent
+		) {
+			$_SESSION['ZWII_SITE_CONTENT'] = $this->getUrl(3);
+			header('Refresh:0; url=' . helper::baseUrl() . $this->getUrl());
+			exit();
+		}
+
 		// $url prend l'adresse sans le token
 		$page = $this->getUrl(2);
+
 		// La page n'existe pas
 		if (
 			$this->getUser('permission', __CLASS__, __FUNCTION__) !== true
 			|| $this->getData(['page', $page]) === null
-			// Contrôle la présence de l'id d'espace uniquement si l'id est fourni afin de ne pas bloquer les modules non mis à jour
-			|| (
-				$this->getUrl(3)
-				&& $this->getUrl(3) != self::$siteContent
-			)
 		) {
 			// Valeurs en sortie
 			$this->addOutput([
@@ -318,6 +339,15 @@ class page extends common
 	 */
 	public function edit()
 	{
+		// La session ne correspond pas au site ouvert dans cet onglet
+		if (
+			// Contrôle la présence de l'id d'espace uniquement si l'id est fourni afin de ne pas bloquer les modules non mis à jour
+			$this->getUrl(3) && $this->getUrl(3) != self::$siteContent
+		) {
+			$_SESSION['ZWII_SITE_CONTENT'] = $this->getUrl(3);
+			header('Refresh:0; url=' . helper::baseUrl() . $this->getUrl());
+			exit();
+		}
 		// La page n'existe pas
 		if (
 			$this->getUser('permission', __CLASS__, __FUNCTION__) !== true
@@ -713,7 +743,9 @@ class page extends common
 			unset ($d["css"], $d["js"]);
 			return $d;
 		}, $p);
-		return json_encode($d);
+		$d = json_encode($d);
+		return $d;
 
 	}
+
 }
