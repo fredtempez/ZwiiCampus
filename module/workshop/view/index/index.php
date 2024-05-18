@@ -1,5 +1,8 @@
 <?php $startRow = 0; ?>
-<?php foreach ($this->getData(['course']) as $courseId => $courseValue): ?>
+<?php $c = $this->getData(['course']);?>
+<?php $titles = array_column($c, 'title'); ?>
+<?php array_multisort($titles, SORT_ASC, $c); ?>
+<?php foreach ($c as $courseId => $courseValue): ?>
     <!-- Filtre de catégorie -->
     <?php if (
         $this->getData(['module', $this->getUrl(0), 'config', 'category']) !== 'all' &&

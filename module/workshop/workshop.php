@@ -153,13 +153,6 @@ class workshop extends common
 			'view' => 'index'
 		]);
 
-
-		// Valeurs en sortie
-		$this->addOutput([
-			'showBarEditButton' => true,
-			'showPageContent' => true,
-			'view' => 'index',
-		]);
 	}
 
 	// Initialise avec des valeurs par défaut
