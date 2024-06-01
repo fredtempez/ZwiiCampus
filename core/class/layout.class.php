@@ -1018,7 +1018,7 @@ class layout extends common
                     or $this->getUrl(0) === ''
                 ) {
                     // Bouton Editer une page
-                    if ($this->getUser('permission', 'page', 'edit')) {
+                    if ($this->getUser('permission', 'page', 'edit') and $this->geturl(1) !== 'edit') {
                         $leftItems .= '<li>' . template::ico('pencil', [
                             'href' => helper::baseUrl() . 'page/edit/' . $this->getUrl(0) . '/' . self::$siteContent,
                             'help' => 'Éditer la page'
