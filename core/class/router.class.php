@@ -428,7 +428,7 @@ class core extends common
 
 			// Stocke le rapport en CSV
 			$file = fopen(common::DATA_DIR . common::$siteContent . '/report.csv', 'a+');
-			fputcsv($file,  [ $this->getUser('id'), $this->getUrl(0) ,time()], ';');
+			fputcsv($file, [$this->getUser('id'), $this->getUrl(0), time()], ';');
 			fclose($file);
 
 		}
@@ -494,6 +494,13 @@ class core extends common
 					and $this->getUser('password') === $this->getInput('ZWII_USER_PASSWORD')
 					and $this->getUser('group') < common::GROUP_EDITOR
 				)
+			) {
+				$access = false;
+			}
+			// Lève une erreur si l'url est celle d'une page avec des éléments surnuméraires  https://www.site.fr/page/truc
+			if (
+				array_key_exists($this->getUrl(0), $this->getData(['page']))
+				and $this->getUrl(1)
 			) {
 				$access = false;
 			}
@@ -798,7 +805,7 @@ class core extends common
 			if ($accessInfo['userName']) {
 				$this->addOutput([
 					'title' => 'Accès verrouillé',
-					'content' => template::speech('<p>'. sprintf(helper::translate('La page %s est ouverte par l\'utilisateur %s</p><p><a style="color:inherit" href="javascript:history.back()">%s</a></p>'), $accessInfo['pageId'], $accessInfo['userName'], helper::translate('Retour')))
+					'content' => template::speech('<p>' . sprintf(helper::translate('La page %s est ouverte par l\'utilisateur %s</p><p><a style="color:inherit" href="javascript:history.back()">%s</a></p>'), $accessInfo['pageId'], $accessInfo['userName'], helper::translate('Retour')))
 				]);
 			} else {
 				if (
@@ -810,7 +817,7 @@ class core extends common
 				} else {
 					$this->addOutput([
 						'title' => 'Accès interdit',
-						'content' => template::speech('<p>' . helper::translate('Vous n\'êtes pas autorisé à consulter cette page (erreur 403)') . '</p><p><a style="color:inherit" href="javascript:history.back()">'. helper::translate('Retour') . '</a></p>')
+						'content' => template::speech('<p>' . helper::translate('Vous n\'êtes pas autorisé à consulter cette page (erreur 403)') . '</p><p><a style="color:inherit" href="javascript:history.back()">' . helper::translate('Retour') . '</a></p>')
 					]);
 				}
 			}
@@ -818,7 +825,8 @@ class core extends common
 
 			// Pour éviter une 404, bascule dans l'espace correct si la page existe dans cet espace.
 			// Parcourir les espaces y compris l'accueil
-			foreach (array_merge(['home'=> []], $this->getData(['course'])) as $courseId => $value) {;
+			foreach (array_merge(['home' => []], $this->getData(['course'])) as $courseId => $value) {
+				;
 				if (
 					// l'espace existe
 					is_dir(common::DATA_DIR . $courseId) &&
@@ -851,7 +859,7 @@ class core extends common
 				// Page par défaut
 				$this->addOutput([
 					'title' => 'Page indisponible',
-					'content' => template::speech('<p>' . helper::translate('La page demandée n\'existe pas ou est introuvable (erreur 404)') . '</p><p><a style="color:inherit" href="javascript:history.back()">'. helper::translate('Retour') . '</a></p>')
+					'content' => template::speech('<p>' . helper::translate('La page demandée n\'existe pas ou est introuvable (erreur 404)') . '</p><p><a style="color:inherit" href="javascript:history.back()">' . helper::translate('Retour') . '</a></p>')
 				]);
 			}
 		}
