@@ -1016,46 +1016,53 @@ class layout extends common
                     )
                     // Sur une page d'accueil
                     or $this->getUrl(0) === ''
-                ) {
-                    // Bouton Editer une page
-                    if ($this->getUser('permission', 'page', 'edit') and $this->geturl(1) !== 'edit') {
-                        $leftItems .= '<li>' . template::ico('pencil', [
-                            'href' => helper::baseUrl() . 'page/edit/' . $this->getUrl(0) . '/' . self::$siteContent,
-                            'help' => 'Éditer la page'
-                        ]) . '</li>';
-                    }
-                    // Bouton Editer le module d'une page
-                    if (
-                        $this->getUser('permission', 'page', 'module')
-                        && $this->getData(['page', $this->getUrl(0), 'moduleId'])
                     ) {
-                        $leftItems .= '<li>' . template::ico('gear', [
-                            'href' => helper::baseUrl() . $this->getUrl(0) . '/config',
-                            'help' => 'Module de la page'
-                        ]) . '</li>';
+                        // Bouton Editer une page
+                        if (
+                            $this->getUser('permission', 'page', 'edit')
+                            and $this->geturl(1) !== 'edit'
+                        ) {
+                            $leftItems .= '<li>' . template::ico('pencil', [
+                                'href' => helper::baseUrl() . 'page/edit/' . $this->getUrl(0) . '/' . self::$siteContent,
+                                'help' => 'Éditer la page'
+                            ]) . '</li>';
+                        }
+                        // Bouton Editer le module d'une page
+                        if (
+                            $this->getUser('permission', 'page', 'module')
+                            and $this->geturl(1) !== 'edit'
+                            and $this->getData(['page', $this->getUrl(0), 'moduleId'])
+                        ) {
+                            $leftItems .= '<li>' . template::ico('gear', [
+                                'href' => helper::baseUrl() . $this->getUrl(0) . '/config',
+                                'help' => 'Module de la page'
+                            ]) . '</li>';
+                        }
+                        // Bouton dupliquer une page
+                        if (
+                            $this->getUser('permission', 'page', 'duplicate')
+                            and $this->geturl(1) !== 'edit'
+                        ) {
+                            $leftItems .= '<li>' . template::ico('clone', [
+                                'href' => helper::baseUrl() . 'page/duplicate/' . $this->getUrl(0) . '/' . self::$siteContent,
+                                'help' => 'Dupliquer la page'
+                            ])
+                                . '</li>';
+                        }
+                        // Bouton Effacer une page
+                        if (
+                            $this->getUser('permission', 'page', 'delete')
+                            and $this->geturl(1) !== 'edit'
+    
+                        ) {
+                            $leftItems .= '<li>' . template::ico('trash', [
+                                'href' => helper::baseUrl() . 'page/delete/' . $this->getUrl(0) . '/' . self::$siteContent,
+                                'help' => 'Supprimer la page',
+                                'id' => 'pageDelete'
+                            ])
+                                . '</li>';
+                        }
                     }
-                    // Bouton dupliquer une page
-                    if (
-                        $this->getUser('permission', 'page', 'duplicate')
-                    ) {
-                        $leftItems .= '<li>' . template::ico('clone', [
-                            'href' => helper::baseUrl() . 'page/duplicate/' . $this->getUrl(0) . '/' . self::$siteContent,
-                            'help' => 'Dupliquer la page'
-                        ])
-                            . '</li>';
-                    }
-                    // Bouton Effacer une page
-                    if (
-                        $this->getUser('permission', 'page', 'delete')
-                    ) {
-                        $leftItems .= '<li>' . template::ico('trash', [
-                            'href' => helper::baseUrl() . 'page/delete/' . $this->getUrl(0) . '/' . self::$siteContent,
-                            'help' => 'Supprimer la page',
-                            'id' => 'pageDelete'
-                        ])
-                            . '</li>';
-                    }
-                }
             }
             // Items de droite
             $rightItems = '';
