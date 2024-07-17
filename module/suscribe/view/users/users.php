@@ -1,9 +1,9 @@
 <div class="row">
-	<div class="col2">
+	<div class="col1">
 		<?php echo template::button('registrationUserBack', [
-			'class' => '',
+			'class' => 'buttonGrey',
 			'href' => helper::baseUrl() . $this->getUrl(0) . '/config',
-			'value' => 'Retour'
+            'value' => template::ico('left')
 		]); ?>
 	</div>
 </div>

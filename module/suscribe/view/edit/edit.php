@@ -1,111 +1,135 @@
 <?php echo template::formOpen('registrationUserEditForm'); ?>
-	<div class="row">
-		<div class="col2">
-			<?php if($this->getUrl(3)): ?>
-				<?php echo template::button('registrationUserEditBack', [
-					'class' => '',
-					'href' => helper::baseUrl() . $this->geturl(0) . '/user',
-					'ico' => 'left',
-					'value' => 'Retour'
-				]); ?>
-			<?php else: ?>
-				<?php echo template::button('registrationUserEditBack', [
-					'class' => '',
-					'href' => helper::baseUrl(false),
-					'ico' => 'home',
-					'value' => 'Accueil'
-				]); ?>
-			<?php endif; ?>
-		</div>
-		<div class="col2 offset8">
-			<?php echo template::submit('registrationUserEditSubmit',[
-				'class' => 'green'
-			]); ?>
-		</div>
+<div class="row">
+	<div class="col1">
+		<?php echo template::button('registrationUserEditBack', [
+			'class' => 'buttonGrey',
+			'href' => helper::baseUrl() . $this->geturl(0) . '/users',
+			'value' => template::ico('left')
+		]); ?>
 	</div>
-	<div class="row">
-		<div class="col12">
-			<div class="block">
-				<h4>Confirmation de l'inscription</h4>
-				<div class="row">
-					<div class="col6">
-						<div class="row">
-							<div class="col6">
-								<?php echo template::text('registrationUserEditFirstname', [
-									'autocomplete' => 'off',
-									'label' => 'Prénom',
-									'value' => $this->getData(['user', $this->getUrl(2), 'firstname']),
-									'disabled'=> true
-								]); ?>
-							</div>
-							<div class="col6">
-								<?php echo template::text('registrationUserEditLastname', [
-									'autocomplete' => 'off',
-									'label' => 'Nom',
-									'value' => $this->getData(['user', $this->getUrl(2), 'lastname']),
-									'disabled'=> true
-								]); ?>
-							</div>
+	<div class="col2 offset9">
+		<?php echo template::submit('registrationUserEditSubmit', [
+			'class' => 'green'
+		]); ?>
+	</div>
+</div>
+<div class="row">
+	<div class="col12">
+		<div class="block">
+			<h4>Confirmation de l'inscription</h4>
+			<div class="row">
+				<div class="col12">
+					<div class="row">
+						<div class="col6">
+							<?php echo template::text('registrationUserEditFirstname', [
+								'autocomplete' => 'off',
+								'label' => 'Prénom',
+								'value' => $this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'firstname']),
+								'disabled' => true
+							]); ?>
 						</div>
-						<div class="row">
-							<div class="col12">
-								<?php echo template::mail('registrationUserEditMail', [
-									'autocomplete' => 'off',
-									'label' => 'Adresse électronique',
-									'value' => $this->getData(['user', $this->getUrl(2), 'mail']),
-									'disabled'=> true
-								]); ?>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col6">
-								<?php $status = $module::$statusGroups[$this->getData(['user', $this->getUrl(2), 'group'])];?>
-								<?php echo template::text('resgistrationUserState', [
-									'label' => 'État de l\'inscription',
-									'value' => $status,
-									'disabled'=> true,
-									'help' => 'En attente : le mail n\'a pas encore été validé<br>Email validé : approbation nécessaire.'
-								]);	?>
-							</div>
-							<div class="col6">
-								<?php echo template::text('resgistrationUsertimer', [
-									'label' => 'Date',
-									'value' => helper::dateUTF8(date('Y-m-d G:i'), $this->getData(['user', $userId, 'timer'])),
-									'disabled'=> true
-								]);	?>
-							</div>
+						<div class="col6">
+							<?php echo template::text('registrationUserEditLastname', [
+								'autocomplete' => 'off',
+								'label' => 'Nom',
+								'value' => $this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'lastname']),
+								'disabled' => true
+							]); ?>
 						</div>
 					</div>
-
-					<div class="col6">
-						<?php if($this->getUser('group') === self::GROUP_ADMIN): ?>
-							<?php echo template::select('registrationUserEditGroup', self::$groupEdits, [
-								'disabled' => ($this->getUrl(2) === $this->getUser('id')),
-								'help' => ($this->getUrl(2) === $this->getUser('id') ? 'Impossible de modifier votre propre groupe.' : ''),
-								'label' => 'Groupe <em>(Banni : en attente d\'approbation)</em>',
-								'selected' => $this->getData(['user', $this->getUrl(2), 'group'])
+					<div class="row">
+						<div class="col12">
+							<?php echo template::mail('registrationUserEditMail', [
+								'autocomplete' => 'off',
+								'label' => 'Adresse électronique',
+								'value' => $this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'mail']),
+								'disabled' => true
 							]); ?>
-							Autorisations :
-							<ul id="registrationUserEditGroupDescription<?php echo self::GROUP_MEMBER; ?>" class="registrationUserEditGroupDescription displayNone">
-								<li>Accès aux pages privées membres</li>
-							</ul>
-							<ul id="registrationUserEditGroupDescription<?php echo self::GROUP_EDITOR; ?>" class="registrationUserEditGroupDescription displayNone">
-								<li>Accès aux pages privées membres et éditeurs</li>
-								<li>Ajout - Édition - Suppression de pages</li>
-								<li>Ajout - Édition  - Suppression de fichiers</li>
-							</ul>
-							<ul id="registrationUserEditGroupDescription<?php echo self::GROUP_ADMIN; ?>" class="registrationUserEditGroupDescription displayNone">
-								<li>Accès à toutes les pages privées</li>
-								<li>Ajout - Édition - Suppression de pages</li>
-								<li>Ajout - Édition  - Suppression de fichiers</li>
-								<li>Ajout / Édition / Suppression d'utilisateurs</li>
-								<li>Configuration du site</li>
-								<li>Personnalisation du thème</li>
-							</ul>
-						<?php endif; ?>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col8">
+							<?php echo template::text('registrationUserState', [
+								'label' => 'État de l\'inscription',
+								'value' => $module::$statusGroups[$this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'status'])],
+								'disabled' => true,
+								'help' => 'En attente : le mail n\'a pas encore été validé<br>Email validé : approbation nécessaire.'
+							]); ?>
+						</div>
+						<div class="col4">
+							<?php echo template::text('registrationUsertimer', [
+								'label' => 'Date de demande',
+								'value' => helper::dateUTF8(date('Y-m-d G:i'), $this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'timer'])),
+								'disabled' => true
+							]); ?>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col6">
+					<?php if ($this->getUser('group') === self::GROUP_ADMIN): ?>
+						<?php echo template::select('registrationUserEditGroup', $module::$groups, [
+							'disabled' => ($this->getUrl(2) === $this->getUser('id')),
+							'help' => ($this->getUrl(2) === $this->getUser('id') ? 'Impossible de modifier votre propre groupe.' : ''),
+							'label' => 'Groupe',
+							'selected' => $this->getData(['module', $this->getUrl(0), 'registrationUsers', $this->getUrl(2), 'status'])
+						]); ?>
+					<?php endif; ?>
+				</div>
+				<div class="col6">
+					<div class="registrationUserEditGroupProfil"
+						id="registrationUserEditGroupProfil<?php echo self::GROUP_MEMBER; ?>">
+						<?php echo template::select('registrationUserEditProfil' . self::GROUP_MEMBER, $module::$userProfils[self::GROUP_MEMBER], [
+							'label' => 'Profil',
+							'selected' => $this->getData(['user', $this->getUrl(2), 'profil']),
+							'disabled' => $this->getUser('group') !== self::GROUP_ADMIN,
+						]); ?>
+					</div>
+					<div class="registrationUserEditGroupProfil"
+						id="registrationUserEditGroupProfil<?php echo self::GROUP_EDITOR; ?>">
+						<?php echo template::select('registrationUserEditProfil' . self::GROUP_EDITOR, $module::$userProfils[self::GROUP_EDITOR], [
+							'label' => 'Profil',
+							'selected' => $this->getData(['user', $this->getUrl(2), 'profil']),
+							'disabled' => $this->getUser('group') !== self::GROUP_ADMIN,
+						]); ?>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col12">
+						<div id="registrationUserCommentProfil<?php echo self::GROUP_MEMBER; ?>"
+							class="col12  registrationUserCommentProfil">
+							<?php echo template::textarea('registrationUserEditProfilComment' . self::GROUP_MEMBER, [
+								'label' => 'Commentaire',
+								'value' => implode("\n", $module::$userProfilsComments[self::GROUP_MEMBER]),
+								'readonly' => true,
+
+							]);
+							?>
+						</div>
+						<div id="registrationUserCommentProfil<?php echo self::GROUP_EDITOR; ?>"
+							class="col12  registrationUserCommentProfil">
+							<?php echo template::textarea('registrationUserEditProfilComment' . self::GROUP_EDITOR, [
+								'label' => 'Commentaire',
+								'value' => implode("\n", $module::$userProfilsComments[self::GROUP_EDITOR]),
+								'readonly' => true,
+
+							]);
+							?>
+						</div>
+						<div id="registrationUserCommentProfil<?php echo self::GROUP_ADMIN; ?>"
+							class="col12  registrationUserCommentProfil">
+							<?php echo template::textarea('registrationUserEditProfilComment' . self::GROUP_ADMIN, [
+								'label' => 'Commentaire',
+								'value' => implode("\n", $module::$userProfilsComments[self::GROUP_ADMIN]),
+								'readonly' => true,
+							]);
+							?>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+</div>
 <?php echo template::formClose(); ?>

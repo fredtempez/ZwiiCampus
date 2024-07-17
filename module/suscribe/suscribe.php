@@ -15,7 +15,7 @@
 class suscribe extends common
 {
 
-	const VERSION = '1.4';
+	const VERSION = '2.0test3';
 	const REALNAME = 'Auto-Inscription';
 	const DELETE = true;
 	const UPDATE = '0.0';
@@ -27,21 +27,25 @@ class suscribe extends common
 	const STATUS_ACCOUNT_VALID = 3;
 	public static $statusGroups = [
 		self::STATUS_EMAIL_AWAITING => 'Email non confirmé',
-		self::STATUS_EMAIL_VALID => 'Email confimé',
-		self::STATUS_ACCOUNT_AWAITING => 'Email validé, en attente de validation',
-		self::STATUS_ACCOUNT_VALID => 'Email validé, compte activé',
+		self::STATUS_EMAIL_VALID => 'Email valide',
+		self::STATUS_ACCOUNT_AWAITING => 'Email valide, en attente de confirmation',
+		self::STATUS_ACCOUNT_VALID => 'Email valide, compte activé',
 	];
 
 	public static $actions = [
 		'index' => self::GROUP_VISITOR,
 		'validate' => self::GROUP_VISITOR,
 		'config' => self::GROUP_EDITOR,
-		'user' => self::GROUP_EDITOR,
+		'users' => self::GROUP_EDITOR,
 		'delete' => self::GROUP_EDITOR,
 		'edit' => self::GROUP_EDITOR
 	];
 
-
+	public static $layout = [
+		'inputRowContainer1' => 'Un élément par ligne',
+		'inputRowContainer2' => 'Deux éléments par ligne',
+		'inputRowContainer4' => 'Quatre éléments par ligne',
+	];
 
 	public static $timeLimit = [
 		2 => '2 minutes',
@@ -51,21 +55,23 @@ class suscribe extends common
 
 	public static $users = [];
 
-
+	public static $groups = [];
+	public static $userProfils = [];
+	public static $userProfilsComments = [];
 
 	/**
 	 * Liste des utilisateurs en attente
 	 */
-	public function user()
+	public function users()
 	{
-		$userIdsFirstnames = helper::arraycollumn($this->getData(['module', $this->getUrl(0), 'user']), 'firstname');
+		$userIdsFirstnames = helper::arraycollumn($this->getData(['module', $this->getUrl(0), 'users']), 'firstname');
 		ksort($userIdsFirstnames);
 		foreach ($userIdsFirstnames as $userId => $userFirstname) {
 			self::$users[] = [
 				$userId,
-				$userFirstname . ' ' . $this->getData(['module', $this->getUrl(0), 'user', $userId, 'lastname']),
-				self::$statusGroups[$this->getData(['module', $this->getUrl(0), 'user', $userId, 'status'])],
-				helper::dateUTF8(date('Y-m-d G:i'), $this->getData(['module', $this->getUrl(0), 'user', $userId, 'timer'])),
+				$userFirstname . ' ' . $this->getData(['module', $this->getUrl(0), 'users', $userId, 'lastname']),
+				self::$statusGroups[$this->getData(['module', $this->getUrl(0), 'users', $userId, 'status'])],
+				helper::dateUTF8(date('Y-m-d G:i'), $this->getData(['module', $this->getUrl(0), 'users', $userId, 'timer'])),
 				template::button('registrationUserEdit' . $userId, [
 					'href' => helper::baseUrl() . $this->getUrl(0) . '/edit/' . $userId,
 					'value' => template::ico('pencil')
@@ -79,8 +85,8 @@ class suscribe extends common
 		}
 		// Valeurs en sortie
 		$this->addOutput([
-			'title' => 'Demandes d\'inscriptions',
-			'view' => 'user'
+			'title' => 'Inscription en attente',
+			'view' => 'users'
 		]);
 	}
 
@@ -101,7 +107,7 @@ class suscribe extends common
 		// Accès refusé
 		if (
 			// L'utilisateur n'existe pas
-			$this->getData(['module', $this->getUrl(0), 'user']) === null
+			$this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2)]) === null
 			// Droit d'édition
 			and (
 					// Impossible de s'auto-éditer
@@ -125,45 +131,69 @@ class suscribe extends common
 				$this->getUser('permission', __CLASS__, __FUNCTION__) === true
 				&& $this->isPost()
 			) {
-				// Modification du groupe
+				// Créer le user dans la base
 				$this->setData([
-					'module',
-					$this->getUrl(0),
 					'user',
+					$this->getUrl(2),
 					[
-						'firstname' => $this->getData(['module', $this->getUrl(0), 'user', 'firstname']),
+						'firstname' => $this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'firstname']),
 						'forgot' => 0,
 						'group' => $this->getInput('registrationUserEditGroup', helper::FILTER_INT),
-						'lastname' => $this->getData(['module', $this->getUrl(0), 'user', 'lastname']),
-						'mail' => $this->getData(['module', $this->getUrl(0), 'user', 'mail']),
-						'password' => $this->getData(['module', $this->getUrl(0), 'user', 'password']),
-						'connectFail' => $this->getData(['module', $this->getUrl(0), 'user', 'connectFail']),
-						'connectTimeout' => $this->getData(['module', $this->getUrl(0), 'user', 'connectTimeout']),
-						'accessUrl' => $this->getData(['module', $this->getUrl(0), 'user', 'accessUrl']),
-						'accessTimer' => $this->getData(['module', $this->getUrl(0), 'user', 'accessTimer']),
-						'accessCsrf' => $this->getData(['module', $this->getUrl(0), 'user', 'accessCsrf'])
+						// Le profil vaut 0 pour les amdins et 1 pour les autres membres, profil par défaut.
+						'profil' => $this->getInput('registrationUserEditGroup', helper::FILTER_INT) === self::GROUP_ADMIN
+							? 0 : 1,
+						'lastname' => $this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'lastname']),
+						'mail' => $this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'mail']),
+						'password' => $this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'password']),
+						'connectFail' => $this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'connectFail']),
+						'connectTimeout' => $this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'connectTimeout']),
+						'accessUrl' => $this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'accessUrl']),
+						'accessTimer' => $this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'accessTimer']),
+						'accessCsrf' => $this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'accessCsrf'])
 					]
 				]);
 				// Notifier le user uniquement si le groupe est membre au moins membre
 				if ($this->getInput('registrationUserEditGroup') >= 1) {
 					$this->sendMail(
-						$this->getData(['module', $this->getUrl(0), 'user', 'mail']),
+						$this->getData(['module', $this->getUrl(0), 'users', 'mail']),
 						'Approbation de l\'inscription',
 						'<p>' . $this->getdata(['module', $this->getUrl(0), 'config', 'mailValidateContent']) . '</p>',
 						null,
 						$this->getData(['config', 'smtp', 'from'])
 					);
 				}
+				// Supprimer le user de la base temporaire,
+				$this->deleteData(['module', $this->getUrl(0), 'users', $this->getUrl(2)]);
 				// Valeurs en sortie
 				$this->addOutput([
-					'redirect' => helper::baseUrl() . $this->getUrl(0) . '/user',
+					'redirect' => helper::baseUrl() . $this->getUrl(0) . '/users',
 					'notification' => 'Modifications enregistrées',
 					'state' => true
 				]);
 			}
+			// Changement temporaire de libellé du groupe 0
+			self::$groups = self::$groupEdits;
+			self::$groups[self::GROUP_BANNED] = 'En attente d\'approbation';
+
+			// Profils disponibles
+			foreach ($this->getData(['profil']) as $profilId => $profilData) {
+				if ($profilId < self::GROUP_MEMBER) {
+					continue;
+				}
+				if ($profilId === self::GROUP_ADMIN) {
+					self::$userProfils[$profilId][self::GROUP_ADMIN] = $profilData['name'];
+					self::$userProfilsComments[$profilId][self::GROUP_ADMIN] = $profilData['comment'];
+					continue;
+				}
+				foreach ($profilData as $key => $value) {
+					self::$userProfils[$profilId][$key] = $profilData[$key]['name'];
+					self::$userProfilsComments[$profilId][$key] = $profilData[$key]['name'] . ' : ' . $profilData[$key]['comment'];
+				}
+			}
+
 			// Valeurs en sortie
 			$this->addOutput([
-				'title' => $this->getData(['module', $this->getUrl(0), 'user', 'firstname']) . ' ' . $this->getData(['user', $this->getUrl(0), 'lastname']),
+				'title' => $this->getData(['module', $this->getUrl(0), 'users', 'firstname']) . ' ' . $this->getData(['user', $this->getUrl(0), 'lastname']),
 				'view' => 'edit'
 			]);
 		}
@@ -178,7 +208,7 @@ class suscribe extends common
 		// Accès refusé
 		if (
 			// L'utilisateur n'existe pas
-			$this->getData(['module', $this->getUrl(0), 'user', $this->getUrl(2)]) === null
+			$this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2)]) === null
 			// Groupe insuffisant
 			&& $this->getUser('permission', __CLASS__, __FUNCTION__) !== true
 		) {
@@ -189,10 +219,10 @@ class suscribe extends common
 		}
 		// Suppression
 		else {
-			$this->deleteData(['module', $this->getUrl(0), 'user', $this->getUrl(2)]);
+			$this->deleteData(['module', $this->getUrl(0), 'users', $this->getUrl(2)]);
 			// Valeurs en sortie
 			$this->addOutput([
-				'redirect' => helper::baseUrl() . $this->getUrl(0) . '/user',
+				'redirect' => helper::baseUrl() . $this->getUrl(0) . '/users',
 				'notification' => 'Utilisateur supprimé',
 				'state' => true
 			]);
@@ -212,23 +242,32 @@ class suscribe extends common
 		 */
 		// Soumission du formulaire
 		if ($this->isPost()) {
+			// Le domaine saisi est invalide si un filtre existe
+			if (
+				!empty($this->getData(['module', $this->getUrl(0), 'config', 'filter']))
+			) {
+				// Contrôler la validité du domaine saisi parmi les domaines valides
+				$email_to_check = $this->getInput('registrationAddMail', helper::FILTER_MAIL, true);
+				$valid_domains[] = strpos($this->getData(['module', $this->getUrl(0), 'config', 'filter']), ';') === false
+					? $this->getData(['module', $this->getUrl(0), 'config', 'filter'])
+					: explode(';', $this->getData(['module', $this->getUrl(0), 'config', 'filter']));
+				if (in_array(explode('@', $email_to_check)[1], $valid_domains) === false) {
+					self::$inputNotices['registrationAddMail'] = 'Ce domaine n\'est pas autorisé';
+				}
+			}
 			// Drapeau de contrôle des données saisies.
 			$check = true;
+			$sentMailtoUser = false;
 			// L'identifiant d'utilisateur est indisponible
 			$userId = $this->getInput('registrationAddId', helper::FILTER_ID, true);
-			if ($this->getData(['module', $userId])) {
-				self::$inputNotices['registrationAddId'] = 'Identifiant déjà enregistré';
+			if (is_array($this->getData(['user', $userId]))) {
+				self::$inputNotices['registrationAddId'] = 'Identifiant invalide';
 				$check = false;
 			}
-			// Double vérification pour le mot de passe
-			if ($this->getInput('registrationAddPassword', helper::FILTER_STRING_SHORT, true) !== $this->getInput('registrationAddConfirmPassword', helper::FILTER_STRING_SHORT, true)) {
-				self::$inputNotices['registrationAddConfirmPassword'] = 'Les mots de passe ne sont pas identiques';
-				$check = false;
-			}
-			// Le mail existe déjà
+			// Le compte existe déjà
 			foreach ($this->getData(['user']) as $usersId => $user) {
 				if ($user['mail'] === $this->getInput('registrationAddMail', helper::FILTER_MAIL, true)) {
-					self::$inputNotices['registrationAddMail'] = 'Adresse de courriel déjà enregistrée';
+					self::$inputNotices['registrationAddMail'] = 'Vous ne pouvez pas utilisez cette boite mail';
 					$check = false;
 					break;
 				}
@@ -240,26 +279,24 @@ class suscribe extends common
 			// Pas de nom saisi
 			if (
 				empty($userFirstname) ||
-				empty($userLastname) ||
-				empty($this->getInput('registrationAddPassword', helper::FILTER_STRING_SHORT, true)) ||
-				empty($this->getInput('registrationAddConfirmPassword', helper::FILTER_STRING_SHORT, true))
+				empty($userLastname)
 			) {
 				$check = false;
 			}
 			// Si tout est ok
 			if ($check === true) {
-				//  Enregistrement du compte dans les donénes du module
+				//  Enregistrement du compte dans les données du module
 				$auth = uniqid('', true);
 				$this->setData([
 					'module',
 					$this->getUrl(0),
-					'user',
+					'users',
 					$userId,
 					[
 						'firstname' => $userFirstname,
 						'lastname' => $userLastname,
 						'mail' => $userMail,
-						'password' => $this->getInput('registrationAddPassword', helper::FILTER_PASSWORD, true),
+						'password' => '',
 						// pas de groupe afin de le différencier dans la liste des users
 						'timer' => time(),
 						'auth' => $auth,
@@ -275,14 +312,14 @@ class suscribe extends common
 					}
 				}
 				// Envoi du mail à l'administrateur
-				if ($to) {
+				if ($check && is_array($to)) {
 					$this->sendMail(
 						$to,
 						'Auto-inscription sur le site ' . $this->getData(['config', 'title']),
-						'<p>Un nouveau membre s\'est inscrit, son email est en attentde  validation</p>' .
+						'<p>Un nouveau membre s\'est inscrit, son email est en attente de  validation</p>' .
 						'<p><strong>Identifiant du compte :</strong> ' . $userId . ' (' . $userFirstname . ' ' . $userLastname . ')<br>' .
 						'<strong>Email  :</strong> ' . $userMail . '</p>' .
-						'<a href="' . helper::baseUrl() . 'user/login/' . strip_tags(str_replace('/', '_', $this->getUrl(0) . '/user')) . '">Validation de l\'inscription</a>',
+						'<a href="' . helper::baseUrl() . 'user/login/' . strip_tags(str_replace('/', '_', $this->getUrl(0) . '/users')) . '">Validation de l\'inscription</a>',
 						null,
 						$this->getData(['config', 'smtp', 'from'])
 					);
@@ -292,8 +329,7 @@ class suscribe extends common
 				// forger le lien de vérification
 				$validateLink = helper::baseUrl(true) . $this->getUrl() . '/validate/' . $userId . '/' . $auth;
 				// Envoi
-				$sentMailtoUser = false;
-				if ($check === true) {
+				if ($check) {
 					$sentMailtoUser = $this->sendMail(
 						$userMail,
 						'Confirmation de votre inscription',
@@ -328,63 +364,81 @@ class suscribe extends common
 	 */
 	public function validate()
 	{
-		// Vérifie la session + l'id + le timer
-		$check = true;
-		$notification = 'Bienvenue sur le site' . $this->getData(['config', 'title']);
-		$userId = $this->getUrl(2);
-		$auth = $this->getUrl(3);
-		// la validité du lien est dépassé
-		if (time() - $this->getData(['module', $this->getUrl(0), 'user', $userId, 'timer']) <= (60 * $this->getdata(['module', $this->getUrl(0), 'config', 'pageTimeOut']))) {
-			$check = false;
-			$notification = 'La validité est dépassée';
-		}
-
-		// La clé est incorrecte ou le compte n'est pas en attente de validation
-		if (
-			$check
-			&& $auth !== $this->getData(['module', $this->getUrl(0), 'user', $userId, 'auth'])
-			&& $this->getData(['module', $this->getUrl(0), 'user', $userId, 'status']) !== self::STATUS_EMAIL_AWAITING
-		) {
-			$check = false;
-			$notification = 'L\adresse transmise est incorrecte !';
-		}
-
-		if ($check) {
+		// Soumission du formulaire
+		if ($this->isPost()) {
+			// Vérifie la session + l'id + le timer
+			$check = true;
+			$notification = 'Bienvenue sur le site ' . $this->getData(['config', 'title']);
+			$userId = $this->getUrl(2);
+			$auth = $this->getUrl(3);
+			// la validité du lien est dépassé
 			if (
-				// Pas d'approbation par un administrateur
-				$this->getData(['module', $this->getUrl(0), 'config', 'approval']) === false
+				(time() - $this->getData(['module', $this->getUrl(0), 'users', $userId, 'timer']))
+				>= $this->getdata(['module', $this->getUrl(0), 'config', 'timeOut'])
 			) {
-				// Créer le compte
-				$this->setData([
-					'user',
-					$userId,
-					[
-						'firstname' => $this->getData(['module', $this->getUrl(0), 'user', $userId, 'firstname']),
-						'lastname' => $this->getData(['module', $this->getUrl(0), 'user', $userId, 'lastname']),
-						'mail' => $this->getData(['module', $this->getUrl(0), 'user', $userId, 'mail']),
-						'password' => $this->getData(['module', $this->getUrl(0), 'user', $userId, 'password']),
-						'group' => self::GROUP_MEMBER,
-						'profil' => 1,
-						'forgot' => 0,
-						'pseudo' => $userId,
-						'signature' => 1,
-						'language' => self::$siteContent,
-					]
-				]);
-				// Modifier le statut dans le module
-				$this->setData(['module', $this->getUrl(0), 'user', $userId, 'status', self::STATUS_ACCOUNT_VALID]);
-				$notification = 'Votre inscription est confirmée';
-			} else {
-				// Approbation nécessaire
-				$this->setData(['module', $this->getUrl(0), 'user', $userId, 'status', self::STATUS_ACCOUNT_AWAITING]);
-				$notification = 'L\'inscription doit être approuvée par un administrateur';
+				$check = false;
+				$notification = 'La validité du lien est dépassée';
 			}
+			// La clé est incorrecte ou le compte n'est pas en attente de validation
+			if (
+				$check
+				&& $auth !== $this->getData(['module', $this->getUrl(0), 'users', $userId, 'auth'])
+				&& $this->getData(['module', $this->getUrl(0), 'users', $userId, 'status']) !== self::STATUS_EMAIL_AWAITING
+			) {
+				$check = false;
+				$notification = 'Données incorrectes !';
+			}
+			// Double vérification pour le mot de passe
+			if (
+				$check
+				&& $this->getInput('registrationValidPassword', helper::FILTER_STRING_SHORT, true) !== $this->getInput('registrationValidConfirmPassword', helper::FILTER_STRING_SHORT, true)
+			) {
+				self::$inputNotices['registrationAddConfirmPassword'] = 'Les mots de passe ne sont pas identiques';
+				$check = false;
+			}
+
+			if ($check) {
+				if (
+					// Pas d'approbation par un administrateur
+					$this->getData(['module', $this->getUrl(0), 'config', 'approval']) === false
+				) {
+					// Créer le compte
+					$this->setData([
+						'user',
+						$userId,
+						[
+							'firstname' => $this->getData(['module', $this->getUrl(0), 'users', $userId, 'firstname']),
+							'lastname' => $this->getData(['module', $this->getUrl(0), 'users', $userId, 'lastname']),
+							'mail' => $this->getData(['module', $this->getUrl(0), 'users', $userId, 'mail']),
+							'password' => $this->getInput('registrationValidPassword', helper::FILTER_PASSWORD, true),
+							'group' => self::GROUP_MEMBER,
+							'profil' => 1,
+							'forgot' => 0,
+							'pseudo' => $userId,
+							'signature' => 1,
+							'language' => self::$siteContent,
+						]
+					]);
+					// Modifier le statut dans le module
+					$this->deleteData(['module', $this->getUrl(0), 'users', $userId]);
+					$notification = 'Votre inscription est confirmée';
+				} else {
+					// Approbation nécessaire
+					$this->setData(['module', $this->getUrl(0), 'users', $userId, 'status', self::STATUS_ACCOUNT_AWAITING]);
+					$notification = 'L\'inscription doit être approuvée par un administrateur';
+				}
+			}
+			// Valeurs en sortie
+			$this->addOutput([
+				'redirect' => $check ? helper::baseUrl() . $this->getdata(['module', $this->getUrl(0), 'config', 'pageSuccess']) : helper::baseUrl() . $this->getdata(['module', $this->getUrl(0), 'config', 'pageError']),
+				'notification' => $notification,
+				'state' => $check
+			]);
 		}
 		// Valeurs en sortie
 		$this->addOutput([
-			'redirect' => $check ? helper::baseUrl() . $this->getdata(['module', $this->getUrl(0), 'config', 'pageSuccess']) : helper::baseUrl() . $this->getdata(['module', $this->getUrl(0), 'config', 'pageError']),
-			'notificaton' => $notification,
-			'state' => $check
+			'title' => 'Saisie du mot de passe',
+			'view' => 'validate'
 		]);
 	}
 
@@ -398,18 +452,21 @@ class suscribe extends common
 			$this->getUser('permission', __CLASS__, __FUNCTION__) === true
 			&& $this->isPost()
 		) {
+
 			// Lire les options et les enregistrer
 			$this->setData([
 				'module',
 				$this->getUrl(0),
 				'config',
 				[
-					'timeOut' => $this->getInput('registrationConfigTimeOut', helper::FILTER_INT),
+					'timeOut' => $this->getInput('registrationConfigTimeOut', helper::FILTER_INT) * 60,
 					'pageSuccess' => $this->getInput('registrationConfigSuccess'),
 					'pageError' => $this->getInput('registrationConfigError'),
 					'approval' => $this->getInput('registrationConfigState', helper::FILTER_BOOLEAN),
 					'mailRegisterContent' => $this->getInput('registrationconfigMailRegisterContent', null, true),
 					'mailValidateContent' => $this->getInput('registrationconfigMailValidateContent', null, true),
+					'layout' => $this->getInput('registrationConfigLayout'),
+					'filter' => $this->getInput('registrationConfigFilter', helper::FILTER_STRING_SHORT)
 				]
 			]);
 			$this->addOutput([

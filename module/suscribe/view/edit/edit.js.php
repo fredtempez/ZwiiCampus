@@ -13,7 +13,19 @@
 /**
  * Droits des groupes
  */
-$("#registrationUserEditGroup").on("change", function() {
-	$(".registrationUserEditGroupDescription").hide();
-	$("#registrationUserEditGroupDescription" + $(this).val()).show();
-}).trigger("change");
+
+
+$(document).ready(function () {
+	$(".registrationUserEditGroupProfil").hide();
+	$(".registrationUserCommentProfil").hide();
+	$("#registrationUserEditGroupProfil" + $("#registrationUserEditGroup").val()).show();
+	$("#registrationUserCommentProfil" + $("#registrationUserEditGroup").val()).show();
+
+	$("#registrationUserEditGroup").on("change", function () {
+		$(".registrationUserEditGroupProfil").hide();
+		$(".registrationUserCommentProfil").hide();
+		$("#registrationUserEditGroupProfil" + $(this).val()).show();
+		$("#registrationUserCommentProfil" + $(this).val()).show();
+	});
+
+});
