@@ -67,7 +67,12 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col6">
+				<div class="col4">
+					<?php echo template::text('registrationUserLabel', [
+						'label' => 'Etiquette'
+					]); ?>
+				</div>
+				<div class="col4">
 					<?php if ($this->getUser('group') === self::GROUP_ADMIN): ?>
 						<?php echo template::select('registrationUserEditGroup', $module::$groups, [
 							'disabled' => ($this->getUrl(2) === $this->getUser('id')),
@@ -77,7 +82,7 @@
 						]); ?>
 					<?php endif; ?>
 				</div>
-				<div class="col6">
+				<div class="col4">
 					<div class="registrationUserEditGroupProfil"
 						id="registrationUserEditGroupProfil<?php echo self::GROUP_MEMBER; ?>">
 						<?php echo template::select('registrationUserEditProfil' . self::GROUP_MEMBER, $module::$userProfils[self::GROUP_MEMBER], [

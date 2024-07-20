@@ -15,8 +15,8 @@
 class suscribe extends common
 {
 
-	const VERSION = '2.0test3';
-	const REALNAME = 'Auto-Inscription';
+	const VERSION = '2.0';
+	const REALNAME = 'Auto Inscription';
 	const DELETE = true;
 	const UPDATE = '0.0';
 	const DATADIRECTORY = ''; // Contenu localisé inclus par défaut (page.json et module.json)
@@ -145,6 +145,7 @@ class suscribe extends common
 						'lastname' => $this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'lastname']),
 						'mail' => $this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'mail']),
 						'password' => $this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'password']),
+						'tags' => $this->getInput('registrationUserLabel', helper::FILTER_STRING_SHORT),
 						'connectFail' => $this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'connectFail']),
 						'connectTimeout' => $this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'connectTimeout']),
 						'accessUrl' => $this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'accessUrl']),
