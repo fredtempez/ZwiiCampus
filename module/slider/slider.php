@@ -27,7 +27,7 @@ class slider extends common
 		'index' => self::GROUP_VISITOR
 	];
 
-	const VERSION = '6.4';
+	const VERSION = '7.0';
 	const REALNAME = 'Carrousel';
 	const DELETE = true;
 	const UPDATE = '0.0';
@@ -57,6 +57,7 @@ class slider extends common
 		false => 'Puces invisibles'
 	];
 
+
 	public static $auto = [
 		true => 'Active',
 		false => 'Inactive'
@@ -76,7 +77,7 @@ class slider extends common
 		1920 => '1920 pixels',
 		0 => 'Largeur de l\'écran'
 	];
-	public static $selectedMaxwidth = 0;
+	public static $selectedMaxwidth = 640;
 
 	// Transition
 	public static $speed = [
@@ -125,10 +126,15 @@ class slider extends common
 
 	//Choix du tri
 	public static $sort = [
-		'asc' => 'Alphabétique naturel',
-		'dsc' => 'Alphabétique naturel inverse',
+		'dsc' => 'Alphabétique naturel',
+		'asc' => 'Alphabétique naturel inverse',
 		'rand' => 'Aléatoire',
 		'none' => 'Par défaut, sans tri',
+	];
+
+	public static $caption = [
+		'bottom' => 'En bas de l\'image',
+		'alt' => 'Uniquement dans le texte alternatif'
 	];
 
 	/**
@@ -236,15 +242,27 @@ class slider extends common
 					];
 				}
 			}
-			// Tri des images pour affichage de la liste dans la page d'édition
+			// Tri des images par ordre alphabétique, alphabétique inverse, aléatoire ou pas
 			switch ($this->getData(['module', $this->getUrl(0), 'theme', 'sort'])) {
-				case 'dsc':
-					ksort(self::$pictures, SORT_NATURAL | SORT_FLAG_CASE);
-					break;
 				case 'asc':
 					krsort(self::$pictures, SORT_NATURAL | SORT_FLAG_CASE);
 					break;
+				case 'dsc':
+					ksort(self::$pictures, SORT_NATURAL | SORT_FLAG_CASE);
+					break;
 				case 'rand':
+					// Récupérer les clés du tableau
+					$keys = array_keys(self::$pictures);
+					// Mélanger les clés
+					shuffle($keys);
+					// Créer un nouveau tableau avec les clés mélangées
+					$shuffledPictures = [];
+					foreach ($keys as $key) {
+						$shuffledPictures[$key] = self::$pictures[$key];
+					}
+					// Mettre à jour le tableau initial avec le nouveau tableau mélangé
+					self::$pictures = $shuffledPictures;
+					break;
 				case 'none':
 				default:
 					break;
@@ -331,7 +349,8 @@ class slider extends common
 							'speed' => $speed,
 							'timeout' => $timeout,
 							'namespace' => $this->getInput('sliderThemeNameSpace', helper::FILTER_STRING_SHORT),
-							'sort' => $this->getInput('sliderThemeTri', helper::FILTER_STRING_SHORT),
+							'sort' => $this->getInput('sliderThemeSort', helper::FILTER_STRING_SHORT),
+							'caption' => $this->getInput('sliderThemeCaption', helper::FILTER_STRING_SHORT),
 						],
 						'directory' => $this->getData(['module', $this->getUrl(0), 'directory']),
 						'legends' => $this->getData(['module', $this->getUrl(0), 'legends']),
@@ -353,7 +372,7 @@ class slider extends common
 		// Sélection largeur de l'écran
 		self::$selectedMaxwidth = array_key_exists($this->getData(['module', $this->getUrl(0), 'theme', 'maxWidth']), self::$screenWidth)
 			? $this->getData(['module', $this->getUrl(0), 'theme', 'maxWidth'])
-			: 0;
+			: 640;
 
 		// Valeurs en sortie
 		$this->addOutput([
@@ -378,23 +397,18 @@ class slider extends common
 				if ($fileInfos->isDot() === false and $fileInfos->isFile() and @getimagesize($fileInfos->getPathname())) {
 					self::$pictures[$directory . '/' . $fileInfos->getFilename()] = [
 						'legend' => $this->getData(['module', $galleryId, 'legends', str_replace('.', '', $fileInfos->getFilename())]),
-						'uri' => $this->getData(['module', $galleryId, 'uri', str_replace('.', '', $fileInfos->getFilename())]),
+						'uri' => $this->getData(['module', $galleryId, 'uri', str_replace('.', '', $fileInfos->getFilename())])
 					];
-					//self::$pictures['uri'][$directory . '/' . $fileInfos->getFilename()] = ;
 				}
 			}
 
 			// Tri des images par ordre alphabétique, alphabétique inverse, aléatoire ou pas
-			switch ($this->getData(['module', $galleryId, 'theme', 'sort'])) {
-				case 'desc':
-					uksort(self::$pictures, function ($a, $b) {
-						return strcmp(basename($a), basename($b));
-					});
-					break;
+			switch ($this->getData(['module', $this->getUrl(0), 'theme', 'sort'])) {
 				case 'asc':
-					uksort(self::$pictures, function ($a, $b) {
-						return strcmp(basename($b), basename($a));
-					});
+					krsort(self::$pictures, SORT_NATURAL | SORT_FLAG_CASE);
+					break;
+				case 'dsc':
+					ksort(self::$pictures, SORT_NATURAL | SORT_FLAG_CASE);
 					break;
 				case 'rand':
 					// Récupérer les clés du tableau
@@ -410,7 +424,6 @@ class slider extends common
 					self::$pictures = $shuffledPictures;
 					break;
 				case 'none':
-					break;
 				default:
 					break;
 			}
@@ -448,7 +461,6 @@ class slider extends common
 	private function init()
 	{
 		if (is_null($this->getData(['module', $this->getUrl(0), 'theme']))) {
-
 			$this->setData([
 				'module',
 				$this->getUrl(0),

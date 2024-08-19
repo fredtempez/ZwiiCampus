@@ -1,3 +1,8 @@
+# Version 7.0
+- Ajoute un affichage de la légende sous l'image
+- Corrige un tri inversé
+- Erreur dans la feuille de style de la vue index
+- Bug de calcul de la largeur maximale du slide dans la vue index
 # Version 6.5
 - Contrôle de la variable de session liée au contenu. Evite des erreurs lorsque plusieurs onglets sont ouverts.
 # Version 6.4
