@@ -69,7 +69,7 @@
 			<div class="row">
 				<div class="col4">
 					<?php echo template::text('registrationUserLabel', [
-						'label' => 'Etiquette'
+						'label' => 'Étiquette'
 					]); ?>
 				</div>
 				<div class="col4">

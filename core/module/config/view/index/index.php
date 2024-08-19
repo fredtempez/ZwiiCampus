@@ -23,7 +23,7 @@
 
 <div class="tab">
     <?php echo template::button('configLocaleButton', [
-        'value' => 'Identité - Etiquettes',
+        'value' => 'Identité - Étiquettes',
         'class' => 'buttonTab'
     ]); ?>
     <?php echo template::button('configSetupButton', [
