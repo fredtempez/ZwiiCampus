@@ -7,15 +7,6 @@
 			'value' => template::ico('left')
 		]); ?>
 	</div>
-	<div class="col1">
-		<?php /**echo template::button('pageEditHelp', [
-						'href' => 'https://doc.zwiicms.fr/edition-des-pages',
-						'target' => '_blank',
-						'value' => template::ico('help'),
-						'class' => 'buttonHelp',
-						'help' => 'Consulter l\'aide en ligne'
-					]); */?>
-	</div>
 	<div class="col1 offset6">
 		<?php echo template::button('pageEditDelete', [
 			'class' => 'buttonRed',
