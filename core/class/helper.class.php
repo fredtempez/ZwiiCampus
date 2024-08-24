@@ -408,8 +408,8 @@ class helper
 	 */
 	public static function deleteCookie($cookieKey)
 	{
-		unset($_COOKIE[$cookieKey]);
 		setcookie($cookieKey, '', time() - 3600, helper::baseUrl(false, false), '', false, true);
+		unset($_COOKIE[$cookieKey]);
 	}
 
 	/**
