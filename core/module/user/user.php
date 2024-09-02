@@ -254,15 +254,31 @@ class user extends common
 		if (
 			isset($_POST['usersDeleteSubmit'])
 		) {
+			$notification = helper::translate('Suppression de %s compte');
+			$success = true;
+			$count = 0;
 			foreach ($_POST as $keyPost => $valuePost) {
 				// Exclure les variables post qui ne sont pas des userId et ne traiter que les non inscrits
 				if (
 					$this->getData(['user', $keyPost]) !== null
-					&& $this->getData(['user', $keyPost]) !== null
 				) {
-					$this->deleteData(['user', $keyPost]);
+					
+					if ($keyPost === $this->getUser('id')) {
+						$notification = helper::translate('Votre compte n\'a pas été supprimé !') .  '<br />' . $notification ;
+						$success = 1;
+					} else {
+						$this->deleteData(['user', $keyPost]);
+						$count += 1;
+					}
 				}
 			}
+			// Valeurs en sortie
+			$this->addOutput([
+				'redirect' => helper::baseUrl() . 'user/usersDelete',
+				'notification' => sprintf($count > 1 ? $notification . 's': $notification , $count),
+				'state' => $success
+			]);
+
 		}
 
 		// Liste des groupes et des profils
