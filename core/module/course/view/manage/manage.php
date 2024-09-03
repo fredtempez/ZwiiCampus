@@ -55,6 +55,15 @@
             ]); ?>
         </div>
     <?php endif; ?>
+    <?php if ($this->getUser('permission', 'course', 'export') === true): ?>
+        <div class="col2">
+            <?php echo template::button('courseManageExport' . $this->getUrl(2), [
+                'href' => helper::baseUrl() . 'course/export/' . $this->getUrl(2),
+                'value' => 'Exporter',
+                'ico' => 'upload'
+            ]); ?>
+        </div>
+    <?php endif; ?>
 </div>
 
 <div class="row">

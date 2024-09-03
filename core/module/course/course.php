@@ -40,6 +40,7 @@ class course extends common
         'categoryAdd' => self::GROUP_ADMIN,
         'categoryEdit' => self::GROUP_ADMIN,
         'categoryDelete' => self::GROUP_ADMIN,
+        'export' => self::GROUP_ADMIN,
     ];
 
     public static $courseAccess = [
@@ -303,14 +304,14 @@ class course extends common
         self::$courseCategories = $this->getData(['category']);
 
         // Liste des pages disponibles
-        $this->initDB('page', $this->getUrl(2));
+        $this->initDB('page', $courseId);
         self::$pagesList = $this->getData(['page']);
-        foreach (self::$pagesList as $page => $pageId) {
+        foreach (self::$pagesList as $pageId => $page) {
             if (
-                $this->getData(['page', $page, 'block']) === 'bar' ||
-                $this->getData(['page', $page, 'disable']) === true
+                $page['block'] === 'bar' ||
+                $page['disable'] === true
             ) {
-                unset(self::$pagesList[$page]);
+                unset(self::$pagesList[$pageId]);
             }
         }
 
@@ -352,14 +353,14 @@ class course extends common
         self::$courseCategories = $this->getData(['category']);
 
         // Liste des pages disponibles
-        $this->initDB('page', $this->getUrl(2));
+        $this->initDB('page', $courseId);
         self::$pagesList = $this->getData(['page']);
-        foreach (self::$pagesList as $page => $pageId) {
+        foreach (self::$pagesList as $pageId => $page) {
             if (
-                $this->getData(['page', $page, 'block']) === 'bar' ||
-                $this->getData(['page', $page, 'disable']) === true
+                $page['block'] === 'bar' ||
+                $page['disable'] === true
             ) {
-                unset(self::$pagesList[$page]);
+                unset(self::$pagesList[$pageId]);
             }
         }
 
@@ -1677,6 +1678,127 @@ class course extends common
                 'notification' => $message,
             ]);
         }
+
+    }
+
+    // Générer un fichier externe contenant le contenu des pages
+    public function export()
+    {
+
+        // Espace sélectionné
+        $courseId = $this->getUrl(2);
+
+        // Accès limité aux admins, à l'auteur ou éditeurs inscrits
+        if (
+            $this->getUser('permission', __CLASS__, __FUNCTION__) === false
+        ) {
+            // Valeurs en sortie
+            $this->addOutput([
+                'access' => false
+            ]);
+        }
+
+        // Liste des pages disponibles
+        $this->initDB('page', $courseId);
+        self::$pagesList = [];
+        foreach ($this->getData(['page']) as $pageId => $page) {
+            if (
+                $page['block'] !== 'bar' &&
+                $page['disable'] !== true
+            ) {
+                self::$pagesList[] = template::checkbox('courseManageExport' . $pageId, true, $page['title']);
+            }
+        }
+
+        // Soumission du formulaire
+        if ($this->isPost()) {
+            $datas = '';
+            $resources = [];
+
+            foreach ($this->getData(['page']) as $pageId => $page) {
+                if ($this->getInput('courseManageExport' . $pageId, helper::FILTER_BOOLEAN) === true) {
+                    $pageContent = $this->getPage($pageId, $courseId);
+
+                    // Extraction des URLs des ressources (images, fichiers, etc.)
+                    preg_match_all('/<img[^>]+src=["\'](.*?)["\']/i', $pageContent, $imgMatches);
+                    preg_match_all('/<a[^>]+href=["\'](.*?)["\']/i', $pageContent, $linkMatches);
+
+                    if (!empty($imgMatches[1])) {
+                        $resources = array_merge($resources, $imgMatches[1]);
+
+                        // Remplacement des chemins pour les images dans $pageContent
+                        foreach ($imgMatches[1] as $resourceUrl) {
+                            $resourcePath = parse_url($resourceUrl, PHP_URL_PATH);
+                            $resourceFile = basename($resourcePath);
+                            $pageContent = str_replace($resourceUrl, $resourceFile, $pageContent);
+                        }
+                    }
+
+                    if (!empty($linkMatches[1])) {
+                        $resources = array_merge($resources, $linkMatches[1]);
+
+                        // Remplacement des chemins pour les liens dans $pageContent
+                        foreach ($linkMatches[1] as $resourceUrl) {
+                            $resourcePath = parse_url($resourceUrl, PHP_URL_PATH);
+                            $resourceFile = basename($resourcePath);
+                            $pageContent = str_replace($resourceUrl, $resourceFile, $pageContent);
+                        }
+                    }
+
+                    $datas .= $pageContent;
+                }
+            }
+
+            // Créer le dossier d'export
+            $path = self::FILE_DIR . 'source/' . $courseId . '/';
+            if (is_dir($path . 'export') === false) {
+                mkdir($path . 'export');
+            }
+
+            // Copier les ressources dans le dossier d'export
+            foreach ($resources as $resourceUrl) {
+                $resourcePath = parse_url($resourceUrl, PHP_URL_PATH);
+                $resourceFile = basename($resourcePath);
+                if (file_exists($resourcePath)) { // Utilisation du chemin correct
+                    copy($resourcePath, $path . 'export/' . $resourceFile);
+                }
+            }
+
+            // Ajouter les balises HTML manquantes
+            $datas = '<!DOCTYPE html>
+                <html lang="fr">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Export de Pages</title>
+                    <link rel="stylesheet" href="style.css">
+                </head>
+                <body>' . $datas . '</body></html>';
+
+            // Sauvegarder le fichier HTML
+            file_put_contents($path . '/export/' . $courseId . '_export.html', $datas, LOCK_EX);
+            
+            // Copie une feuille de style
+            copy('core/module/course/ressource/style.css', $path . 'export/style.css');
+
+            // Valeurs en sortie
+            $this->addOutput([
+                'redirect' => helper::baseUrl() . 'course/manage/' . $courseId,
+                'notification' => helper::translate('Pages exportées dans le dossier de cet espace'),
+                'state' => true,
+            ]);
+        }
+
+
+
+
+
+
+        // Valeurs en sortie
+        $this->addOutput([
+            'title' => helper::translate('Exporter les pages'),
+            'view' => 'export'
+        ]);
 
     }
 
