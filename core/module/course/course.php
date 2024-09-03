@@ -174,6 +174,9 @@ class course extends common
             $this->initData('module', $courseId);
             $this->initData('theme', $courseId);
 
+            // Pointer RFM sur le dossier
+            self::$siteContent = $courseId;
+
             // BDD des inscrits
             $this->setData([
                 'enrolment',
@@ -305,6 +308,8 @@ class course extends common
 
         // Liste des pages disponibles
         $this->initDB('page', $courseId);
+        // Pointer RFM sur le dossier
+        self::$siteContent = $courseId;
         self::$pagesList = $this->getData(['page']);
         foreach (self::$pagesList as $pageId => $page) {
             if (
@@ -354,6 +359,8 @@ class course extends common
 
         // Liste des pages disponibles
         $this->initDB('page', $courseId);
+        // Pointer RFM sur le dossier
+        self::$siteContent = $courseId;
         self::$pagesList = $this->getData(['page']);
         foreach (self::$pagesList as $pageId => $page) {
             if (
@@ -1700,6 +1707,7 @@ class course extends common
 
         // Liste des pages disponibles
         $this->initDB('page', $courseId);
+        self::$siteContent = $courseId;
         self::$pagesList = [];
         foreach ($this->getData(['page']) as $pageId => $page) {
             if (
@@ -1777,7 +1785,7 @@ class course extends common
 
             // Sauvegarder le fichier HTML
             file_put_contents($path . '/export/' . $courseId . '_export.html', $datas, LOCK_EX);
-            
+
             // Copie une feuille de style
             copy('core/module/course/ressource/style.css', $path . 'export/style.css');
 
