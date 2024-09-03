@@ -86,6 +86,9 @@ class course extends common
     {
         // Tableau à transmettre à la fvue
         self::$courses = array();
+        
+        // Pointer RFM sur le dossier de l'espace
+        self::$siteContent = 'home';
 
         if (
             $this->getUser('id')
@@ -174,7 +177,7 @@ class course extends common
             $this->initData('module', $courseId);
             $this->initData('theme', $courseId);
 
-            // Pointer RFM sur le dossier
+            // Pointer RFM sur le dossier de l'espace
             self::$siteContent = $courseId;
 
             // BDD des inscrits
@@ -308,7 +311,7 @@ class course extends common
 
         // Liste des pages disponibles
         $this->initDB('page', $courseId);
-        // Pointer RFM sur le dossier
+        // Pointer RFM sur le dossier de l'espace
         self::$siteContent = $courseId;
         self::$pagesList = $this->getData(['page']);
         foreach (self::$pagesList as $pageId => $page) {
@@ -359,7 +362,7 @@ class course extends common
 
         // Liste des pages disponibles
         $this->initDB('page', $courseId);
-        // Pointer RFM sur le dossier
+        // Pointer RFM sur le dossier de l'espace
         self::$siteContent = $courseId;
         self::$pagesList = $this->getData(['page']);
         foreach (self::$pagesList as $pageId => $page) {
@@ -1707,6 +1710,7 @@ class course extends common
 
         // Liste des pages disponibles
         $this->initDB('page', $courseId);
+        // Pointer RFM sur le dossier de l'espace
         self::$siteContent = $courseId;
         self::$pagesList = [];
         foreach ($this->getData(['page']) as $pageId => $page) {
