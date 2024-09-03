@@ -86,7 +86,7 @@ class course extends common
     {
         // Tableau à transmettre à la fvue
         self::$courses = array();
-        
+
         // Pointer RFM sur le dossier de l'espace
         self::$siteContent = 'home';
 
@@ -179,6 +179,8 @@ class course extends common
 
             // Pointer RFM sur le dossier de l'espace
             self::$siteContent = $courseId;
+            // Ordonne les pages par position
+            $this->buildHierarchy();
 
             // BDD des inscrits
             $this->setData([
@@ -313,15 +315,10 @@ class course extends common
         $this->initDB('page', $courseId);
         // Pointer RFM sur le dossier de l'espace
         self::$siteContent = $courseId;
+        // Ordonne les pages par position
+        $this->buildHierarchy();
+        // Données pour le formulaire
         self::$pagesList = $this->getData(['page']);
-        foreach (self::$pagesList as $pageId => $page) {
-            if (
-                $page['block'] === 'bar' ||
-                $page['disable'] === true
-            ) {
-                unset(self::$pagesList[$pageId]);
-            }
-        }
 
         // Valeurs en sortie
         $this->addOutput([
@@ -364,15 +361,10 @@ class course extends common
         $this->initDB('page', $courseId);
         // Pointer RFM sur le dossier de l'espace
         self::$siteContent = $courseId;
+        // Ordonne les pages par position
+        $this->buildHierarchy();
+        // Données pour le formulaire
         self::$pagesList = $this->getData(['page']);
-        foreach (self::$pagesList as $pageId => $page) {
-            if (
-                $page['block'] === 'bar' ||
-                $page['disable'] === true
-            ) {
-                unset(self::$pagesList[$pageId]);
-            }
-        }
 
         // Valeurs en sortie
         $this->addOutput([
@@ -1712,14 +1704,14 @@ class course extends common
         $this->initDB('page', $courseId);
         // Pointer RFM sur le dossier de l'espace
         self::$siteContent = $courseId;
+        // Ordonne les pages par position
+        $this->buildHierarchy();
+        // Tableau de retour
         self::$pagesList = [];
+
+        // Construction du formulaire
         foreach ($this->getData(['page']) as $pageId => $page) {
-            if (
-                $page['block'] !== 'bar' &&
-                $page['disable'] !== true
-            ) {
-                self::$pagesList[] = template::checkbox('courseManageExport' . $pageId, true, $page['title']);
-            }
+            self::$pagesList[] = template::checkbox('courseManageExport' . $pageId, true, $page['title']);
         }
 
         // Soumission du formulaire
@@ -2113,7 +2105,6 @@ class course extends common
         // Afficher le JSON;
         return $data;
     }
-
 
 
 }

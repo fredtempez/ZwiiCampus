@@ -747,7 +747,7 @@ class common
 	 * Fonction pour construire le tableau des pages
 	 */
 
-	private function buildHierarchy()
+	public function buildHierarchy()
 	{
 
 		$pages = helper::arrayColumn($this->getData(['page']), 'position', 'SORT_ASC');
