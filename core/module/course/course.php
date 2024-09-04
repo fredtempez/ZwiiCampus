@@ -313,12 +313,25 @@ class course extends common
 
         // Liste des pages disponibles
         $this->initDB('page', $courseId);
+
         // Pointer RFM sur le dossier de l'espace
         self::$siteContent = $courseId;
+
         // Ordonne les pages par position
         $this->buildHierarchy();
+
         // Données pour le formulaire
         self::$pagesList = $this->getData(['page']);
+
+        // Exclure les barres et les pages désactivées
+        foreach (self::$pagesList as $pageId => $page) {
+            if (
+                $page['block'] === 'bar' ||
+                $page['disable'] === true
+            ) {
+                unset(self::$pagesList[$pageId]);
+            }
+        }
 
         // Valeurs en sortie
         $this->addOutput([
@@ -359,12 +372,25 @@ class course extends common
 
         // Liste des pages disponibles
         $this->initDB('page', $courseId);
+
         // Pointer RFM sur le dossier de l'espace
         self::$siteContent = $courseId;
+
         // Ordonne les pages par position
         $this->buildHierarchy();
+
         // Données pour le formulaire
         self::$pagesList = $this->getData(['page']);
+        
+        // Exclure les barres et les pages désactivées
+        foreach (self::$pagesList as $pageId => $page) {
+            if (
+                $page['block'] === 'bar' ||
+                $page['disable'] === true
+            ) {
+                unset(self::$pagesList[$pageId]);
+            }
+        }
 
         // Valeurs en sortie
         $this->addOutput([
@@ -1702,24 +1728,35 @@ class course extends common
 
         // Liste des pages disponibles
         $this->initDB('page', $courseId);
+
         // Pointer RFM sur le dossier de l'espace
         self::$siteContent = $courseId;
+
         // Ordonne les pages par position
         $this->buildHierarchy();
+
         // Tableau de retour
         self::$pagesList = [];
 
-        // Construction du formulaire
+        // Exclure les barres et les pages désactivées
         foreach ($this->getData(['page']) as $pageId => $page) {
-            self::$pagesList[] = template::checkbox('courseManageExport' . $pageId, true, $page['title']);
+            if (
+                $this->getData(['page', $pageId, 'block']) !== 'bar' &&
+                $this->getData(['page', $pageId, 'disable']) !== true
+            ) {
+                self::$pagesList[] = template::checkbox('courseManageExport' . $pageId, true, $page['title'], [
+                    'class' => 'courseManageCheckbox'
+                ]);
+            }
         }
+        
 
         // Soumission du formulaire
         if ($this->isPost()) {
             $datas = '';
             $resources = [];
 
-            foreach ($this->getData(['page']) as $pageId => $page) {
+            foreach (self::$pagesList as $pageId => $page) {
                 if ($this->getInput('courseManageExport' . $pageId, helper::FILTER_BOOLEAN) === true) {
                     $pageContent = $this->getPage($pageId, $courseId);
 

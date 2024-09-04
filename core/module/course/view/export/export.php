@@ -7,7 +7,19 @@
             'value' => template::ico('left')
         ]); ?>
     </div>
-    <div class="col2 offset9">
+    <div class="col1 offset7">
+        <?php echo template::button('courseExportSelectAll', [
+            'value' => template::ico('square-check'),
+            'help' => 'Tout sélectionner'
+        ]); ?>
+    </div>
+    <div class="col1">
+        <?php echo template::button('courseExportSelectNone', [
+            'value' => template::ico('square-check-empty'),
+            'help' => 'Tout désélectionner'
+        ]); ?>
+    </div>
+    <div class="col2">
         <?php echo template::submit('courseExportSubmit', [
             'value' => 'Valider'
         ]); ?>
