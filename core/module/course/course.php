@@ -381,7 +381,7 @@ class course extends common
 
         // Données pour le formulaire
         self::$pagesList = $this->getData(['page']);
-        
+
         // Exclure les barres et les pages désactivées
         foreach (self::$pagesList as $pageId => $page) {
             if (
@@ -1750,13 +1750,12 @@ class course extends common
             }
         }
         
-
         // Soumission du formulaire
         if ($this->isPost()) {
             $datas = '';
             $resources = [];
 
-            foreach (self::$pagesList as $pageId => $page) {
+            foreach ($this->getData(['page']) as $pageId => $page) {
                 if ($this->getInput('courseManageExport' . $pageId, helper::FILTER_BOOLEAN) === true) {
                     $pageContent = $this->getPage($pageId, $courseId);
 
@@ -1811,7 +1810,7 @@ class course extends common
                 <head>
                     <meta charset="UTF-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>Export de Pages</title>
+                    <title>' . $this->getData(['course', $courseId, 'title']). '</title>
                     <link rel="stylesheet" href="style.css">
                 </head>
                 <body>' . $datas . '</body></html>';
