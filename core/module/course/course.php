@@ -1823,7 +1823,7 @@ class course extends common
             file_put_contents($path . '/export/' . $courseId . '_export.html', $datas, LOCK_EX);
 
             // Copie une feuille de style
-            copy('core/module/course/ressource/style.css', $path . 'export/style.css');
+            copy('core/module/course/resource/style.css', $path . 'export/style.css');
 
             // Valeurs en sortie
             $this->addOutput([
@@ -1842,6 +1842,7 @@ class course extends common
 
     }
 
+    // Fonction utilisé par l'export en html pour corriger les URL des ressources
     private function processResources(&$pageContent, $regex, &$resources)
     {
         preg_match_all($regex, $pageContent, $matches);
@@ -1859,7 +1860,7 @@ class course extends common
     }
 
     /**
-     * Sauvegarde d'un cours sans option
+     * Récupération d'un espace sans option
      */
 
     public function restore()
