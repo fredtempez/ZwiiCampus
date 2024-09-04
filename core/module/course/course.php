@@ -1752,7 +1752,7 @@ class course extends common
 
         // Soumission du formulaire
         if ($this->isPost()) {
-            $datas = '';
+            $datas = '<h1>' . $this->getData(['course', $courseId, 'title']) . '</h1>';
             $resources = [];
 
             foreach ($this->getData(['page']) as $pageId => $page) {
@@ -1820,7 +1820,7 @@ class course extends common
         <body>' . $datas . '</body></html>';
 
             // Sauvegarder le fichier HTML
-            file_put_contents($path . '/export/' . $courseId . '_export.html', $datas, LOCK_EX);
+            file_put_contents($path . '/export/export_' . $this->getData(['course', $courseId, 'title']) . '.html', $datas, LOCK_EX);
 
             // Copie une feuille de style
             copy('core/module/course/resource/style.css', $path . 'export/style.css');
