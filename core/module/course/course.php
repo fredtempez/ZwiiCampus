@@ -1765,17 +1765,17 @@ class course extends common
                     preg_match_all('/<video[^>]+src=["\'](.*?)["\']/i', $pageContent, $videoMatches); // Vidéos directes
                     preg_match_all('/<source[^>]+src=["\'](.*?)["\']/i', $pageContent, $sourceMatches); // Vidéos dans balises <source>
 
-            // Traitement des images
-            $this->processResources($pageContent, '/<img[^>]+src=["\'](.*?)["\']/i', $resources);
+                    // Traitement des images
+                    $this->processResources($pageContent, '/<img[^>]+src=["\'](.*?)["\']/i', $resources);
 
-            // Traitement des vidéos directes via <video>
-            $this->processResources($pageContent, '/<video[^>]+src=["\'](.*?)["\']/i', $resources);
+                    // Traitement des vidéos directes via <video>
+                    $this->processResources($pageContent, '/<video[^>]+src=["\'](.*?)["\']/i', $resources);
 
-            // Traitement des sources dans les balises <source> (utilisées dans <video> ou <audio>)
-            $this->processResources($pageContent, '/<source[^>]+src=["\'](.*?)["\']/i', $resources);
+                    // Traitement des sources dans les balises <source> (utilisées dans <video> ou <audio>)
+                    $this->processResources($pageContent, '/<source[^>]+src=["\'](.*?)["\']/i', $resources);
 
-            // Traitement des liens <a>
-            $this->processResources($pageContent, '/<a[^>]+href=["\'](.*?)["\']/i', $resources);
+                    // Traitement des liens <a>
+                    $this->processResources($pageContent, '/<a[^>]+href=["\'](.*?)["\']/i', $resources);
 
                     // Traitement des liens
                     if (!empty($linkMatches[1])) {
