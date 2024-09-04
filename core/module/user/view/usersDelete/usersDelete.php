@@ -7,18 +7,6 @@
             'value' => template::ico('left')
         ]); ?>
     </div>
-    <div class="col1 offset8">
-        <?php echo template::button('usersDeleteSelectAll', [
-            'value' => template::ico('square-check'),
-            'help' => 'Tout sélectionner'
-        ]); ?>
-    </div>
-    <div class="col1">
-        <?php echo template::button('usersDeleteSelectNone', [
-            'value' => template::ico('square-check-empty'),
-            'help' => 'Tout désélectionner'
-        ]); ?>
-    </div>
     <div class="col1">
         <?php echo template::submit('usersDeleteSubmit', [
             'class' => 'buttonRed',
@@ -44,6 +32,18 @@
         <?php echo template::select('usersFilterLastName', $module::$alphabet, [
             'label' => 'Nom commence par',
             'selected' => isset($_POST['usersFilterLastName']) ? $_POST['usersFilterLastName'] : 'all',
+        ]); ?>
+    </div>
+    <div class="col1 offset1 verticalAlignBottom">
+        <?php echo template::button('usersDeleteSelectAll', [
+            'value' => template::ico('square-check'),
+            'help' => 'Tout sélectionner'
+        ]); ?>
+    </div>
+    <div class="col1 verticalAlignBottom">
+        <?php echo template::button('usersDeleteSelectNone', [
+            'value' => template::ico('square-check-empty'),
+            'help' => 'Tout désélectionner'
         ]); ?>
     </div>
 </div>

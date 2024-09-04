@@ -7,21 +7,9 @@
             'value' => template::ico('left')
         ]); ?>
     </div>
-    <div class="col1 offset8">
-        <?php echo template::button('courseUserAddSelectAll', [
-            'value' => template::ico('square-check'),
-            'help' => 'Tout sélectionner'
-        ]); ?>
-    </div>
-    <div class="col1">
-        <?php echo template::button('courseUserAddSelectNone', [
-            'value' => template::ico('square-check-empty'),
-            'help' => 'Tout désélectionner'
-        ]); ?>
-    </div>
-    <div class="col1">
+    <div class="col2 offset9">
         <?php echo template::submit('courseUsersAddSubmit', [
-            'value' => '',
+            'value' => 'Inscrire',
             'ico' => 'plus',
         ]); ?>
     </div>
@@ -43,6 +31,18 @@
         <?php echo template::select('courseFilterLastName', $module::$alphabet, [
             'label' => 'Nom commence par',
             'selected' => isset($_POST['courseFilterLastName']) ? $_POST['courseFilterLastName'] : 'all',
+        ]); ?>
+    </div>
+    <div class="col1 offset1 verticalAlignBottom">
+        <?php echo template::button('courseUserAddSelectAll', [
+            'value' => template::ico('square-check'),
+            'help' => 'Tout sélectionner'
+        ]); ?>
+    </div>
+    <div class="col1 verticalAlignBottom">
+        <?php echo template::button('courseUserAddSelectNone', [
+            'value' => template::ico('square-check-empty'),
+            'help' => 'Tout désélectionner'
         ]); ?>
     </div>
 </div>

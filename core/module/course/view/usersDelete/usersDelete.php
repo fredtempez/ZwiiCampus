@@ -7,26 +7,14 @@
             'value' => template::ico('left')
         ]); ?>
     </div>
-    <div class="col1 offset8">
-        <?php echo template::button('courseUserDeleteSelectAll', [
-            'value' => template::ico('square-check'),
-            'help' => 'Tout sélectionner'
-        ]); ?>
-    </div>
-    <div class="col1">
-        <?php echo template::button('courseUserDeleteSelectNone', [
-            'value' => template::ico('square-check-empty'),
-            'help' => 'Tout désélectionner'
-        ]); ?>
-    </div>
-<div class="col1">
+    <div class="col2 offset9">
         <?php echo template::submit('courseUsersDeleteSubmit', [
             'class' => 'buttonRed',
-            'ico' => '',
-            'value' => template::ico('minus'),
+            'ico' => 'minus',
+            'value' => 'Désinscrire',
         ]); ?>
     </div>
-    </div>
+</div>
 <div class="row" id="Bfrtip">
     <div class="col3">
         <?php echo template::select('courseFilterGroup', $module::$courseGroups, [
@@ -46,9 +34,21 @@
             'selected' => isset($_POST['courseFilterLastName']) ? $_POST['courseFilterLastName'] : 'all',
         ]); ?>
     </div>
+    <div class="col1 offset1 verticalAlignBottom">
+        <?php echo template::button('courseUserDeleteSelectAll', [
+            'value' => template::ico('square-check'),
+            'help' => 'Tout sélectionner'
+        ]); ?>
+    </div>
+    <div class="col1 verticalAlignBottom">
+        <?php echo template::button('courseUserDeleteSelectNone', [
+            'value' => template::ico('square-check-empty'),
+            'help' => 'Tout désélectionner'
+        ]); ?>
+    </div>
 </div>
 <?php if ($module::$courseUsers): ?>
-    <?php echo template::table([1, 2, 3, 3, 3], $module::$courseUsers, ['', 'Id',  'Prénom', 'Nom', 'Étiquettes'], ['id' => 'dataTables']); ?>
+    <?php echo template::table([1, 2, 3, 3, 3], $module::$courseUsers, ['', 'Id', 'Prénom', 'Nom', 'Étiquettes'], ['id' => 'dataTables']); ?>
 <?php else: ?>
     <?php echo template::speech('Aucun inscrit'); ?>
 <?php endif; ?>
