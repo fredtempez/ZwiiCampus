@@ -1,4 +1,4 @@
-<?php echo template::formOpen('usersDeleteForm'); ?>
+<?php echo template::formOpen('usersTagForm'); ?>
 <div class="row">
     <div class="col1">
         <?php echo template::button('userDeleteBack', [
@@ -7,24 +7,20 @@
             'value' => template::ico('left')
         ]); ?>
     </div>
-    <div class="col1 offset8">
-        <?php echo template::button('usersDeleteSelectAll', [
+    <div class="col1 offset7">
+        <?php echo template::button('usersTagSelectAll', [
             'value' => template::ico('square-check'),
             'help' => 'Tout sélectionner'
         ]); ?>
     </div>
     <div class="col1">
-        <?php echo template::button('usersDeleteSelectNone', [
+        <?php echo template::button('usersTagSelectNone', [
             'value' => template::ico('square-check-empty'),
             'help' => 'Tout désélectionner'
         ]); ?>
     </div>
-    <div class="col1">
-        <?php echo template::submit('usersDeleteSubmit', [
-            'class' => 'buttonRed',
-            'ico' => '',
-            'value' => template::ico('minus'),
-        ]); ?>
+    <div class="col2">
+        <?php echo template::submit('usersTagSubmit'); ?>
     </div>
 </div>
 <div class="row" id="Bfrtip">

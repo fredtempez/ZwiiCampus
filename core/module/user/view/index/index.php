@@ -6,43 +6,41 @@
 			'value' => template::ico('home')
 		]); ?>
 	</div>
-	<div class="col1">
-		<?php /**echo template::button('userHelp', [
-			  'href' => 'https://doc.zwiicms.fr/gestion-des-utilisateurs',
-			  'target' => '_blank',
-			  'value' => template::ico('help'),
-			  'class' => 'buttonHelp',
-			  'help' => 'Consulter l\'aide en ligne'
-		  ]);*/ ?>
-	</div>
-	<div class="col1 offset6">
-		<?php echo template::button('userImport', [
-			'href' => helper::baseUrl() . 'user/import',
-			'value' => template::ico('users'),
-			'help' => 'Importer des utilisateurs en masse'
-		]); ?>
-	</div>
-	<div class="col1">
-	<?php echo template::button('userDeleteAll', [
-		'class' => 'userDeleteAll buttonRed',
-		'href' => helper::baseUrl() . 'user/usersDelete/' . $this->getUrl(2),
-		'value' => template::ico('users'),
-		'help' => 'Désinscrire en masse',
-	]) ?>
-	</div>
-	<div class="col1">
-		<?php echo template::button('userGroup', [
-			'href' => helper::baseUrl() . 'user/profil',
-			'value' => template::ico('lock'),
-			'help' => 'Profils'
-		]); ?>
-	</div>
-	<div class="col1">
+	<div class="col1 offset2">
 		<?php echo template::button('userAdd', [
 			'href' => helper::baseUrl() . 'user/add',
 			'value' => template::ico('plus'),
 			'class' => 'buttonGreen',
 			'help' => 'Ajouter un utilisateur'
+		]); ?>
+	</div>
+	<div class="col2 ">
+		<?php echo template::button('userImport', [
+			'href' => helper::baseUrl() . 'user/import',
+			'ico' => 'users',
+			'value' => 'Importer en masse'
+		]); ?>
+	</div>
+	<div class="col2">
+	<?php echo template::button('userDeleteAll', [
+		'class' => 'userDeleteAll buttonRed',
+		'href' => helper::baseUrl() . 'user/usersDelete/' . $this->getUrl(2),
+		'ico' => 'users',
+		'value' => 'Désinscrire en masse',
+	]) ?>
+	</div>
+	<div class="col2">
+		<?php echo template::button('userTag', [
+			'href' => helper::baseUrl() . 'user/tag',
+			'ico' => '#',
+			'value' => 'Étiquettes'
+		]); ?>
+	</div>
+	<div class="col2">
+		<?php echo template::button('userGroup', [
+			'href' => helper::baseUrl() . 'user/profil',
+			'ico' => 'lock',
+			'value' => 'Profils'
 		]); ?>
 	</div>
 </div>
