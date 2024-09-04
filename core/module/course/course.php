@@ -1749,7 +1749,7 @@ class course extends common
                 ]);
             }
         }
-        
+
         // Soumission du formulaire
         if ($this->isPost()) {
             $datas = '';
@@ -1759,21 +1759,25 @@ class course extends common
                 if ($this->getInput('courseManageExport' . $pageId, helper::FILTER_BOOLEAN) === true) {
                     $pageContent = $this->getPage($pageId, $courseId);
 
-                    // Extraction des URLs des ressources (images, fichiers, etc.)
-                    preg_match_all('/<img[^>]+src=["\'](.*?)["\']/i', $pageContent, $imgMatches);
-                    preg_match_all('/<a[^>]+href=["\'](.*?)["\']/i', $pageContent, $linkMatches);
+                    // Extraction des URLs des ressources (images, vidéos, fichiers, etc.)
+                    preg_match_all('/<img[^>]+src=["\'](.*?)["\']/i', $pageContent, $imgMatches); // Images
+                    preg_match_all('/<a[^>]+href=["\'](.*?)["\']/i', $pageContent, $linkMatches); // Liens
+                    preg_match_all('/<video[^>]+src=["\'](.*?)["\']/i', $pageContent, $videoMatches); // Vidéos directes
+                    preg_match_all('/<source[^>]+src=["\'](.*?)["\']/i', $pageContent, $sourceMatches); // Vidéos dans balises <source>
 
-                    if (!empty($imgMatches[1])) {
-                        $resources = array_merge($resources, $imgMatches[1]);
+            // Traitement des images
+            $this->processResources($pageContent, '/<img[^>]+src=["\'](.*?)["\']/i', $resources);
 
-                        // Remplacement des chemins pour les images dans $pageContent
-                        foreach ($imgMatches[1] as $resourceUrl) {
-                            $resourcePath = parse_url($resourceUrl, PHP_URL_PATH);
-                            $resourceFile = basename($resourcePath);
-                            $pageContent = str_replace($resourceUrl, $resourceFile, $pageContent);
-                        }
-                    }
+            // Traitement des vidéos directes via <video>
+            $this->processResources($pageContent, '/<video[^>]+src=["\'](.*?)["\']/i', $resources);
 
+            // Traitement des sources dans les balises <source> (utilisées dans <video> ou <audio>)
+            $this->processResources($pageContent, '/<source[^>]+src=["\'](.*?)["\']/i', $resources);
+
+            // Traitement des liens <a>
+            $this->processResources($pageContent, '/<a[^>]+href=["\'](.*?)["\']/i', $resources);
+
+                    // Traitement des liens
                     if (!empty($linkMatches[1])) {
                         $resources = array_merge($resources, $linkMatches[1]);
 
@@ -1806,14 +1810,14 @@ class course extends common
 
             // Ajouter les balises HTML manquantes
             $datas = '<!DOCTYPE html>
-                <html lang="fr">
-                <head>
-                    <meta charset="UTF-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>' . $this->getData(['course', $courseId, 'title']). '</title>
-                    <link rel="stylesheet" href="style.css">
-                </head>
-                <body>' . $datas . '</body></html>';
+        <html lang="fr">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>' . $this->getData(['course', $courseId, 'title']) . '</title>
+            <link rel="stylesheet" href="style.css">
+        </head>
+        <body>' . $datas . '</body></html>';
 
             // Sauvegarder le fichier HTML
             file_put_contents($path . '/export/' . $courseId . '_export.html', $datas, LOCK_EX);
@@ -1830,16 +1834,28 @@ class course extends common
         }
 
 
-
-
-
-
         // Valeurs en sortie
         $this->addOutput([
             'title' => helper::translate('Exporter les pages'),
             'view' => 'export'
         ]);
 
+    }
+
+    private function processResources(&$pageContent, $regex, &$resources)
+    {
+        preg_match_all($regex, $pageContent, $matches);
+
+        if (!empty($matches[1])) {
+            $resources = array_merge($resources, $matches[1]);
+
+            // Remplacement des chemins dans $pageContent
+            foreach ($matches[1] as $resourceUrl) {
+                $resourcePath = parse_url($resourceUrl, PHP_URL_PATH);
+                $resourceFile = basename($resourcePath);
+                $pageContent = str_replace($resourceUrl, $resourceFile, $pageContent);
+            }
+        }
     }
 
     /**
