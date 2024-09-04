@@ -1147,12 +1147,12 @@ class user extends common
 
 		// Exclure les espaces des cours
 		/*
-						  foreach (array_keys($this->getData(['course'])) as $courseId) {
-							  self::$sharePath = array_filter(self::$sharePath, function ($key) use ($courseId) {
-								  return strpos($key, $courseId) === false;
-							  });
-						  }
-						  */
+								foreach (array_keys($this->getData(['course'])) as $courseId) {
+									self::$sharePath = array_filter(self::$sharePath, function ($key) use ($courseId) {
+										return strpos($key, $courseId) === false;
+									});
+								}
+								*/
 
 		self::$sharePath = array_flip(self::$sharePath);
 		self::$sharePath = array_merge(['none' => 'Aucun Accès'], self::$sharePath);
@@ -1663,6 +1663,33 @@ class user extends common
 				'access' => false
 			]);
 		}
+
+		// Inscription des utilisateurs cochés
+		if (
+			isset($_POST['usersTagSubmit'])
+		) {
+			$notification = helper::translate('Modification de %s étiquette');
+			$success = true;
+			$count = 0;
+			$newTags = $this->getInput('usersTagLabel', null, true);
+			foreach ($_POST as $keyPost => $valuePost) {
+				// Exclure les variables post qui ne sont pas des userId et ne traiter que les non inscrits
+				if (
+					$this->getData(['user', $keyPost]) !== null
+				) {
+					$this->setData(['user', $keyPost, 'tags', $newTags]);
+					$count += 1; 
+				}
+			}
+			// Valeurs en sortie
+			$this->addOutput([
+				'redirect' => helper::baseUrl() . 'user/tag',
+				'notification' => sprintf($count > 1 ? $notification . 's' : $notification, $count),
+				'state' => $success
+			]);
+
+		}
+		
 
 		// Liste des groupes et des profils
 		$usersGroups = $this->getData(['profil']);

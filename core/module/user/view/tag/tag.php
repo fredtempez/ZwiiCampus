@@ -7,20 +7,22 @@
             'value' => template::ico('left')
         ]); ?>
     </div>
-    <div class="col1 offset7">
-        <?php echo template::button('usersTagSelectAll', [
-            'value' => template::ico('square-check'),
-            'help' => 'Tout sélectionner'
-        ]); ?>
-    </div>
-    <div class="col1">
-        <?php echo template::button('usersTagSelectNone', [
-            'value' => template::ico('square-check-empty'),
-            'help' => 'Tout désélectionner'
-        ]); ?>
-    </div>
-    <div class="col2">
-        <?php echo template::submit('usersTagSubmit'); ?>
+</div>
+<div class="row">
+    <div class="col12">
+        <div class="block">
+            <h4>Étiquette de remplacement</h4>
+            <div class="row">
+                <div class="col8">
+                    <?php echo template::text('usersTagLabel', [
+                        'placeholder' => 'Les étiquettes saisis remplaceront celles existantes. Les étiquettes sont séparées par des espaces'
+                    ]); ?>
+                </div>
+                <div class="col2 offset2 verticalAlignBottom">
+                    <?php echo template::submit('usersTagSubmit'); ?>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <div class="row" id="Bfrtip">
@@ -40,6 +42,18 @@
         <?php echo template::select('usersFilterLastName', $module::$alphabet, [
             'label' => 'Nom commence par',
             'selected' => isset($_POST['usersFilterLastName']) ? $_POST['usersFilterLastName'] : 'all',
+        ]); ?>
+    </div>
+    <div class="col1 offset1 verticalAlignBottom">
+        <?php echo template::button('usersTagSelectAll', [
+            'value' => template::ico('square-check'),
+            'help' => 'Tout sélectionner'
+        ]); ?>
+    </div>
+    <div class="col1 verticalAlignBottom">
+        <?php echo template::button('usersTagSelectNone', [
+            'value' => template::ico('square-check-empty'),
+            'help' => 'Tout désélectionner'
         ]); ?>
     </div>
 </div>
