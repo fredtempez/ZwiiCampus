@@ -1836,7 +1836,7 @@ class course extends common
 
         // Valeurs en sortie
         $this->addOutput([
-            'title' => helper::translate('Exporter les pages'),
+            'title' => sprintf('%s id : %s', helper::translate('Export des pages de l\'espace'), $this->getUrl(2)),
             'view' => 'export'
         ]);
 
