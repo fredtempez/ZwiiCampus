@@ -6,15 +6,7 @@
 			'value' => template::ico('home')
 		]); ?>
 	</div>
-	<div class="col1 offset2">
-		<?php echo template::button('userAdd', [
-			'href' => helper::baseUrl() . 'user/add',
-			'value' => template::ico('plus'),
-			'class' => 'buttonGreen',
-			'help' => 'Ajouter un utilisateur'
-		]); ?>
-	</div>
-	<div class="col2 ">
+	<div class="col2 offset2">
 		<?php echo template::button('userImport', [
 			'href' => helper::baseUrl() . 'user/import',
 			'ico' => 'users',
@@ -32,15 +24,25 @@
 	<div class="col2">
 		<?php echo template::button('userTag', [
 			'href' => helper::baseUrl() . 'user/tag',
-			'ico' => '#',
-			'value' => 'Étiquettes'
+			'ico' => 'tags',
+			'value' => 'Étiquettes',
+			'help' => 'Trier les utilisateurs avec des tags'
 		]); ?>
 	</div>
 	<div class="col2">
 		<?php echo template::button('userGroup', [
 			'href' => helper::baseUrl() . 'user/profil',
 			'ico' => 'lock',
-			'value' => 'Profils'
+			'value' => 'Profils',
+			'help' => 'Droits d\'accès aux fonctionnalités'
+		]); ?>
+	</div>
+	<div class="col1">
+		<?php echo template::button('userAdd', [
+			'href' => helper::baseUrl() . 'user/add',
+			'value' => template::ico('plus'),
+			'class' => 'buttonGreen',
+			'help' => 'Ajouter un utilisateur'
 		]); ?>
 	</div>
 </div>
