@@ -97,9 +97,9 @@
                         'label' => 'Dossier depuis un espace',
                         'class' => 'filemanager',
                         /*
-                        * 'none' interdit l'accès au gestionnaire de fichier
-                        * Ce n'est pas un chemin donc on n'ajoute pas le .
-                        */
+                         * 'none' interdit l'accès au gestionnaire de fichier
+                         * Ce n'est pas un chemin donc on n'ajoute pas le .
+                         */
                         'selected' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'folder', 'coursePath'])
                     ]); ?>
                 </div>
@@ -272,9 +272,14 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col6">
+                    <div class="col3">
                         <?php echo template::checkbox('profilEditCourseUsers', true, 'Gérer les participants', [
                             'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'course', 'users']),
+                        ]); ?>
+                    </div>
+                    <div class="col3">
+                        <?php echo template::checkbox('profilEditCourseExport', true, 'Exporter un espace en html', [
+                            'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'course', 'export']),
                         ]); ?>
                     </div>
                 </div>

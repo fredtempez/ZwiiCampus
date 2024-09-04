@@ -180,10 +180,14 @@
                 <div class="col3">
                     <?php echo template::checkbox('profilAddCourseRestore', true, 'Restaurer un espace'); ?>
                 </div>
+
             </div>
             <div class="row">
-                <div class="col6">
+                <div class="col3">
                     <?php echo template::checkbox('profilAddCourseUsers', true, 'Gérer les participants'); ?>
+                </div>
+                <div class="col3">
+                    <?php echo template::checkbox('profilAddCourseExport', true, 'Exporter un espace en html'); ?>
                 </div>
             </div>
             <div id="courseContainer">

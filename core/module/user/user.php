@@ -870,6 +870,7 @@ class user extends common
 					'index' => $this->getInput('profilEditCourseUsers', helper::FILTER_BOOLEAN)
 						|| $this->getInput('profilEditCourseUserHistory', helper::FILTER_BOOLEAN)
 						|| $this->getInput('profilEditCourseUserExport', helper::FILTER_BOOLEAN)
+						|| $this->getInput('profilEditCoursExport', helper::FILTER_BOOLEAN)
 						|| $this->getInput('profilEditCourseUserAdd', helper::FILTER_BOOLEAN)
 						|| $this->getInput('profilEditCourseUsersAdd', helper::FILTER_BOOLEAN)
 						|| $this->getInput('profilEditCourseUserDelete', helper::FILTER_BOOLEAN)
@@ -881,6 +882,7 @@ class user extends common
 					'manage' => $this->getInput('profilEditCourseUsers', helper::FILTER_BOOLEAN)
 						|| $this->getInput('profilEditCourseUserHistory', helper::FILTER_BOOLEAN)
 						|| $this->getInput('profilEditCourseUserExport', helper::FILTER_BOOLEAN)
+						|| $this->getInput('profilEditCoursExport', helper::FILTER_BOOLEAN)
 						|| $this->getInput('profilEditCourseUserAdd', helper::FILTER_BOOLEAN)
 						|| $this->getInput('profilEditCourseUsersAdd', helper::FILTER_BOOLEAN)
 						|| $this->getInput('profilEditCourseUserDelete', helper::FILTER_BOOLEAN)
@@ -893,6 +895,7 @@ class user extends common
 					'users' => $this->getInput('profilEditCourseUsers', helper::FILTER_BOOLEAN),
 					'userHistory' => $this->getInput('profilEditCourseUserHistory', helper::FILTER_BOOLEAN),
 					'userHistoryExport' => $this->getInput('profilEditCourseUserHistoryExport', helper::FILTER_BOOLEAN),
+					'export' => $this->getInput('profilEditCourseExport', helper::FILTER_BOOLEAN),
 					'userAdd' => $this->getInput('profilEditCourseUserAdd', helper::FILTER_BOOLEAN),
 					'usersAdd' => $this->getInput('profilEditCourseUsersAdd', helper::FILTER_BOOLEAN),
 					'userDelete' => $this->getInput('profilEditCourseUserDelete', helper::FILTER_BOOLEAN),
@@ -1065,6 +1068,7 @@ class user extends common
 						'index' => $this->getInput('profilAddCourseUsers', helper::FILTER_BOOLEAN)
 							|| $this->getInput('profilAddCourseUserHistory', helper::FILTER_BOOLEAN)
 							|| $this->getInput('profilAddCourseUserExport', helper::FILTER_BOOLEAN)
+							|| $this->getInput('profilAddCoursExport', helper::FILTER_BOOLEAN)
 							|| $this->getInput('profilAddCourseUserAdd', helper::FILTER_BOOLEAN)
 							|| $this->getInput('profilAddCourseUsersAdd', helper::FILTER_BOOLEAN)
 							|| $this->getInput('profilAddCourseUserDelete', helper::FILTER_BOOLEAN)
@@ -1072,10 +1076,10 @@ class user extends common
 							|| $this->getInput('profilAddCourseEdit', helper::FILTER_BOOLEAN)
 							|| $this->getInput('profilAddCourseBackup', helper::FILTER_BOOLEAN)
 							|| $this->getInput('profilAddCourseRestore', helper::FILTER_BOOLEAN),
-
 						'manage' => $this->getInput('profilAddCourseUsers', helper::FILTER_BOOLEAN)
 							|| $this->getInput('profilAddCourseUserHistory', helper::FILTER_BOOLEAN)
 							|| $this->getInput('profilAddCourseUserExport', helper::FILTER_BOOLEAN)
+							|| $this->getInput('profilAddCoursExport', helper::FILTER_BOOLEAN)
 							|| $this->getInput('profilAddCourseUserAdd', helper::FILTER_BOOLEAN)
 							|| $this->getInput('profilAddCourseUsersAdd', helper::FILTER_BOOLEAN)
 							|| $this->getInput('profilAddCourseUserDelete', helper::FILTER_BOOLEAN)
@@ -1088,6 +1092,7 @@ class user extends common
 						'users' => $this->getInput('profilAddCourseUsers', helper::FILTER_BOOLEAN),
 						'userHistory' => $this->getInput('profilAddCourseUserHistory', helper::FILTER_BOOLEAN),
 						'userHistoryExport' => $this->getInput('profilAddCourseUserHistoryExport', helper::FILTER_BOOLEAN),
+						'export' => $this->getInput('profilAddCourseExport', helper::FILTER_BOOLEAN),
 						'userAdd' => $this->getInput('profilAddCourseUserAdd', helper::FILTER_BOOLEAN),
 						'usersAdd' => $this->getInput('profilAddCourseUsersAdd', helper::FILTER_BOOLEAN),
 						'userDelete' => $this->getInput('profilAddCourseUserDelete', helper::FILTER_BOOLEAN),

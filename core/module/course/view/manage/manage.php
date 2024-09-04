@@ -14,7 +14,8 @@
                 'class' => 'courseDelete buttonRed',
                 'href' => helper::baseUrl() . 'course/delete/' . $this->getUrl(2),
                 'value' => 'Supprimer',
-                'ico' => 'trash'
+                'ico' => 'trash',
+                'help' => 'Supprime l\'espace et les historiques des participants',
             ]); ?>
         </div>
     <?php endif; ?>
@@ -24,7 +25,8 @@
                 'class' => 'courseReset buttonRed',
                 'href' => helper::baseUrl() . 'course/reset/' . $this->getUrl(2),
                 'value' => 'Réinitaliser',
-                'ico' => 'cancel'
+                'ico' => 'cancel',
+                'help' => 'Désinscrit les participants et supprime les historiques',
             ]); ?>
         </div>
     <?php endif; ?>
@@ -33,7 +35,8 @@
             <?php echo template::button('courseManageDownload' . $this->getUrl(2), [
                 'href' => helper::baseUrl() . 'course/backup/' . $this->getUrl(2),
                 'value' => 'Sauvegarder',
-                'ico' => 'download-cloud'
+                'ico' => 'download-cloud',
+                'help' => 'Génère une copie de sauvegarde de l\'espace',
             ]); ?>
         </div>
     <?php endif; ?>
@@ -42,7 +45,8 @@
             <?php echo template::button('courseManageDuplicate' . $this->getUrl(2), [
                 'href' => helper::baseUrl() . 'course/clone/' . $this->getUrl(2),
                 'value' => 'Cloner',
-                'ico' => 'clone'
+                'ico' => 'clone',
+                'help' => 'Copie l\'espace et son contenu sans les participants et leurs historiques',
             ]); ?>
         </div>
     <?php endif; ?>
@@ -51,7 +55,8 @@
             <?php echo template::button('courseManageEdit' . $this->getUrl(2), [
                 'href' => helper::baseUrl() . 'course/edit/' . $this->getUrl(2),
                 'value' => 'Éditer',
-                'ico' => 'pencil'
+                'ico' => 'pencil',
+                'help' => 'Modifie les paramètres de l\'espace',
             ]); ?>
         </div>
     <?php endif; ?>
@@ -59,8 +64,9 @@
         <div class="col2">
             <?php echo template::button('courseManageExport' . $this->getUrl(2), [
                 'href' => helper::baseUrl() . 'course/export/' . $this->getUrl(2),
-                'value' => 'Exporter',
-                'ico' => 'upload'
+                'value' => 'Exporter HTML',
+                'ico' => 'upload',
+                'help' => 'Le contenu de l\'espace est exporté dans une page web autonome',
             ]); ?>
         </div>
     <?php endif; ?>
