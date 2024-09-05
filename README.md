@@ -4,7 +4,7 @@ ZwiiCampus (Learning Management System) est logiciel auteur destiné à mettre e
 
 Ce logiciel s'installe en ligne ou localement depuis un serveur Web. 
 
-## Principales focntionnalités :
+## Principales fonctionnalités :
 - Gestion des espaces d'enseignement : Créez des espaces de formation avec accès restreint.
 - Participation et suivi des apprenants : Inscription libre, imposée ou avec clé, et suivi statistique détaillé des participants.
 - Gestion des accès : Contrôlez la disponibilité des espaces (ouvert, limité dans le temps, fermé).
