@@ -5,12 +5,12 @@ ZwiiCampus (Learning Management System) est logiciel auteur destiné à mettre e
 Ce logiciel s'installe en ligne ou localement depuis un serveur Web. 
 
 ## Principales focntionnalités :
-Gestion des espaces d'enseignement : Créez des espaces de formation avec accès restreint.
-Participation et suivi des apprenants : Inscription libre, imposée ou avec clé, et suivi statistique détaillé des participants.
-Gestion des accès : Contrôlez la disponibilité des espaces (ouvert, limité dans le temps, fermé).
-Outils statistiques : Visualisation et exportation CSV des progrès des apprenants.
-Facilité d'installation : Pas besoin de base de données, tout fonctionne avec des fichiers JSON.
-Sauvegarde et restauration : Outils de gestion pour réinitialiser les espaces et les participations.
+- Gestion des espaces d'enseignement : Créez des espaces de formation avec accès restreint.
+- Participation et suivi des apprenants : Inscription libre, imposée ou avec clé, et suivi statistique détaillé des participants.
+- Gestion des accès : Contrôlez la disponibilité des espaces (ouvert, limité dans le temps, fermé).
+- Outils statistiques : Visualisation et exportation CSV des progrès des apprenants.
+- Facilité d'installation : Pas besoin de base de données, tout fonctionne avec des fichiers JSON.
+- Sauvegarde et restauration : Outils de gestion pour réinitialiser les espaces et les participations.
 
 
 ## Configuration recommandée
