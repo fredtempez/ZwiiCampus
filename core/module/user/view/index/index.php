@@ -26,7 +26,7 @@
 			'href' => helper::baseUrl() . 'user/tag',
 			'ico' => 'tags',
 			'value' => 'Étiquettes',
-			'help' => 'Trier les utilisateurs avec des tags'
+			'help' => 'Filtrer les utilisateurs avec des tags'
 		]); ?>
 	</div>
 	<div class="col2">
@@ -34,7 +34,7 @@
 			'href' => helper::baseUrl() . 'user/profil',
 			'ico' => 'lock',
 			'value' => 'Profils',
-			'help' => 'Droits d\'accès aux fonctionnalités'
+			'help' => 'Permissions par profils'
 		]); ?>
 	</div>
 	<div class="col1">
