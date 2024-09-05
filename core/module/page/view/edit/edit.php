@@ -7,7 +7,7 @@
 			'value' => template::ico('left')
 		]); ?>
 	</div>
-	<div class="col1 offset6">
+	<div class="col1 offset7">
 		<?php echo template::button('pageEditDelete', [
 			'class' => 'buttonRed',
 			'href' => helper::baseUrl() . 'page/delete/' . $this->getUrl(2) . '/' . self::$siteContent,
