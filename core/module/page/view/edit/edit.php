@@ -10,7 +10,7 @@
 	<div class="col1 offset6">
 		<?php echo template::button('pageEditDelete', [
 			'class' => 'buttonRed',
-			'href' => helper::baseUrl() . 'page/delete/' . $this->getUrl(2)  . '/' . self::$siteContent,
+			'href' => helper::baseUrl() . 'page/delete/' . $this->getUrl(2) . '/' . self::$siteContent,
 			'value' => template::ico('trash'),
 			'help' => 'Effacer la page'
 		]); ?>
@@ -28,7 +28,6 @@
 		]); ?>
 	</div>
 </div>
-
 <div class="tab">
 	<?php echo template::button('pageEditContentButton', [
 		'value' => 'Contenu',
@@ -58,11 +57,6 @@
 			<div class="block">
 				<h4>
 					<?php echo helper::translate('Titres'); ?>
-					<!--<span id="infoHelpButton" class="helpDisplayButton">
-						<a href="https://doc.zwiicms.fr/informations-generales" target="_blank" title="Cliquer pour consulter l'aide en ligne">
-							<?php //echo template::ico('help', ['margin' => 'left']); ?>
-						</a>
-					</span>-->
 				</h4>
 				<div class="row">
 					<div class="col8">
@@ -111,11 +105,6 @@
 			<div class="block">
 				<h4>
 					<?php echo helper::translate('Emplacement dans le menu'); ?>
-					<!--<span id="positionHelpButton" class="helpDisplayButton">
-						<a href="https://doc.zwiicms.fr/emplacement-dans-le-menu" target="_blank" title="Cliquer pour consulter l'aide en ligne">
-							<?php //echo template::ico('help', ['margin' => 'left']); ?>
-						</a>
-					</span>-->
 				</h4>
 				<div class="blockContainer">
 					<div class="row">
@@ -167,11 +156,6 @@
 			<div class="block">
 				<h4>
 					<?php echo helper::translate('Options avancées'); ?>
-					<!--<span id="advancedHelpButton" class="helpDisplayButton">
-						<a href="https://doc.zwiicms.fr/options-d-emplacement-avancee" target="_blank" title="Cliquer pour consulter l'aide en ligne">
-							<?php //echo template::ico('help', ['margin' => 'left']); ?>
-						</a>
-					</span>-->
 				</h4>
 				<div class="blockContainer">
 					<div class="row">
@@ -186,7 +170,8 @@
 								'help' => 'Sélectionnez une image ou une icône de petite dimension',
 								'language' => $this->getData(['user', $this->getUser('id'), 'language']),
 								'label' => 'Icône',
-								'value' => $this->getData(['page', $this->getUrl(2), 'iconUrl'])
+								'value' => $this->getData(['page', $this->getUrl(2), 'iconUrl']),
+								'folder' => $this->getData(['page', $this->getUrl(2), 'iconUrl']) ? dirname($this->getData(['page', $this->getUrl(2), 'iconUrl'])) : '',
 							]); ?>
 						</div>
 					</div>
@@ -283,11 +268,6 @@
 			<div class="block">
 				<h4>
 					<?php echo helper::translate('Mise en page'); ?>
-					<!--<span id="layoutHelpButton" class="helpDisplayButton">
-						<a href="https://doc.zwiicms.fr/mise-en-page-2" target="_blank" title="Cliquer pour consulter l'aide en ligne">
-							<?php //echo template::ico('help', ['margin' => 'left']); ?>
-						</a>
-					</span>-->
 				</h4>
 				<div class="blockContainer">
 					<div class="row">
@@ -363,11 +343,6 @@
 			<div class="block">
 				<h4>
 					<?php echo helper::translate('Permission et référencement'); ?>
-					<!--<span id="seoHelpButton" class="helpDisplayButton">
-						<a href="https://doc.zwiicms.fr/permission-et-referencement" target="_blank" title="Cliquer pour consulter l'aide en ligne">
-							<?php //echo template::ico('help', ['margin' => 'left']); ?>
-						</a>
-					</span>-->
 				</h4>
 				<div class="blockContainer">
 					<div class="row">
@@ -415,5 +390,4 @@
 		</div>
 	</div>
 </div>
-
 <?php echo template::formClose(); ?>
