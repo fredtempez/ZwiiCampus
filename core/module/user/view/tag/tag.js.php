@@ -39,6 +39,7 @@ $(document).ready((function () {
             url: "core/vendor/datatables/french.json"
         },
         locale: 'fr',
+        "lengthMenu": [[10, 25, 50, 100, 299,  -1], [10, 25, 50, 100, 200, "Tout"]],
         "columnDefs": [
             {
                 target: 0,
