@@ -47,7 +47,7 @@
 		if (
 			$this->getData(['theme', 'menu', 'position']) === 'top'
 			and $this->getData(['theme', 'menu', 'fixed']) === true
-			and $this->getUser('password') === $this->getInput('ZWII_USER_PASSWORD')
+			and $this->isConnected() === true
 			and $this->getUser('group') > self::GROUP_MEMBER
 		) {
 			echo '<nav id="navfixedconnected" >';

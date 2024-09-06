@@ -2038,7 +2038,7 @@ class course extends common
         }
         // Si un utilisateur connecté est admin ou auteur, c'est autorisé
         if (
-            $this->getUser('password') === $this->getInput('ZWII_USER_PASSWORD') &&
+            $this->isConnected() === true &&
             ($this->getUser('group') === self::GROUP_ADMIN ||
                 $this->getUser('id') === $this->getData(['course', $courseId, 'author']))
         ) {
