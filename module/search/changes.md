@@ -1,3 +1,5 @@
+# Version 3.3
+- Une seule lecture du fichier module.json
 # Version 3.2
 - Contrôle de la variable de session liée au contenu. Evite des erreurs lorsque plusieurs onglets sont ouverts.
 # Version 3.1

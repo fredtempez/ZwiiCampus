@@ -20,7 +20,7 @@
 class search extends common
 {
 
-	const VERSION = '3.2';
+	const VERSION = '3.3';
 	const REALNAME = 'Recherche';
 	const DATADIRECTORY = self::DATA_DIR . 'search/';
 
@@ -172,40 +172,43 @@ class search extends common
 
 	public function index()
 	{
-
 		// Initialise un module non configuré
 		$this->init();
-
-		if (
-			$this->isPost()
-		) {
+	
+		if ($this->isPost()) {
 			//Initialisations variables
 			$success = true;
 			$result = [];
 			$notification = '';
 			$total = '';
-
+	
 			// Récupération du mot clef passé par le formulaire de ...view/index.php, avec caractères accentués
 			self::$motclef = $this->getInput('searchMotphraseclef');
 			// Variable de travail, on conserve la variable globale pour l'affichage du résultat
 			$motclef = self::$motclef;
-
-			// Suppression des mots < 3  caractères et des articles > 2 caractères de la chaîne $motclef
+	
+			// Suppression des mots < 3 caractères et des articles > 2 caractères de la chaîne $motclef
 			$arraymotclef = explode(' ', $motclef);
 			$motclef = '';
 			foreach ($arraymotclef as $key => $value) {
-				if (strlen($value) > 2 && $value !== 'les' && $value !== 'des' && $value !== 'une' && $value !== 'aux')
+				if (strlen($value) > 2 && $value !== 'les' && $value !== 'des' && $value !== 'une' && $value !== 'aux') {
 					$motclef .= $value . ' ';
+				}
 			}
 			// Suppression du dernier ' '
-			if ($motclef !== '')
+			if ($motclef !== '') {
 				$motclef = substr($motclef, 0, strlen($motclef) - 1);
-
+			}
+	
 			// Récupération de l'état de l'option mot entier passé par le même formulaire
 			self::$motentier = $this->getInput('searchMotentier', helper::FILTER_BOOLEAN);
-
+	
+			// Lecture unique des données du module
+			$moduleData = $this->getData(['module']);
+	
 			if ($motclef !== '') {
 				foreach ($this->getHierarchy(null, false, null) as $parentId => $childIds) {
+					// Vérification des conditions pour la page parente
 					if (
 						$this->getData(['page', $parentId, 'disable']) === false &&
 						$this->getUser('group') >= $this->getData(['page', $parentId, 'group']) &&
@@ -213,7 +216,6 @@ class search extends common
 					) {
 						$url = $parentId;
 						$titre = $this->getData(['page', $parentId, 'title']);
-						//$content = file_get_contents(self::DATA_DIR . self::$siteContent . '/content/' . $this->getData(['page', $parentId, 'content']));
 						$content = $this->getPage($parentId, self::$siteContent);
 						$content = $titre . ' ' . $content;
 						// Pages sauf pages filles et articles de blog
@@ -222,9 +224,9 @@ class search extends common
 							$result[] = $tempData;
 						}
 					}
-
+	
+					// Vérification des sous-pages et articles de sous-pages
 					foreach ($childIds as $childId) {
-						// Sous page
 						if (
 							$this->getData(['page', $childId, 'disable']) === false &&
 							$this->getUser('group') >= $this->getData(['page', $parentId, 'group']) &&
@@ -232,24 +234,21 @@ class search extends common
 						) {
 							$url = $childId;
 							$titre = $this->getData(['page', $childId, 'title']);
-							//$content = file_get_contents(self::DATA_DIR . self::$siteContent . '/content/' . $this->getData(['page', $childId, 'content']));
 							$content = $this->getPage($childId, self::$siteContent);
 							$content = $titre . ' ' . $content;
-							//Pages filles
 							$tempData = $this->occurrence($url, $titre, $content, $motclef, self::$motentier);
 							if (is_array($tempData)) {
 								$result[] = $tempData;
 							}
 						}
-
+	
 						// Articles d'une sous-page blog ou de news
-						if ($this->getData(['module', $childId, 'posts'])) {
-							foreach ($this->getData(['module', $childId, 'posts']) as $articleId => $article) {
-								if ($this->getData(['module', $childId, 'posts', $articleId, 'state']) === true) {
+						if (isset($moduleData[$childId]['posts'])) {
+							foreach ($moduleData[$childId]['posts'] as $articleId => $article) {
+								if ($article['state'] === true) {
 									$url = $childId . '/' . $articleId;
 									$titre = $article['title'];
 									$contenu = ' ' . $titre . ' ' . $article['content'];
-									// Articles de sous-page de type blog
 									$tempData = $this->occurrence($url, $titre, $contenu, $motclef, self::$motentier);
 									if (is_array($tempData)) {
 										$result[] = $tempData;
@@ -258,12 +257,11 @@ class search extends common
 							}
 						}
 					}
-
+	
 					// Articles d'un blog ou de news
-					if ($this->getData(['module', $parentId, 'posts'])) {
-
-						foreach ($this->getData(['module', $parentId, 'posts']) as $articleId => $article) {
-							if ($this->getData(['module', $parentId, 'posts', $articleId, 'state']) === true) {
+					if (isset($moduleData[$parentId]['posts'])) {
+						foreach ($moduleData[$parentId]['posts'] as $articleId => $article) {
+							if ($article['state'] === true) {
 								$url = $parentId . '/' . $articleId;
 								$titre = $article['title'];
 								$contenu = ' ' . $titre . ' ' . $article['content'];
@@ -275,22 +273,21 @@ class search extends common
 						}
 					}
 				}
+	
 				// Message de synthèse de la recherche
 				if (count($result) === 0) {
 					self::$resultTitle = helper::translate('Aucun résultat');
 					self::$resultError = helper::translate('Avez-vous pensé aux accents ?');
 				} else {
 					self::$resultError = '';
-					//self::$resultTitle = sprintf(' %s',helper::translate('Résultat de votre recherche'));
 					rsort($result);
 					foreach ($result as $key => $value) {
 						$r[] = $value['preview'];
 					}
-					// Générer une chaine de caractères
 					self::$resultList = implode("", $r);
 				}
 			}
-
+	
 			// Valeurs en sortie, affichage du résultat
 			$this->addOutput([
 				'view' => 'index',
@@ -309,6 +306,8 @@ class search extends common
 			]);
 		}
 	}
+	
+	
 
 
 	// Fonction de recherche des occurrences dans $contenu
