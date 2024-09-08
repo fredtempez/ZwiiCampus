@@ -14,13 +14,13 @@
  * @link http://zwiicms.fr/
  */
 
- /**
+/**
  * Initialisation de Zwii
  */
 // Remplace la directive htaccess
 ini_set('session.use_trans_sid', FALSE);
 // Crée un identifiant unique pour chaque site en fonction du nom de domaine ou autre
-$siteId = md5($_SERVER['SERVER_NAME']); // Ou utilise un autre identifiant unique pour chaque site
+$siteId = md5($_SERVER['SERVER_NAME'] . $_SERVER['SCRIPT_FILENAME']); // Ou utilise un autre identifiant unique pour chaque site
 // Change le nom de la session en fonction de cet identifiant
 session_name('zwii_session_' . $siteId);
 // Démarre la session
@@ -37,7 +37,7 @@ include_once('core/include/checkup.php');
  * fr_FR.utf8 : la majorité
 */
 date_default_timezone_set('Europe/Paris');
-setlocale (LC_ALL, 'fr_FR.UTF8', 'fr_FR', 'french');
+setlocale(LC_ALL, 'fr_FR.UTF8', 'fr_FR', 'french');
 
 /**
  * Chargement des classes
