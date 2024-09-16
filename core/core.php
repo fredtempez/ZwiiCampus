@@ -51,7 +51,7 @@ class common
 	const ACCESS_TIMER = 1800;
 
 	// Numéro de version
-	const ZWII_VERSION = '1.12.07';
+	const ZWII_VERSION = '1.12.08';
 
 	// URL autoupdate
 	const ZWII_UPDATE_URL = 'https://forge.chapril.org/ZwiiCMS-Team/campus-update/raw/branch/master/';
@@ -390,7 +390,7 @@ class common
 		// Stocker le cookie de langue pour l'éditeur de texte ainsi que l'url du contenu pour le theme
 		setcookie('ZWII_UI', self::$i18nUI, time() + 3600, '', '', false, false);
 		// Stocker l'courseId pour le thème de TinyMCE
-		setcookie('ZWII_SITE_CONTENT', self::$siteContent, time() + 3600, '', '', false, false);
+		//setcookie('ZWII_SITE_CONTENT', self::$siteContent, time() + 3600, '', '', false, false);
 		setlocale(LC_ALL, self::$i18nUI);
 
 		// Construit la liste des pages parents/enfants
@@ -451,8 +451,6 @@ class common
 		include ('core/include/update.inc.php');
 
 	}
-
-
 
 	/**
 	 * Ajoute les valeurs en sortie

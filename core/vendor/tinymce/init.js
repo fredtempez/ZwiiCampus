@@ -10,6 +10,8 @@
 if (typeof (privateKey) == 'undefined') {
 	var privateKey = null;
 };
+// Récupération du thème de l'espace
+var siteContent = document.getElementById('zwii_site_content').getAttribute('data-variable');
 tinymce.init({
 	// Classe où appliquer l'éditeur
 	selector: ".editorWysiwyg",
@@ -99,7 +101,7 @@ tinymce.init({
 	content_css: [
 		baseUrl + "core/layout/common.css",
 		baseUrl + "core/vendor/tinymce/content.css",
-		baseUrl + "site/data/"+ (getCookie("ZWII_SITE_CONTENT") === null ? 'home' : getCookie("ZWII_SITE_CONTENT")) +"/theme.css",
+		baseUrl + "site/data/"+ siteContent === null ? 'home' : siteContent +"/theme.css",
 		baseUrl + "site/data/custom.css"
 	],
 	// Classe à ajouter à la balise body dans l'iframe
