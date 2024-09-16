@@ -14,7 +14,7 @@
  * @link http://zwiicms.fr/
  */
 
- /**
+/**
  * Initialisation de Zwii
  */
 // Remplace la directive htaccess
@@ -44,9 +44,6 @@ session_start();
 // Contrôle des conditions de fonctionnement
 include_once('core/include/checkup.php');
 
-// Mise à jour du système de BDD
-include_once('core/include/pre-update.php');
-
 /*
  *Localisation par défaut 
 
@@ -56,17 +53,17 @@ include_once('core/include/pre-update.php');
  * fr_FR.utf8 : la majorité
 */
 date_default_timezone_set('Europe/Paris');
-setlocale (LC_ALL, 'fr_FR.UTF8', 'fr_FR', 'french');
+setlocale(LC_ALL, 'fr_FR.UTF8', 'fr_FR', 'french');
 
 /**
  * Chargement des classes
  */
 require 'core/class/autoload.php';
 autoload::autoloader();
+spl_autoload_register('core::autoload');
 
 /**
  * Chargement du coeur
  */
 $core = new core;
-spl_autoload_register('core::autoload');
 echo $core->router();
