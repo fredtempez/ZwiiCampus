@@ -51,7 +51,7 @@ class common
 	const ACCESS_TIMER = 1800;
 
 	// Numéro de version
-	const ZWII_VERSION = '1.12.06';
+	const ZWII_VERSION = '1.12.07';
 
 	// URL autoupdate
 	const ZWII_UPDATE_URL = 'https://forge.chapril.org/ZwiiCMS-Team/campus-update/raw/branch/master/';
@@ -1019,7 +1019,10 @@ class common
 	 * @return bool l'utilisateur est connecté true sinon false
 	 */ 
 	public function isConnected() {
-		return ($this->getUser('authKey') === $this->getInput('ZWII_AUTH_KEY'));
+		return ( 
+			!empty($this->getUser('authKey'))
+			&&
+			$this->getUser('authKey') === $this->getInput('ZWII_AUTH_KEY'));
 	}
 
 	/**
