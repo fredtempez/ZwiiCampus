@@ -82,17 +82,25 @@ class layout extends common
                 $content = 'col' . $blocks[1];
                 $blockright = 'col' . $blocks[2];
         }
-        // Page pleine pour la configuration des modules et l'édition des pages sauf l'affichage d'un article de blog
-        $pattern = ['config', 'edit', 'add', 'comment', 'data'];
+        // Toujours en pleine page pour la configuration des modules et l'édition des pages sauf l'affichage d'un article de blog
+        $pattern = ['config', 'edit', 'add', 'comment', 'data', 'option', 'theme', 'comment', 'article', 'data', 'gallery', 'update', 'users', 'validate'];
         if (
             (sizeof($blocks) === 1 ||
                 in_array($this->getUrl(1), $pattern))
         ) { // Pleine page en mode configuration
-            if ($this->getData(['page', $this->getUrl(0), 'navLeft']) === 'top' || $this->getData(['page', $this->getUrl(0), 'navRight']) === 'top') {
+            if (
+                ($this->getData(['page', $this->getUrl(0), 'navLeft']) === 'top'
+                    || $this->getData(['page', $this->getUrl(0), 'navRight']) === 'top')
+                && in_array($this->getUrl(1), $pattern) === false
+            ) {
                 $this->showNavButtons('top');
             }
             $this->showContent();
-            if ($this->getData(['page', $this->getUrl(0), 'navLeft']) === 'bottom' || $this->getData(['page', $this->getUrl(0), 'navRight']) === 'bottom') {
+            if (
+                ($this->getData(['page', $this->getUrl(0), 'navLeft']) === 'bottom'
+                    || $this->getData(['page', $this->getUrl(0), 'navRight']) === 'bottom')
+                && in_array($this->getUrl(1), $pattern) === false
+            ) {
                 $this->showNavButtons('bottom');
             }
         } else {
@@ -352,11 +360,11 @@ class layout extends common
             $items .= $this->getData(['theme', 'footer', 'displaymemberAccount']) === false ? ' class="displayNone">' : '>';
             $items .= '<wbr>&nbsp;|&nbsp;';
             if (
-                $this->getUser('permission', 'filemanager') === true 
-                && $this->getUser('permission',  'folder', (self::$siteContent === 'home' ? 'homePath' : 'coursePath')) !== 'none'
+                $this->getUser('permission', 'filemanager') === true
+                && $this->getUser('permission', 'folder', (self::$siteContent === 'home' ? 'homePath' : 'coursePath')) !== 'none'
             ) {
                 $items .= '<wbr>' . template::ico('folder', [
-                    'href' => helper::baseUrl(false) . 'core/vendor/filemanager/dialog.php?type=0&akey=' . md5_file(self::DATA_DIR . 'core.json') . '&lang=' . $this->getData(['user', $this->getUser('id'), 'language'])   . '&fldr=/' . self::$siteContent,
+                    'href' => helper::baseUrl(false) . 'core/vendor/filemanager/dialog.php?type=0&akey=' . md5_file(self::DATA_DIR . 'core.json') . '&lang=' . $this->getData(['user', $this->getUser('id'), 'language']) . '&fldr=/' . self::$siteContent,
                     'margin' => 'all',
                     'attr' => 'data-lity',
                     'help' => 'Fichiers du site'
@@ -520,8 +528,10 @@ class layout extends common
         ) {
 
             // Affiche l'icône RFM
-            if ($this->getUser('permission', 'filemanager') === true
-                && $this->getUser('permission', 'folder', (self::$siteContent === 'home' ? 'homePath' : 'coursePath')) !== 'none') {
+            if (
+                $this->getUser('permission', 'filemanager') === true
+                && $this->getUser('permission', 'folder', (self::$siteContent === 'home' ? 'homePath' : 'coursePath')) !== 'none'
+            ) {
                 $itemsRight .= '<li>' . template::ico('folder', [
                     'href' => helper::baseUrl(false) . 'core/vendor/filemanager/dialog.php?type=0&akey=' . md5_file(self::DATA_DIR . 'core.json') . '&lang=' . $this->getData(['user', $this->getUser('id'), 'language']) . '&fldr=/' . self::$siteContent,
                     'attr' => 'data-lity',
@@ -931,7 +941,7 @@ class layout extends common
                     }
                     $leftItems .= '</select></li>';
                 }
-  
+
                 $leftItems .= '<li>' . template::ico('cubes', [
                     'href' => helper::baseUrl() . 'course',
                     'help' => 'Gérer les espaces'
@@ -1016,53 +1026,53 @@ class layout extends common
                     )
                     // Sur une page d'accueil
                     or $this->getUrl(0) === ''
+                ) {
+                    // Bouton Editer une page
+                    if (
+                        $this->getUser('permission', 'page', 'edit')
+                        and $this->geturl(1) !== 'edit'
                     ) {
-                        // Bouton Editer une page
-                        if (
-                            $this->getUser('permission', 'page', 'edit')
-                            and $this->geturl(1) !== 'edit'
-                        ) {
-                            $leftItems .= '<li>' . template::ico('pencil', [
-                                'href' => helper::baseUrl() . 'page/edit/' . $this->getUrl(0) . '/' . self::$siteContent,
-                                'help' => 'Éditer la page'
-                            ]) . '</li>';
-                        }
-                        // Bouton Editer le module d'une page
-                        if (
-                            $this->getUser('permission', 'page', 'module')
-                            and $this->geturl(1) !== 'edit'
-                            and $this->getData(['page', $this->getUrl(0), 'moduleId'])
-                        ) {
-                            $leftItems .= '<li>' . template::ico('gear', [
-                                'href' => helper::baseUrl() . $this->getUrl(0) . '/config',
-                                'help' => 'Module de la page'
-                            ]) . '</li>';
-                        }
-                        // Bouton dupliquer une page
-                        if (
-                            $this->getUser('permission', 'page', 'duplicate')
-                            and $this->geturl(1) !== 'edit'
-                        ) {
-                            $leftItems .= '<li>' . template::ico('clone', [
-                                'href' => helper::baseUrl() . 'page/duplicate/' . $this->getUrl(0) . '/' . self::$siteContent,
-                                'help' => 'Dupliquer la page'
-                            ])
-                                . '</li>';
-                        }
-                        // Bouton Effacer une page
-                        if (
-                            $this->getUser('permission', 'page', 'delete')
-                            and $this->geturl(1) !== 'edit'
-    
-                        ) {
-                            $leftItems .= '<li>' . template::ico('trash', [
-                                'href' => helper::baseUrl() . 'page/delete/' . $this->getUrl(0) . '/' . self::$siteContent,
-                                'help' => 'Supprimer la page',
-                                'id' => 'pageDelete'
-                            ])
-                                . '</li>';
-                        }
+                        $leftItems .= '<li>' . template::ico('pencil', [
+                            'href' => helper::baseUrl() . 'page/edit/' . $this->getUrl(0) . '/' . self::$siteContent,
+                            'help' => 'Éditer la page'
+                        ]) . '</li>';
                     }
+                    // Bouton Editer le module d'une page
+                    if (
+                        $this->getUser('permission', 'page', 'module')
+                        and $this->geturl(1) !== 'edit'
+                        and $this->getData(['page', $this->getUrl(0), 'moduleId'])
+                    ) {
+                        $leftItems .= '<li>' . template::ico('gear', [
+                            'href' => helper::baseUrl() . $this->getUrl(0) . '/config',
+                            'help' => 'Module de la page'
+                        ]) . '</li>';
+                    }
+                    // Bouton dupliquer une page
+                    if (
+                        $this->getUser('permission', 'page', 'duplicate')
+                        and $this->geturl(1) !== 'edit'
+                    ) {
+                        $leftItems .= '<li>' . template::ico('clone', [
+                            'href' => helper::baseUrl() . 'page/duplicate/' . $this->getUrl(0) . '/' . self::$siteContent,
+                            'help' => 'Dupliquer la page'
+                        ])
+                            . '</li>';
+                    }
+                    // Bouton Effacer une page
+                    if (
+                        $this->getUser('permission', 'page', 'delete')
+                        and $this->geturl(1) !== 'edit'
+
+                    ) {
+                        $leftItems .= '<li>' . template::ico('trash', [
+                            'href' => helper::baseUrl() . 'page/delete/' . $this->getUrl(0) . '/' . self::$siteContent,
+                            'help' => 'Supprimer la page',
+                            'id' => 'pageDelete'
+                        ])
+                            . '</li>';
+                    }
+                }
             }
             // Items de droite
             $rightItems = '';
@@ -1076,7 +1086,7 @@ class layout extends common
             ) {
                 $rightItems .= '<li>' . template::ico('folder', [
                     'help' => 'Fichiers',
-                    'href' => helper::baseUrl(false) . 'core/vendor/filemanager/dialog.php?type=0&akey=' . md5_file(self::DATA_DIR . 'core.json') . '&lang=' . $this->getData(['user', $this->getUser('id'), 'language'])  . '&fldr=/' . self::$siteContent,
+                    'href' => helper::baseUrl(false) . 'core/vendor/filemanager/dialog.php?type=0&akey=' . md5_file(self::DATA_DIR . 'core.json') . '&lang=' . $this->getData(['user', $this->getUser('id'), 'language']) . '&fldr=/' . self::$siteContent,
                     'attr' => 'data-lity'
                 ]) . '</li>';
             }
