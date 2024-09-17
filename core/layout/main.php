@@ -34,8 +34,6 @@
 	} ?>
 </head>
 <body>
-	<!-- Variable transmise à TinyMCE -->
-	<div id="zwii_site_content" data-variable="<?php echo htmlspecialchars(isset($_SESSION['ZWII_SITE_CONTENT']) ? $_SESSION['ZWII_SITE_CONTENT'] : 'home'); ?>"></div>
 	<!-- Barre d'administration -->
 	<?php if ($this->getUser('group') > self::GROUP_MEMBER) : ?>
 		<?php $layout->showBar(); ?>
