@@ -30,7 +30,8 @@ class config extends common
 		'logReset' => self::GROUP_ADMIN,
 		'logDownload' => self::GROUP_ADMIN,
 		'blacklistReset' => self::GROUP_ADMIN,
-		'blacklistDownload' => self::GROUP_ADMIN
+		'blacklistDownload' => self::GROUP_ADMIN,
+		'register' => self::GROUP_ADMIN,
 	];
 
 	public static $timezones = [
@@ -971,5 +972,26 @@ class config extends common
 			// Fallback if not using Apache or unable to detect modules
 			return getenv('HTTP_MOD_REWRITE') == 'On' || getenv('REDIRECT_STATUS') == '200';
 		}
+	}
+
+		/**
+	 * Stocke la variable dans les paramètres de l'utilisateur pour activer la tab à sa prochaine visite
+	 * @return never
+	 */
+	public function register(): void
+	{
+		$this->setData([
+			'user',
+			$this->getUser('id'),
+			'view',
+			[
+				'config' => $this->getUrl(2),
+				'page' => $this->getData(['user', $this->getUser('id'), 'view', 'page']),
+			]
+		]);
+		// Valeurs en sortie
+		$this->addOutput([
+			'redirect' => helper::baseUrl() . 'config/' . $this->getUrl(2),
+		]);
 	}
 }

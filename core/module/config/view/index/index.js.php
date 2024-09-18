@@ -66,11 +66,12 @@ $(document).ready(function () {
         $("#connectCaptchaStrong").prop("checked", false);
     }
 
-    var configLayout = getCookie("configLayout");
-    if (configLayout == null) {
-        configLayout = "locale";
-        setCookie("configLayout", "locale");
-    }
+	var configLayout = "<?php echo $this->getData(['user', $this->getUser('id'), 'view', 'config']);?>";
+	// Non défini, valeur par défaut
+	if (configLayout == null) {
+        configLayout = "setup"; 
+	 }
+
     $("#localeContainer").hide();
     $("#socialContainer").hide();
     $("#connectContainer").hide();
@@ -168,7 +169,6 @@ $(document).ready(function () {
         $("#configSocialButton").removeClass("activeButton");
         $("#configConnectButton").removeClass("activeButton");
         $("#configNetworkButton").removeClass("activeButton");
-        setCookie("configLayout", "locale");
     });
     $("#configSetupButton").on("click", function () {
         $("#localeContainer").hide();
@@ -181,7 +181,6 @@ $(document).ready(function () {
         $("#configSocialButton").removeClass("activeButton");
         $("#configConnectButton").removeClass("activeButton");
         $("#configNetworkButton").removeClass("activeButton");
-        setCookie("configLayout", "setup");
     });
 
     $("#configSocialButton").on("click", function () {
@@ -195,7 +194,6 @@ $(document).ready(function () {
         $("#configSocialButton").addClass("activeButton");
         $("#configConnectButton").removeClass("activeButton");
         $("#configNetworkButton").removeClass("activeButton");
-        setCookie("configLayout", "social");
     });
     $("#configConnectButton").on("click", function () {
         $("#setupContainer").hide();
@@ -208,7 +206,6 @@ $(document).ready(function () {
         $("#configSocialButton").removeClass("activeButton");
         $("#configConnectButton").addClass("activeButton");
         $("#configNetworkButton").removeClass("activeButton");
-        setCookie("configLayout", "connect");
     });
     $("#configNetworkButton").on("click", function () {
         $("#setupContainer").hide();
@@ -221,7 +218,6 @@ $(document).ready(function () {
         $("#configSocialButton").removeClass("activeButton");
         $("#configConnectButton").removeClass("activeButton");
         $("#configNetworkButton").addClass("activeButton");
-        setCookie("configLayout", "network");
     });
 
 
@@ -307,27 +303,6 @@ $(document).ready(function () {
 
 });
 
-
-function setCookie(name, value, days) {
-    var expires = "";
-    if (days) {
-        var date = new Date();
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-        expires = "; expires=" + date.toUTCString();
-    }
-    document.cookie = name + "=" + (value || "") + expires + "; path=/; samesite=lax";
-}
-
-function getCookie(name) {
-    var nameEQ = name + "=";
-    var ca = document.cookie.split(';');
-    for (var i = 0; i < ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-    }
-    return null;
-}
 
 // Define function to capitalize the first letter of a string
 function capitalizeFirstLetter(string) {
