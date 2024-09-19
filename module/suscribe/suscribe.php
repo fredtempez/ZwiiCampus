@@ -15,7 +15,7 @@
 class suscribe extends common
 {
 
-	const VERSION = '2.0';
+	const VERSION = '2.2';
 	const REALNAME = 'Auto Inscription';
 	const DELETE = true;
 	const UPDATE = '0.0';
@@ -249,107 +249,121 @@ class suscribe extends common
 			) {
 				// Contrôler la validité du domaine saisi parmi les domaines valides
 				$email_to_check = $this->getInput('registrationAddMail', helper::FILTER_MAIL, true);
-				$valid_domains[] = strpos($this->getData(['module', $this->getUrl(0), 'config', 'filter']), ';') === false
-					? $this->getData(['module', $this->getUrl(0), 'config', 'filter'])
-					: explode(';', $this->getData(['module', $this->getUrl(0), 'config', 'filter']));
-				if (in_array(explode('@', $email_to_check)[1], $valid_domains) === false) {
+
+				// Récupérer la liste des domaines valides depuis la configuration et supprimer les espaces autour
+				$filter = trim($this->getData(['module', $this->getUrl(0), 'config', 'filter']));
+
+				// Vérifier si la liste contient plusieurs domaines ou un seul, puis supprimer les espaces pour chaque domaine
+				$valid_domains = strpos($filter, ';') === false
+					? [trim($filter)]  // Si un seul domaine, on supprime les espaces et on le met dans un tableau
+					: array_map('trim', explode(';', $filter));  // Si plusieurs domaines, on les explose en tableau et supprime les espaces
+
+				// Extraire le domaine de l'adresse email à vérifier
+				$email_domain = explode('@', $email_to_check)[1];
+
+				// Vérifier si le domaine de l'email est dans la liste des domaines valides
+				if (!in_array($email_domain, $valid_domains)) {
 					self::$inputNotices['registrationAddMail'] = 'Ce domaine n\'est pas autorisé';
 				}
+
 			}
-			// Drapeau de contrôle des données saisies.
-			$check = true;
-			$sentMailtoUser = false;
-			// L'identifiant d'utilisateur est indisponible
-			$userId = $this->getInput('registrationAddId', helper::FILTER_ID, true);
-			if (is_array($this->getData(['user', $userId]))) {
-				self::$inputNotices['registrationAddId'] = 'Identifiant invalide';
-				$check = false;
-			}
-			// Le compte existe déjà
-			foreach ($this->getData(['user']) as $usersId => $user) {
-				if ($user['mail'] === $this->getInput('registrationAddMail', helper::FILTER_MAIL, true)) {
-					self::$inputNotices['registrationAddMail'] = 'Vous ne pouvez pas utilisez cette boite mail';
+			// Email valide, on continue le traitement 
+			if (self::$inputNotices === []) {
+				// Drapeau de contrôle des données saisies.
+				$check = true;
+				$sentMailtoUser = false;
+				// L'identifiant d'utilisateur est indisponible
+				$userId = $this->getInput('registrationAddId', helper::FILTER_ID, true);
+				if (is_array($this->getData(['user', $userId]))) {
+					self::$inputNotices['registrationAddId'] = 'Identifiant invalide';
 					$check = false;
-					break;
 				}
-			}
-			// Données de l'utilisateur
-			$userFirstname = $this->getInput('registrationAddFirstname', helper::FILTER_STRING_SHORT, true);
-			$userLastname = $this->getInput('registrationAddLastname', helper::FILTER_STRING_SHORT, true);
-			$userMail = $this->getInput('registrationAddMail', helper::FILTER_MAIL, true);
-			// Pas de nom saisi
-			if (
-				empty($userFirstname) ||
-				empty($userLastname)
-			) {
-				$check = false;
-			}
-			// Si tout est ok
-			if ($check === true) {
-				//  Enregistrement du compte dans les données du module
-				$auth = uniqid('', true);
-				$this->setData([
-					'module',
-					$this->getUrl(0),
-					'users',
-					$userId,
-					[
-						'firstname' => $userFirstname,
-						'lastname' => $userLastname,
-						'mail' => $userMail,
-						'password' => '',
-						// pas de groupe afin de le différencier dans la liste des users
-						'timer' => time(),
-						'auth' => $auth,
-						'status' => self::STATUS_EMAIL_AWAITING
-					]
-				]);
-				// Mail d'avertissement aux administrateurs
-				// Utilisateurs dans le groupe admin
-				$to = [];
-				foreach ($this->getData(['user']) as $key => $user) {
-					if ($user['group'] == self::GROUP_ADMIN) {
-						$to[] = $user['mail'];
+				// Le compte existe déjà
+				foreach ($this->getData(['user']) as $usersId => $user) {
+					if ($user['mail'] === $this->getInput('registrationAddMail', helper::FILTER_MAIL, true)) {
+						self::$inputNotices['registrationAddMail'] = 'Vous ne pouvez pas utilisez cette boite mail';
+						$check = false;
+						break;
 					}
 				}
-				// Envoi du mail à l'administrateur
-				if ($check && is_array($to)) {
-					$this->sendMail(
-						$to,
-						'Auto-inscription sur le site ' . $this->getData(['config', 'title']),
-						'<p>Un nouveau membre s\'est inscrit, son email est en attente de  validation</p>' .
-						'<p><strong>Identifiant du compte :</strong> ' . $userId . ' (' . $userFirstname . ' ' . $userLastname . ')<br>' .
-						'<strong>Email  :</strong> ' . $userMail . '</p>' .
-						'<a href="' . helper::baseUrl() . 'user/login/' . strip_tags(str_replace('/', '_', $this->getUrl(0) . '/users')) . '">Validation de l\'inscription</a>',
-						null,
-						$this->getData(['config', 'smtp', 'from'])
-					);
+				// Données de l'utilisateur
+				$userFirstname = $this->getInput('registrationAddFirstname', helper::FILTER_STRING_SHORT, true);
+				$userLastname = $this->getInput('registrationAddLastname', helper::FILTER_STRING_SHORT, true);
+				$userMail = $this->getInput('registrationAddMail', helper::FILTER_MAIL, true);
+				// Pas de nom saisi
+				if (
+					empty($userFirstname) ||
+					empty($userLastname)
+				) {
+					$check = false;
 				}
+				// Si tout est ok
+				if ($check === true) {
+					//  Enregistrement du compte dans les données du module
+					$auth = uniqid('', true);
+					$this->setData([
+						'module',
+						$this->getUrl(0),
+						'users',
+						$userId,
+						[
+							'firstname' => $userFirstname,
+							'lastname' => $userLastname,
+							'mail' => $userMail,
+							'password' => '',
+							// pas de groupe afin de le différencier dans la liste des users
+							'timer' => time(),
+							'auth' => $auth,
+							'status' => self::STATUS_EMAIL_AWAITING
+						]
+					]);
+					// Mail d'avertissement aux administrateurs
+					// Utilisateurs dans le groupe admin
+					$to = [];
+					foreach ($this->getData(['user']) as $key => $user) {
+						if ($user['group'] == self::GROUP_ADMIN) {
+							$to[] = $user['mail'];
+						}
+					}
+					// Envoi du mail à l'administrateur
+					if ($check && is_array($to)) {
+						$this->sendMail(
+							$to,
+							'Auto-inscription sur le site ' . $this->getData(['config', 'title']),
+							'<p>Un nouveau membre s\'est inscrit, son email est en attente de  validation</p>' .
+							'<p><strong>Identifiant du compte :</strong> ' . $userId . ' (' . $userFirstname . ' ' . $userLastname . ')<br>' .
+							'<strong>Email  :</strong> ' . $userMail . '</p>' .
+							'<a href="' . helper::baseUrl() . 'user/login/' . strip_tags(str_replace('/', '_', $this->getUrl(0) . '/users')) . '">Validation de l\'inscription</a>',
+							null,
+							$this->getData(['config', 'smtp', 'from'])
+						);
+					}
 
-				// Mail de confirmation à l'utilisateur
-				// forger le lien de vérification
-				$validateLink = helper::baseUrl(true) . $this->getUrl() . '/validate/' . $userId . '/' . $auth;
-				// Envoi
-				if ($check) {
-					$sentMailtoUser = $this->sendMail(
-						$userMail,
-						'Confirmation de votre inscription',
-						'<p>' . $this->getdata(['module', $this->getUrl(0), 'config', 'mailRegisterContent']) . '</p>' .
-						'<p><a href="' . $validateLink . '">Activer votre compte<a/>' . '</p>' .
-						'<p>ou copiez collez le lien suivant dans un navigateur : ' . $validateLink . '</p>'
-						,
-						null,
-						$this->getData(['config', 'smtp', 'from'])
-					);
+					// Mail de confirmation à l'utilisateur
+					// forger le lien de vérification
+					$validateLink = helper::baseUrl(true) . $this->getUrl() . '/validate/' . $userId . '/' . $auth;
+					// Envoi
+					if ($check) {
+						$sentMailtoUser = $this->sendMail(
+							$userMail,
+							'Confirmation de votre inscription',
+							'<p>' . $this->getdata(['module', $this->getUrl(0), 'config', 'mailRegisterContent']) . '</p>' .
+							'<p><a href="' . $validateLink . '">Activer votre compte<a/>' . '</p>' .
+							'<p>ou copiez collez le lien suivant dans un navigateur : ' . $validateLink . '</p>'
+							,
+							null,
+							$this->getData(['config', 'smtp', 'from'])
+						);
+					}
 				}
+				// Valeurs en sortie
+				$this->addOutput([
+					'redirect' => helper::baseUrl(),
+					//'redirect' => $validateLink,
+					'notification' => $sentMailtoUser ? "Un mail vous a été envoyé." : 'Quelque chose n\'a pas fonctionné !',
+					'state' => $sentMailtoUser ? true : false
+				]);
 			}
-			// Valeurs en sortie
-			$this->addOutput([
-				'redirect' => helper::baseUrl(),
-				//'redirect' => $validateLink,
-				'notification' => $sentMailtoUser ? "Un mail vous a été envoyé." : 'Quelque chose n\'a pas fonctionné !',
-				'state' => $sentMailtoUser ? true : false
-			]);
 		}
 		// Valeurs en sortie
 		$this->addOutput([
