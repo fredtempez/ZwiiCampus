@@ -1098,13 +1098,13 @@ class layout extends common
                     'help' => 'Langues',
                     'href' => helper::baseUrl() . 'language'
                 ]) . '</li>';
-                $rightItems .= '<li>' . template::ico('cog-alt', [
-                    'help' => 'Configuration',
-                    'href' => helper::baseUrl() . 'config'
-                ]) . '</li>';
                 $rightItems .= '<li>' . template::ico('users', [
                     'help' => 'Utilisateurs',
                     'href' => helper::baseUrl() . 'user'
+                ]) . '</li>';                
+                $rightItems .= '<li>' . template::ico('cog-alt', [
+                    'help' => 'Configuration',
+                    'href' => helper::baseUrl() . 'config'
                 ]) . '</li>';
                 // Mise à jour automatique
                 $today = mktime(0, 0, 0);
