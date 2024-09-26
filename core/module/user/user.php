@@ -1682,7 +1682,7 @@ class user extends common
 		if (
 			isset($_POST['usersTagSubmit'])
 		) {
-			$notification = helper::translate('Modification de %s étiquette');
+			$notification = helper::translate('Modification de %s étiquette(s)');
 			$success = true;
 			$count = 0;
 			$newTags = $this->getInput('usersTagLabel', null, true);
