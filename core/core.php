@@ -51,7 +51,7 @@ class common
 	const ACCESS_TIMER = 1800;
 
 	// Numéro de version
-	const ZWII_VERSION = '1.12.00.12';
+	const ZWII_VERSION = '1.12.00.13';
 
 	// URL autoupdate
 	const ZWII_UPDATE_URL = 'https://forge.chapril.org/ZwiiCMS-Team/campus-update/raw/branch/master/';
@@ -332,6 +332,9 @@ class common
 		if (isset($_SESSION['ZWII_SITE_CONTENT'])) {
 			// Déterminé par la session présente
 			self::$siteContent = $_SESSION['ZWII_SITE_CONTENT'];
+		} else {
+			$_SESSION['ZWII_SITE_CONTENT'] = 'home';
+			self::$siteContent = 'home';
 		}
 
 		// Instanciation de la classe des entrées / sorties

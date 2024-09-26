@@ -19,7 +19,7 @@ setlocale(LC_CTYPE, $lang);
 
 /* Lecture du groupe de l'utilisateur connecté pour attribuer les droits et les dossiers */
 $userId = $_COOKIE['ZWII_USER_ID'];
-$courseId = $_SESSION['ZWII_SITE_CONTENT'];
+$courseId = $_GET['lang'];
 $u = json_decode(file_get_contents('../../../site/data/user.json'), true);
 $g = json_decode(file_get_contents('../../../site/data/profil.json'), true);
 
