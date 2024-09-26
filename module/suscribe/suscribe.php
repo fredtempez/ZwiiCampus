@@ -15,7 +15,7 @@
 class suscribe extends common
 {
 
-	const VERSION = '2.2';
+	const VERSION = '2.3';
 	const REALNAME = 'Auto Inscription';
 	const DELETE = true;
 	const UPDATE = '0.0';
@@ -243,12 +243,14 @@ class suscribe extends common
 		 */
 		// Soumission du formulaire
 		if ($this->isPost()) {
+			// Contrôler la validité du domaine saisi parmi les domaines valides
+			$email_to_check = $this->getInput('registrationAddMail', helper::FILTER_MAIL, true);
 			// Le domaine saisi est invalide si un filtre existe
 			if (
-				!empty($this->getData(['module', $this->getUrl(0), 'config', 'filter']))
+				empty($this->getData(['module', $this->getUrl(0), 'config', 'filter'])) === true &&
+				empty($email_to_check) === true
 			) {
-				// Contrôler la validité du domaine saisi parmi les domaines valides
-				$email_to_check = $this->getInput('registrationAddMail', helper::FILTER_MAIL, true);
+
 
 				// Récupérer la liste des domaines valides depuis la configuration et supprimer les espaces autour
 				$filter = trim($this->getData(['module', $this->getUrl(0), 'config', 'filter']));
