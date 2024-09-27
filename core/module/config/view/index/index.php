@@ -7,11 +7,10 @@
             'value' => template::ico('home')
         ]); ?>
     </div>
-    <div class="col2 offset8">
+    <div class="col2 offset9">
         <?php echo template::submit('Submit'); ?>
     </div>
 </div>
-
 <div class="tab">
     <?php echo template::button('configSetupButton', [
         'value' => 'Configuration',
@@ -34,7 +33,6 @@
 		'href' => helper::baseUrl() . 'config/register/network' 
     ]); ?>
 </div>
-
 <?php include('core/module/config/view/locale/locale.php') ?>
 <?php include('core/module/config/view/setup/setup.php') ?>
 <?php include('core/module/config/view/social/social.php') ?>
