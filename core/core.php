@@ -51,7 +51,7 @@ class common
 	const ACCESS_TIMER = 1800;
 
 	// Numéro de version
-	const ZWII_VERSION = '1.12.00.15';
+	const ZWII_VERSION = '1.13.00';
 
 	// URL autoupdate
 	const ZWII_UPDATE_URL = 'https://forge.chapril.org/ZwiiCMS-Team/campus-update/raw/branch/master/';
@@ -511,42 +511,45 @@ class common
 		return is_object($success);
 	}
 
-	/**
-	 * Sauvegarde des données
-	 * @param array $keys Clé(s) des données
-	 */
-	public function setData($keys = [])
-	{
-		// Pas d'enregistrement lorsqu'une notice est présente ou tableau transmis vide
-		if (
-			!empty(self::$inputNotices)
-			or empty($keys)
-		) {
-			return false;
-		}
-
-		// Empêcher la sauvegarde d'une donnée nulle.
-		if (gettype($keys[count($keys) - 1]) === NULL) {
-			return false;
-		}
-
-		// Initialisation du retour en cas d'erreur de descripteur
-		$success = false;
-		// Construire la requête dans la base inf à 1 retourner toute la base
-		if (count($keys) >= 1) {
-			// Descripteur de la base
-			$db = $this->dataFiles[$keys[0]];
-			$query = $keys[0];
-			// Construire la requête
-			// Ne pas tenir compte du dernier élément qui une une value donc <
-			for ($i = 1; $i < count($keys) - 1; $i++) {
-				$query .= '.' . $keys[$i];
-			}
-			// Appliquer la modification, le dernier élément étant la donnée à sauvegarder
-			$success = is_object($db->set($query, $keys[count($keys) - 1], true));
-		}
-		return $success;
+/**
+ * Sauvegarde des données
+ * @param array $keys Clé(s) des données
+ * @param bool $save Indique si le fichier doit être sauvegardé après modification (par défaut true)
+ * @return bool Succès de l'opération
+ */
+public function setData($keys = [], $save = true)
+{
+	// Pas d'enregistrement lorsqu'une notice est présente ou tableau transmis vide
+	if (
+		!empty(self::$inputNotices)
+		or empty($keys)
+	) {
+		return false;
 	}
+
+	// Empêcher la sauvegarde d'une donnée nulle.
+	if (gettype($keys[count($keys) - 1]) === NULL) {
+		return false;
+	}
+
+	// Initialisation du retour en cas d'erreur de descripteur
+	$success = false;
+	// Construire la requête dans la base inf à 1 retourner toute la base
+	if (count($keys) >= 1) {
+		// Descripteur de la base
+		$db = $this->dataFiles[$keys[0]];
+		$query = $keys[0];
+		// Construire la requête
+		// Ne pas tenir compte du dernier élément qui une une value donc <
+		for ($i = 1; $i < count($keys) - 1; $i++) {
+			$query .= '.' . $keys[$i];
+		}
+		// Appliquer la modification, le dernier élément étant la donnée à sauvegarder
+		$success = is_object($db->set($query, $keys[count($keys) - 1], $save));
+	}
+	return $success;
+}
+
 
 	/**
 	 * Accède aux données
@@ -656,15 +659,32 @@ class common
 
 	public function initDB($module, $path = '')
 	{
-		// Instanciation de la classe des entrées / sorties
-		// Constructeur  JsonDB;
-		$this->dataFiles[$module] = new \Prowebcraft\JsonDb([
+		// Chemin complet vers le fichier JSON
+		$dir = empty($path) ? self::DATA_DIR : self::DATA_DIR . $path . '/';
+		$config = [
 			'name' => $module . '.json',
-			'dir' => empty($path) ? self::DATA_DIR : self::DATA_DIR . $path . '/',
-			'backup' => file_exists('site/data/.backup')
-		]);
+			'dir' => $dir,
+			'backup' => file_exists('site/data/.backup'),
+			'update' => false,
+		];
+	
+		// Instanciation de l'objet et stockage dans dataFiles
+		$this->dataFiles[$module] = new \Prowebcraft\JsonDb($config);
 
 	}
+	
+
+	/**
+	 * Cette fonction est liée à saveData
+	 * @param mixed $module
+	 * @return void
+	 */
+	public function saveDB($module): void
+	{
+		$db = $this->dataFiles[$module];		
+		$db->save();
+	}
+
 
 	/**
 	 * Initialisation des données sur un contenu ou la page d'accueil

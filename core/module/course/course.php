@@ -798,9 +798,11 @@ class course extends common
                     $this->getData(['user', $keyPost]) !== null
                     && $this->getData(['enrolment', $courseId, $keyPost]) === null
                 ) {
-                    $this->setData(['enrolment', $courseId, $keyPost, 'history', array()]);
+                    $this->setData(['enrolment', $courseId, $keyPost, 'history', array()], false);
                 }
             }
+            // Sauvegarde la base manuellement
+			$this->saveDB('enrolment');
         }
 
         // Liste des groupes et des profils
@@ -1154,11 +1156,6 @@ class course extends common
                 ? helper::baseUrl() . $this->getData(['enrolment', $courseId, $userId, 'lastPageView'])
                 : helper::baseUrl();
 
-            /*            
-    $essage = $this->getData(['enrolment', $courseId, $userId, 'datePageView']) 
-        ? $this->getData(['enrolment', $courseId, $userId, 'datePageView']) 
-        : '';
-        */
             if ($this->getData(['course', $courseId, 'access']) === self::COURSE_ACCESS_DATE) {
                 $to = helper::dateUTF8('%d %B %Y', $this->getData(['course', $courseId, 'closingDate']), self::$i18nUI) . helper::translate(' à ') . helper::dateUTF8('%H:%M', $this->getData(['course', $courseId, 'closingDate']), self::$i18nUI);
                 $message .= sprintf(helper::translate('Ce contenu ferme le %s'), $to);
@@ -1390,7 +1387,7 @@ class course extends common
                     if (!empty($userValue['history'])) {
                         $maxTime = max($userValue['history']);
                         $lastPageId = array_search($maxTime, $userValue['history']);
-                        $this->setData(['enrolment', $courseId, $userId, 'lastPageView', $lastPageId]);
+                        $this->setData(['enrolment', $courseId, $userId, 'lastPageView', $lastPageId], false);
                         $this->setData(['enrolment', $courseId, $userId, 'datePageView', $maxTime]);
                     }
                 }

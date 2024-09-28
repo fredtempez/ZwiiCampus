@@ -423,7 +423,7 @@ class core extends common
 			)
 		) {
 			// Stocke la dernière page vue et sa date de consultation
-			$this->setData(['enrolment', common::$siteContent, $this->getUser('id'), 'lastPageView', $this->getUrl(0)]);
+			$this->setData(['enrolment', common::$siteContent, $this->getUser('id'), 'lastPageView', $this->getUrl(0)], false);
 			$this->setData(['enrolment', common::$siteContent, $this->getUser('id'), 'datePageView', time()]);
 
 			// Stocke le rapport en CSV
@@ -541,7 +541,7 @@ class core extends common
 			$this->isConnected() === true
 			&& $this->getUser('id')
 		) {
-			$this->setData(['user', $this->getUser('id'), 'accessUrl', $this->getUrl()]);
+			$this->setData(['user', $this->getUser('id'), 'accessUrl', $this->getUrl()], false);
 			$this->setData(['user', $this->getUser('id'), 'accessTimer', time()]);
 		}
 		// Breadcrumb
