@@ -620,7 +620,7 @@ public function setData($keys = [], $save = true)
 	 * Écrit les données dans un fichier avec plusieurs tentatives d'écriture et verrouillage
 	 *
 	 * @param string $filename Le nom du fichier
-	 * @param array $data Les données à écrire dans le fichier
+	 * @param string $data Les données à écrire dans le fichier
 	 * @param int $flags Les drapeaux optionnels à passer à la fonction $this->secure_file_put_contents
 	 * @return bool True si l'écriture a réussi, sinon false
 	 */
@@ -630,32 +630,30 @@ public function setData($keys = [], $save = true)
 		// Initialise le compteur de tentatives
 		$attempts = 0;
 
-		// Convertit les données en chaîne de caractères
-		$serialized_data = serialize($data);
-
 		// Vérifie la longueur des données
-		$data_length = strlen($serialized_data);
+		$data_length = strlen($data);
 
 		// Effectue jusqu'à 5 tentatives d'écriture
 		while ($attempts < 5) {
 			// Essaye d'écrire les données dans le fichier avec verrouillage exclusif
 			$write_result = file_put_contents($filename, $data, LOCK_EX | $flags);
 
+			$now = \DateTime::createFromFormat('U.u', microtime(true));
+            file_put_contents("tmplog.txt", '[SecurePut][' . $now->format('H:i:s.u') . ']' . "\r\n", FILE_APPEND);
+
 			// Vérifie si l'écriture a réussi
 			if ($write_result !== false && $write_result === $data_length) {
 				// Sort de la boucle si l'écriture a réussi
-				return true;
+				break;
 			}
 
 			// Incrémente le compteur de tentatives
 			$attempts++;
+			sleep(1);
 		}
-
-		// Échec de l'écriture après plusieurs tentatives
-		return false;
+		// Etat de l'écriture
+		return ($attempts < 5);
 	}
-
-
 
 	public function initDB($module, $path = '')
 	{
