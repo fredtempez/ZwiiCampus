@@ -393,8 +393,6 @@ class page extends common
 						foreach ($this->getHierarchy($this->getUrl(2), null) as $childrenPageId) {
 							$this->setData(['page', $childrenPageId, 'parentPageId', $pageId], false);
 						}
-						// Sauvegarde la base manuellement
-						$this->saveDB('page');
 						// Change l'id de page dans les données des modules
 						if ($this->getData(['module', $this->getUrl(2)]) !== null) {
 							$this->setData(['module', $pageId, $this->getData(['module', $this->getUrl(2)])], false);
