@@ -974,7 +974,7 @@ class config extends common
 		}
 	}
 
-		/**
+	/**
 	 * Stocke la variable dans les paramètres de l'utilisateur pour activer la tab à sa prochaine visite
 	 * @return never
 	 */

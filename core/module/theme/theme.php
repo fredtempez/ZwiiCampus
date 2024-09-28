@@ -507,21 +507,23 @@ class theme extends common
 					'featureContent' => $featureContent,
 					'featureFiles' => $files
 				]
-			]);
+			], false);
 			// Modification de la position du menu selon la position de la bannière
 			if ($this->getData(['theme', 'header', 'position']) == 'site') {
-				$this->setData(['theme', 'menu', 'position', str_replace('body-', 'site-', $this->getData(['theme', 'menu', 'position']))]);
+				$this->setData(['theme', 'menu', 'position', str_replace('body-', 'site-', $this->getData(['theme', 'menu', 'position']))], false);
 			}
 			if ($this->getData(['theme', 'header', 'position']) == 'body') {
-				$this->setData(['theme', 'menu', 'position', str_replace('site-', 'body-', $this->getData(['theme', 'menu', 'position']))]);
+				$this->setData(['theme', 'menu', 'position', str_replace('site-', 'body-', $this->getData(['theme', 'menu', 'position']))], false);
 			}
 			// Menu accroché à la bannière qui devient cachée
 			if (
 				$this->getData(['theme', 'header', 'position']) == 'hide' &&
 				in_array($this->getData(['theme', 'menu', 'position']), ['body-first', 'site-first', 'body-first', 'site-second'])
 			) {
-				$this->setData(['theme', 'menu', 'position', 'site']);
+				$this->setData(['theme', 'menu', 'position', 'site'], false);
 			}
+			// Sauvegarde la base manuellement
+			$this->saveDB(module: 'theme');
 			// Valeurs en sortie
 			$this->addOutput([
 				'notification' => helper::translate('Modifications enregistrées'),
@@ -636,11 +638,11 @@ class theme extends common
 		// Polices liées aux thèmes des espaces
 		foreach ($this->getData(['course']) as $courseId => $courseValue) {
 			$theme = json_decode(file_get_contents(self::DATA_DIR . $courseId . '/theme.json'), true);
-			$fonts['Bannière ('. $courseId .')'] = $theme['theme']['header']['font'];
-			$fonts['Menu ('. $courseId .')'] = $theme['theme']['menu']['font'];
-			$fonts['Titre ('. $courseId .')'] = $theme['theme']['title']['font'];
-			$fonts['Texte ('. $courseId .')'] = $theme['theme']['text']['font'];
-			$fonts['Pied de page ('. $courseId .')'] = $theme['theme']['footer']['font'];
+			$fonts['Bannière (' . $courseId . ')'] = $theme['theme']['header']['font'];
+			$fonts['Menu (' . $courseId . ')'] = $theme['theme']['menu']['font'];
+			$fonts['Titre (' . $courseId . ')'] = $theme['theme']['title']['font'];
+			$fonts['Texte (' . $courseId . ')'] = $theme['theme']['text']['font'];
+			$fonts['Pied de page (' . $courseId . ')'] = $theme['theme']['footer']['font'];
 		}
 
 		// Récupérer le détail des fontes installées
@@ -658,7 +660,7 @@ class theme extends common
 			if (is_array($typeValue)) {
 				foreach ($typeValue as $fontId => $fontValue) {
 					// Recherche les correspondances
-					$result = array_filter($fonts, function($value) use ($fontId) {
+					$result = array_filter($fonts, function ($value) use ($fontId) {
 						return $value == $fontId;
 					});
 					$keyResults = array_keys($result);
@@ -929,7 +931,7 @@ class theme extends common
 					'fontWeight' => $this->getInput('themeTitleFontWeight'),
 					'textTransform' => $this->getInput('themeTitleTextTransform')
 				]
-			]);
+			], false);
 			$this->setData([
 				'theme',
 				'text',
@@ -939,7 +941,7 @@ class theme extends common
 					'textColor' => $this->getInput('themeTextTextColor'),
 					'linkColor' => $this->getInput('themeTextLinkColor')
 				]
-			]);
+			], false);
 			$this->setData([
 				'theme',
 				'site',
@@ -950,14 +952,14 @@ class theme extends common
 					'width' => $this->getInput('themeSiteWidth'),
 					'margin' => $this->getInput('themeSiteMargin', helper::FILTER_BOOLEAN)
 				]
-			]);
+			], false);
 			$this->setData([
 				'theme',
 				'button',
 				[
 					'backgroundColor' => $this->getInput('themeButtonBackgroundColor')
 				]
-			]);
+			], false);
 			$this->setData([
 				'theme',
 				'block',

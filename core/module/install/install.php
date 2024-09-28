@@ -158,9 +158,9 @@ class install extends common
 				);
 
 				// Sauvegarder la configuration du Proxy
-				$this->setData(['config', 'proxyType', $this->getInput('installProxyType')]);
-				$this->setData(['config', 'proxyUrl', $this->getInput('installProxyUrl')]);
-				$this->setData(['config', 'proxyPort', $this->getInput('installProxyPort', helper::FILTER_INT)]);
+				$this->setData(['config', 'proxyType', $this->getInput('installProxyType')], false);
+				$this->setData(['config', 'proxyUrl', $this->getInput('installProxyUrl')], false);
+				$this->setData(['config', 'proxyPort', $this->getInput('installProxyPort', helper::FILTER_INT)], false);
 
 				// Images exemples livrées dans tous les cas
 				try {

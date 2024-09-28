@@ -391,11 +391,13 @@ class page extends common
 						$pageId = helper::increment($pageId, self::$moduleIds);
 						// Met à jour les enfants
 						foreach ($this->getHierarchy($this->getUrl(2), null) as $childrenPageId) {
-							$this->setData(['page', $childrenPageId, 'parentPageId', $pageId]);
+							$this->setData(['page', $childrenPageId, 'parentPageId', $pageId], false);
 						}
+						// Sauvegarde la base manuellement
+						$this->saveDB('page');
 						// Change l'id de page dans les données des modules
 						if ($this->getData(['module', $this->getUrl(2)]) !== null) {
-							$this->setData(['module', $pageId, $this->getData(['module', $this->getUrl(2)])]);
+							$this->setData(['module', $pageId, $this->getData(['module', $this->getUrl(2)])], false);
 							$this->deleteData(['module', $this->getUrl(2)]);
 							// Renommer le dossier du module
 							$moduleId = $this->getData(['page', $this->getUrl(2), 'moduleId']);
@@ -406,8 +408,10 @@ class page extends common
 								copy($modulesData[$moduleId]['dataDirectory'] . $this->getUrl(2), $modulesData[$moduleId]['dataDirectory'] . $pageId);
 								$this->deleteDir($modulesData[$moduleId]['dataDirectory'] . $this->getUrl(2));
 								// Mettre à jour le nom de la feuille de style
-								$this->setData(['module', $pageId, 'theme', 'style', $modulesData[$moduleId]['dataDirectory'] . $pageId]);
+								$this->setData(['module', $pageId, 'theme', 'style', $modulesData[$moduleId]['dataDirectory'] . $pageId], false);
 							}
+							// Sauvegarde la base manuellement
+							$this->saveDB('module');
 						}
 						// Met à jour les historiques des utilisateurs
 						foreach ($this->getData(['enrolment', self::$siteContent]) as $userId => $userData) {
@@ -418,14 +422,17 @@ class page extends common
 							) {
 								// Remplacer l'ancienne ID par la nouvelle
 								$datas = $this->getData(['enrolment', self::$siteContent, $userId, 'history', $this->getUrl(2)]);
-								$this->setData(['enrolment', self::$siteContent, $userId, 'history', $pageId, $datas]);
+								$this->setData(['enrolment', self::$siteContent, $userId, 'history', $pageId, $datas], false);
 								$this->deleteData(['enrolment', self::$siteContent, $userId, 'history', $this->getUrl(2)]);
 							}
 							// Mettre à jour la dernière page vue si nécessaire
 							if ($this->getData(['enrolment', self::$siteContent, $userId, 'lastPageView']) === $this->getUrl(2)) {
-								$this->setData(['enrolment', self::$siteContent, $userId, 'lastPageView', $pageId]);
+								$this->setData(['enrolment', self::$siteContent, $userId, 'lastPageView', $pageId], false);
 							}
 						}
+						// Sauvegarde la base manuellement
+						$this->saveDB('enrolment');
+
 						// Met à jour la homePage si nécessaire
 						if ($this->getUrl(2) === $this->getData(['course', self::$siteContent, 'homePageId'])) {
 							$this->setData(['course', self::$siteContent, 'homePageId', $pageId]);
@@ -433,7 +440,7 @@ class page extends common
 
 						// Si la page correspond à la page d'accueil, change l'id dans la configuration du site
 						if ($this->getData(['config', 'homePageId']) === $this->getUrl(2)) {
-							$this->setData(['config', 'homePageId', $pageId]);
+							$this->setData(['config', 'homePageId', $pageId], false);
 						}
 					}
 					// Supprime les données du module en cas de changement de module
@@ -449,20 +456,22 @@ class page extends common
 					}
 					// Traitement des pages spéciales affectées dans la config :
 					if ($this->getUrl(2) === $this->getData(['config', 'legalPageId'])) {
-						$this->setData(['config', 'legalPageId', $pageId]);
+						$this->setData(['config', 'legalPageId', $pageId], false);
 					}
 					if ($this->getUrl(2) === $this->getData(['config', 'searchPageId'])) {
-						$this->setData(['config', 'searchPageId', $pageId]);
+						$this->setData(['config', 'searchPageId', $pageId], false);
 					}
 					if ($this->getUrl(2) === $this->getData(['config', 'page404'])) {
-						$this->setData(['config', 'page404', $pageId]);
+						$this->setData(['config', 'page404', $pageId], false);
 					}
 					if ($this->getUrl(2) === $this->getData(['config', 'page403'])) {
-						$this->setData(['config', 'page403', $pageId]);
+						$this->setData(['config', 'page403', $pageId], false);
 					}
 					if ($this->getUrl(2) === $this->getData(['config', 'page302'])) {
-						$this->setData(['config', 'page302', $pageId]);
+						$this->setData(['config', 'page302', $pageId], false);
 					}
+					// Sauvegarde la base manuellement
+					$this->saveDB(module: 'config');
 					// Si la page est une page enfant, actualise les positions des autres enfants du parent, sinon actualise les pages sans parents
 					$lastPosition = 1;
 					$hierarchy = $this->getInput('pageEditParentPageId') ? $this->getHierarchy($this->getInput('pageEditParentPageId')) : array_keys($this->getHierarchy());
@@ -481,11 +490,12 @@ class page extends common
 								$lastPosition++;
 							}
 							// Change la position
-							$this->setData(['page', $hierarchyPageId, 'position', $lastPosition]);
+							$this->setData(['page', $hierarchyPageId, 'position', $lastPosition], false);
 							// Incrémente pour la prochaine position
 							$lastPosition++;
 						}
 					}
+
 					if ($this->getinput('pageEditBlock') !== 'bar') {
 						$barLeft = $this->getinput('pageEditBarLeft');
 						$barRight = $this->getinput('pageEditBarRight');
@@ -506,7 +516,7 @@ class page extends common
 					) {
 						foreach ($this->getHierarchy($pageId) as $parentId => $childId) {
 							if ($this->getData(['page', $childId, 'parentPageId']) === $pageId) {
-								$this->setData(['page', $childId, 'position', 0]);
+								$this->setData(['page', $childId, 'position', 0], false);
 							}
 						}
 					}
@@ -515,17 +525,17 @@ class page extends common
 					if ($this->getinput('pageEditBlock') === 'bar') {
 						foreach ($this->getHierarchy() as $eachPageId => $parentId) {
 							if ($this->getData(['page', $eachPageId, 'barRight']) === $this->getUrl(2)) {
-								$this->setData(['page', $eachPageId, 'barRight', $pageId]);
+								$this->setData(['page', $eachPageId, 'barRight', $pageId], false);
 							}
 							if ($this->getData(['page', $eachPageId, 'barLeft']) === $this->getUrl(2)) {
-								$this->setData(['page', $eachPageId, 'barLeft', $pageId]);
+								$this->setData(['page', $eachPageId, 'barLeft', $pageId], false);
 							}
 							foreach ($parentId as $childId) {
 								if ($this->getData(['page', $childId, 'barRight']) === $this->getUrl(2)) {
-									$this->setData(['page', $childId, 'barRight', $pageId]);
+									$this->setData(['page', $childId, 'barRight', $pageId], false);
 								}
 								if ($this->getData(['page', $childId, 'barLeft']) === $this->getUrl(2)) {
-									$this->setData(['page', $childId, 'barLeft', $pageId]);
+									$this->setData(['page', $childId, 'barLeft', $pageId], false);
 								}
 							}
 						}

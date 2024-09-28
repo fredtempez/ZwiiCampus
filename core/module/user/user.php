@@ -1150,12 +1150,12 @@ class user extends common
 
 		// Exclure les espaces des cours
 		/*
-									  foreach (array_keys($this->getData(['course'])) as $courseId) {
-										  self::$sharePath = array_filter(self::$sharePath, function ($key) use ($courseId) {
-											  return strpos($key, $courseId) === false;
-										  });
-									  }
-									  */
+														foreach (array_keys($this->getData(['course'])) as $courseId) {
+															self::$sharePath = array_filter(self::$sharePath, function ($key) use ($courseId) {
+																return strpos($key, $courseId) === false;
+															});
+														}
+														*/
 
 		self::$sharePath = array_flip(self::$sharePath);
 		self::$sharePath = array_merge(['none' => 'Aucun Accès'], self::$sharePath);
@@ -1384,13 +1384,12 @@ class user extends common
 					]);
 				}
 			}
+			// Sauvegarde la base manuellement
+			$this->saveDB(module: 'user');
 		}
 
 		// Journalisation
 		$this->saveLog($logStatus);
-
-		// Sauvegarde la base manuellement
-		$this->saveDB('user');
 
 		// Stockage des cookies
 		if (!empty($_COOKIE['ZWII_USER_ID'])) {
@@ -1587,7 +1586,7 @@ class user extends common
 									"accessCsrf" => null,
 									'tags' => $item['tags']
 								]
-							]);
+							], false);
 							// Icône de notification
 							$item['notification'] = $create ? template::ico('check') : template::ico('cancel');
 							// Envoi du mail
@@ -1628,6 +1627,8 @@ class user extends common
 					}
 
 				}
+				// Sauvegarde la base manuellement
+				$this->saveDB(module: 'user');
 				if (empty(self::$users)) {
 					$notification = helper::translate('Rien à importer, erreur de format ou fichier incorrect');
 					$success = false;
@@ -1697,10 +1698,12 @@ class user extends common
 				if (
 					$this->getData(['user', $keyPost]) !== null
 				) {
-					$this->setData(['user', $keyPost, 'tags', $newTags]);
+					$this->setData(['user', $keyPost, 'tags', $newTags], false);
 					$count += 1;
 				}
 			}
+			// Sauvegarde la base manuellement
+			$this->saveDB(module: 'user');
 			// Valeurs en sortie
 			$this->addOutput([
 				'redirect' => helper::baseUrl() . 'user/tag',

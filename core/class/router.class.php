@@ -32,8 +32,6 @@ class core extends common
 			}
 			// Date de la dernière suppression
 			$this->setData(['core', 'lastClearTmp', $lastClearTmp]);
-			// Enregistre les données
-			//$this->SaveData();
 		}
 		// Backup automatique des données
 		$lastBackup = mktime(0, 0, 0);
