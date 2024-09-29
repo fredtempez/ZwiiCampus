@@ -203,7 +203,7 @@ class install extends common
 				$this->copyDir('core/module/install/ressource/i18n', self::I18N_DIR);
 
 				// Fixe l'adresse from pour les envois d'email
-				$this->setData(['config', 'smtp', 'from', 'no-reply@' . str_replace('www.', '', $_SERVER['HTTP_HOST'])]);
+				$this->setData(['config', 'smtp', 'from', 'no-reply@' . str_replace('www.', '', $_SERVER['HTTP_HOST'])], false);
 
 				// Valeurs en sortie
 				$this->addOutput([
@@ -212,9 +212,10 @@ class install extends common
 					'state' => true
 				]);
 			}
+			// Force la sauvegarde
+			$this->saveDB('config');
 
 			// Affichage du formulaire
-
 			// Valeurs en sortie
 			$this->addOutput([
 				'display' => self::DISPLAY_LAYOUT_LIGHT,
