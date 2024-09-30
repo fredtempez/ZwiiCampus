@@ -25,6 +25,9 @@ $siteId = md5($_SERVER['SERVER_NAME'] . $_SERVER['SCRIPT_FILENAME']); // Ou util
 // Change le nom de la session en fonction de cet identifiant
 session_name('zwii_session_' . $siteId);
 
+// Récupère dynamiquement le chemin du dossier dans lequel le script est exécuté
+$scriptPath = dirname($_SERVER['SCRIPT_NAME']);
+
 // Si le chemin est vide (ce qui peut arriver si le site est à la racine), définis-le comme '/'
 if ($scriptPath === '/' || $scriptPath === '\\' || $scriptPath === '.') {
     $scriptPath = '/';

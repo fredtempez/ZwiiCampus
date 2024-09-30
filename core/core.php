@@ -320,12 +320,31 @@ class common
 	public function __construct()
 	{
 
+		// Construct cache
+		if (isset($GLOBALS['common_construct'])) {
+			$this->input['_POST'] = $GLOBALS['common_construct']['input']['_POST'];
+			$this->input['_COOKIE'] = $GLOBALS['common_construct']['input']['_COOKIE'];
+			self::$siteContent = $GLOBALS['common_construct']['siteContent'];
+			$this->dataFiles = $GLOBALS['common_construct']['dataFiles'];
+			$this->configFiles = $GLOBALS['common_construct']['configFiles'];
+			$this->user = $GLOBALS['common_construct']['user'];
+			self::$i18nUI = $GLOBALS['common_construct']['i18nUI'];
+			$this->hierarchy = $GLOBALS['common_construct']['hierarchy'];
+			$this->url = $GLOBALS['common_construct']['url'];
+			self::$dialog = $GLOBALS['common_construct']['dialog'];
+			return;
+		}
+
 		// Extraction des données http
 		if (isset($_POST)) {
 			$this->input['_POST'] = $_POST;
+			// Cache
+			$GLOBALS['common_construct']['input']['_POST'] = $this->input['_POST'];
 		}
 		if (isset($_COOKIE)) {
 			$this->input['_COOKIE'] = $_COOKIE;
+			// Cache
+			$GLOBALS['common_construct']['input']['_COOKIE'] = $this->input['_COOKIE'];
 		}
 
 		// Déterminer le contenu du site
@@ -336,16 +355,23 @@ class common
 			$_SESSION['ZWII_SITE_CONTENT'] = 'home';
 			self::$siteContent = 'home';
 		}
+		// Cache
+		$GLOBALS['common_construct']['siteContent'] = self::$siteContent;
 
 		// Instanciation de la classe des entrées / sorties
 		// Les fichiers de configuration
 		foreach ($this->configFiles as $module => $value) {
 			$this->initDB($module);
 		}
+		// Cache
+		$GLOBALS['common_construct']['configFiles'] = $this->configFiles;
 		// Les fichiers des contenus
 		foreach ($this->contentFiles as $module => $value) {
 			$this->initDB($module, self::$siteContent);
 		}
+		// Cache
+		$GLOBALS['common_construct']['dataFiles'] = $this->dataFiles;
+
 
 		// Installation fraîche, initialisation de la configuration inexistante
 		// Nécessaire pour le constructeur
@@ -371,6 +397,8 @@ class common
 		if ($this->user === []) {
 			$this->user = $this->getData(['user', $this->getInput('ZWII_USER_ID')]);
 		}
+		// Cache
+		$GLOBALS['common_construct']['user'] = $this->user;
 
 		// Langue de l'administration si le user est connecté
 		if ($this->getData(['user', $this->getUser('id'), 'language'])) {
@@ -395,11 +423,15 @@ class common
 		// Stocker l'courseId pour le thème de TinyMCE
 		//setcookie('ZWII_SITE_CONTENT', self::$siteContent, time() + 3600, '', '', false, false);
 		setlocale(LC_ALL, self::$i18nUI);
+		// Cache
+		$GLOBALS['common_construct']['i18nUI'] = self::$i18nUI;
 
 		// Construit la liste des pages parents/enfants
 		if ($this->hierarchy['all'] === []) {
 			$this->buildHierarchy();
 		}
+		// Cache
+		$GLOBALS['common_construct']['hierarchy'] = $this->hierarchy;
 
 		// Construit l'url
 		if ($this->url === '') {
@@ -409,6 +441,8 @@ class common
 				$this->url = $this->homePageId();
 			}
 		}
+		// Cache
+		$GLOBALS['common_construct']['url'] = $this->url;
 
 		// Chargement des dialogues
 		if (!file_exists(self::I18N_DIR . self::$i18nUI . '.json')) {
@@ -428,6 +462,8 @@ class common
 				self::$dialog = array_merge(self::$dialog, $d);
 			}
 		}
+		// Cache
+		$GLOBALS['common_construct']['dialog'] = self::$dialog;
 
 		// Données de proxy
 		$proxy = $this->getData(['config', 'proxyType']) . $this->getData(['config', 'proxyUrl']) . ':' . $this->getData(['config', 'proxyPort']);
@@ -451,7 +487,7 @@ class common
 		}
 
 		// Mise à jour des données core
-		include ('core/include/update.inc.php');
+		include('core/include/update.inc.php');
 
 	}
 
@@ -511,44 +547,44 @@ class common
 		return is_object($success);
 	}
 
-/**
- * Sauvegarde des données
- * @param array $keys Clé(s) des données
- * @param bool $save Indique si le fichier doit être sauvegardé après modification (par défaut true)
- * @return bool Succès de l'opération
- */
-public function setData($keys = [], $save = true)
-{
-	// Pas d'enregistrement lorsqu'une notice est présente ou tableau transmis vide
-	if (
-		!empty(self::$inputNotices)
-		or empty($keys)
-	) {
-		return false;
-	}
-
-	// Empêcher la sauvegarde d'une donnée nulle.
-	if (gettype($keys[count($keys) - 1]) === NULL) {
-		return false;
-	}
-
-	// Initialisation du retour en cas d'erreur de descripteur
-	$success = false;
-	// Construire la requête dans la base inf à 1 retourner toute la base
-	if (count($keys) >= 1) {
-		// Descripteur de la base
-		$db = $this->dataFiles[$keys[0]];
-		$query = $keys[0];
-		// Construire la requête
-		// Ne pas tenir compte du dernier élément qui une une value donc <
-		for ($i = 1; $i < count($keys) - 1; $i++) {
-			$query .= '.' . $keys[$i];
+	/**
+	 * Sauvegarde des données
+	 * @param array $keys Clé(s) des données
+	 * @param bool $save Indique si le fichier doit être sauvegardé après modification (par défaut true)
+	 * @return bool Succès de l'opération
+	 */
+	public function setData($keys = [], $save = true)
+	{
+		// Pas d'enregistrement lorsqu'une notice est présente ou tableau transmis vide
+		if (
+			!empty(self::$inputNotices)
+			or empty($keys)
+		) {
+			return false;
 		}
-		// Appliquer la modification, le dernier élément étant la donnée à sauvegarder
-		$success = is_object($db->set($query, $keys[count($keys) - 1], $save));
+
+		// Empêcher la sauvegarde d'une donnée nulle.
+		if (gettype($keys[count($keys) - 1]) === NULL) {
+			return false;
+		}
+
+		// Initialisation du retour en cas d'erreur de descripteur
+		$success = false;
+		// Construire la requête dans la base inf à 1 retourner toute la base
+		if (count($keys) >= 1) {
+			// Descripteur de la base
+			$db = $this->dataFiles[$keys[0]];
+			$query = $keys[0];
+			// Construire la requête
+			// Ne pas tenir compte du dernier élément qui une une value donc <
+			for ($i = 1; $i < count($keys) - 1; $i++) {
+				$query .= '.' . $keys[$i];
+			}
+			// Appliquer la modification, le dernier élément étant la donnée à sauvegarder
+			$success = is_object($db->set($query, $keys[count($keys) - 1], $save));
+		}
+		return $success;
 	}
-	return $success;
-}
 
 
 	/**
@@ -639,7 +675,7 @@ public function setData($keys = [], $save = true)
 			$write_result = file_put_contents($filename, $data, LOCK_EX | $flags);
 
 			// $now = \DateTime::createFromFormat('U.u', microtime(true));
-            // file_put_contents("tmplog.txt", '[SecurePut][' . $now->format('H:i:s.u') . ']' . "\r\n", FILE_APPEND);
+			// file_put_contents("tmplog.txt", '[SecurePut][' . $now->format('H:i:s.u') . ']' . "\r\n", FILE_APPEND);
 
 			// Vérifie si l'écriture a réussi
 			if ($write_result !== false && $write_result === $data_length) {
@@ -665,12 +701,12 @@ public function setData($keys = [], $save = true)
 			'backup' => file_exists('site/data/.backup'),
 			'update' => false,
 		];
-	
+
 		// Instanciation de l'objet et stockage dans dataFiles
 		$this->dataFiles[$module] = new \Prowebcraft\JsonDb($config);
 
 	}
-	
+
 
 	/**
 	 * Cette fonction est liée à saveData
@@ -679,7 +715,7 @@ public function setData($keys = [], $save = true)
 	 */
 	public function saveDB($module): void
 	{
-		$db = $this->dataFiles[$module];		
+		$db = $this->dataFiles[$module];
 		$db->save();
 	}
 
@@ -695,7 +731,7 @@ public function setData($keys = [], $save = true)
 	{
 
 		// Tableau avec les données vierges
-		require_once ('core/module/install/ressource/defaultdata.php');
+		require_once('core/module/install/ressource/defaultdata.php');
 
 		// L'arborescence
 		if (!file_exists(self::DATA_DIR . $path)) {
@@ -730,7 +766,7 @@ public function setData($keys = [], $save = true)
 	public function saveConfig($module)
 	{
 		// Tableau avec les données vierges
-		require_once ('core/module/install/ressource/defaultdata.php');
+		require_once('core/module/install/ressource/defaultdata.php');
 		// Installation des données des autres modules cad theme profil font config, admin et core
 		$this->setData([$module, init::$defaultData[$module]]);
 		common::$coreNotices[] = $module;
@@ -1036,9 +1072,10 @@ public function setData($keys = [], $save = true)
 
 	/**
 	 * @return bool l'utilisateur est connecté true sinon false
-	 */ 
-	public function isConnected() {
-		return ( 
+	 */
+	public function isConnected()
+	{
+		return (
 			!empty($this->getUser('authKey'))
 			&&
 			$this->getUser('authKey') === $this->getInput('ZWII_AUTH_KEY'));
