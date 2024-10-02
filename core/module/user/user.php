@@ -1150,12 +1150,12 @@ class user extends common
 
 		// Exclure les espaces des cours
 		/*
-														foreach (array_keys($this->getData(['course'])) as $courseId) {
-															self::$sharePath = array_filter(self::$sharePath, function ($key) use ($courseId) {
-																return strpos($key, $courseId) === false;
-															});
-														}
-														*/
+																		  foreach (array_keys($this->getData(['course'])) as $courseId) {
+																			  self::$sharePath = array_filter(self::$sharePath, function ($key) use ($courseId) {
+																				  return strpos($key, $courseId) === false;
+																			  });
+																		  }
+																		  */
 
 		self::$sharePath = array_flip(self::$sharePath);
 		self::$sharePath = array_merge(['none' => 'Aucun Accès'], self::$sharePath);
@@ -1438,11 +1438,27 @@ class user extends common
 			// Id unique incorrecte
 			or $this->getUrl(3) !== md5(json_encode($this->getData(['user', $this->getUrl(2)])))
 		) {
+			$this->saveLog(
+				' Erreur de réinitialisation de mot de passe ' . $this->getUrl(2) .
+				' Compte : ' . $this->getData(['user', $this->getUrl(2)]) .
+				' Temps : ' . $this->getData(['user', $this->getUrl(2), 'forgot']) + 86400 < time() .
+				' Clé : ' . $this->getUrl(3) !== md5(json_encode($this->getData(['user', $this->getUrl(2)])))
+			);
+			// Message d'erreur en cas de problème de réinitialisation de mot de passe
+			$message = $this->getData(['user', $this->getUrl(2)]) === null
+				? ' Utilisateur inconnu '
+				: '';
+			$message = $this->getData(['user', $this->getUrl(2), 'forgot']) + 86400 < time()
+				? ' Temps dépassé '
+				: $message;
+			$message = $this->getUrl(3) !== md5(json_encode($this->getData(['user', $this->getUrl(2)])))
+				? ' Clé invalide '
+				: $message;
 
 			// Valeurs en sortie
 			$this->addOutput([
 				'redirect' => helper::baseurl(),
-				'notification' => helper::translate('Impossible de réinitialiser le mot de passe de ce compte !'),
+				'notification' => helper::translate('Impossible de réinitialiser le mot de passe de ce compte !') . $message,
 				'state' => false
 				//'access' => false
 			]);
