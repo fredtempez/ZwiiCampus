@@ -1125,23 +1125,23 @@ class layout extends common
                         }
                         // Modules installés
                         $infoModules = helper::getModules();
-                        var_dump($infoModules);
                         // Recherche de mise à jour des modules
                         $store = plugin::getStore();
                         if (is_array($store)) {
-                            // Parcourir les données des modules disponibles en ligne
+                            // Parcourir les données des modules du store
                             foreach ($store as $key => $value) {
                                 if (empty($key)) {
                                     continue;
                                 }
-
                                 // Mise à jour d'un module
-                                if (isset($infoModules[$key])
-                                    && 
-                                $value['version']  >= $infoModules[$key]['version'] ) {
+                                // Le module est installé et une mise à jour est en ligne
+                                if (
+                                    isset($infoModules[$key])
+                                    &&
+                                    version_compare($infoModules[$key]['version'], $value['version'], '<')
+                                ) {
                                     $this->setData(['core', 'updateModuleAvailable', true], false);
                                 }
-
                             }
                         }
                         // Sauvegarde la base manuellement
