@@ -12,12 +12,28 @@
 		<?php endif; ?>
 	</div>
 	<div class="col6 newsDate textAlignRight">
-		<!-- bloc signature et date -->
+		<!-- bloc signature -->
 		<?php echo template::ico('user'); ?>
-		<?php echo $module::$articleSignature . ' - '; ?>
-		<?php echo template::ico('calendar-empty'); ?>
-		<?php echo helper::dateUTF8('%d %B %Y', $this->getData(['module', $this->getUrl(0), 'posts', $this->getUrl(1), 'publishedOn']), self::$i18nUI) . '&nbsp' . helper::dateUTF8('%H:%M', $this->getData(['module', $this->getUrl(0), 'posts', $this->getUrl(1), 'publishedOn']), self::$i18nUI); ?>
-		<!-- Bloc edition -->
+		<?php echo $module::$articleSignature; ?>
+		<!-- bloc date -->
+		<?php if (
+			$this->getData(['module', $this->getUrl(0), 'config', 'showDate']) === true
+			|| $this->getData(['module', $this->getUrl(0), 'config', 'showTime']) === true
+		): ?>
+			<?php echo template::ico('calendar-empty', ['margin' => 'left']); ?>
+		<?php endif; ?>
+		<?php if ($this->getData(['module', $this->getUrl(0), 'config', 'showDate']) === true): ?>
+			<?php echo helper::dateUTF8($module::$dateFormat, $this->getData(['module', $this->getUrl(0), 'posts', $this->getUrl(1), 'publishedOn']), self::$i18nUI); ?>
+		<?php endif; ?>
+		<?php if (
+			$this->getData(['module', $this->getUrl(0), 'config', 'showDate']) === true
+			&& $this->getData(['module', $this->getUrl(0), 'config', 'showTime']) === true
+		): ?>
+			<?php echo '&nbsp;-&nbsp;'; ?>
+		<?php endif; ?>
+		<?php if ($this->getData(['module', $this->getUrl(0), 'config', 'showTime']) === true): ?>
+			<?php echo helper::dateUTF8($module::$timeFormat, $this->getData(['module', $this->getUrl(0), 'posts', $this->getUrl(1), 'publishedOn']), self::$i18nUI); ?>
+		<?php endif; ?>		<!-- Bloc edition -->
 		<?php if (
 			$this->isConnected() === true
 			and
@@ -25,15 +41,13 @@
 				($this->getUser('group') === self::GROUP_ADMIN)
 			)
 		): ?>
-			&nbsp;-&nbsp;
 			<a href="<?php echo helper::baseUrl() . $this->getUrl(0) . '/edit/' . $this->getUrl(1); ?>">
-				<?php echo template::ico('pencil'); ?>
+				<?php echo template::ico('pencil', ['margin' => 'left']); ?>
 				<?php echo helper::translate('Éditer'); ?>
 			</a>
 		<?php endif; ?>
 		<!-- Bloc RSS-->
 		<?php if ($this->getData(['module', $this->getUrl(0), 'config', 'feeds'])): ?>
-			&nbsp;-&nbsp;
 			<div id="rssFeed">
 				<a type="application/rss+xml" href="<?php echo helper::baseUrl() . $this->getUrl(0) . '/rss'; ?>"
 					target="_blank">
