@@ -7,7 +7,7 @@
             'value' => template::ico('left')
         ]); ?>
     </div>
-    <div class="col1">
+    <div class="col1 offset10">
         <?php echo template::submit('usersDeleteSubmit', [
             'class' => 'buttonRed',
             'ico' => '',
