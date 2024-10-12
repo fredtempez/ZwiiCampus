@@ -119,14 +119,16 @@ class page extends common
 				$page
 			]);
 			// Ecriture
-			$this->setData(['page', $pageId, $data]);
+			$this->setData(['page', $pageId, $data], false);
 			$notification = helper::translate('Page dupliquée');
 			// Duplication du module présent
 			if ($this->getData(['page', $page, 'moduleId'])) {
 				$data = $this->getData(['module', $page]);
-				$this->setData(['module', $pageId, $data]);
+				$this->setData(['module', $pageId, $data], false);
 				$notification = helper::translate('Page et module dupliqués');
 			}
+			// Force la sauvegarde
+			$this->saveDB('page');
 
 			// Valeurs en sortie
 			$this->addOutput([
