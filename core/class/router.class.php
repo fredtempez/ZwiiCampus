@@ -503,6 +503,15 @@ class core extends common
 			) {
 				$access = false;
 			}
+			/*
+			// Empêche la consultation d'un espace laissé ouvert après la déconnexion et redirige vers cet espace pour contrôle
+			if (
+				$this->isConnected() === false 
+				and self::$siteContent !== 'home' 
+			) { 	
+				header(header: 'Location:' . helper::baseUrl(true) . 'swap/' . self::$siteContent);
+				exit();
+			*/
 		}
 
 		/**
