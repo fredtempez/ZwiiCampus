@@ -503,15 +503,22 @@ class core extends common
 			) {
 				$access = false;
 			}
-			/*
-			// Empêche la consultation d'un espace laissé ouvert après la déconnexion et redirige vers cet espace pour contrôle
+
+			/** Empêche la consultation d'un espace laissé ouvert après la déconnexion et redirige vers home
+			 * L'utilisateur n'est pas connecté
+			 * ET l'accueil n'est pas affiché
+			 * ET l'espace affiché nécessite un compte d'accès, enrolment vaut 1,2 ou 3
+			 * */
+
 			if (
 				$this->isConnected() === false 
 				and self::$siteContent !== 'home' 
-			) { 	
+				and $this->getData(['course', self::$siteContent, 'enrolment']) > 0
+			) { 
+				$_SESSION['ZWII_SITE_CONTENT'] = 'home';
 				header(header: 'Location:' . helper::baseUrl(true) . 'swap/' . self::$siteContent);
 				exit();
-			*/
+			}
 		}
 
 		/**
