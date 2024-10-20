@@ -174,8 +174,11 @@ class common
 	public static $dialog;
 	// Langue de l'interface sélectionnée
 	public static $i18nUI = 'fr_FR';
-	// Langues de contenu
+
+	// Espace, contenu sélectionné
 	public static $siteContent = 'home';
+	// Progression d'un participant
+	public static $userProgress = '';
 
 	public static $languages = [
 		'de' => 'Deutsch',

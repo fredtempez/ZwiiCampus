@@ -1358,6 +1358,9 @@ class course extends common
         // Liste des inscrits dans le contenu sélectionné.
         $users = $this->getData(['enrolment', $courseId]);
 
+        // Obtient les statistiques de l'ensemble de la cohorte
+        $reports = $this->getReport($courseId);
+
         if (is_array($users)) {
             // Tri du tableau par défaut par $userId
             ksort($users);
@@ -1388,8 +1391,8 @@ class course extends common
                 }
 
                 // Progression
-                $viewPages = $this->getData(['enrolment', $courseId, $userId, 'history']) !== null ?
-                    count(array_keys($this->getData(['enrolment', $courseId, $userId, 'history']))) :
+                $viewPages = array_key_exists($userId, $reports) ?
+                    count($reports[$userId]) :
                     0;
 
                 // Construction du tableau
@@ -2052,6 +2055,33 @@ class course extends common
         }
     }
 
+
+    /**
+     * Méthode pour afficher la progression dans les espaces.
+     * 
+     * @param mixed $courseId
+     * @param mixed $userId
+     * @return string Ratio de pages vues
+     */
+    public function userProgress($courseId, $userId): string
+    {
+
+        // Obtient les statistiques de l'ensemble de la cohorte
+        $reports = $this->getReport($courseId, $userId);
+
+        // Nombre de pages dans l'espace
+        $viewPages = array_key_exists($userId, $reports) ?
+            count($reports[$userId]) :
+            0;
+        // Nombre de pages vues
+        $sumPages = $this->countPages($this->getData(['page']));
+
+        // Calcule le ratio
+        $ratio = number_format(min(round(($viewPages * 100) / $sumPages, 1) / 100, 1), 2, ',');
+
+        return $ratio;
+    }
+
     /**
      * 
      * Compte les pages d'un espace 
@@ -2116,7 +2146,7 @@ class course extends common
     /**
      * Lit le contenu des fichiers de traces au format CS et renvoie un tableau associatif
      */
-    public function getReport($courseId, $userId = null)
+    private function getReport($courseId, $userId = null)
     {
 
         $data = [];
