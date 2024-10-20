@@ -364,7 +364,6 @@ class template
                 href="' .
             helper::baseUrl(false) . 'core/vendor/filemanager/dialog.php' .
             '?relative_url=1' .
-            '&lang=' . $attributes['language'] .
             '&field_id=' . $attributes['id'] .
             '&type=' . $attributes['type'] .
             '&akey=' . md5_file(core::DATA_DIR . 'core.json') .

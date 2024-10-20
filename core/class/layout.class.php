@@ -364,7 +364,7 @@ class layout extends common
                 && $this->getUser('permission', 'folder', (self::$siteContent === 'home' ? 'homePath' : 'coursePath')) !== 'none'
             ) {
                 $items .= '<wbr>' . template::ico('folder', [
-                    'href' => helper::baseUrl(false) . 'core/vendor/filemanager/dialog.php?type=0&akey=' . md5_file(self::DATA_DIR . 'core.json') . '&lang=' . $this->getData(['user', $this->getUser('id'), 'language']) . '&fldr=/' . self::$siteContent,
+                    'href' => helper::baseUrl(false) . 'core/vendor/filemanager/dialog.php?type=0&akey=' . md5_file(self::DATA_DIR . 'core.json') . '&fldr=/' . self::$siteContent,
                     'margin' => 'all',
                     'attr' => 'data-lity',
                     'help' => 'Fichiers du site'
@@ -533,7 +533,7 @@ class layout extends common
                 && $this->getUser('permission', 'folder', (self::$siteContent === 'home' ? 'homePath' : 'coursePath')) !== 'none'
             ) {
                 $itemsRight .= '<li>' . template::ico('folder', [
-                    'href' => helper::baseUrl(false) . 'core/vendor/filemanager/dialog.php?type=0&akey=' . md5_file(self::DATA_DIR . 'core.json') . '&lang=' . $this->getData(['user', $this->getUser('id'), 'language']) . '&fldr=/' . self::$siteContent,
+                    'href' => helper::baseUrl(false) . 'core/vendor/filemanager/dialog.php?type=0&akey=' . md5_file(self::DATA_DIR . 'core.json') . '&fldr=/' . self::$siteContent,
                     'attr' => 'data-lity',
                     'help' => 'Fichiers du site'
                 ]) . '</li>';
@@ -1086,7 +1086,7 @@ class layout extends common
             ) {
                 $rightItems .= '<li>' . template::ico('folder', [
                     'help' => 'Fichiers',
-                    'href' => helper::baseUrl(false) . 'core/vendor/filemanager/dialog.php?type=0&akey=' . md5_file(self::DATA_DIR . 'core.json') . '&lang=' . $this->getData(['user', $this->getUser('id'), 'language']) . '&fldr=/' . self::$siteContent,
+                    'href' => helper::baseUrl(false) . 'core/vendor/filemanager/dialog.php?type=0&akey=' . md5_file(self::DATA_DIR . 'core.json') . '&fldr=/' . self::$siteContent,
                     'attr' => 'data-lity'
                 ]) . '</li>';
             }
