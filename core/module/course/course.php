@@ -669,17 +669,12 @@ class course extends common
         // Liste des pages contenues dans cet espace et exclure les barres et les pages masquées
         $sumPages = 0;
         $pages = json_decode(file_get_contents(self::DATA_DIR . $courseId . '/page.json'), true);
-        $pages = $pages['page'];
-        foreach ($pages as $pageId => $pageData) {
-            if ($pageData['position'] > 0) {
-                $sumPages++;
-            }
-        }
-
+        $sumPages = $this->countPages($pages['page']);
 
         // Liste des inscrits dans le contenu sélectionné.
         $users = $this->getData(['enrolment', $courseId]);
 
+        // Obtient les statistiques de l'ensemble de la cohorte
         $reports = $this->getReport($courseId);
 
         if (is_array($users)) {
@@ -802,7 +797,7 @@ class course extends common
                 }
             }
             // Sauvegarde la base manuellement
-			$this->saveDB('enrolment');
+            $this->saveDB('enrolment');
         }
 
         // Liste des groupes et des profils
@@ -2024,7 +2019,7 @@ class course extends common
 
     /**
      * Autorise l'accès à un contenu
-     * @param @return bool le user a le droit d'entrée dans le contenu
+     * @return bool le user a le droit d'entrée dans le contenu
      * @param string $courseId identifiant du contenu sollicité
      */
     public function courseIsAvailable($courseId)
@@ -2052,17 +2047,23 @@ class course extends common
                     time() <= $this->getData(['course', $courseId, 'closingDate'])
                 );
             case self::COURSE_ACCESS_CLOSE:
+            default:
                 return false;
         }
     }
 
+    /**
+     * 
+     * Compte les pages d'un espace 
+     * @param mixed $array Tableau des pages de l'espace
+     * @return int Nombre de pages
+     */
     private function countPages($array)
     {
         $count = 0;
-        foreach ($array as $key => $value) {
-            $count++; // Incrémente le compteur pour chaque clé associative trouvée
-            if (is_array($value)) {
-                $count += $this->countPages($value); // Appelle récursivement la fonction si la valeur est un tableau
+        foreach ($array as $pageId => $pageData) {
+            if ($pageData['position'] > 0) {
+                $count++;
             }
         }
         return $count;
@@ -2082,7 +2083,7 @@ class course extends common
 
     /**
      * Autorise l'accès à un contenu
-     * @param @return bool le user a le droit d'entrée dans le contenu
+     * @return bool le user a le droit d'entrée dans le contenu
      * @param string $userId identifiant de l'utilisateur
      * @param string $courseId identifiant du contenu sollicité
      */
@@ -2115,7 +2116,7 @@ class course extends common
     /**
      * Lit le contenu des fichiers de traces au format CS et renvoie un tableau associatif
      */
-    private function getReport($courseId, $userId = null)
+    public function getReport($courseId, $userId = null)
     {
 
         $data = [];
@@ -2131,14 +2132,19 @@ class course extends common
                 $pageId = $line[1];
                 $timestamp = $line[2];
                 // Filtre userId
-                // if (!is_null($userId) && $name === $userId) {
+                if (
+                    is_null($userId) === false
+                    && $name !== $userId
+                ) {
+                    continue;
+                }
+
                 // Initialiser le tableau si nécessaire
                 if (!isset($data[$name][$pageId])) {
                     $data[$name][$pageId] = array();
                 }
                 // Ajouter le timestamp
                 $data[$name][$pageId][] = $timestamp;
-                //}
             }
 
             // Fermer le fichier
@@ -2155,6 +2161,4 @@ class course extends common
         // Afficher le JSON;
         return $data;
     }
-
-
 }
