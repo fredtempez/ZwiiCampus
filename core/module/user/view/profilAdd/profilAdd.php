@@ -196,7 +196,7 @@
                         <?php echo template::checkbox('profilAddCourseUserHistory', true, 'Voir historique d\'un participant'); ?>
                     </div>
                     <div class="col3">
-                        <?php echo template::checkbox('profilAddCourseUserHistoryExport', true, 'Exporter historique d\'un participant'); ?>
+                        <?php echo template::checkbox('profilAddCourseuserReportExport', true, 'Exporter historique d\'un participant'); ?>
                     </div>
                     <div class="col3">
                         <?php echo template::checkbox('profilAddCourseUserDelete', true, 'Désinscrire un participant'); ?>

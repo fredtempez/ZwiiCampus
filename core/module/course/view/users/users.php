@@ -8,7 +8,7 @@
     </div>
     <div class="col1 offset8">
         <?php echo template::button('userDeleteAll', [
-            'href' => helper::baseUrl() . 'course/usersHistoryExport/' . $this->getUrl(2),
+            'href' => helper::baseUrl() . 'course/usersReportExport/' . $this->getUrl(2),
             'value' => template::ico('download'),
             'help' => 'Exporter',
         ]) ?>

@@ -291,8 +291,8 @@
                             ]); ?>
                         </div>
                         <div class="col3">
-                            <?php echo template::checkbox('profilEditCourseUserHistoryExport', true, 'Exporter historique d\'un participant', [
-                                'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'course', 'userHistoryExport']),
+                            <?php echo template::checkbox('profilEditCourseuserReportExport', true, 'Exporter historique d\'un participant', [
+                                'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'course', 'userReportExport']),
                             ]); ?>
                         </div>
                         <div class="col3">

@@ -56,10 +56,10 @@ $(document).ready(function () {
 
     if ($('#profilEditCourseUsers').is(':checked')) {
         // Activer les autres checkboxes
-        $('#profilEditCourseUserHistory, #profilEditCourseUserHistoryExport, #profilEditCourseUserDelete, #profilEditCourseUsersAdd, #profilEditCourseUsersDelete, #profilEditCourseReset').prop('disabled', false);
+        $('#profilEditCourseUserHistory, #profilEditCourseuserReportExport, #profilEditCourseUserDelete, #profilEditCourseUsersAdd, #profilEditCourseUsersDelete, #profilEditCourseReset').prop('disabled', false);
     } else {
         // Désactiver les autres checkboxes
-        $('#profilEditCourseUserHistory, #profilEditCourseUserHistoryExport, #profilEditCourseUserDelete, #profilEditCourseUsersAdd, #profilEditCourseUsersDelete, #profilEditCourseReset').prop('checked', false).prop('disabled', true);
+        $('#profilEditCourseUserHistory, #profilEditCourseuserReportExport, #profilEditCourseUserDelete, #profilEditCourseUsersAdd, #profilEditCourseUsersDelete, #profilEditCourseReset').prop('checked', false).prop('disabled', true);
         // Désactiver les modules et tout décocher
         $(".courseContainer").slideUp();
         $('.courseContainer input[type="checkbox"]').prop('checked', false);
@@ -135,11 +135,11 @@ $(document).ready(function () {
     $('#profilEditCourseUsers').change(function () {
         if ($(this).is(':checked')) {
             // Activer les autres checkboxes
-            $('#profilEditCourseUserHistory, #profilEditCourseUserHistoryExport, #profilEditCourseUserDelete, #profilEditCourseUsersAdd, #profilEditCourseUsersDelete, #profilEditCourseReset').prop('disabled', false);
+            $('#profilEditCourseUserHistory, #profilEditCourseuserReportExport, #profilEditCourseUserDelete, #profilEditCourseUsersAdd, #profilEditCourseUsersDelete, #profilEditCourseReset').prop('disabled', false);
             
         } else {
             // Désactiver les autres checkboxes
-            $('#profilEditCourseUserHistory, #profilEditCourseUserHistoryExport, #profilEditCourseUserDelete, #profilEditCourseUsersAdd, #profilEditCourseUsersDelete, #profilEditCourseReset').prop('checked', false).prop('disabled', true);
+            $('#profilEditCourseUserHistory, #profilEditCourseuserReportExport, #profilEditCourseUserDelete, #profilEditCourseUsersAdd, #profilEditCourseUsersDelete, #profilEditCourseReset').prop('checked', false).prop('disabled', true);
             // Désactiver les modules et tout décocher
             $(".courseContainer").slideUp();
             $('.courseContainer input[type="checkbox"]').prop('checked', false);
