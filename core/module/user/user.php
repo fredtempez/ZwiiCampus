@@ -898,7 +898,7 @@ class user extends common
 					// Droits spécifiques
 					'users' => $this->getInput('profilEditCourseUsers', helper::FILTER_BOOLEAN),
 					'userHistory' => $this->getInput('profilEditCourseUserHistory', helper::FILTER_BOOLEAN),
-					'userHistoryExport' => $this->getInput('profilEditCourseUserHistoryExport', helper::FILTER_BOOLEAN),
+					'userReportExport' => $this->getInput('profilEditCourseuserReportExport', helper::FILTER_BOOLEAN),
 					'export' => $this->getInput('profilEditCourseExport', helper::FILTER_BOOLEAN),
 					'userAdd' => $this->getInput('profilEditCourseUserAdd', helper::FILTER_BOOLEAN),
 					'usersAdd' => $this->getInput('profilEditCourseUsersAdd', helper::FILTER_BOOLEAN),
@@ -1095,7 +1095,7 @@ class user extends common
 						// La suite
 						'users' => $this->getInput('profilAddCourseUsers', helper::FILTER_BOOLEAN),
 						'userHistory' => $this->getInput('profilAddCourseUserHistory', helper::FILTER_BOOLEAN),
-						'userHistoryExport' => $this->getInput('profilAddCourseUserHistoryExport', helper::FILTER_BOOLEAN),
+						'userReportExport' => $this->getInput('profilAddCourseuserReportExport', helper::FILTER_BOOLEAN),
 						'export' => $this->getInput('profilAddCourseExport', helper::FILTER_BOOLEAN),
 						'userAdd' => $this->getInput('profilAddCourseUserAdd', helper::FILTER_BOOLEAN),
 						'usersAdd' => $this->getInput('profilAddCourseUsersAdd', helper::FILTER_BOOLEAN),
