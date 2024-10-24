@@ -519,6 +519,22 @@ class core extends common
 				header(header: 'Location:' . helper::baseUrl(true) . 'swap/' . self::$siteContent);
 				exit();
 			}
+			/**
+			 * Récupère les statistiques de l'utilisateur non admin
+			 * en dehors de home 
+			 * et si la connextion est nécessaire et que le membre est connecté 
+			 * stocke la progression dans la base des inscriptions
+			 * 
+			 */
+			if (
+				$this->isConnected() === true
+				and self::$siteContent !== 'home'
+				and $this->getData(['course', self::$siteContent, 'enrolment']) > 0
+			) {
+				$course = new course();
+				self::$userProgress = $course->userProgress(self::$siteContent, $this->getUser('id'));
+				$this->setData(['enrolment', self::$siteContent, $this->getUser('id'), 'progress', self::$userProgress ]);
+			}
 		}
 
 		/**
@@ -573,20 +589,6 @@ class core extends common
 				$this->getData(['page', $this->getUrl(0), 'title']);
 		}
 
-		/**
-		 * Récupère les statistiques de l'utilisateur non admin
-		 * en dehors de home 
-		 * et si la connextion est nécessaire et que le membre est connecté 
-		 * 
-		 */
-		if (
-			$this->isConnected() === true
-			and self::$siteContent !== 'home'
-			and $this->getData(['course', self::$siteContent, 'enrolment']) > 0
-		) {
-			$course = new course();
-			self::$userProgress = $course->userProgress(self::$siteContent, $this->getUser('id'));
-		}
 
 		// Importe le style de la page principale
 		$inlineStyle[] = $this->getData(['page', $this->getUrl(0), 'css']) === null ? '' : $this->getData(['page', $this->getUrl(0), 'css']);
