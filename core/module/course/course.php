@@ -734,8 +734,16 @@ class course extends common
                     $this->getData(['user', $userId, 'tags']),
                     template::button('userReport' . $userId, [
                         'href' => helper::baseUrl() . 'course/userReport/' . $courseId . '/' . $userId,
-                        'value' => $viewPages ? min(round(($viewPages * 100) / $sumPages, 1), 100) . ' %' : '0%',
-                        'disable' => empty($viewPages)
+                        /** La lecture de la progression s'effectue selon la nouvelle méthode (progression dans la base des enrolements)
+                         *  Soit avec l'ancienne méthode qui consiste à recalculer la progression.  
+                         *  TRANSITOIRE A SUPPRIMER EN FIN D'ANNEE
+                         **/
+                        'value' => array_key_exists('progress', $userValue)
+                            ? $userValue['progress']
+                            : ($viewPages ? min(round(($viewPages * 100) / $sumPages, 1), 100) . ' %' : '0%'),
+                        'disable' => empty($userValue['datePageView']),
+                        //'value' => $viewPages ? min(round(($viewPages * 100) / $sumPages, 1), 100) . ' %' : '0%',
+                        //'disable' => empty($viewPages)
                     ]),
                     template::button('userDelete' . $userId, [
                         'class' => 'userDelete buttonRed',
@@ -1405,7 +1413,14 @@ class course extends common
                     : $this->getData(['enrolment', $courseId, $userId, 'lastPageView']) . ' (supprimée)',
                     helper::dateUTF8('%d/%d/%Y', $this->getData(['enrolment', $courseId, $userId, 'datePageView'])),
                     helper::dateUTF8('%H:%M', $this->getData(['enrolment', $courseId, $userId, 'datePageView'])),
-                    number_format(min(round(($viewPages * 100) / $sumPages, 1) / 100, 1), 2, ',')
+                    /** La lecture de la progression s'effectue selon la nouvelle méthode (progression dans la base des enrolements)
+                     *  Soit avec l'ancienne méthode qui consiste à recalculer la progression.  
+                     *  TRANSITOIRE A SUPPRIMER EN FIN D'ANNEE
+                     **/
+                    array_key_exists('progress', $userValue)
+                    ? $userValue['progress']
+                    : ($viewPages ? min(round(($viewPages * 100) / $sumPages, 1), 100) . ' %' : '0%'),
+                    //number_format(min(round(($viewPages * 100) / $sumPages, 1) / 100, 1), 2, ','),
                 ];
 
                 // Synthèse des historiques
@@ -2057,7 +2072,7 @@ class course extends common
 
 
     /**
-     * Méthode pour afficher la progression dans les espaces.
+     * Méthode externe pour afficher la progression dans les espaces.
      * 
      * @param mixed $courseId
      * @param mixed $userId
@@ -2106,7 +2121,9 @@ class course extends common
             $courseId,
             $userId,
             [
-                'history' => [],
+                'lastPageView' => '',
+                'datePageView' => '',
+                'progress' => '',
             ]
         ]);
     }
