@@ -1408,6 +1408,7 @@ class course extends common
                     $userId,
                     $this->getData(['user', $userId, 'firstname']),
                     $this->getData(['user', $userId, 'lastname']),
+                    $this->getData(['user', $userId, 'mail']),
                     isset($pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])])
                     ? $pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])]
                     : $this->getData(['enrolment', $courseId, $userId, 'lastPageView']) . ' (supprimée)',
