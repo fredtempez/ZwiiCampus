@@ -1349,7 +1349,7 @@ class course extends common
         }
 
         self::$courseUsers = [
-            0 => ['UserId', 'Prénom', 'Nom', 'Page Titre', 'Consultation Date', 'Consultation Heure', 'Progression']
+            0 => ['UserId', 'Prénom', 'Nom', 'Mail', 'Page Titre', 'Consultation Date', 'Consultation Heure', 'Progression']
         ];
 
         // Statistiques du contenu sélectionné calcul du nombre de pages
