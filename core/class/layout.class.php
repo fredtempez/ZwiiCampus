@@ -1120,8 +1120,8 @@ class layout extends common
                         $this->setData(['core', 'lastAutoUpdate', $today], false);
                         if (
                             helper::checkNewVersion(common::ZWII_UPDATE_CHANNEL)
-                        ) {                            
-                            $this->setData(['core', 'updateAvailable', true]);
+                        ) {
+                            $this->setData(['core', 'updateAvailable', true], false);
                         }
                         // Modules installés
                         $infoModules = helper::getModules();
