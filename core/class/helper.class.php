@@ -35,12 +35,12 @@ class helper
 
 		// La traduction existe déjà dans le core
 		/*
-						  if (array_key_exists($text, core::$dialog) === false && !empty($text)) {
-						  $dialogues = json_decode(file_get_contents('core/module/install/ressource/i18n/fr_FR.json' ), true);
-						  $data = array_merge($dialogues,[$text =>  '']);
-						  file_put_contents ('core/module/install/ressource/i18n/fr_FR.json', json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT), LOCK_EX);
-						  }
-						  */
+								if (array_key_exists($text, core::$dialog) === false && !empty($text)) {
+								$dialogues = json_decode(file_get_contents('core/module/install/ressource/i18n/fr_FR.json' ), true);
+								$data = array_merge($dialogues,[$text =>  '']);
+								file_put_contents ('core/module/install/ressource/i18n/fr_FR.json', json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT), LOCK_EX);
+								}
+								*/
 		return (array_key_exists($text, core::$dialog) && !empty(core::$dialog[$text]) ? core::$dialog[$text] : $text);
 	}
 
@@ -343,7 +343,7 @@ class helper
 	public static function checkRewrite()
 	{
 		// N'interroge que le serveur Apache
-		if (strpos($_SERVER["SERVER_SOFTWARE"], 'Apache') > 0) {
+		if ((helper::checkServerSoftware() === false)) {
 			self::$rewriteStatus = false;
 		} else {
 			// Ouvre et scinde le fichier .htaccess
@@ -352,6 +352,14 @@ class helper
 			self::$rewriteStatus = (strpos($htaccess[1], 'RewriteEngine on') !== false);
 		}
 		return self::$rewriteStatus;
+	}
+	
+	/**
+	 * Retourne vrai ou faux selon que le serveur est comptatible avec htaccess
+	 * @return bool
+	 */
+	public static function checkServerSoftware() {
+		return (stripos($_SERVER['SERVER_SOFTWARE'], 'Apache') !== false || stripos($_SERVER['SERVER_SOFTWARE'], 'LiteSpeed')  !== false);
 	}
 
 	/**
@@ -673,30 +681,30 @@ class helper
 	public static function subword($text, $start, $length)
 	{
 		$text = trim($text);
-	
+
 		// Vérifier si la longueur du texte sans les balises dépasse la longueur souhaitée
 		if (mb_strlen(strip_tags($text)) > $length) {
 			// Utiliser mb_substr pour couper le texte
 			$text = mb_substr($text, $start, $length);
-			
+
 			// S'assurer que le texte ne se termine pas au milieu d'un mot
 			$lastSpace = mb_strrpos($text, ' ');
 			if ($lastSpace !== false) {
 				$text = mb_substr($text, 0, $lastSpace);
 			}
-	
+
 			// Fermer les balises HTML ouvertes
 			$dom = new DOMDocument();
 			@$dom->loadHTML('<div>' . $text . '</div>', LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
 			$text = $dom->saveHTML();
-	
+
 			// Retirer la balise de conteneur ajoutée
 			$text = preg_replace('~^<div>(.*)</div>$~s', '$1', $text);
-	
+
 			// Ajouter des points de suspension si le texte a été coupé
 			$text .= '...';
 		}
-	
+
 		return $text;
 	}
 
