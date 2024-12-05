@@ -519,13 +519,12 @@ class core extends common
 				header(header: 'Location:' . helper::baseUrl(true) . 'swap/' . self::$siteContent);
 				exit();
 			}
-			/**
+			/*
 			 * Récupère les statistiques de l'utilisateur non admin
 			 * en dehors de home 
 			 * et si la connextion est nécessaire et que le membre est connecté 
 			 * stocke la progression dans la base des inscriptions
 			 * 
-			 */
 			if (
 				$this->isConnected() === true
 				and self::$siteContent !== 'home'
@@ -534,7 +533,7 @@ class core extends common
 				$course = new course();
 				$userProgress = $course->userProgress(self::$siteContent, $this->getUser('id'));
 				$this->setData(['enrolment', self::$siteContent, $this->getUser('id'), 'progress', $userProgress ]);
-			}
+			}*/
 		}
 
 		/**
