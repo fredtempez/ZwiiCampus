@@ -413,7 +413,9 @@ class page extends common
 							// Sauvegarde la base manuellement
 							$this->saveDB('module');
 						}
-						// Met à jour les historiques des utilisateurs
+						/*
+						 * 
+						 * Met à jour les historiques des utilisateurs
 						foreach ($this->getData(['enrolment', self::$siteContent]) as $userId => $userData) {
 							// Vérifier si l'utilisateur a un historique
 							if (
@@ -432,6 +434,7 @@ class page extends common
 						}
 						// Sauvegarde la base manuellement
 						$this->saveDB('enrolment');
+						**/
 
 						// Met à jour la homePage si nécessaire
 						if ($this->getUrl(2) === $this->getData(['course', self::$siteContent, 'homePageId'])) {
