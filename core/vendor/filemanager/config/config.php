@@ -14,7 +14,7 @@ ob_start('mb_output_handler');
 date_default_timezone_set('Europe/Paris');
 
 // Lire la langue installée
-$lang = isset($_GET['lang']) ? $_GET['lang'] : 'en';
+$lang = isset($_GET['lang']) ? $_GET['lang'] : 'fr_FR';
 setlocale(LC_CTYPE, $lang);
 
 /* Lecture du groupe de l'utilisateur connecté pour attribuer les droits et les dossiers */
