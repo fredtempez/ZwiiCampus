@@ -532,8 +532,8 @@ class core extends common
 				and $this->getData(['course', self::$siteContent, 'enrolment']) > 0
 			) {
 				$course = new course();
-				self::$userProgress = $course->userProgress(self::$siteContent, $this->getUser('id'));
-				$this->setData(['enrolment', self::$siteContent, $this->getUser('id'), 'progress', self::$userProgress ]);
+				$userProgress = $course->userProgress(self::$siteContent, $this->getUser('id'));
+				$this->setData(['enrolment', self::$siteContent, $this->getUser('id'), 'progress', $userProgress ]);
 			}
 		}
 

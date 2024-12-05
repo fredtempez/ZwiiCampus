@@ -738,11 +738,13 @@ class course extends common
                          *  Soit avec l'ancienne méthode qui consiste à recalculer la progression.  
                          *  TRANSITOIRE A SUPPRIMER EN FIN D'ANNEE
                          **/
+                        /*
                         'value' => array_key_exists('progress', $userValue)
                             ? $userValue['progress']
                             : ($viewPages ? min(round(($viewPages * 100) / $sumPages, 1), 100) . ' %' : '0%'),
                         'disable' => empty($userValue['datePageView']),
-                        //'value' => $viewPages ? min(round(($viewPages * 100) / $sumPages, 1), 100) . ' %' : '0%',
+                        */
+                        'value' => $viewPages ? min(round(($viewPages * 100) / $sumPages, 1), 100) . ' %' : '0%',
                         //'disable' => empty($viewPages)
                     ]),
                     template::button('userDelete' . $userId, [
@@ -2062,7 +2064,7 @@ class course extends common
                 return true;
             case self::COURSE_ACCESS_DATE:
                 return (
-                    time() >= $this->getData(['course', $courseId, 'openingDate']) &&
+                     time() >= $this->getData(['course', $courseId, 'openingDate']) &&
                     time() <= $this->getData(['course', $courseId, 'closingDate'])
                 );
             case self::COURSE_ACCESS_CLOSE:
@@ -2073,7 +2075,7 @@ class course extends common
 
 
     /**
-     * Méthode externe pour afficher la progression dans les espaces.
+     * Méthode externe pour calculer la progression dans les espaces et la stocker dans enrolment
      * 
      * @param mixed $courseId
      * @param mixed $userId
@@ -2091,10 +2093,14 @@ class course extends common
             0;
         // Nombre de pages vues
         $sumPages = $this->countPages($this->getData(['page']));
-
+        
         // Calcule le ratio
-        $ratio = number_format(min(round(($viewPages * 100) / $sumPages, 1) / 100, 1), 2, ',');
-
+        $ratio = ($viewPages *100) / $sumPages; 
+        // Arrondi le ratio à deux décimales
+        $ratio = round($ratio, 2);
+        // Transforme le ratio en pourcentage
+        $ratio = number_format($ratio) . ' %';
+  
         return $ratio;
     }
 
