@@ -16,7 +16,7 @@
 class blog extends common
 {
 
-	const VERSION = '8.0';
+	const VERSION = '8.1';
 	const REALNAME = 'Blog';
 	const DELETE = true;
 	const UPDATE = '0.0';
@@ -41,9 +41,6 @@ class blog extends common
 	];
 
 	public static $articles = [];
-
-	// Signature de l'article
-	public static $articleSignature = '';
 
 	// Signature du commentaire
 	public static $editCommentSignature = '';
@@ -179,6 +176,7 @@ class blog extends common
 			$this->setData(['module', $this->getUrl(0), 'config', 'buttonBack', true]);
 			$this->setData(['module', $this->getUrl(0), 'config', 'showTime', true]);
 			$this->setData(['module', $this->getUrl(0), 'config', 'showDate', true]);
+			$this->setData(['module', $this->getUrl(0), 'config', 'showPseudo', true]);
 			$this->setData(['module', $this->getUrl(0), 'config', 'versionData', '8.0']);
 		}
 	}
@@ -198,7 +196,7 @@ class blog extends common
 		$feeds = new \FeedWriter\RSS2();
 
 		// En-tête
-		$feeds->setTitle($this->getData(['page', $this->getUrl(0), 'title']) ? $this->getData(['page', $this->getUrl(0), 'title']): '');
+		$feeds->setTitle($this->getData(['page', $this->getUrl(0), 'title']) ? $this->getData(['page', $this->getUrl(0), 'title']) : '');
 		$feeds->setLink(helper::baseUrl() . $this->getUrl(0));
 		if ($this->getData(['page', $this->getUrl(0), 'metaDescription'])) {
 			$feeds->setDescription($this->getData(['page', $this->getUrl(0), 'metaDescription']));
@@ -222,10 +220,10 @@ class blog extends common
 					'title' => $this->getData(['module', $this->getUrl(0), 'posts', $articleId, 'title']),
 					'link' => helper::baseUrl() . $this->getUrl(0) . '/' . $articleId,
 					'description' => '<img src="' . helper::baseUrl(false) . self::FILE_DIR . 'thumb/' . $thumb
-					. '" alt="' . $this->getData(['module', $this->getUrl(0), 'posts', $articleId, 'title'])
-					. '" title="' . $this->getData(['module', $this->getUrl(0), 'posts', $articleId, 'title'])
-					. '" />' .
-					$this->getData(['module', $this->getUrl(0), 'posts', $articleId, 'content']),
+						. '" alt="' . $this->getData(['module', $this->getUrl(0), 'posts', $articleId, 'title'])
+						. '" title="' . $this->getData(['module', $this->getUrl(0), 'posts', $articleId, 'title'])
+						. '" />' .
+						$this->getData(['module', $this->getUrl(0), 'posts', $articleId, 'content']),
 				]);
 				$newsArticle->setAuthor($author, 'no@mail.com');
 				$newsArticle->setId(helper::baseUrl() . $this->getUrl(0) . '/' . $articleId);
@@ -455,9 +453,12 @@ class blog extends common
 		else {
 			$approved = !$this->getData(['module', $this->getUrl(0), 'posts', $this->getUrl(2), 'comment', $this->getUrl(3), 'approval']);
 			$this->setData([
-				'module', $this->getUrl(0),
-				'posts', $this->getUrl(2),
-				'comment', $this->getUrl(3),
+				'module',
+				$this->getUrl(0),
+				'posts',
+				$this->getUrl(2),
+				'comment',
+				$this->getUrl(3),
 				[
 					'author' => $this->getData(['module', $this->getUrl(0), 'posts', $this->getUrl(2), 'comment', $this->getUrl(3), 'author']),
 					'content' => $this->getData(['module', $this->getUrl(0), 'posts', $this->getUrl(2), 'comment', $this->getUrl(3), 'content']),
@@ -570,7 +571,8 @@ class blog extends common
 			$this->isPost()
 		) {
 			$this->setData([
-				'module', $this->getUrl(0),
+				'module',
+				$this->getUrl(0),
 				'config',
 				[
 					'feeds' => $this->getInput('blogOptionShowFeeds', helper::FILTER_BOOLEAN),
@@ -583,6 +585,7 @@ class blog extends common
 					'buttonBack' => $this->getInput('blogOptionButtonBack', helper::FILTER_BOOLEAN),
 					'showDate' => $this->getInput('blogOptionShowDate', helper::FILTER_BOOLEAN),
 					'showTime' => $this->getInput('blogOptionShowTime', helper::FILTER_BOOLEAN),
+					'showPseudo' => $this->getInput('blogOptionShowPseudo', helper::FILTER_BOOLEAN),
 					'versionData' => $this->getData(['module', $this->getUrl(0), 'config', 'versionData']),
 				]
 			]);
@@ -757,63 +760,69 @@ class blog extends common
 						and password_verify($this->getInput('blogArticleCaptcha', helper::FILTER_INT), $this->getInput('blogArticleCaptchaResult')) === false
 					) {
 						self::$inputNotices['blogArticleCaptcha'] = 'Incorrect';
-					}
-					// Crée le commentaire
-					$commentId = helper::increment(uniqid(), $this->getData(['module', $this->getUrl(0), 'posts', $this->getUrl(1), 'comment']));
-					$content = $this->getInput('blogArticleContent', null, true);
-					$this->setData([
-						'module', $this->getUrl(0),
-						'posts', $this->getUrl(1),
-						'comment',
-						$commentId,
-						[
-							'author' => $this->getInput('blogArticleAuthor', helper::FILTER_STRING_SHORT, empty($this->getInput('blogArticleUserId')) ? TRUE : FALSE),
-							'content' => $content,
-							'createdOn' => time(),
-							'userId' => $this->getInput('blogArticleUserId'),
-							'approval' => !$this->getData(['module', $this->getUrl(0), 'posts', $this->getUrl(1), 'commentApproved']) // true commentaire publié false en attente de publication
-						]
-					]);
-					// Envoi d'une notification aux administrateurs
-					// Init tableau
-					$to = [];
-					// Liste des destinataires
-					foreach ($this->getData(['user']) as $userId => $user) {
-						if ($user['group'] >= $this->getData(['module', $this->getUrl(0), 'posts', $this->getUrl(1), 'commentGroupNotification'])) {
-							$to[] = $user['mail'];
-							$firstname[] = $user['firstname'];
-							$lastname[] = $user['lastname'];
-						}
-					}
-					// Envoi du mail $sent code d'erreur ou de réussite
-					$notification = $this->getData(['module', $this->getUrl(0), 'posts', $this->getUrl(1), 'commentApproved']) === true ? 'Commentaire déposé en attente d\'approbation' : 'Commentaire déposé';
-					if ($this->getData(['module', $this->getUrl(0), 'posts', $this->getUrl(1), 'commentNotification']) === true) {
-						$error = 0;
-						foreach ($to as $key => $adress) {
-							$sent = $this->sendMail(
-								$adress,
-								'Nouveau commentaire déposé',
-								'Bonjour' . ' <strong>' . $firstname[$key] . ' ' . $lastname[$key] . '</strong>,<br><br>' .
-								'L\'article <a href="' . helper::baseUrl() . $this->getUrl(0) . '/	' . $this->getUrl(1) . '">' . $this->getData(['module', $this->getUrl(0), 'posts', $this->getUrl(1), 'title']) . '</a> a  reçu un nouveau commentaire.<br><br>',
-								null,
-								$this->getData(['config', 'smtp', 'from'])
-							);
-							if ($sent === false)
-								$error++;
-						}
-						// Valeurs en sortie
-						$this->addOutput([
-							'redirect' => helper::baseUrl() . $this->getUrl() . '#comment',
-							'notification' => ($error === 0 ? $notification . '<br/>Une notification a été envoyée.' : $notification . '<br/> Erreur de notification : ' . $sent),
-							'state' => ($sent === true ? true : null)
-						]);
 					} else {
-						// Valeurs en sortie
-						$this->addOutput([
-							'redirect' => helper::baseUrl() . $this->getUrl() . '#comment',
-							'notification' => $notification,
-							'state' => true
+
+						// Création du commentaire et notifcation par email
+						$commentId = helper::increment(uniqid(), $this->getData(['module', $this->getUrl(0), 'posts', $this->getUrl(1), 'comment']));
+						$content = $this->getInput('blogArticleContent', null, true);
+						$this->setData([
+							'module',
+							$this->getUrl(0),
+							'posts',
+							$this->getUrl(1),
+							'comment',
+							$commentId,
+							[
+								'author' => $this->getInput('blogArticleAuthor', helper::FILTER_STRING_SHORT, empty($this->getInput('blogArticleUserId')) ? TRUE : FALSE),
+								'content' => $content,
+								'createdOn' => time(),
+								'userId' => $this->getInput('blogArticleUserId'),
+								'approval' => !$this->getData(['module', $this->getUrl(0), 'posts', $this->getUrl(1), 'commentApproved']) // true commentaire publié false en attente de publication
+							]
 						]);
+						// Envoi d'une notification aux administrateurs
+						// Init tableau
+						$to = [];
+						// Liste des destinataires
+						foreach ($this->getData(['user']) as $userId => $user) {
+							if ($user['group'] >= $this->getData(['module', $this->getUrl(0), 'posts', $this->getUrl(1), 'commentGroupNotification'])) {
+								$to[] = $user['mail'];
+								$firstname[] = $user['firstname'];
+								$lastname[] = $user['lastname'];
+							}
+						}
+						// Envoi du mail $sent code d'erreur ou de réussite
+						$notification = $this->getData(['module', $this->getUrl(0), 'posts', $this->getUrl(1), 'commentApproved']) === true ? 'Commentaire déposé en attente d\'approbation' : 'Commentaire déposé';
+						if ($this->getData(['module', $this->getUrl(0), 'posts', $this->getUrl(1), 'commentNotification']) === true) {
+							$error = 0;
+							foreach ($to as $key => $adress) {
+								$sent = $this->sendMail(
+									$adress,
+									'Nouveau commentaire déposé',
+									'<p>Bonjour' . ' <strong>' . $firstname[$key] . ' ' . $lastname[$key] . '</strong>,</p>' .
+									'<p>L\'article <a href="' . helper::baseUrl() . $this->getUrl(0) . '/	' . $this->getUrl(1) . '">' . $this->getData(['module', $this->getUrl(0), 'posts', $this->getUrl(1), 'title']) . '</a> a  reçu un nouveau commentaire rédigé par <strong>' .
+									$this->getInput('blogArticleAuthor', helper::FILTER_STRING_SHORT, empty($this->getInput('blogArticleUserId')) ? TRUE : FALSE) . '</strong></p>' .
+									'<p>' . $content.'</p>',
+									null,
+									$this->getData(['config', 'smtp', 'from'])
+								);
+								if ($sent === false)
+									$error++;
+							}
+							// Valeurs en sortie
+							$this->addOutput([
+								'redirect' => helper::baseUrl() . $this->getUrl() . '#comment',
+								'notification' => ($error === 0 ? $notification . '<br/>Une notification a été envoyée.' : $notification . '<br/> Erreur de notification : ' . $sent),
+								'state' => ($sent === true ? true : null)
+							]);
+						} else {
+							// Valeurs en sortie
+							$this->addOutput([
+								'redirect' => helper::baseUrl() . $this->getUrl() . '#comment',
+								'notification' => $notification,
+								'state' => true
+							]);
+						}
 					}
 				}
 				// Ids des commentaires approuvés par ordre de publication
@@ -831,8 +840,6 @@ class blog extends common
 				$pagination = helper::pagination($commentIds, $this->getUrl(), $this->getData(['module', $this->getUrl(0), 'config', 'itemsperPage']), '#comment');
 				// Liste des pages
 				self::$pages = $pagination['pages'];
-				// Signature de l'article
-				self::$articleSignature = $this->signature($this->getData(['module', $this->getUrl(0), 'posts', $this->getUrl(1), 'userId']));
 				// Signature du commentaire édité
 				if ($this->isConnected() === true) {
 					self::$editCommentSignature = $this->signature($this->getUser('id'));
