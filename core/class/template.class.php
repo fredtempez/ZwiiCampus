@@ -369,9 +369,9 @@ class template
             '&type=' . $attributes['type'] .
             '&akey=' . md5_file(core::DATA_DIR . 'core.json') .
                 // Ajoute le nom du dossier si la variable est passée
-            (!empty($attributes['folder']) ? '&fldr=' . $attributes['folder'] : '') .
-            ($attributes['extensions'] ? '&extensions=' . $attributes['extensions'] : '')
-            . '"
+            (empty($attributes['folder']) ? '&fldr=/': '&fldr=' . $attributes['folder']) .
+            ($attributes['extensions'] ? '&extensions=' . $attributes['extensions'] : '') .
+            '"
                 class="inputFile %s %s"
                 %s
                 data-lity

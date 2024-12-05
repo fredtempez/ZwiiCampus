@@ -19,7 +19,7 @@ setlocale(LC_CTYPE, $lang);
 
 /* Lecture du groupe de l'utilisateur connecté pour attribuer les droits et les dossiers */
 $userId = $_COOKIE['ZWII_USER_ID'];
-$courseId = $_GET['lang'];
+$courseId = $_GET['fldr'];
 $u = json_decode(file_get_contents('../../../site/data/user.json'), true);
 $g = json_decode(file_get_contents('../../../site/data/profil.json'), true);
 
@@ -87,7 +87,6 @@ if (!is_null($u) && !is_null($g) && !is_null($userId)) {
 			exit("<h1 style='color: red'>Accès interdit au gestionnaire de fichiers !</h1>");
 	}
 }
-
 
 /* Fin lecture du groupe de l'utilisateur connecté pour attribuer les droits et les dossiers */
 

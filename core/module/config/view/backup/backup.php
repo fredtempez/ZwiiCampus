@@ -17,7 +17,8 @@
 <div class="row">
 	<div class="col12">
 		<div class="block">
-			<h4><?php echo helper::translate('Paramètres de la sauvegarde'); ?>
+			<h4>
+				<?php echo helper::translate('Paramètres de la sauvegarde'); ?>
 			</h4>
 			<div class="row">
 				<div class="col12">
@@ -27,7 +28,10 @@
 					]); ?>
 				</div>
 				<div class="col12">
-					<em>L'archive est générée dans <a href="<?php echo helper::baseUrl(false); ?>core/vendor/filemanager/dialog.php?fldr=backup&type=0&akey=<?php echo md5_file(self::DATA_DIR . 'core.json'); ?>&lang=<?php echo $this->getData(['user', $this->getUser('id'), 'language']);?>" data-lity>le dossier Backup</a> du gestionnaire de fichiers.</em>
+					<em>L'archive est générée dans
+						<a href="<?php echo helper::baseUrl(false); ?>core/vendor/filemanager/dialog.php?fldr=backup&type=0&akey=<?php echo md5_file(self::DATA_DIR . 'core.json'); ?>&lang=<?php echo $this->getData(['user', $this->getUser('id'), 'language']); ?>"
+							data-lity>le dossier Backup</a> du gestionnaire de fichiers.
+					</em>
 				</div>
 			</div>
 		</div>
