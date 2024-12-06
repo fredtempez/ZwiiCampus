@@ -736,16 +736,14 @@ class course extends common
                         'href' => helper::baseUrl() . 'course/userReport/' . $courseId . '/' . $userId,
                         /** La lecture de la progression s'effectue selon la nouvelle méthode (progression dans la base des enrolements)
                          *  Soit avec l'ancienne méthode qui consiste à recalculer la progression.  
-                         *  TRANSITOIRE A SUPPRIMER EN FIN D'ANNEE
+                         * 
+                         * Le pourcentage de progression est-il renseigné au format INT sinon il est recalculé
+                         * 
                          **/
-                        /*
-                        'value' => array_key_exists('progress', $userValue)
-                            ? $userValue['progress']
+                        'value' => (array_key_exists('progress', $userValue) and is_int($userValue['progress']))
+                            ? number_format($userValue['progress']) . ' %'
                             : ($viewPages ? min(round(($viewPages * 100) / $sumPages, 1), 100) . ' %' : '0%'),
                         'disable' => empty($userValue['datePageView']),
-                        */
-                        'value' => $viewPages ? min(round(($viewPages * 100) / $sumPages, 1), 100) . ' %' : '0%',
-                        //'disable' => empty($viewPages)
                     ]),
                     template::button('userDelete' . $userId, [
                         'class' => 'userDelete buttonRed',
@@ -754,7 +752,6 @@ class course extends common
                         'help' => 'Désinscrire'
                     ])
                 ];
-
             }
         }
 
@@ -2079,29 +2076,43 @@ class course extends common
      * 
      * @param mixed $courseId
      * @param mixed $userId
-     * @return string Ratio de pages vues
+     * @return float Ratio de pages vues en décimales de pourcentages
      */
-    public function userProgress($courseId, $userId): string
+    private function getUserProgress($courseId, $userId): float
     {
 
         // Obtient les statistiques de l'ensemble de la cohorte
         $reports = $this->getReport($courseId, $userId);
 
-        // Nombre de pages dans l'espace
+        // Nombre de pages dans l'espace vues par cet utilisateur
         $viewPages = array_key_exists($userId, $reports) ?
             count($reports[$userId]) :
             0;
-        // Nombre de pages vues
+        // Nombre de pages totales
         $sumPages = $this->countPages($this->getData(['page']));
         
         // Calcule le ratio
-        $ratio = ($viewPages *100) / $sumPages; 
+        $ratio = ($viewPages * 100) / $sumPages; 
         // Arrondi le ratio à deux décimales
         $ratio = round($ratio, 2);
-        // Transforme le ratio en pourcentage
-        $ratio = number_format($ratio) . ' %';
   
         return $ratio;
+    }
+
+    /**
+     *
+     * @param mixed $courseId id de l'espace
+     * @param mixed $userId id de l'utilisateur
+     * @return float nombre de pages vues
+     */
+    public function setUserProgress($courseId, $userId): float {
+			// Stocke le rapport en CSV
+			$file = fopen(common::DATA_DIR . $courseId. '/report.csv', 'a+');
+			fputcsv($file, [$userId, $this->getUrl(0), time()], ';');
+			fclose($file);
+
+            // Retourne le nombre de page vues
+            return ($this->getUserProgress($courseId, $userId));
     }
 
     /**

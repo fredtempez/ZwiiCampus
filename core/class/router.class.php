@@ -409,25 +409,40 @@ class core extends common
 			exit();
 		}
 
-		// Sauvegarde la dernière page visitée par l'utilisateur connecté et enregistre l'historique des consultations
+
+		/*
+		 * Récupère les statistiques de l'utilisateur non admin
+		 * en dehors de home 
+		 * et si la connextion est nécessaire et que le membre est connecté 
+		 * stocke la progression dans la base des inscriptions
+		 * */
 		if (
+			// L'utilisateur est renseigné
 			$this->getUser('id')
+			// L'accueil ne stocke pas lea progression
 			&& common::$siteContent !== 'home'
+			// La page existe
 			&& in_array($this->getUrl(0), array_keys($this->getData(['page'])))
-			// Le userId n'est pas celui d'un admis ni le prof du contenu
+			// L'espace dispose d'un accès nécessitant un compte
+			&& $this->getData(['course', self::$siteContent, 'enrolment']) > 0
+			// Le userId n'est pas celui d'un admis ni le compte d'un gestionnaire de cet espace
 			&& (
 				$this->getUser('group') < common::GROUP_ADMIN
 				|| $this->getUser('id') !== $this->getData(['course', common::$siteContent, 'author'])
 			)
 		) {
+
+			$course = new course();
+
+			// Met à jour la progression de l'utisateur et obtient le nombre de pages vues
+			$userProgress =  $course->setUserProgress(self::$siteContent, $this->getUser('id'));
+			
+			// Stockage dans les données d'inscription du membre
+			$this->setData(['enrolment', self::$siteContent, $this->getUser('id'), 'progress', $userProgress], false);
+
 			// Stocke la dernière page vue et sa date de consultation
 			$this->setData(['enrolment', common::$siteContent, $this->getUser('id'), 'lastPageView', $this->getUrl(0)], false);
 			$this->setData(['enrolment', common::$siteContent, $this->getUser('id'), 'datePageView', time()]);
-
-			// Stocke le rapport en CSV
-			$file = fopen(common::DATA_DIR . common::$siteContent . '/report.csv', 'a+');
-			fputcsv($file, [$this->getUser('id'), $this->getUrl(0), time()], ';');
-			fclose($file);
 
 		}
 
@@ -519,21 +534,6 @@ class core extends common
 				header(header: 'Location:' . helper::baseUrl(true) . 'swap/' . self::$siteContent);
 				exit();
 			}
-			/*
-			 * Récupère les statistiques de l'utilisateur non admin
-			 * en dehors de home 
-			 * et si la connextion est nécessaire et que le membre est connecté 
-			 * stocke la progression dans la base des inscriptions
-			 * 
-			if (
-				$this->isConnected() === true
-				and self::$siteContent !== 'home'
-				and $this->getData(['course', self::$siteContent, 'enrolment']) > 0
-			) {
-				$course = new course();
-				$userProgress = $course->userProgress(self::$siteContent, $this->getUser('id'));
-				$this->setData(['enrolment', self::$siteContent, $this->getUser('id'), 'progress', $userProgress ]);
-			}*/
 		}
 
 		/**
