@@ -435,15 +435,17 @@ class core extends common
 			$course = new course();
 
 			// Met à jour la progression de l'utisateur et obtient le nombre de pages vues
-			$userProgress =  $course->setUserProgress(self::$siteContent, $this->getUser('id'));
-			
+			$userProgress = $course->setUserProgress(self::$siteContent, $this->getUser('id'));
+
 			// Stockage dans les données d'inscription du membre
 			$this->setData(['enrolment', self::$siteContent, $this->getUser('id'), 'progress', $userProgress], false);
 
+			// Les rapports sont activés
 			// Stocke la dernière page vue et sa date de consultation
-			$this->setData(['enrolment', common::$siteContent, $this->getUser('id'), 'lastPageView', $this->getUrl(0)], false);
-			$this->setData(['enrolment', common::$siteContent, $this->getUser('id'), 'datePageView', time()]);
-
+			if ($this->getdata(['course', common::$siteContent, 'report']) === true) {
+				$this->setData(['enrolment', common::$siteContent, $this->getUser('id'), 'lastPageView', $this->getUrl(0)], false);
+				$this->setData(['enrolment', common::$siteContent, $this->getUser('id'), 'datePageView', time()]);
+			}
 		}
 
 		// Journalisation

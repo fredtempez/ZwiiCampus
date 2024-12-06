@@ -91,6 +91,12 @@
             </div>
             <div class="row">
                 <div class="col4">
+                    <?php echo template::checkbox('courseEditEnrolmentReport', true, 'Rapport des vues', [
+                        'checked' => $this->getdata(['course', $this->getUrl(2), 'report']),
+                        'help' => 'Ne s\'applique pas à l\'inscription anonyme',
+                    ]); ?>
+                </div>
+                <div class="col4">
                     <?php echo template::checkbox('courseEditEnrolmentLimit', true, 'Date de fin d\'inscription', [
                         'checked' => $this->getdata(['course', $this->getUrl(2), 'limitEnrolment']),
                         'help' => 'Ne s\'applique pas à l\'inscription anonyme',
@@ -99,7 +105,7 @@
                 <div class="col4">
                     <?php echo template::date('courseEditEnrolmentLimitDate', [
                         'type' => 'datetime-local',
-                        'label' => 'Fermeture',
+                        'label' => 'Fin d\'inscription',
                         'value' => is_null($this->getdata(['course', $this->getUrl(2), 'limitEnrolmentDate'])) ? '' : floor($this->getdata(['course', $this->getUrl(2), 'limitEnrolmentDate']) / 60) * 60
                     ]); ?>
                 </div>

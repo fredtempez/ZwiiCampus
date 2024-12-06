@@ -289,6 +289,7 @@ class course extends common
                     'enrolmentKey' => $this->getInput('courseEditEnrolmentKey'),
                     'limitEnrolment' => $this->getInput('courseEditEnrolmentLimit', helper::FILTER_BOOLEAN),
                     'limitEnrolmentDate' => $this->getInput('courseEditEnrolmentLimitDate', helper::FILTER_DATETIME),
+                    'report' => $this->getInput('courseEditEnrolmentReport', helper::FILTER_BOOLEAN),
                 ]
             ]);
 
@@ -719,6 +720,22 @@ class course extends common
                     0;
 
                 // Construction du tableau
+ 
+                if ($this->getdata(['course', $courseId, 'report']) === true) {
+                    $reportButton = template::button('userReport' . $userId, [
+                        'href' => helper::baseUrl() . 'course/userReport/' . $courseId . '/' . $userId,
+                        'value' => (array_key_exists('progress', $userValue) && is_int($userValue['progress']))
+                            ? number_format($userValue['progress']) . ' %'
+                            : ($viewPages ? min(round(($viewPages * 100) / $sumPages, 1), 100) . ' %' : '0%'),
+                        'disable' => empty($userValue['datePageView']),
+                    ]);
+                } else {
+                    $reportButton = template::button('userReport' . $userId, [
+                        'value' =>'-',
+                        'disable' => true,
+                        'help' => 'Rapport désactivé',
+                    ]);
+                }
                 self::$courseUsers[] = [
                     //$userId,
                     $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
@@ -732,19 +749,7 @@ class course extends common
                     ? helper::dateUTF8('%H:%M', $userValue['datePageView'])
                     : '',
                     $this->getData(['user', $userId, 'tags']),
-                    template::button('userReport' . $userId, [
-                        'href' => helper::baseUrl() . 'course/userReport/' . $courseId . '/' . $userId,
-                        /** La lecture de la progression s'effectue selon la nouvelle méthode (progression dans la base des enrolements)
-                         *  Soit avec l'ancienne méthode qui consiste à recalculer la progression.  
-                         * 
-                         * Le pourcentage de progression est-il renseigné au format INT sinon il est recalculé
-                         * 
-                         **/
-                        'value' => (array_key_exists('progress', $userValue) and is_int($userValue['progress']))
-                            ? number_format($userValue['progress']) . ' %'
-                            : ($viewPages ? min(round(($viewPages * 100) / $sumPages, 1), 100) . ' %' : '0%'),
-                        'disable' => empty($userValue['datePageView']),
-                    ]),
+                    $reportButton,
                     template::button('userDelete' . $userId, [
                         'class' => 'userDelete buttonRed',
                         'href' => helper::baseUrl() . 'course/userDelete/' . $courseId . '/' . $userId,
