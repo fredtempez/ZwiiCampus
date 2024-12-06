@@ -206,6 +206,7 @@ class course extends common
                     'enrolmentKey' => $this->getInput('courseAddEnrolmentKey'),
                     'limitEnrolment' => $this->getInput('courseAddEnrolmentLimit', helper::FILTER_BOOLEAN),
                     'limitEnrolmentDate' => $this->getInput('courseAddEnrolmentLimitDate', helper::FILTER_DATETIME),
+                    'report' => $this->getInput('courseAddEnrolmentReport', helper::FILTER_BOOLEAN),
                 ]
             ]);
 
