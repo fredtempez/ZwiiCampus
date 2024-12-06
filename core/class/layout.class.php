@@ -363,8 +363,9 @@ class layout extends common
                 $this->getUser('permission', 'filemanager') === true
                 && $this->getUser('permission', 'folder', (self::$siteContent === 'home' ? 'homePath' : 'coursePath')) !== 'none'
             ) {
+                $folder = '&fldr=/' . (self::$siteContent === 'home' ? '' : self::$siteContent);
                 $items .= '<wbr>' . template::ico('folder', [
-                    'href' => helper::baseUrl(false) . 'core/vendor/filemanager/dialog.php?type=0&akey=' . md5_file(self::DATA_DIR . 'core.json') . '&lang=' . $this->getData(['user', $this->getUser('id'), 'language']) . '&fldr=/' . self::$siteContent,
+                    'href' => helper::baseUrl(false) . 'core/vendor/filemanager/dialog.php?type=0&akey=' . md5_file(self::DATA_DIR . 'core.json') . '&lang=' . $this->getData(['user', $this->getUser('id'), 'language']) . $folder,
                     'margin' => 'all',
                     'attr' => 'data-lity',
                     'help' => 'Fichiers du site'
@@ -532,8 +533,9 @@ class layout extends common
                 $this->getUser('permission', 'filemanager') === true
                 && $this->getUser('permission', 'folder', (self::$siteContent === 'home' ? 'homePath' : 'coursePath')) !== 'none'
             ) {
+                $folder = '&fldr=/' . (self::$siteContent === 'home' ? '' : self::$siteContent);
                 $itemsRight .= '<li>' . template::ico('folder', [
-                    'href' => helper::baseUrl(false) . 'core/vendor/filemanager/dialog.php?type=0&akey=' . md5_file(self::DATA_DIR . 'core.json') . '&lang=' . $this->getData(['user', $this->getUser('id'), 'language']) . '&fldr=/' . self::$siteContent,
+                    'href' => helper::baseUrl(false) . 'core/vendor/filemanager/dialog.php?type=0&akey=' . md5_file(self::DATA_DIR . 'core.json') . '&lang=' . $this->getData(['user', $this->getUser('id'), 'language']) . $folder,
                     'attr' => 'data-lity',
                     'help' => 'Fichiers du site'
                 ]) . '</li>';
@@ -1084,9 +1086,10 @@ class layout extends common
                 )
                 || $this->getUser('group') === self::GROUP_ADMIN
             ) {
+                $folder = '&fldr=/' . (self::$siteContent === 'home' ? '' : self::$siteContent);
                 $rightItems .= '<li>' . template::ico('folder', [
                     'help' => 'Fichiers',
-                    'href' => helper::baseUrl(false) . 'core/vendor/filemanager/dialog.php?type=0&akey=' . md5_file(self::DATA_DIR . 'core.json') . '&lang=' . $this->getData(['user', $this->getUser('id'), 'language']) . '&fldr=/' . self::$siteContent,
+                    'href' => helper::baseUrl(false) . 'core/vendor/filemanager/dialog.php?type=0&akey=' . md5_file(self::DATA_DIR . 'core.json') . '&lang=' . $this->getData(['user', $this->getUser('id'), 'language']) . $folder,
                     'attr' => 'data-lity'
                 ]) . '</li>';
             }
