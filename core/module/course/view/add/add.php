@@ -88,8 +88,9 @@
             </div>
             <div class="row">
             <div class="col4">
-                    <?php echo template::checkbox('courseAddEnrolmentReport', true, 'Rapport des vues', [
-                        'help' => 'Ne s\'applique pas à l\'inscription anonyme',
+                    <?php echo template::checkbox('courseAddEnrolmentReport', true, 'Rapport des consultations', [
+                        'help' => 'Enregistre une trace des consultations. Ne s\'applique pas à l\'inscription anonyme',
+                        'checked' => true
                     ]); ?>
                 </div>
                 <div class="col4">
