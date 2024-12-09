@@ -162,7 +162,7 @@
             </div>
             <div class="row">
                 <div class="col4">
-                    <?php echo template::checkbox('courseManageEnrolmentReport', true, 'Rapport des vues', [
+                    <?php echo template::checkbox('courseManageEnrolmentReport', true, 'Rapport des consultations', [
                         'checked' => $this->getdata(['course', $this->getUrl(2), 'report']),
                         'help' => 'Ne s\'applique pas à l\'inscription anonyme',
                         'disabled' => true,
