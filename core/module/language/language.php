@@ -500,7 +500,7 @@ class language extends common
 					$data[$key] = $target;
 				}
 			}
-			file_put_contents(self::I18N_DIR . $lang . '.json', json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT), LOCK_EX);
+			file_put_contents(self::I18N_DIR . $lang . '.json', json_encode($data));
 
 			// Mettre à jour le descripteur
 			$this->setData([
@@ -528,13 +528,18 @@ class language extends common
 		}
 
 		// Ajout des champs absents selon la langue de référence
-		$dataFr = json_decode(file_get_contents(self::I18N_DIR . 'fr_FR.json'), true);
-		foreach ($dataFr as $key => $value) {
-			if (!array_key_exists($key, $data)) {
-				$data[$key] = '';
-			}
-		}
-		file_put_contents(self::I18N_DIR . $lang . '.json', json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT), LOCK_EX);
+		/*
+			  $dataFr = json_decode(file_get_contents(self::I18N_DIR . 'fr_FR.json'), true);
+			  foreach ($dataFr as $key => $value) {
+				  if (!array_key_exists($key, $data)) {
+					  $data[$key] = '';
+				  }
+			  }
+			  file_put_contents(self::I18N_DIR . $lang . '.json', $data);
+			  */
+
+		// Trier le tableau
+		asort($data);
 
 		//  Tableau des chaines à traduire dans la langue sélectionnée
 		foreach ($data as $key => $value) {
@@ -557,7 +562,7 @@ class language extends common
 			'title' => helper::translate('Éditer les dialogues') . '&nbsp;' . template::flag($lang, '20 %'),
 			'view' => 'edit',
 			'vendor' => [
-				'tablednd',
+				'tablednd'
 			],
 		]);
 	}
