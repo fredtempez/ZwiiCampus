@@ -91,16 +91,15 @@ class language extends common
 			}
 
 			// Télécharger le descripteur en ligne
-			$languageData = json_decode(helper::getUrlContents(self::ZWII_UI_URL . $lang . '.json'), true);
+			$languageData = helper::getUrlContents(self::ZWII_UI_URL . $lang . '.json');
 			$descripteur = json_decode(helper::getUrlContents(self::ZWII_UI_URL . 'language.json'), true);
 			$success = false;
 			if (
-				is_array($languageData) &&
+				$languageData &&
 				is_array($descripteur['language'][$lang])
 			) {
 				if ($this->setData(['language', $lang, $descripteur['language'][$lang]])) {
-					$success = $this->secure_file_put_contents(self::I18N_DIR . $lang . '.json', json_encode($languageData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
-					$success = is_int($success) ? true : false;
+					$success = $this->secure_file_put_contents(self::I18N_DIR . $lang . '.json', $languageData);
 				}
 			}
 
