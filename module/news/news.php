@@ -206,7 +206,6 @@ class news extends common
 		$this->addOutput([
 			'title' => helper::translate('Rédiger un article'),
 			'vendor' => [
-				'flatpickr',
 				'tinymce'
 			],
 			'view' => 'add'
@@ -465,7 +464,6 @@ class news extends common
 			$this->addOutput([
 				'title' => $this->getData(['module', $this->getUrl(0), 'posts', $this->getUrl(2), 'title']),
 				'vendor' => [
-					'flatpickr',
 					'tinymce'
 				],
 				'view' => 'edit'

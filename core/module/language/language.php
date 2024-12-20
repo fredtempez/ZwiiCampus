@@ -558,7 +558,7 @@ class language extends common
 			'title' => helper::translate('Éditer les dialogues') . '&nbsp;' . template::flag($lang, '20 %'),
 			'view' => 'edit',
 			'vendor' => [
-				'flatpickr',
+				'tablednd',
 			],
 		]);
 	}

@@ -151,7 +151,6 @@ class form extends common
 			'title' => helper::translate('Configuration du module'),
 			'vendor' => [
 				'html-sortable',
-				'flatpickr'
 			],
 			'view' => 'config'
 		]);
@@ -223,7 +222,6 @@ class form extends common
 				'title' => helper::translate('Options de configuration'),
 				'vendor' => [
 					'html-sortable',
-					'flatpickr'
 				],
 				'view' => 'option'
 			]);
@@ -505,9 +503,6 @@ class form extends common
 				'notification' => ($sent === true ? helper::translate('Formulaire soumis') : $sent),
 				'redirect' => $redirect ? helper::baseUrl() . $redirect : '',
 				'state' => ($sent === true ? true : false),
-				'vendor' => [
-					'flatpickr'
-				],
 			]);
 		}
 		// Valeurs en sortie
@@ -515,9 +510,6 @@ class form extends common
 			'showBarEditButton' => true,
 			'showPageContent' => true,
 			'view' => 'index',
-			'vendor' => [
-				'flatpickr'
-			],
 		]);
 	}
 
