@@ -15,7 +15,7 @@
 class suscribe extends common
 {
 
-	const VERSION = '2.3';
+	const VERSION = '2.4';
 	const REALNAME = 'Auto Inscription';
 	const DELETE = true;
 	const UPDATE = '0.0';
@@ -315,6 +315,7 @@ class suscribe extends common
 							'password' => '',
 							// pas de groupe afin de le différencier dans la liste des users
 							'timer' => time(),
+							'pseudo' => $userId,
 							'auth' => $auth,
 							'status' => self::STATUS_EMAIL_AWAITING
 						]

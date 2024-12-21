@@ -164,6 +164,7 @@ $(document).ready(function () {
         $("#connectContainer").hide();
         $("#networkContainer").hide();
         $("#localeContainer").show();
+        document.getElementById("containerSelected").value = "locale";
         $("#configSetupButton").removeClass("activeButton");
         $("#configLocaleButton").addClass("activeButton");
         $("#configSocialButton").removeClass("activeButton");
@@ -176,6 +177,7 @@ $(document).ready(function () {
         $("#connectContainer").hide();
         $("#networkContainer").hide();
         $("#setupContainer").show();
+        document.getElementById("containerSelected").value = "setup";
         $("#configSetupButton").addClass("activeButton");
         $("#configLocaleButton").removeClass("activeButton");
         $("#configSocialButton").removeClass("activeButton");
@@ -189,6 +191,7 @@ $(document).ready(function () {
         $("#localeContainer").hide();
         $("#networkContainer").hide();
         $("#socialContainer").show();
+        document.getElementById("containerSelected").value = "social";
         $("#configSetupButton").removeClass("activeButton");
         $("#configLocaleButton").removeClass("activeButton");
         $("#configSocialButton").addClass("activeButton");
@@ -201,6 +204,7 @@ $(document).ready(function () {
         $("#socialContainer").hide();
         $("#networkContainer").hide();
         $("#connectContainer").show();
+        document.getElementById("containerSelected").value = "connect";
         $("#configSetupButton").removeClass("activeButton");
         $("#configLocaleButton").removeClass("activeButton");
         $("#configSocialButton").removeClass("activeButton");
@@ -213,6 +217,7 @@ $(document).ready(function () {
         $("#socialContainer").hide();
         $("#connectContainer").hide();
         $("#networkContainer").show();
+        document.getElementById("containerSelected").value = "network";
         $("#configSetupButton").removeClass("activeButton");
         $("#configLocaleButton").removeClass("activeButton");
         $("#configSocialButton").removeClass("activeButton");

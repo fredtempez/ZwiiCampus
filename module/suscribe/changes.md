@@ -1,3 +1,5 @@
+# Version 2.4
+- L'approbation par un administrateur initialise le pseudo avec l'id de l'utilisateur.
 # Version 2.3
 - Warning lors de la saisie d'un email vide
 # Version 2.2
