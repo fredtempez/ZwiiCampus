@@ -1023,8 +1023,8 @@ class layout extends common
                     // Sur une page sans module
                     or $this->getData(['page', $this->getUrl(0), 'moduleId']) === ''
                     // Sur une page avec un module invalide
-                    or (!is_null($this->getData(['page', $this->getUrl(2), 'moduleId'])) &&
-                        !class_exists($this->getData(['page', $this->getUrl(2), 'moduleId']))
+                    or (empty($this->getData(['page', $this->getUrl(0), 'moduleId']))  === false
+                        and class_exists($this->getData(['page', $this->getUrl(0), 'moduleId'])) === false
                     )
                     // Sur une page d'accueil
                     or $this->getUrl(0) === ''
@@ -1044,6 +1044,7 @@ class layout extends common
                         $this->getUser('permission', 'page', 'module')
                         and $this->geturl(1) !== 'edit'
                         and $this->getData(['page', $this->getUrl(0), 'moduleId'])
+                        and class_exists($this->getData(['page', $this->getUrl(0), 'moduleId'])) === true
                     ) {
                         $leftItems .= '<li>' . template::ico('gear', [
                             'href' => helper::baseUrl() . $this->getUrl(0) . '/config',
