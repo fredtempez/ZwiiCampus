@@ -66,11 +66,11 @@ $(document).ready(function () {
         $("#connectCaptchaStrong").prop("checked", false);
     }
 
-	var configLayout = "<?php echo $this->getData(['user', $this->getUser('id'), 'view', 'config']);?>";
-	// Non défini, valeur par défaut
-	if (configLayout == "") {
-        configLayout = "setup"; 
-	 }
+    let configLayout = "<?php echo $this->getData(['user', $this->getUser('id'), 'view', 'config']);?>";
+    // Non défini, valeur par défaut
+    if (configLayout == "") {
+        configLayout = "setup";
+    }
 
     $("#localeContainer").hide();
     $("#socialContainer").hide();
@@ -83,6 +83,16 @@ $(document).ready(function () {
 
     // Gestion des événements
     //---------------------------------------------------------------------------------------------------------------------
+
+
+    /**
+     * Transmet le bouton de l'onglet sélectionné avant la soumission
+     */
+
+    // Mettre à jour le champ caché avant la soumission
+    $('#configForm').on('submit', function () {
+        $('#containerSelected').val(configLayout);
+    });
 
     /**
      * Afficher et masquer options smtp
@@ -157,14 +167,14 @@ $(document).ready(function () {
 
     /**
      *  Sélection de la  page de configuration à afficher
-     */   
+     */
     $("#configLocaleButton").on("click", function () {
         $("#setupContainer").hide();
         $("#socialContainer").hide();
         $("#connectContainer").hide();
         $("#networkContainer").hide();
         $("#localeContainer").show();
-        document.getElementById("containerSelected").value = "locale";
+        configLayout = "locale";
         $("#configSetupButton").removeClass("activeButton");
         $("#configLocaleButton").addClass("activeButton");
         $("#configSocialButton").removeClass("activeButton");
@@ -177,7 +187,7 @@ $(document).ready(function () {
         $("#connectContainer").hide();
         $("#networkContainer").hide();
         $("#setupContainer").show();
-        document.getElementById("containerSelected").value = "setup";
+        configLayout = "setup";
         $("#configSetupButton").addClass("activeButton");
         $("#configLocaleButton").removeClass("activeButton");
         $("#configSocialButton").removeClass("activeButton");
@@ -191,7 +201,7 @@ $(document).ready(function () {
         $("#localeContainer").hide();
         $("#networkContainer").hide();
         $("#socialContainer").show();
-        document.getElementById("containerSelected").value = "social";
+        configLayout = "social";
         $("#configSetupButton").removeClass("activeButton");
         $("#configLocaleButton").removeClass("activeButton");
         $("#configSocialButton").addClass("activeButton");
@@ -204,7 +214,7 @@ $(document).ready(function () {
         $("#socialContainer").hide();
         $("#networkContainer").hide();
         $("#connectContainer").show();
-        document.getElementById("containerSelected").value = "connect";
+        configLayout = "connect";
         $("#configSetupButton").removeClass("activeButton");
         $("#configLocaleButton").removeClass("activeButton");
         $("#configSocialButton").removeClass("activeButton");
@@ -217,7 +227,7 @@ $(document).ready(function () {
         $("#socialContainer").hide();
         $("#connectContainer").hide();
         $("#networkContainer").show();
-        document.getElementById("containerSelected").value = "network";
+        configLayout = "network";
         $("#configSetupButton").removeClass("activeButton");
         $("#configLocaleButton").removeClass("activeButton");
         $("#configSocialButton").removeClass("activeButton");
@@ -247,7 +257,7 @@ $(document).ready(function () {
 
     // Contrôle l'image Open Screen Graph
     // Type d'image
-    $("span#screenType").each(function(){
+    $("span#screenType").each(function () {
         var text = $(this).text();
         if (text.includes("jpg") || text.includes("jpeg") || text.includes("png")) {
             $(this).css("color", "green");
@@ -256,7 +266,7 @@ $(document).ready(function () {
         }
     });
     // La largeur
-    $("span#screenWide").each(function(){
+    $("span#screenWide").each(function () {
         var screenId = parseInt($(this).text());
         if (screenId >= 1200) {
             $(this).css("color", "green");
@@ -265,7 +275,7 @@ $(document).ready(function () {
         }
     });
     // La hauteur
-    $("span#screenHeight").each(function(){
+    $("span#screenHeight").each(function () {
         var screenId = parseInt($(this).text());
         if (screenId >= 630) {
             $(this).css("color", "green");
@@ -274,7 +284,7 @@ $(document).ready(function () {
         }
     });
     // Le ratio
-    $('span#screenRatio').each(function(){
+    $('span#screenRatio').each(function () {
         var ratio = parseFloat($(this).text());
         if (ratio >= 1.90 && ratio <= 1.92) {
             $(this).css("color", "green");
@@ -285,17 +295,17 @@ $(document).ready(function () {
         }
     });
     // Le poids
-    $('span#screenWeight').each(function(index){
+    $('span#screenWeight').each(function (index) {
         var weight = parseFloat($(this).text());
         var fileType = $('span#screenType').eq(index).text();
         if ((fileType === "jpg" || fileType === "jpeg") && weight < 5000000) {
             $(this).css("color", "green");
         } else {
-           $(this).css("color", "red");
+            $(this).css("color", "red");
         }
     });
 
-    $('span#screenWeight').each(function(index){
+    $('span#screenWeight').each(function (index) {
         var weight = parseFloat($(this).text());
         var fileType = $('span#screenType').eq(index).text();
 
