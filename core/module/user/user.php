@@ -1240,6 +1240,7 @@ class user extends common
 		) {
 			// Lire Id du compte
 			$userId = $this->getInput('userLoginId', helper::FILTER_ID, true);
+			$notification = '';
 			// Check le captcha
 			if (
 				$this->getData(['config', 'connect', 'captcha'])
@@ -1353,11 +1354,13 @@ class user extends common
 
 							// L'email a été envoyé avec succès, redirection vers la page de double authentification
 							if ($sent === true) {
+								// Journalisation
 								$logStatus = helper::translate('Envoi du message d\'authentification');
 								// Redirection vers la page d'authentification
 								$authRedirect = 'user/auth/';
 								// Stocker la clé envoyée par email
 								$this->setData(['user', $userId, 'authKey', $keyByMail]);
+								$notification = sprintf('Clé d\'authentification envoyée à votre adresse mail %s', $this->getData(['user', $userId, 'mail']));
 							} else {
 								// Impossible d'envoyer le message
 								// Double authentification désactivée
@@ -1365,9 +1368,11 @@ class user extends common
 								$this->setData(['user', $userId, 'authKey', $authKey]);
 								// Journalisation 
 								$this->saveLog($sent);
+								$notification = sprintf(helper::translate('Bienvenue %s %s'), $this->getData(['user', $userId, 'firstname']), $this->getData(['user', $userId, 'lastname']));
 							}
 						} else {
 							$logStatus = helper::translate('Connexion réussie');
+							$notification = sprintf(helper::translate('Bienvenue %s %s'), $this->getData(['user', $userId, 'firstname']), $this->getData(['user', $userId, 'lastname']));
 							$this->setData(['user', $userId, 'authKey', $authKey]);
 						}
 
@@ -1402,7 +1407,7 @@ class user extends common
 						$redirect = ($pageId && strpos($pageId, 'user_reset') !== 0) ? helper::baseUrl() . $authRedirect . str_replace('_', '/', str_replace('__', '#', $pageId)) : helper::baseUrl() . $authRedirect;
 						// Valeurs en sortie
 						$this->addOutput([
-							'notification' => sprintf(helper::translate('Bienvenue %s %s'), $this->getData(['user', $userId, 'firstname']), $this->getData(['user', $userId, 'lastname'])),
+							'notification' => $notification,
 							'redirect' => $redirect,
 							'state' => true
 						]);
@@ -1462,24 +1467,24 @@ class user extends common
 			// Vérifier la clé saisie
 			$targetKey = $this->getData(['user', $this->getUser('id'), 'authKey']);
 			$inputKey = $this->getInput('userAuthKey', helper::FILTER_INT);
+			// Redirection
+			$pageId = $this->getUrl(2);
+			$redirect = $pageId? helper::baseUrl() . $pageId : helper::baseUrl() ;
 			if (
 				// La clé est valide ou le message n'ayant pas été expédié, la double authentification est désactivée
 				$targetKey === $inputKey || $this->getData(['config', 'connect', 'mailAuth', 0]) === 0
 			) {
-				
-				// Redirection
-				$pageId = $this->getUrl(2);
+
 				// La fiche de l'utilisateur contient la clé d'authentification
 				$this->setData(['user', $this->getUser('id'), 'authKey', $this->getInput('ZWII_AUTH_KEY')]);
-				$redirect = ($pageId && strpos($pageId, 'user_reset') !== 0) ? helper::baseUrl() . str_replace('_', '/', str_replace('__', '#', $pageId)) : helper::baseUrl();
 				// Journalisation
 				$this->saveLog('Connexion réussie');
-				// Réinitialiser le compteur de temps
-				$this->setData(['user', $this->getUser('id'), 'connectTimeout', 0]);
+				// Utilisateur connecté
+				$userId = $this->getUser('id');
 				// Valeurs en sortie
 				$this->addOutput([
 					'redirect' => $redirect,
-					'notification' => helper::translate('Connexion réussie'),
+					'notification' => sprintf(helper::translate('Bienvenue %s %s'), $this->getData(['user', $userId, 'firstname']), $this->getData(['user', $userId, 'lastname'])),
 					'state' => true
 				]);
 			} else {
@@ -1498,10 +1503,9 @@ class user extends common
 
 				// Journalisation
 				$this->saveLog('Erreur de vérification de la clé envoyée par email ' . $this->getUser('id'));
-
 				// Valeurs en sortie
 				$this->addOutput([
-					'redirect' => helper::baseUrl() . 'user/auth',
+					'redirect' => $redirect,
 					'notification' => helper::translate('La clé est incorrecte'),
 					'state' => false
 				]);
@@ -1515,6 +1519,7 @@ class user extends common
 			]);
 		}
 	}
+
 
 
 	/**

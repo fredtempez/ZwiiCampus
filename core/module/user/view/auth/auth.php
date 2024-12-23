@@ -9,8 +9,8 @@
 <div class="row" id="buttonsContainer">
     <div class="col2" id="backContainer">
         <?php echo template::button('userAuthBack', [
-            'href' => $this->getUrl(2) ? helper::baseUrl() . ' user/login' . str_replace('_', '/', str_replace('__', '#', $this->getUrl(2))) : helper::baseUrl() . ' user/login',
-            'value' => template::ico('left')
+             'href' => $this->getUrl(2) ? helper::baseUrl() . 'user/login/' . str_replace('_', '/', str_replace('__', '#', $this->getUrl(2))) : helper::baseUrl() . 'user/login',
+             'value' => template::ico('left')
         ]); ?>
     </div>
     <div class="col2 offset8" id="loginContainer">
