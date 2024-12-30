@@ -13,9 +13,9 @@
 
 $(document).ready((function () {
 
-    var dataX = <?php echo json_encode(array_map(function ($item) { return $item[0]; }, $module::$userGraph)); ?>;
-    var dataY = <?php echo json_encode(array_map(function ($item) { return $item[1];}, $module::$userGraph)); ?>;
-    var dataText = <?php echo json_encode(array_map(function ($item) { return $item[2];}, $module::$userGraph)); ?>;
+    var dataX = <?php echo json_encode(array_map(function ($item) { return $item[0]; }, course::$userGraph)); ?>;
+    var dataY = <?php echo json_encode(array_map(function ($item) { return $item[1];}, course::$userGraph)); ?>;
+    var dataText = <?php echo json_encode(array_map(function ($item) { return $item[2];}, course::$userGraph)); ?>;
 
     var data = [{
         x: dataX,

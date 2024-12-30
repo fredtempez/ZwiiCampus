@@ -31,19 +31,19 @@
                     ]); ?>
                 </div>
                 <div class="col5">
-                    <?php echo template::select('courseAddAuthor', $module::$courseTeachers, [
+                    <?php echo template::select('courseAddAuthor', course::$courseTeachers, [
                         'label' => 'Auteur'
                     ]); ?>
                 </div>
             </div>
             <div class="row">
                 <div class="col6">
-                    <?php echo template::select('courseAddTheme', $module::$courses, [
+                    <?php echo template::select('courseAddTheme', course::$courses, [
                         'label' => 'Copier le thème depuis',
                     ]); ?>
                 </div>
                 <div class="col6">
-                    <?php echo template::select('courseAddCategorie', $module::$courseCategories, [
+                    <?php echo template::select('courseAddCategorie', course::$courseCategories, [
                         'label' => 'Catégorie',
                     ]); ?>
                 </div>
@@ -57,7 +57,7 @@
             </div>
             <div class="row">
                 <div class="col4">
-                    <?php echo template::select('courseAddAccess', $module::$courseAccess, [
+                    <?php echo template::select('courseAddAccess', course::$courseAccess, [
                         'label' => 'Accès'
                     ]); ?>
                 </div>
@@ -76,7 +76,7 @@
             </div>
             <div class="row">
                 <div class="col6">
-                    <?php echo template::select('courseAddEnrolment', $module::$courseEnrolment, [
+                    <?php echo template::select('courseAddEnrolment', course::$courseEnrolment, [
                         'label' => 'Participation'
                     ]); ?>
                 </div>

@@ -98,14 +98,14 @@
                 <div class="col6">
                     <?php echo template::text('courseManageHomePageId', [
                         'label' => 'Page d\'accueil',
-                        'value' => $module::$pagesList[$this->getdata(['course', $this->getUrl(2), 'homePageId'])]['shortTitle'],
+                        'value' => course::$pagesList[$this->getdata(['course', $this->getUrl(2), 'homePageId'])]['shortTitle'],
                         'readonly' => true,
                     ]); ?>
                 </div>
                 <div class="col6">
                     <?php echo template::text('courseManageCategorie', [
                         'label' => 'Catégorie',
-                        'value' => $module::$courseCategories[$this->getdata(['course', $this->getUrl(2), 'category'])],
+                        'value' => course::$courseCategories[$this->getdata(['course', $this->getUrl(2), 'category'])],
                         'readonly' => true,
                     ]); ?>
                 </div>
@@ -123,7 +123,7 @@
                 <div class="col4">
                     <?php echo template::text('courseManageAccess', [
                         'label' => 'Disponibilité',
-                        'value' => $module::$courseAccess[$this->getdata(['course', $this->getUrl(2), 'access'])],
+                        'value' => course::$courseAccess[$this->getdata(['course', $this->getUrl(2), 'access'])],
                         'readonly' => true,
                     ]); ?>
                 </div>
@@ -148,7 +148,7 @@
                 <div class="col4">
                     <?php echo template::text('courseManageEnrolment', [
                         'label' => 'Participation',
-                        'value' => $module::$courseEnrolment[$this->getdata(['course', $this->getUrl(2), 'enrolment'])],
+                        'value' => course::$courseEnrolment[$this->getdata(['course', $this->getUrl(2), 'enrolment'])],
                         'readonly' => true,
                     ]); ?>
                 </div>

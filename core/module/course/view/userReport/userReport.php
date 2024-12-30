@@ -20,7 +20,7 @@
         </div>
     </div>
 </div>
-<?php if ($module::$userReport): ?>
+<?php if (course::$userReport): ?>
     <div class="row">
         <div class="col4 offset2">
             <?php if ($this->getData(['course', $this->getUrl(2), 'access']) === self::COURSE_ACCESS_DATE): ?>
@@ -34,19 +34,19 @@
         </div>
         <div class="col4">
             <p>Commencé le :
-                <?php echo $module::$userStat['floor']; ?>
+                <?php echo course::$userStat['floor']; ?>
             </p>
             <p>Terminé le :
-                <?php echo $module::$userStat['top']; ?>
+                <?php echo course::$userStat['top']; ?>
             </p>
             <p>Temps passé :
-                <?php echo $module::$userStat['time']; ?>
+                <?php echo course::$userStat['time']; ?>
             </p>
         </div>
     </div>
     <div class="row textAlignCenter">
         <div class="col8">
-            <?php echo template::table([6, 3, 3], $module::$userReport, ['Page', 'Début de Consultation', 'Temps consultation']); ?>
+            <?php echo template::table([6, 3, 3], course::$userReport, ['Page', 'Début de Consultation', 'Temps consultation']); ?>
         </div>
     </div>
 <?php else: ?>

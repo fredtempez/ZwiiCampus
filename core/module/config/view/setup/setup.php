@@ -26,7 +26,7 @@
 						]); ?>
 					</div>
 					<div class="col4">
-						<?php echo template::select('configTimezone', $module::$timezones, [
+						<?php echo template::select('configTimezone', config::$timezones, [
 							'label' => 'Fuseau horaire',
 							'selected' => $this->getData(['config', 'timezone']),
 							'help' => 'Le fuseau horaire est utile au bon référencement'
@@ -44,7 +44,7 @@
 						<?php echo template::checkbox('configRewrite', true, 'Apache URL intelligentes', [
 							'checked' => helper::checkRewrite(),
 							'help' => 'Supprime le point d\'interrogation dans les URL, l\'option est indisponible avec les autres serveurs Web',
-							'disabled' => helper::checkServerSoftware() === false and $module->isModRewriteEnabled()
+							'disabled' => helper::checkServerSoftware() === false and config->isModRewriteEnabled()
 						]); ?>
 					</div>
 				</div>
@@ -74,7 +74,7 @@
 				</div>
 				<div class="row">
 					<div class="col3">
-						<?php echo template::select('configAutoUpdateDelay', $module::$updateDelay, [
+						<?php echo template::select('configAutoUpdateDelay', config::$updateDelay, [
 							'label' => 'Fréquence de recherche',
 							'selected' => $this->getData(['config', 'autoUpdateDelay']),
 						]); ?>
@@ -87,7 +87,7 @@
 						<?php echo template::button('configUpdateForced', [
 							'ico' => 'download-cloud',
 							'href' => helper::baseUrl() . 'install/update',
-							'value' => $module::$updateButtonText,
+							'value' => config::$updateButtonText,
 							'class' => 'buttonRed',
 						]); ?>
 					</div>

@@ -15,8 +15,8 @@
     </div>
 </div>
 
-<?php if($module::$courseCategories): ?>
-	<?php echo template::table([5,5,1,1], $module::$courseCategories, ['Id', 'Titre', '','']); ?>
+<?php if(course::$courseCategories): ?>
+	<?php echo template::table([5,5,1,1], course::$courseCategories, ['Id', 'Titre', '','']); ?>
 <?php else: ?>
 	<?php echo template::speech('Aucune catégorie'); ?>
 <?php endif; ?>

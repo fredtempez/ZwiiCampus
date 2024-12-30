@@ -25,7 +25,7 @@
                     ]); ?>
                 </div>
                 <div class="col5">
-                    <?php echo template::select('courseEditAuthor', $module::$courseTeachers, [
+                    <?php echo template::select('courseEditAuthor', course::$courseTeachers, [
                         'label' => 'Auteur',
                         'selected' => $this->getdata(['course', $this->getUrl(2), 'author'])
                     ]); ?>
@@ -33,13 +33,13 @@
             </div>
             <div class="row">
                 <div class="col6">
-                    <?php echo template::select('courseEditHomePageId', helper::arrayColumn($module::$pagesList, 'title'), [
+                    <?php echo template::select('courseEditHomePageId', helper::arrayColumn(course::$pagesList, 'title'), [
                         'label' => 'Page d\'accueil',
                         'selected' => $this->getdata(['course', $this->getUrl(2), 'homePageId']),
                     ]); ?>
                 </div>
                 <div class="col6">
-                    <?php echo template::select('courseEditCategorie', $module::$courseCategories, [
+                    <?php echo template::select('courseEditCategorie', course::$courseCategories, [
                         'label' => 'Catégorie',
                         'selected' => $this->getdata(['course', $this->getUrl(2), 'category'])
                     ]); ?>
@@ -55,7 +55,7 @@
             </div>
             <div class="row">
                 <div class="col4">
-                    <?php echo template::select('courseEditAccess', $module::$courseAccess, [
+                    <?php echo template::select('courseEditAccess', course::$courseAccess, [
                         'label' => 'Disponibilité',
                         'selected' => $this->getdata(['course', $this->getUrl(2), 'access'])
                     ]); ?>
@@ -77,7 +77,7 @@
             </div>
             <div class="row">
                 <div class="col4">
-                    <?php echo template::select('courseEditEnrolment', $module::$courseEnrolment, [
+                    <?php echo template::select('courseEditEnrolment', course::$courseEnrolment, [
                         'label' => 'Participation',
                         'selected' => $this->getdata(['course', $this->getUrl(2), 'enrolment'])
                     ]); ?>

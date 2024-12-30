@@ -597,8 +597,9 @@ class theme extends common
 					'burgerTitle' => $this->getInput('themeMenuBurgerTitle', helper::FILTER_BOOLEAN),
 					'memberBar' => $this->getInput('themeMenuMemberBar', helper::FILTER_BOOLEAN),
 					'selectSpace' => $this->getInput('themeMenuSelectSpace', helper::FILTER_BOOLEAN),
+					'hidePages' => $this->getInput('themeMenuHidePages', helper::FILTER_BOOLEAN),
 					'burgerLogo' => $this->getInput('themeMenuBurgerLogo'),
-					'burgerContent' => $this->getInput('themeMenuBurgerContent')
+					'burgerContent' => $this->getInput('themeMenuBurgerContent'),
 				]
 			]);
 			// Valeurs en sortie

@@ -221,7 +221,6 @@ core.start = function () {
         var e = new Date();
         e.setFullYear(e.getFullYear() + 1);
         var expires = "expires=" + e.toUTCString() + ";";
-    
         // Stocke le cookie d'acceptation
         document.cookie = "ZWII_COOKIE_CONSENT=true; samesite=lax; " + domain + path + expires;
     });
@@ -253,8 +252,6 @@ core.start = function () {
             menuDOM.css("display", "");
         }
     });
-
-
 
     /**
      * Choix de page dans la barre de membre
@@ -372,9 +369,13 @@ core.start = function () {
             }
         }
     }).trigger("resize");
-
-
-
+    /**
+     * Masque les pages du menu si demandé dans la configuration du thème du menu
+     */
+    var hidePages = "<?php echo $this->getData(['theme', 'menu', 'hidePages'])?>";
+    if (hidePages == 1) {
+        $("#menuLeft").css("visibility", "hidden");
+    }
 };
 
 

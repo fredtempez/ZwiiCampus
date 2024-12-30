@@ -31,7 +31,7 @@
             <h4><?php echo helper::translate('Sélection des pages de l\'espace') ?></h4>
             <div class='row'>
                 <div class='col10 offset2'>
-                    <?php foreach ($module::$pagesList as $key => $value) {
+                    <?php foreach (course::$pagesList as $key => $value) {
                         echo $value;
                     }
                     ?>

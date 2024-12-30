@@ -496,7 +496,7 @@ class layout extends common
     public function showMenu()
     {
         // Met en forme les items du menu
-        $itemsLeft = $this->formatMenu(false);
+        $itemsLeft = $this->formatMenu();
 
         // Menu extra
         $itemsRight = $this->formatMenu(true);

@@ -29,7 +29,7 @@
                                     ]); ?>
                                 </div>
                                 <div class="col6">
-                                    <?php echo template::select('profilEditProfil', $module::$profils, [
+                                    <?php echo template::select('profilEditProfil', user::$profils, [
                                         'label' => 'Hiérarchie',
                                         'help' => 'Rang 9 > rang 1. Le profil de rang 1 n\'est pas modifiable.',
                                         'selected' => $this->getUrl(3),
@@ -93,7 +93,7 @@
                     ]); ?>
                 </div>
                 <div class="col5">
-                    <?php echo template::select('profilEditCoursePath', $module::$sharePath, [
+                    <?php echo template::select('profilEditCoursePath', user::$sharePath, [
                         'label' => 'Dossier depuis un espace',
                         'class' => 'filemanager',
                         /*
@@ -104,7 +104,7 @@
                     ]); ?>
                 </div>
                 <div class="col5">
-                    <?php echo template::select('profilEditHomePath', $module::$sharePath, [
+                    <?php echo template::select('profilEditHomePath', user::$sharePath, [
                         'label' => 'Dossier depuis l\'accueil',
                         'class' => 'filemanager',
                         // 'none' interdit l'accès au gestionnaire de fichier au niveau de l'accueil

@@ -27,7 +27,7 @@
                             ]); ?>
                         </div>
                         <div class="col12">
-                            <?php echo template::select('profilAddGroup', $module::$groupProfils, [
+                            <?php echo template::select('profilAddGroup', user::$groupProfils, [
                                 'label' => 'Groupe associé',
                                 'selected' => $this->getUrl(2)
                             ]); ?>
@@ -69,13 +69,13 @@
                     <?php echo template::checkbox('profilAddFileManager', true, 'Autorisé'); ?>
                 </div>
                 <div class="col5">
-                    <?php echo template::select('profilAddCoursePath', $module::$sharePath, [
+                    <?php echo template::select('profilAddCoursePath', user::$sharePath, [
                         'label' => 'Dossier depuis un espace',
                         'class' => 'filemanager',
                     ]); ?>
                 </div>
                 <div class="col5">
-                    <?php echo template::select('profilAddHomePath', $module::$sharePath, [
+                    <?php echo template::select('profilAddHomePath', user::$sharePath, [
                         'label' => 'Dossier depuis l\'accueil',
                         'class' => 'filemanager',
                     ]); ?>
