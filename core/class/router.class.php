@@ -251,6 +251,25 @@ class core extends common
 			}
 
 			$css .= '#toggle span,#menu a{padding:' . $this->getData(['theme', 'menu', 'height']) . ';font-family:' . $fonts[$this->getData(['theme', 'menu', 'font'])] . ';font-weight:' . $this->getData(['theme', 'menu', 'fontWeight']) . ';font-size:' . $this->getData(['theme', 'menu', 'fontSize']) . ';text-transform:' . $this->getData(['theme', 'menu', 'textTransform']) . '}';
+
+
+			// Déterminer la hauteur max du menu pour éviter les débordements
+			$padding = $this->getData(['theme', 'menu', 'height']); // Par exemple, "10px 20px"
+			$fontSize = (float) $this->getData(['theme', 'text', 'fontSize']); // Taille de référence en pixels
+			$menuFontSize = (float) $this->getData(['theme', 'menu', 'fontSize']); // Taille du menu en em
+
+			// Extraire la première valeur du padding (par exemple "10px 20px" -> "10px")
+			$firstPadding = (float) explode(" ", $padding)[0]; // Nous prenons la première valeur, supposée être en px
+
+			// Convertir menuFontSize (en em) en pixels
+			$menuFontSizeInPx = $menuFontSize * $fontSize;
+
+			// Calculer la hauteur totale
+			$totalHeight = $firstPadding + $fontSize + $menuFontSizeInPx;
+
+			// Fixer la hauteur maximale de la barre de menu
+			$css .= '#menuLeft, nav, a.active {max-height:' . $totalHeight . 'px}';
+
 			// Pied de page
 			$colors = helper::colorVariants($this->getData(['theme', 'footer', 'backgroundColor']));
 			if ($this->getData(['theme', 'footer', 'margin'])) {
@@ -629,7 +648,6 @@ class core extends common
 				'inlineStyle' => $inlineStyle,
 				'inlineScript' => $inlineScript,
 			]);
-
 		}
 		// Importe le module
 		else {
@@ -858,8 +876,7 @@ class core extends common
 
 			// Pour éviter une 404, bascule dans l'espace correct si la page existe dans cet espace.
 			// Parcourir les espaces y compris l'accueil
-			foreach (array_merge(['home' => []], $this->getData(['course'])) as $courseId => $value) {
-				;
+			foreach (array_merge(['home' => []], $this->getData(['course'])) as $courseId => $value) {;
 				if (
 					// l'espace existe
 					is_dir(common::DATA_DIR . $courseId) &&
@@ -914,25 +931,25 @@ class core extends common
 			]);
 		}
 		switch ($this->output['display']) {
-			// Layout brut
+				// Layout brut
 			case common::DISPLAY_RAW:
 				echo $this->output['content'];
 				break;
-			// Layout vide
+				// Layout vide
 			case common::DISPLAY_LAYOUT_BLANK:
 				require 'core/layout/blank.php';
 				break;
-			// Affichage en JSON
+				// Affichage en JSON
 			case common::DISPLAY_JSON:
 				header('Content-Type: application/json');
 				echo json_encode($this->output['content']);
 				break;
-			// RSS feed
+				// RSS feed
 			case common::DISPLAY_RSS:
 				header('Content-type: application/rss+xml; charset=UTF-8');
 				echo $this->output['content'];
 				break;
-			// Layout allégé
+				// Layout allégé
 			case common::DISPLAY_LAYOUT_LIGHT:
 				ob_start();
 				require 'core/layout/light.php';
@@ -943,7 +960,7 @@ class core extends common
 				$content = preg_replace('/[\t ]+/u', ' ', $content);
 				echo $content;
 				break;
-			// Layout principal
+				// Layout principal
 			case common::DISPLAY_LAYOUT_MAIN:
 				ob_start();
 				require 'core/layout/main.php';

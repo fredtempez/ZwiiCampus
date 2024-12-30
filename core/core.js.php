@@ -372,9 +372,16 @@ core.start = function () {
     /**
      * Masque les pages du menu si demandé dans la configuration du thème du menu
      */
+    // Option active
     var hidePages = "<?php echo $this->getData(['theme', 'menu', 'hidePages'])?>";
+
     if (hidePages == 1) {
-        $("#menuLeft").css("visibility", "hidden");
+        $("#menuLeft").css({
+            "visibility": "hidden",
+            "overflow": "hidden",
+            "max-width": "10px"
+        });
+
     }
 };
 
