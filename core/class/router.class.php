@@ -268,7 +268,7 @@ class core extends common
 			$totalHeight = $firstPadding + $fontSize + $menuFontSizeInPx;
 
 			// Fixer la hauteur maximale de la barre de menu
-			$css .= '#menuLeft, nav, a.active {max-height:' . $totalHeight . 'px}';
+			// $css .= '#menuLeft, nav, a.active {max-height:' . $totalHeight . 'px}';
 
 			// Pied de page
 			$colors = helper::colorVariants($this->getData(['theme', 'footer', 'backgroundColor']));
