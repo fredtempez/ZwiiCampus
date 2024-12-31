@@ -520,6 +520,21 @@ class layout extends common
         }
 
         /**
+         * Affiche le bouton d'affichage des rapports individuels de consultation
+         */
+        if (
+            $this->getUser('group') === self::GROUP_MEMBER
+            && $this->getData(['theme', 'menu', 'userReport']) === true
+            && self::$siteContent !== 'home'
+        ) {
+            $itemsRight .= '<li>' . template::ico('chart-line', [
+                'help' => 'Rapport des consultations',
+                'margin' => 'all',
+                'href' => helper::baseUrl() . 'course/userReport/' . self::$siteContent . '/' .$this->getUser('id')
+            ]) . '</li>';
+        }
+
+        /**
          * Commandes pour les membres simples
          * Affichage des boutons  gestionnaire de fichiers et mon compte
          */

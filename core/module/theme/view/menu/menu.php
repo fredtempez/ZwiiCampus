@@ -87,19 +87,24 @@
                         'help' => 'Cette option est à utiliser lorsque les pages sont listées dans une barre latérale.'
                     ]); ?>
                 </div>
-                <div class="col3">
-                    <?php echo template::checkbox('themeMenuLoginLink', true, 'Lien de connexion', [
-                        'checked' => $this->getData(['theme', 'menu', 'loginLink'])
-                    ]); ?>
-                </div>
-                <div class="col3">
+                <div class="col2">
                     <?php echo template::checkbox('themeMenuSelectSpace', true, 'Sélecteur d\'espaces', [
                         'checked' => $this->getData(['theme', 'menu', 'selectSpace']),
                     ]); ?>
                 </div>
                 <div class="col3">
+                    <?php echo template::checkbox('themeMenuUserReport', true, 'Rapport des consultations', [
+                        'checked' => $this->getData(['theme', 'menu', 'userReport']),
+                    ]); ?>
+                </div>
+                <div class="col2">
                     <?php echo template::checkbox('themeMenuMemberBar', true, 'Barre de membre', [
                         'checked' => $this->getData(['theme', 'menu', 'memberBar']),
+                    ]); ?>
+                </div>
+                <div class="col2">
+                    <?php echo template::checkbox('themeMenuLoginLink', true, 'Lien de connexion', [
+                        'checked' => $this->getData(['theme', 'menu', 'loginLink'])
                     ]); ?>
                 </div>
             </div>

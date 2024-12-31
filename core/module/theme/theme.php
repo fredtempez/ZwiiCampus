@@ -598,10 +598,13 @@ class theme extends common
 					'memberBar' => $this->getInput('themeMenuMemberBar', helper::FILTER_BOOLEAN),
 					'selectSpace' => $this->getInput('themeMenuSelectSpace', helper::FILTER_BOOLEAN),
 					'hidePages' => $this->getInput('themeMenuHidePages', helper::FILTER_BOOLEAN),
+					'userReport' => $this->getInput('themeMenuUserReport', helper::FILTER_BOOLEAN),
 					'burgerLogo' => $this->getInput('themeMenuBurgerLogo'),
 					'burgerContent' => $this->getInput('themeMenuBurgerContent'),
 				]
 			]);
+			// Active le rapport des consultations si options active dans le thème
+			$this->setData(['course', self::$siteContent, 'report', true]);
 			// Valeurs en sortie
 			$this->addOutput([
 				'notification' => helper::translate('Modifications enregistrées'),
@@ -678,14 +681,14 @@ class theme extends common
 							'value' => template::ico('pencil'),
 							//'disabled' => !empty($fontUsed[$fontId])
 						])
-						: '',
+							: '',
 						$type !== 'websafe' ? template::button('themeFontDelete' . $fontId, [
 							'class' => 'themeFontDelete buttonRed',
 							'href' => helper::baseUrl() . $this->getUrl(0) . '/fontDelete/' . $type . '/' . $fontId,
 							'value' => template::ico('cancel'),
 							'disabled' => !empty($fontUsed[$fontId])
 						])
-						: ''
+							: ''
 					];
 				}
 			}
@@ -1012,8 +1015,7 @@ class theme extends common
 					'notification' => $data['notification'],
 					'state' => $data['success'],
 					'view' => 'manage'
-				]);
-				;
+				]);;
 			}
 		}
 

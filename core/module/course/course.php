@@ -28,8 +28,8 @@ class course extends common
         'usersDelete' => self::GROUP_EDITOR, //Fait
         'usersReportExport' => self::GROUP_EDITOR, //fait
         'userDelete' => self::GROUP_EDITOR, //Fait
-        'userReport' => self::GROUP_EDITOR, //Fait
-        'userReportExport' => self::GROUP_EDITOR, //Fait
+        'userReport' => self::GROUP_MEMBER, //Fait
+        'userReportExport' => self::GROUP_MEMBER, //Fait
         'backup' => self::GROUP_EDITOR, // Fait
         'restore' => self::GROUP_EDITOR, //Fait
         'reset' => self::GROUP_EDITOR,
@@ -726,13 +726,13 @@ class course extends common
                     $reportButton = template::button('userReport' . $userId, [
                         'href' => helper::baseUrl() . 'course/userReport/' . $courseId . '/' . $userId,
                         'value' => (array_key_exists('progress', $userValue) && is_int($userValue['progress']))
-                            ? number_format($userValue['progress']) . ' %'
-                            : ($viewPages ? min(round(($viewPages * 100) / $sumPages, 1), 100) . ' %' : '0%'),
+                            ? template::ico('chart-line',['margin' => 'right']) . number_format($userValue['progress']) . ' %'
+                            : template::ico('chart-line',['margin' => 'right']) . ($viewPages ? min(round(($viewPages * 100) / $sumPages, 1), 100) . ' %' : '0%'),
                         'disable' => empty($userValue['datePageView']),
                     ]);
                 } else {
                     $reportButton = template::button('userReport' . $userId, [
-                        'value' =>'-',
+                        'value' => template::ico('chart-line'),
                         'disable' => true,
                         'help' => 'Rapport désactivé',
                     ]);
@@ -1245,6 +1245,7 @@ class course extends common
         // Accès limité au propriétaire ou éditeurs inscrits ou admin
         if (
             $this->permissionControl(__FUNCTION__, $courseId) === false
+            and $this->getUser('id') !== $this->getUrl(3)
         ) {
             // Valeurs en sortie
             $this->addOutput([
@@ -1329,7 +1330,7 @@ class course extends common
 
         // Valeurs en sortie
         $this->addOutput([
-            'title' => helper::translate('Historique ') . $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
+            'title' => helper::translate('Rapport des consultations : ') . $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
             'view' => 'userReport',
             'vendor' => [
                 "plotly"
@@ -1346,6 +1347,7 @@ class course extends common
         // Accès limité au propriétaire ou éditeurs inscrits ou admin
         if (
             $this->permissionControl(__FUNCTION__, $courseId) === false
+            and $this->getUser('id') !== $this->getUrl(3)
         ) {
             // Valeurs en sortie
             $this->addOutput([

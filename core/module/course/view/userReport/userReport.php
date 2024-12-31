@@ -2,12 +2,13 @@
     <div class="col1">
         <?php echo template::button('courseUserHistoryBack', [
             'class' => 'buttonGrey',
-            'href' => helper::baseUrl() . 'course/users/' . $this->getUrl(2),
+            // Le retour est différent selon que c'est un admin ou un tuteur ou l'utilisateur lui-même
+            'href' => $this->getUser('group') === self::GROUP_MEMBER ? helper::baseUrl(false) : helper::baseUrl() . 'course/users/' . $this->getUrl(2),
             'value' => template::ico('left')
         ]); ?>
     </div>
     <div class="col1 offset10">
-        <?php echo template::button('userDeleteAll', [
+        <?php echo template::button('userReportExportAll', [
             'href' => helper::baseUrl() . 'course/userReportExport/' . $this->getUrl(2) . '/' . $this->getUrl(3),
             'value' => template::ico('download'),
             'help' => 'Exporter rapport',
