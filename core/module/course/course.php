@@ -29,7 +29,7 @@ class course extends common
         'usersReportExport' => self::GROUP_EDITOR, //fait
         'userDelete' => self::GROUP_EDITOR, //Fait
         'userReport' => self::GROUP_MEMBER, //Fait
-        'userReportExport' => self::GROUP_MEMBER, //Fait
+        'userReportExport' => self::GROUP_EDITOR, //Fait
         'backup' => self::GROUP_EDITOR, // Fait
         'restore' => self::GROUP_EDITOR, //Fait
         'reset' => self::GROUP_EDITOR,
@@ -109,7 +109,7 @@ class course extends common
                         ? sprintf('%s %s', $this->getData(['user', $this->getData(['course', $courseId, 'author']), 'firstname']), $this->getData(['user', $this->getData(['course', $courseId, 'author']), 'lastname']))
                         : '';
                     $categorieUrl = helper::baseUrl() . 'course/swap/' . $courseId;
-                    $info = sprintf(' <a href="%s">%s</a><br />Auteur : %s<br />Id : %s<br />', $categorieUrl, $this->getData(['course', $courseId, 'title']), $author, $courseId, );
+                    $info = sprintf(' <a href="%s">%s</a><br />Auteur : %s<br />Id : %s<br />', $categorieUrl, $this->getData(['course', $courseId, 'title']), $author, $courseId,);
                     $enrolment = sprintf(
                         'Accès : %s<br />Inscription : %s<br />',
                         self::$courseAccess[$this->getData(['course', $courseId, 'access'])],
@@ -337,7 +337,7 @@ class course extends common
 
         // Valeurs en sortie
         $this->addOutput([
-            'title' => sprintf('%s id : %s', helper::translate('Éditer l\'espace'), $this->getUrl(2)),
+            'title' => sprintf('%s %s (%s)', helper::translate('Editer l\'espace'), $this->getData(['course', $courseId, 'title' ]), $this->getUrl(2)),
             'view' => 'edit'
         ]);
     }
@@ -396,7 +396,7 @@ class course extends common
 
         // Valeurs en sortie
         $this->addOutput([
-            'title' => sprintf('%s id : %s', helper::translate('Gérer l\'espace'), $this->getUrl(2)),
+            'title' => sprintf('%s %s (%s)', helper::translate('Gérer l\'espace'), $this->getData(['course', $courseId, 'title' ]), $this->getUrl(2)),
             'view' => 'manage'
         ]);
     }
@@ -462,7 +462,6 @@ class course extends common
                 $success = $this->deleteDir(self::DATA_DIR . $courseId);
                 $this->deleteData(['course', $courseId]);
                 $this->deleteData(['enrolment', $courseId]);
-
             }
             // Dossier du gestionnaire de fichier
             if (is_dir(self::FILE_DIR . 'source/' . $courseId)) {
@@ -476,7 +475,6 @@ class course extends common
                 'state' => $success
             ]);
         }
-
     }
 
     /**
@@ -551,7 +549,6 @@ class course extends common
             'title' => helper::translate('Ajouter une catégorie'),
             'view' => 'categoryAdd'
         ]);
-
     }
 
     public function categoryEdit()
@@ -618,7 +615,6 @@ class course extends common
                 'state' => $state
             ]);
         }
-
     }
 
     public function users()
@@ -721,13 +717,13 @@ class course extends common
                     0;
 
                 // Construction du tableau
- 
+
                 if ($this->getdata(['course', $courseId, 'report']) === true) {
                     $reportButton = template::button('userReport' . $userId, [
                         'href' => helper::baseUrl() . 'course/userReport/' . $courseId . '/' . $userId,
                         'value' => (array_key_exists('progress', $userValue) && is_int($userValue['progress']))
-                            ? template::ico('chart-line',['margin' => 'right']) . number_format($userValue['progress']) . ' %'
-                            : template::ico('chart-line',['margin' => 'right']) . ($viewPages ? min(round(($viewPages * 100) / $sumPages, 1), 100) . ' %' : '0%'),
+                            ? template::ico('chart-line', ['margin' => 'right']) . number_format($userValue['progress']) . ' %'
+                            : template::ico('chart-line', ['margin' => 'right']) . ($viewPages ? min(round(($viewPages * 100) / $sumPages, 1), 100) . ' %' : '0%'),
                         'disable' => empty($userValue['datePageView']),
                     ]);
                 } else {
@@ -741,14 +737,14 @@ class course extends common
                     //$userId,
                     $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
                     array_key_exists('lastPageView', $userValue) && isset($pages[$userValue['lastPageView']]['title'])
-                    ? $pages[$userValue['lastPageView']]['title']
-                    : '',
+                        ? $pages[$userValue['lastPageView']]['title']
+                        : '',
                     array_key_exists('lastPageView', $userValue)
-                    ? helper::dateUTF8('%d/%m/%Y', $userValue['datePageView'])
-                    : '',
+                        ? helper::dateUTF8('%d/%m/%Y', $userValue['datePageView'])
+                        : '',
                     array_key_exists('datePageView', $userValue)
-                    ? helper::dateUTF8('%H:%M', $userValue['datePageView'])
-                    : '',
+                        ? helper::dateUTF8('%H:%M', $userValue['datePageView'])
+                        : '',
                     $this->getData(['user', $userId, 'tags']),
                     $reportButton,
                     template::button('userDelete' . $userId, [
@@ -847,7 +843,6 @@ class course extends common
         if (is_array($suscribers)) {
             $suscribers = array_keys($suscribers);
             $users = array_diff_key($users, array_flip($suscribers));
-
         }
 
         // Tri du tableau par défaut par $userId
@@ -899,7 +894,6 @@ class course extends common
                 $this->getData(['user', $userId, 'lastname']),
                 $this->getData(['user', $userId, 'tags']),
             ];
-
         }
 
         // Ajoute les effectifs aux profils du sélecteur
@@ -1063,7 +1057,6 @@ class course extends common
                     $this->getData(['user', $userId, 'lastname']),
                     $this->getData(['user', $userId, 'tags']),
                 ];
-
             }
         }
 
@@ -1124,7 +1117,6 @@ class course extends common
             'notification' => helper::translate('Espace réinitialisé'),
             'state' => true
         ]);
-
     }
 
     /*
@@ -1190,13 +1182,13 @@ class course extends common
         ) {
             // Gérer les modalités d'inscription
             switch ($this->getData(['course', $courseId, 'enrolment'])) {
-                // Anonyme
+                    // Anonyme
                 case self::COURSE_ENROLMENT_GUEST:
                     $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
                     // Accès direct à la page
                     $redirect = helper::baseUrl() . $pageId;
                     break;
-                // Auto avec ou sans clé
+                    // Auto avec ou sans clé
                 case self::COURSE_ENROLMENT_SELF:
                     //L'étudiant doit disposer d'un compte
                     if ($this->getUser('id')) {
@@ -1215,7 +1207,7 @@ class course extends common
                         $state = false;
                     }
                     break;
-                // Par le prof
+                    // Par le prof
                 case self::COURSE_ENROLMENT_MANDATORY:
                     $message = helper::translate('L\'enseignant doit vous inscrire');
                     $state = false;
@@ -1230,7 +1222,6 @@ class course extends common
             'notification' => helper::translate($message),
             'state' => $state,
         ]);
-
     }
 
     /**
@@ -1244,7 +1235,9 @@ class course extends common
 
         // Accès limité au propriétaire ou éditeurs inscrits ou admin
         if (
+            // Droits consentis
             $this->permissionControl(__FUNCTION__, $courseId) === false
+            // Le compte du membre doit etre celui de l'url
             and $this->getUser('id') !== $this->getUrl(3)
         ) {
             // Valeurs en sortie
@@ -1330,13 +1323,13 @@ class course extends common
 
         // Valeurs en sortie
         $this->addOutput([
-            'title' => helper::translate('Rapport des consultations : ') . $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
+            'title' => sprintf(helper::translate('Rapport des consultations : %s'), $this->getData(['course', $courseId, 'title'])) .
+                sprintf(helper::translate('%s Participant : %s %s'), '<br />', $this->getData(['user', $userId, 'firstname']), $this->getData(['user', $userId, 'lastname'])),
             'view' => 'userReport',
             'vendor' => [
                 "plotly"
             ]
         ]);
-
     }
 
     public function usersReportExport()
@@ -1347,7 +1340,6 @@ class course extends common
         // Accès limité au propriétaire ou éditeurs inscrits ou admin
         if (
             $this->permissionControl(__FUNCTION__, $courseId) === false
-            and $this->getUser('id') !== $this->getUrl(3)
         ) {
             // Valeurs en sortie
             $this->addOutput([
@@ -1417,8 +1409,8 @@ class course extends common
                     $this->getData(['user', $userId, 'lastname']),
                     $this->getData(['user', $userId, 'mail']),
                     isset($pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])])
-                    ? $pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])]
-                    : $this->getData(['enrolment', $courseId, $userId, 'lastPageView']) . ' (supprimée)',
+                        ? $pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])]
+                        : $this->getData(['enrolment', $courseId, $userId, 'lastPageView']) . ' (supprimée)',
                     helper::dateUTF8('%d/%d/%Y', $this->getData(['enrolment', $courseId, $userId, 'datePageView'])),
                     helper::dateUTF8('%H:%M', $this->getData(['enrolment', $courseId, $userId, 'datePageView'])),
                     /** La lecture de la progression s'effectue selon la nouvelle méthode (progression dans la base des enrolements)
@@ -1426,8 +1418,8 @@ class course extends common
                      *  TRANSITOIRE A SUPPRIMER EN FIN D'ANNEE
                      **/
                     array_key_exists('progress', $userValue)
-                    ? $userValue['progress']
-                    : ($viewPages ? min(round(($viewPages * 100) / $sumPages, 1), 100) . ' %' : '0%'),
+                        ? $userValue['progress']
+                        : ($viewPages ? min(round(($viewPages * 100) / $sumPages, 1), 100) . ' %' : '0%'),
                     //number_format(min(round(($viewPages * 100) / $sumPages, 1) / 100, 1), 2, ','),
                 ];
 
@@ -1452,7 +1444,6 @@ class course extends common
                     'notification' => 'Création ' . basename($filename) . ' dans le dossier "Export"',
                     'state' => true,
                 ]);
-
             }
         }
     }
@@ -1552,8 +1543,6 @@ class course extends common
             'notification' => 'Création ' . basename($filename) . ' dans le dossier "Export"',
             'state' => true,
         ]);
-
-
     }
 
     // Génération du message d'inscription
@@ -1658,7 +1647,6 @@ class course extends common
                 'notification' => helper::translate('Désinscription'),
                 'state' => true,
             ]);
-
         }
     }
 
@@ -1724,7 +1712,6 @@ class course extends common
                 'notification' => $message,
             ]);
         }
-
     }
 
     // Générer un fichier externe contenant le contenu des pages
@@ -1854,10 +1841,9 @@ class course extends common
 
         // Valeurs en sortie
         $this->addOutput([
-            'title' => sprintf('%s id : %s', helper::translate('Export des pages de l\'espace'), $this->getUrl(2)),
+            'title' => sprintf('%s %s (%s)', helper::translate('Export des pages de l\'espace'), $this->getData(['course', $courseId, 'title' ]), $this->getUrl(2)),
             'view' => 'export'
         ]);
-
     }
 
     // Fonction utilisé par l'export en html pour corriger les URL des ressources
@@ -1931,8 +1917,7 @@ class course extends common
                     if (file_exists(self::TEMP_DIR . $tempFolder . '/course.json')) {
                         $courseData = json_decode(file_get_contents(self::TEMP_DIR . $tempFolder . '/course.json'), true);
                         // Lire l'id du cours
-                        $courseIds = array_keys($courseData);
-                        ;
+                        $courseIds = array_keys($courseData);;
                         $courseId = $courseIds[0];
                         $success = true;
                     } else {
@@ -1989,7 +1974,6 @@ class course extends common
                     'state' => $success,
                     'notification' => $notification,
                 ]);
-
             }
 
             // Valeurs en sortie
@@ -1998,7 +1982,6 @@ class course extends common
                 'state' => $success,
                 'notification' => $notification,
             ]);
-
         }
         // Valeurs en sortie
         $this->addOutput([
@@ -2025,7 +2008,7 @@ class course extends common
                     $this->getUser('permission', __CLASS__, $function)
                     && $this->getUser('group') === self::$actions[$function]
                     &&
-                        // Permission d'accéder aux espaces dans lesquels le membre auteur
+                    // Permission d'accéder aux espaces dans lesquels le membre auteur
                     (
                         $this->getData(['enrolment', $courseId]) && ($this->getUser('id') === $this->getData(['course', $courseId, 'author']))
                     )
@@ -2069,7 +2052,7 @@ class course extends common
                 return true;
             case self::COURSE_ACCESS_DATE:
                 return (
-                     time() >= $this->getData(['course', $courseId, 'openingDate']) &&
+                    time() >= $this->getData(['course', $courseId, 'openingDate']) &&
                     time() <= $this->getData(['course', $courseId, 'closingDate'])
                 );
             case self::COURSE_ACCESS_CLOSE:
@@ -2098,12 +2081,12 @@ class course extends common
             0;
         // Nombre de pages totales
         $sumPages = $this->countPages($this->getData(['page']));
-        
+
         // Calcule le ratio
-        $ratio = ($viewPages * 100) / $sumPages; 
+        $ratio = ($viewPages * 100) / $sumPages;
         // Arrondi le ratio à deux décimales
         $ratio = round($ratio, 2);
-  
+
         return $ratio;
     }
 
@@ -2113,14 +2096,15 @@ class course extends common
      * @param mixed $userId id de l'utilisateur
      * @return float nombre de pages vues
      */
-    public function setUserProgress($courseId, $userId): float {
-			// Stocke le rapport en CSV
-			$file = fopen(common::DATA_DIR . $courseId. '/report.csv', 'a+');
-			fputcsv($file, [$userId, $this->getUrl(0), time()], ';');
-			fclose($file);
+    public function setUserProgress($courseId, $userId): float
+    {
+        // Stocke le rapport en CSV
+        $file = fopen(common::DATA_DIR . $courseId . '/report.csv', 'a+');
+        fputcsv($file, [$userId, $this->getUrl(0), time()], ';');
+        fclose($file);
 
-            // Retourne le nombre de page vues
-            return ($this->getUserProgress($courseId, $userId));
+        // Retourne le nombre de page vues
+        return ($this->getUserProgress($courseId, $userId));
     }
 
     /**
@@ -2175,7 +2159,7 @@ class course extends common
                     $r = in_array($userId, array_keys($this->getData(['enrolment', $courseId])));
                 }
                 break;
-            // Visiteur non connecté
+                // Visiteur non connecté
             case self::GROUP_VISITOR:
             case null:
                 $r = $this->getData(['course', $courseId, 'enrolment']) === self::COURSE_ENROLMENT_GUEST;

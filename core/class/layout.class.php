@@ -526,11 +526,13 @@ class layout extends common
             $this->getUser('group') === self::GROUP_MEMBER
             && $this->getData(['theme', 'menu', 'userReport']) === true
             && self::$siteContent !== 'home'
+            // Pas de statistiques pour les espaces ouverts
+            && $this->getData(['course', self::$siteContent, 'enrolment']) >= 1
         ) {
             $itemsRight .= '<li>' . template::ico('chart-line', [
                 'help' => 'Rapport des consultations',
                 'margin' => 'all',
-                'href' => helper::baseUrl() . 'course/userReport/' . self::$siteContent . '/' .$this->getUser('id')
+                'href' => helper::baseUrl() . 'course/userReport/' . self::$siteContent . '/' . $this->getUser('id')
             ]) . '</li>';
         }
 
@@ -604,7 +606,7 @@ class layout extends common
             // Menu extra ou standard
 
             if (
-                    // Absence de la position extra, la page est toujours affichée à gauche.
+                // Absence de la position extra, la page est toujours affichée à gauche.
                 ($this->getData(['page', $parentPageId, 'extraPosition']) !== NULL || $extra === true)
                 &&
                 $this->getData(['page', $parentPageId, 'extraPosition']) !== $extra
@@ -1246,7 +1248,6 @@ class layout extends common
                 if ($style) {
                     echo '<style type="text/css">' . helper::minifyCss(htmlspecialchars_decode($style)) . '</style>';
                 }
-
             }
         }
     }

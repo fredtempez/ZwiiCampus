@@ -12,6 +12,8 @@
             'href' => helper::baseUrl() . 'course/userReportExport/' . $this->getUrl(2) . '/' . $this->getUrl(3),
             'value' => template::ico('download'),
             'help' => 'Exporter rapport',
+            // Le memebre ne peut pas exporter
+            'disabled' => $this->getUser('group') === self::GROUP_MEMBER
         ]) ?>
     </div>
 </div>
