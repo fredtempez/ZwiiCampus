@@ -522,18 +522,41 @@ class layout extends common
         /**
          * Affiche le bouton d'affichage des rapports individuels de consultation
          */
+
         if (
-            $this->getUser('group') === self::GROUP_MEMBER
-            && $this->getData(['theme', 'menu', 'userReport']) === true
+            $this->getData(['theme', 'menu', 'userReport']) === true
             && self::$siteContent !== 'home'
             // Pas de statistiques pour les espaces ouverts
             && $this->getData(['course', self::$siteContent, 'enrolment']) >= 1
         ) {
-            $itemsRight .= '<li>' . template::ico('chart-line', [
-                'help' => 'Rapport des consultations',
-                'margin' => 'all',
-                'href' => helper::baseUrl() . 'course/userReport/' . self::$siteContent . '/' . $this->getUser('id')
-            ]) . '</li>';
+            $href = '';
+            switch ($this->getUser('group')) {
+                case self::GROUP_MEMBER:
+                    $href = helper::baseUrl() . 'course/userReport/' . self::$siteContent . '/' . $this->getUser('id');
+                    break;
+                case self::GROUP_EDITOR:
+                    if (
+                        $this->getData(['enrolment', self::$siteContent ]) && ($this->getUser('id') === $this->getData(['course', self::$siteContent , 'author']))
+                        // Permission d'accéder aux espaces dans lesquels le membre est inscrit
+                        ||
+                        ($this->getData(['enrolment', self::$siteContent ])
+                        && $this->getUser('permission', __CLASS__, 'tutor') === true
+                        && array_key_exists($this->getUser('id'), $this->getData(['enrolment', self::$siteContent ])))
+                    )
+                        {
+                        $href = helper::baseUrl() . 'course/users/' . self::$siteContent;
+                    }
+                    break;
+                case self::GROUP_ADMIN:
+                    $href = helper::baseUrl() . 'course/users/' . self::$siteContent;
+            }
+            if ($href) {
+                $itemsRight .= '<li>' . template::ico('chart-line', [
+                    'help' => 'Rapport des consultations',
+                    'margin' => 'all',
+                    'href' => $href
+                ]) . '</li>';
+            }
         }
 
         /**

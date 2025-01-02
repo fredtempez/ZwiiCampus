@@ -623,7 +623,6 @@ class course extends common
         $courseId = $this->getUrl(2);
 
         // Accès limité au propriétaire, admin ou éditeurs isncrits
-
         if (
             $this->permissionControl(__FUNCTION__, $courseId) === false
         ) {
@@ -2013,7 +2012,7 @@ class course extends common
                         $this->getData(['enrolment', $courseId]) && ($this->getUser('id') === $this->getData(['course', $courseId, 'author']))
                     )
                     ||
-                    (  // Permission d'accéder aux espaces dans lesquels le membre est inscrits
+                    (  // Permission d'accéder aux espaces dans lesquels le membre est inscrit
                         $this->getData(['enrolment', $courseId])
                         && $this->getUser('permission', __CLASS__, 'tutor') === true
                         && array_key_exists($this->getUser('id'), $this->getData(['enrolment', $courseId]))
