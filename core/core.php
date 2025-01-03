@@ -547,7 +547,7 @@ class common
 		}
 		// Effacer la donnée
 		$success = $db->delete($query, true);
-		return is_object($success);
+		return $success;
 	}
 
 	/**
@@ -584,7 +584,7 @@ class common
 				$query .= '.' . $keys[$i];
 			}
 			// Appliquer la modification, le dernier élément étant la donnée à sauvegarder
-			$success = is_object($db->set($query, $keys[count($keys) - 1], $save));
+			$success = $db->set($query, $keys[count($keys) - 1], $save);
 		}
 		return $success;
 	}
