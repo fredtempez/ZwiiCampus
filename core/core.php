@@ -51,7 +51,7 @@ class common
 	const ACCESS_TIMER = 1800;
 
 	// Numéro de version
-	const ZWII_VERSION = '1.16.0';
+	const ZWII_VERSION = '1.16.01';
 
 	// URL autoupdate
 	const ZWII_UPDATE_URL = 'https://forge.chapril.org/ZwiiCMS-Team/campus-update/raw/branch/master/';
@@ -202,20 +202,20 @@ class common
 	// Descripteur de données Entrées / Sorties
 	// Liste ici tous les fichiers de données
 	public $dataFiles = [
-		'admin' => '',
-		'blacklist' => '',
-		'config' => '',
-		'core' => '',
-		'course' => '',
-		'font' => '',
-		'module' => '',
-		'page' => '',
-		'theme' => '',
-		'user' => '',
-		'language' => '',
-		'profil' => '',
-		'enrolment' => '',
-		'category' => '',
+		'admin' => null,
+		'blacklist' => null,
+		'config' => null,
+		'core' => null,
+		'course' => null,
+		'font' => null,
+		'module' => null,
+		'page' => null,
+		'theme' => null,
+		'user' => null,
+		'language' => null,
+		'profil' => null,
+		'enrolment' => null,
+		'category' => null,
 	];
 
 	private $configFiles = [
@@ -754,7 +754,8 @@ class common
 		if ($module === 'page') {
 			$content = $path === 'home' ? init::$siteContent : init::$courseContent;
 			foreach ($content as $key => $value) {
-				$this->setPage($key, $value, $path);
+				$this->setPage($key, $value['content'], $path);
+
 			}
 		}
 
