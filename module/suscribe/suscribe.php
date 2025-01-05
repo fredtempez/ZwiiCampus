@@ -217,7 +217,7 @@ class suscribe extends common
 			// Valeurs en sortie
 			$this->addOutput([
 				'redirect' => helper::baseUrl() . $this->getUrl(0) . '/users',
-				'notification' => 'Utilisateur supprimé',
+				'notification' => 'Inscription supprimée',
 				'state' => true
 			]);
 		}
@@ -276,7 +276,7 @@ class suscribe extends common
 				// Le compte existe déjà
 				foreach ($this->getData(['user']) as $usersId => $user) {
 					if ($user['mail'] === $this->getInput('registrationAddMail', helper::FILTER_MAIL, true)) {
-						self::$inputNotices['registrationAddMail'] = 'Vous ne pouvez pas utilisez cette boite mail';
+						self::$inputNotices['registrationAddMail'] = 'Vous ne pouvez pas utilisez cet email';
 						$check = false;
 						break;
 					}
@@ -356,7 +356,7 @@ class suscribe extends common
 				$this->addOutput([
 					'redirect' => helper::baseUrl(),
 					//'redirect' => $validateLink,
-					'notification' => $sentMailtoUser ? "Un mail vous a été envoyé." : 'Quelque chose n\'a pas fonctionné !',
+					'notification' => $sentMailtoUser ? "Un mail vous a été envoyé pour confirmer votre inscription" : 'Quelque chose n\'a pas fonctionné !',
 					'state' => $sentMailtoUser ? true : false
 				]);
 			}
@@ -388,7 +388,7 @@ class suscribe extends common
 				>= $this->getdata(['module', $this->getUrl(0), 'config', 'timeOut'])
 			) {
 				$check = false;
-				$notification = 'La validité du lien est dépassée';
+				$notification = 'La validité du lien est dépassée !';
 			}
 			// La clé est incorrecte ou le compte n'est pas en attente de validation
 			if (
@@ -397,7 +397,7 @@ class suscribe extends common
 				&& $this->getData(['module', $this->getUrl(0), 'users', $userId, 'status']) !== self::STATUS_EMAIL_AWAITING
 			) {
 				$check = false;
-				$notification = 'Données incorrectes !';
+				$notification = 'Les données saisies sont incorrectes !';
 			}
 			// Double vérification pour le mot de passe
 			if (
