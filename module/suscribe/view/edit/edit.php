@@ -16,60 +16,12 @@
 <div class="row">
 	<div class="col12">
 		<div class="block">
-			<h4>Confirmation de l'inscription</h4>
-			<div class="row">
-				<div class="col12">
-					<div class="row">
-						<div class="col6">
-							<?php echo template::text('registrationUserEditFirstname', [
-								'autocomplete' => 'off',
-								'label' => 'Prénom',
-								'value' => $this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'firstname']),
-								'disabled' => true
-							]); ?>
-						</div>
-						<div class="col6">
-							<?php echo template::text('registrationUserEditLastname', [
-								'autocomplete' => 'off',
-								'label' => 'Nom',
-								'value' => $this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'lastname']),
-								'disabled' => true
-							]); ?>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col12">
-							<?php echo template::mail('registrationUserEditMail', [
-								'autocomplete' => 'off',
-								'label' => 'Adresse électronique',
-								'value' => $this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'mail']),
-								'disabled' => true
-							]); ?>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col8">
-							<?php echo template::text('registrationUserState', [
-								'label' => 'État de l\'inscription',
-								'value' => $module::$statusGroups[$this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'status'])],
-								'disabled' => true,
-								'help' => 'En attente : le mail n\'a pas encore été validé<br>Email validé : approbation nécessaire.'
-							]); ?>
-						</div>
-						<div class="col4">
-							<?php echo template::text('registrationUsertimer', [
-								'label' => 'Date de demande',
-								'value' => helper::dateUTF8(date('Y-m-d G:i'), $this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'timer'])),
-								'disabled' => true
-							]); ?>
-						</div>
-					</div>
-				</div>
-			</div>
+			<h4>Approbation de l'inscription</h4>
 			<div class="row">
 				<div class="col4">
 					<?php echo template::text('registrationUserLabel', [
-						'label' => 'Étiquette'
+						'label' => 'Étiquettes',
+						'help' => 'Les étiquettes sont séparées par des espaces',
 					]); ?>
 				</div>
 				<div class="col4">
@@ -130,6 +82,62 @@
 								'readonly' => true,
 							]);
 							?>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col12">
+		<div class="block">
+			<h4>Identité du compte</h4>
+			<div class="row">
+				<div class="col12">
+					<div class="row">
+						<div class="col6">
+							<?php echo template::text('registrationUserEditFirstname', [
+								'autocomplete' => 'off',
+								'label' => 'Prénom',
+								'value' => $this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'firstname']),
+								'disabled' => true
+							]); ?>
+						</div>
+						<div class="col6">
+							<?php echo template::text('registrationUserEditLastname', [
+								'autocomplete' => 'off',
+								'label' => 'Nom',
+								'value' => $this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'lastname']),
+								'disabled' => true
+							]); ?>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col12">
+							<?php echo template::mail('registrationUserEditMail', [
+								'autocomplete' => 'off',
+								'label' => 'Adresse électronique',
+								'value' => $this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'mail']),
+								'disabled' => true
+							]); ?>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col8">
+							<?php echo template::text('registrationUserState', [
+								'label' => 'État de l\'inscription',
+								'value' => $module::$statusGroups[$this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'status'])],
+								'disabled' => true,
+								'help' => 'En attente : le mail n\'a pas encore été validé<br>Email validé : approbation nécessaire.'
+							]); ?>
+						</div>
+						<div class="col4">
+							<?php echo template::text('registrationUsertimer', [
+								'label' => 'Date de demande',
+								'value' => helper::dateUTF8(date('Y-m-d G:i'), $this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'timer'])),
+								'disabled' => true
+							]); ?>
 						</div>
 					</div>
 				</div>

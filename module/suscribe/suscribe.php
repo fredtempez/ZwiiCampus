@@ -15,7 +15,7 @@
 class suscribe extends common
 {
 
-	const VERSION = '2.4';
+	const VERSION = '2.6';
 	const REALNAME = 'Auto Inscription';
 	const DELETE = true;
 	const UPDATE = '0.0';
@@ -146,23 +146,16 @@ class suscribe extends common
 						'mail' => $this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'mail']),
 						'password' => $this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'password']),
 						'tags' => $this->getInput('registrationUserLabel', helper::FILTER_STRING_SHORT),
-						'connectFail' => $this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'connectFail']),
-						'connectTimeout' => $this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'connectTimeout']),
-						'accessUrl' => $this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'accessUrl']),
-						'accessTimer' => $this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'accessTimer']),
-						'accessCsrf' => $this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'accessCsrf'])
 					]
 				]);
-				// Notifier le user uniquement si le groupe est membre au moins membre
-				if ($this->getInput('registrationUserEditGroup') >= 1) {
-					$this->sendMail(
-						$this->getData(['module', $this->getUrl(0), 'users', 'mail']),
-						'Approbation de l\'inscription',
-						'<p>' . $this->getdata(['module', $this->getUrl(0), 'config', 'mailValidateContent']) . '</p>',
-						null,
-						$this->getData(['config', 'smtp', 'from'])
-					);
-				}
+				// Notifier le user 
+				$this->sendMail(
+					$this->getData(['module', $this->getUrl(0), 'users', 'mail']),
+					'Approbation de l\'inscription',
+					'<p>' . $this->getdata(['module', $this->getUrl(0), 'config', 'mailValidateContent']) . '</p>',
+					null,
+					$this->getData(['config', 'smtp', 'from'])
+				);
 				// Supprimer le user de la base temporaire,
 				$this->deleteData(['module', $this->getUrl(0), 'users', $this->getUrl(2)]);
 				// Valeurs en sortie
@@ -411,10 +404,9 @@ class suscribe extends common
 				$check
 				&& $this->getInput('registrationValidPassword', helper::FILTER_STRING_SHORT, true) !== $this->getInput('registrationValidConfirmPassword', helper::FILTER_STRING_SHORT, true)
 			) {
-				self::$inputNotices['registrationAddConfirmPassword'] = 'Les mots de passe ne sont pas identiques';
+				self::$inputNotices['registrationValidConfirmPassword'] = 'Les mots de passe ne sont pas identiques';
 				$check = false;
 			}
-
 			if ($check) {
 				if (
 					// Pas d'approbation par un administrateur
@@ -444,8 +436,19 @@ class suscribe extends common
 					// Approbation nécessaire
 					$this->setData(['module', $this->getUrl(0), 'users', $userId, 'status', self::STATUS_ACCOUNT_AWAITING]);
 					$notification = 'L\'inscription doit être approuvée par un administrateur';
+					// Stocker le mot de passe temporairement 
+					$this->setData([
+						'module',
+						$this->getUrl(0),
+						'users',
+						$userId,
+						'password',
+						$this->getInput('registrationValidPassword', helper::FILTER_PASSWORD, true),
+					]);
+
 				}
 			}
+
 			// Valeurs en sortie
 			$this->addOutput([
 				'redirect' => $check ? helper::baseUrl() . $this->getdata(['module', $this->getUrl(0), 'config', 'pageSuccess']) : helper::baseUrl() . $this->getdata(['module', $this->getUrl(0), 'config', 'pageError']),
