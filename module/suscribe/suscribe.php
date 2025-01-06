@@ -15,7 +15,7 @@
 class suscribe extends common
 {
 
-	const VERSION = '2.6';
+	const VERSION = '2.7';
 	const REALNAME = 'Auto Inscription';
 	const DELETE = true;
 	const UPDATE = '0.0';

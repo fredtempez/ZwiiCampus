@@ -8,8 +8,8 @@
 	</div>
 </div>
 
-<?php if($module::$users): ?>
-<?php echo template::table([3, 3, 2,21, 1, 1], $module::$users, ['Identifiant', 'Nom', 'Etat', 'Date', '', '']); ?>
+<?php if(suscribe::$users): ?>
+<?php echo template::table([3, 3, 2,21, 1, 1], suscribe::$users, ['Identifiant', 'Nom', 'Etat', 'Date', '', '']); ?>
 <?php else: ?>
 	<?php echo template::speech('Pas d\'inscription en attente.'); ?>
 <?php endif; ?>

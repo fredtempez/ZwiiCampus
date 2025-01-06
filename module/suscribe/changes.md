@@ -1,3 +1,5 @@
+# Version 2.7
+- Remplacement du nom générique de classe dans les vues.
 # Version 2.6
 - Corrige d'un bug empêchat de terminer la procédure d'inscription après approbation.
 # Version 2.5
