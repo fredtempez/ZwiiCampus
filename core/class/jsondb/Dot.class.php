@@ -21,7 +21,7 @@ class Dot implements \ArrayAccess, \Iterator, \Countable
      *
      * @param array|null $data Data
      */
-    public function __construct(array $data = null)
+    public function __construct(?array $data = null)
     {
         if (is_array($data)) {
             $this->data = $data;
@@ -101,7 +101,7 @@ class Dot implements \ArrayAccess, \Iterator, \Countable
             }
         } else {
             // Iterate path
-            $keys = explode('.', (string) $key);
+            $keys = explode('.', (string)$key);
             if ($pop === true) {
                 array_pop($keys);
             }
@@ -199,7 +199,7 @@ class Dot implements \ArrayAccess, \Iterator, \Countable
      */
     public function has($key)
     {
-        $keys = explode('.', (string) $key);
+        $keys = explode('.', (string)$key);
         $data = &$this->data;
         foreach ($keys as $key) {
             if (!isset($data[$key])) {
@@ -371,7 +371,7 @@ class Dot implements \ArrayAccess, \Iterator, \Countable
      */
     public function isEmpty(): bool
     {
-        return !(bool) count($this->data);
+        return !(bool)count($this->data);
     }
 
     /**
@@ -391,7 +391,7 @@ class Dot implements \ArrayAccess, \Iterator, \Countable
      */
     public function toJson()
     {
-        return json_encode($this->data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        return json_encode($this->data, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
     }
 
     /**

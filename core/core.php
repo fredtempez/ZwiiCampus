@@ -51,7 +51,7 @@ class common
 	const ACCESS_TIMER = 1800;
 
 	// Numéro de version
-	const ZWII_VERSION = '1.16.02';
+	const ZWII_VERSION = '1.17.00';
 
 	// URL autoupdate
 	const ZWII_UPDATE_URL = 'https://forge.chapril.org/ZwiiCMS-Team/campus-update/raw/branch/master/';
@@ -201,8 +201,7 @@ class common
 
 	// Descripteur de données Entrées / Sorties
 	// Liste ici tous les fichiers de données
-	public $dataFiles = [
-	];
+	public $dataFiles = [];
 
 	private $configFiles = [
 		'admin' => '',
@@ -379,7 +378,6 @@ class common
 					$this->initData($stageId, self::$siteContent);
 				}
 			}
-
 		}
 
 		// Récupère un utilisateur connecté
@@ -399,11 +397,11 @@ class common
 				: 'fr_FR';
 		} else {
 			// Par défaut la langue définie par défaut à l'installation
-			if ($this->getData(['config','defaultLanguageUI'])) {
-				self::$i18nUI = $this->getData(['config','defaultLanguageUI']);
+			if ($this->getData(['config', 'defaultLanguageUI'])) {
+				self::$i18nUI = $this->getData(['config', 'defaultLanguageUI']);
 			} else {
 				self::$i18nUI = 'fr_FR';
-				$this->setData(['config','defaultLanguageUI', 'fr_FR']);
+				$this->setData(['config', 'defaultLanguageUI', 'fr_FR']);
 			}
 		}
 
@@ -477,7 +475,6 @@ class common
 
 		// Mise à jour des données core
 		include('core/include/update.inc.php');
-
 	}
 
 	/**
@@ -693,7 +690,6 @@ class common
 
 		// Instanciation de l'objet et stockage dans dataFiles
 		$this->dataFiles[$module] = new \Prowebcraft\JsonDb($config);
-
 	}
 
 
@@ -741,12 +737,10 @@ class common
 			$content = $path === 'home' ? init::$siteContent : init::$courseContent;
 			foreach ($content as $key => $value) {
 				$this->setPage($key, $value['content'], $path);
-
 			}
 		}
 
 		common::$coreNotices[] = $module;
-
 	}
 	/**
 	 * Initialisation des données
@@ -1110,22 +1104,35 @@ class common
 	 * @param string Valeurs possibles
 	 */
 
+
 	public function updateSitemap()
 	{
 		// Le drapeau prend true quand au moins une page est trouvée
 		$flag = false;
 
-		// Rafraîchit la liste des pages après une modification de pageId notamment 
+		// Rafraîchit la liste des pages après une modification de pageId notamment
 		$this->buildHierarchy();
 
 		// Actualise la liste des pages pour TinyMCE
 		$this->tinyMcePages();
 
-		//require_once 'core/vendor/sitemap/SitemapGenerator.php';	
+		//require_once 'core/vendor/sitemap/SitemapGenerator.php';
 
 		$timezone = $this->getData(['config', 'timezone']);
-		$outputDir = getcwd();
-		$sitemap = new \Icamys\SitemapGenerator\SitemapGenerator(helper::baseurl(false), $outputDir);
+
+		$config = new \Icamys\SitemapGenerator\Config();
+
+
+		// Your site URL.
+		$config->setBaseURL(helper::baseurl(false));
+		// // OPTIONAL. Setting the current working directory to be output directory
+		$config->setSaveDirectory(sys_get_temp_dir());
+
+
+		$sitemap = new \Icamys\SitemapGenerator\SitemapGenerator($config);
+
+		// Create a compressed sitemap
+		$sitemap->enableCompression();
 
 		// will create also compressed (gzipped) sitemap : option buguée
 		// $sitemap->enableCompression();
@@ -1155,7 +1162,7 @@ class common
 			// Page désactivée, traiter les sous-pages sans prendre en compte la page parente.
 			if ($this->getData(['page', $parentPageId, 'disable']) !== true) {
 				// Cas de la page d'accueil ne pas dupliquer l'URL
-				$pageId = ($parentPageId !== $this->homePageId()) ? $parentPageId : '';
+				$pageId = ($parentPageId !== $this->getData(['locale', 'homePageId'])) ? $parentPageId : '';
 				$sitemap->addUrl('/' . $pageId, $datetime);
 				$flag = true;
 			}
@@ -1169,7 +1176,6 @@ class common
 					if ($this->getData(['module', $parentPageId, 'posts', $articleId, 'state']) === true) {
 						$date = $this->getData(['module', $parentPageId, 'posts', $articleId, 'publishedOn']);
 						$sitemap->addUrl('/' . $parentPageId . '/' . $articleId, DateTime::createFromFormat('U', $date));
-						$flag = true;
 					}
 				}
 			}
@@ -1179,7 +1185,7 @@ class common
 					continue;
 				}
 				// Cas de la page d'accueil ne pas dupliquer l'URL
-				$pageId = ($childKey !== $this->homePageId()) ? $childKey : '';
+				$pageId = ($childKey !== $this->getData(['locale', 'homePageId'])) ? $childKey : '';
 				$sitemap->addUrl('/' . $childKey, $datetime);
 				$flag = true;
 
@@ -1191,8 +1197,7 @@ class common
 					foreach ($this->getData(['module', $childKey, 'posts']) as $articleId => $article) {
 						if ($this->getData(['module', $childKey, 'posts', $articleId, 'state']) === true) {
 							$date = $this->getData(['module', $childKey, 'posts', $articleId, 'publishedOn']);
-							$sitemap->addUrl('/' . $childKey . '/' . $articleId, DateTime::createFromFormat('U', $date));
-							$flag = true;
+							$sitemap->addUrl('/' . $childKey . '/' . $articleId, new DateTime("@{$date}", new DateTimeZone($timezone)));
 						}
 					}
 				}
@@ -1217,7 +1222,7 @@ class common
 			}
 			$sitemap->updateRobots();
 		} else {
-			file_put_contents('robots.txt', 'User-agent: *' . PHP_EOL . 'Disallow: /');
+			$this->secure_file_put_contents('robots.txt', 'User-agent: *' . PHP_EOL . 'Disallow: /');
 		}
 
 		// Submit your sitemaps to Google, Yahoo, Bing and Ask.com
@@ -1226,9 +1231,7 @@ class common
 		}
 
 		return (file_exists('sitemap.xml') && file_exists('robots.txt'));
-
 	}
-
 	/*
 	 * Création d'une miniature
 	 * Fonction utilisée lors de la mise à jour d'une version 9 à une version 10
@@ -1533,7 +1536,7 @@ class common
 				foreach ($courses as $courseId => $value) {
 					// Affiche les espaces gérés par l'éditeur, les espaces où il participe et les espaces anonymes
 					if (
-							// le membre est inscrit
+						// le membre est inscrit
 						($this->getData(['enrolment', $courseId]) && array_key_exists($this->getUser('id'), $this->getData(['enrolment', $courseId])))
 						// Il est l'auteur
 						|| $this->getUser('id') === $this->getData(['course', $courseId, 'author'])
@@ -1586,5 +1589,4 @@ class common
 				return $this->getData(['user', $userId, 'firstname']);
 		}
 	}
-
 }
