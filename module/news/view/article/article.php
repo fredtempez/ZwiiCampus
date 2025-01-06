@@ -13,8 +13,12 @@
 	</div>
 	<div class="col6 newsDate textAlignRight">
 		<!-- bloc signature -->
-		<?php echo template::ico('user'); ?>
-		<?php echo $module::$articleSignature; ?>
+		<?php if (
+			$this->getData(['module', $this->getUrl(0), 'config', 'showPseudo']) === true
+		): ?>
+			<?php echo template::ico('user'); ?>
+			<?php echo $this->signature($this->getData(['module', $this->getUrl(0), 'posts', $this->getUrl(1), 'userId'])); ?>
+		<?php endif; ?>
 		<!-- bloc date -->
 		<?php if (
 			$this->getData(['module', $this->getUrl(0), 'config', 'showDate']) === true
@@ -23,7 +27,7 @@
 			<?php echo template::ico('calendar-empty', ['margin' => 'left']); ?>
 		<?php endif; ?>
 		<?php if ($this->getData(['module', $this->getUrl(0), 'config', 'showDate']) === true): ?>
-			<?php echo helper::dateUTF8($module::$dateFormat, $this->getData(['module', $this->getUrl(0), 'posts', $this->getUrl(1), 'publishedOn']), self::$i18nUI); ?>
+			<?php echo helper::dateUTF8(news::$dateFormat, $this->getData(['module', $this->getUrl(0), 'posts', $this->getUrl(1), 'publishedOn']), self::$i18nUI); ?>
 		<?php endif; ?>
 		<?php if (
 			$this->getData(['module', $this->getUrl(0), 'config', 'showDate']) === true
@@ -32,8 +36,8 @@
 			<?php echo '&nbsp;-&nbsp;'; ?>
 		<?php endif; ?>
 		<?php if ($this->getData(['module', $this->getUrl(0), 'config', 'showTime']) === true): ?>
-			<?php echo helper::dateUTF8($module::$timeFormat, $this->getData(['module', $this->getUrl(0), 'posts', $this->getUrl(1), 'publishedOn']), self::$i18nUI); ?>
-		<?php endif; ?>		<!-- Bloc edition -->
+			<?php echo helper::dateUTF8(news::$timeFormat, $this->getData(['module', $this->getUrl(0), 'posts', $this->getUrl(1), 'publishedOn']), self::$i18nUI); ?>
+		<?php endif; ?> <!-- Bloc edition -->
 		<?php if (
 			$this->isConnected() === true
 			and
@@ -51,7 +55,7 @@
 			<div id="rssFeed">
 				<a type="application/rss+xml" href="<?php echo helper::baseUrl() . $this->getUrl(0) . '/rss'; ?>"
 					target="_blank">
-					<img src='module/news/ressource/feed-icon-16.gif' />
+					&nbsp;<img src='module/news/ressource/feed-icon-16.gif' />
 					<?php
 					echo '<p>' . $this->getData(['module', $this->getUrl(0), 'config', 'feedsLabel']) . '</p>';
 					?>
