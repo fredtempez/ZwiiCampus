@@ -202,20 +202,6 @@ class common
 	// Descripteur de données Entrées / Sorties
 	// Liste ici tous les fichiers de données
 	public $dataFiles = [
-		'admin' => null,
-		'blacklist' => null,
-		'config' => null,
-		'core' => null,
-		'course' => null,
-		'font' => null,
-		'module' => null,
-		'page' => null,
-		'theme' => null,
-		'user' => null,
-		'language' => null,
-		'profil' => null,
-		'enrolment' => null,
-		'category' => null,
 	];
 
 	private $configFiles = [
