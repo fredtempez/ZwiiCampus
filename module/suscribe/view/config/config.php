@@ -25,7 +25,7 @@
             <h4>Paramètres</h4>
             <div class="row">
                 <div class="col4">
-                    <?php echo template::select('registrationConfigLayout', $module::$layout, [
+                    <?php echo template::select('registrationConfigLayout', suscribe::$layout, [
                         'label' => 'Disposition',
                         'selected' => $this->getData(['module', $this->getUrl(0), 'config', 'layout'])
                     ]); ?>
@@ -52,7 +52,7 @@
             <h4>Communication</h4>
             <div class="row">
                 <div class="col6">
-                    <?php echo template::select('registrationConfigTimeOut', $module::$timeLimit, [
+                    <?php echo template::select('registrationConfigTimeOut', suscribe::$timeLimit, [
                         'label' => 'Validité du lien',
                         'selected' => $this->getData(['module', $this->getUrl(0), 'config', 'timeOut']) / 60
                     ]); ?>
@@ -99,5 +99,5 @@
     </div>
 </div>
 <?php echo template::formClose(); ?>
-<div class="moduleVersion">Version n°<?php echo $module::VERSION; ?>
+<div class="moduleVersion">Version n°<?php echo suscribe::VERSION; ?>
 </div>

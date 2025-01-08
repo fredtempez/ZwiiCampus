@@ -51,7 +51,7 @@ class common
 	const ACCESS_TIMER = 1800;
 
 	// Numéro de version
-	const ZWII_VERSION = '1.16.01';
+	const ZWII_VERSION = '1.17.00';
 
 	// URL autoupdate
 	const ZWII_UPDATE_URL = 'https://forge.chapril.org/ZwiiCMS-Team/campus-update/raw/branch/master/';
@@ -393,7 +393,6 @@ class common
 					$this->initData($stageId, self::$siteContent);
 				}
 			}
-
 		}
 
 		// Récupère un utilisateur connecté
@@ -413,11 +412,11 @@ class common
 				: 'fr_FR';
 		} else {
 			// Par défaut la langue définie par défaut à l'installation
-			if ($this->getData(['config','defaultLanguageUI'])) {
-				self::$i18nUI = $this->getData(['config','defaultLanguageUI']);
+			if ($this->getData(['config', 'defaultLanguageUI'])) {
+				self::$i18nUI = $this->getData(['config', 'defaultLanguageUI']);
 			} else {
 				self::$i18nUI = 'fr_FR';
-				$this->setData(['config','defaultLanguageUI', 'fr_FR']);
+				$this->setData(['config', 'defaultLanguageUI', 'fr_FR']);
 			}
 		}
 
@@ -491,7 +490,6 @@ class common
 
 		// Mise à jour des données core
 		include('core/include/update.inc.php');
-
 	}
 
 	/**
@@ -707,7 +705,6 @@ class common
 
 		// Instanciation de l'objet et stockage dans dataFiles
 		$this->dataFiles[$module] = new \Prowebcraft\JsonDb($config);
-
 	}
 
 
@@ -755,12 +752,10 @@ class common
 			$content = $path === 'home' ? init::$siteContent : init::$courseContent;
 			foreach ($content as $key => $value) {
 				$this->setPage($key, $value['content'], $path);
-
 			}
 		}
 
 		common::$coreNotices[] = $module;
-
 	}
 	/**
 	 * Initialisation des données
@@ -1124,6 +1119,7 @@ class common
 	 * @param string Valeurs possibles
 	 */
 
+
 	public function updateSitemap()
 	{
 		// Le drapeau prend true quand au moins une page est trouvée
@@ -1240,8 +1236,8 @@ class common
 		}
 
 		return (file_exists('sitemap.xml') && file_exists('robots.txt'));
-
 	}
+
 
 	/*
 	 * Création d'une miniature
@@ -1547,7 +1543,7 @@ class common
 				foreach ($courses as $courseId => $value) {
 					// Affiche les espaces gérés par l'éditeur, les espaces où il participe et les espaces anonymes
 					if (
-							// le membre est inscrit
+						// le membre est inscrit
 						($this->getData(['enrolment', $courseId]) && array_key_exists($this->getUser('id'), $this->getData(['enrolment', $courseId])))
 						// Il est l'auteur
 						|| $this->getUser('id') === $this->getData(['course', $courseId, 'author'])
@@ -1600,5 +1596,4 @@ class common
 				return $this->getData(['user', $userId, 'firstname']);
 		}
 	}
-
 }

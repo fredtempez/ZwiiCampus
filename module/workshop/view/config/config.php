@@ -13,7 +13,7 @@
 </div>
 <div class="row">
 	<div class="col6">
-		<?php echo template::select('coursesConfigCategories', $module::$courseCategories, [
+		<?php echo template::select('coursesConfigCategories', workshop::$courseCategories, [
 			'label' => 'Catégorie à afficher',
 			'selected' => $this->getData(['module', $this->getUrl(0), 'config', 'category'])
 		]); ?>
@@ -76,7 +76,7 @@
 			</h4>
 			<div class="row">
 				<div class="col12">
-					<?php echo template::select('coursesConfigLayout', $module::$coursesLayout, [
+					<?php echo template::select('coursesConfigLayout', workshop::$coursesLayout, [
 						'label' => 'Présentation en colonnes',
 						'selected' => $this->getData(['module', $this->getUrl(0), 'config', 'layout']),
 						'help' => 'Chaque contenu est présenté dans une colonne'
@@ -186,5 +186,5 @@
 
 <?php echo template::formClose(); ?>
 <div class="moduleVersion">Version n°
-	<?php echo $module::VERSION; ?>
+	<?php echo workshop::VERSION; ?>
 </div>

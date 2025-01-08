@@ -1,5 +1,5 @@
 # Version 3.3
-- Une seule lecture du fichier module.json
+- Remplacement du nom générique de classe dans les vues.
 # Version 3.2
 - Contrôle de la variable de session liée au contenu. Evite des erreurs lorsque plusieurs onglets sont ouverts.
 # Version 3.1

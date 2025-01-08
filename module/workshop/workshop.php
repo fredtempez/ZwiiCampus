@@ -15,7 +15,7 @@
 
 class workshop extends common
 {
-	const VERSION = '1.01';
+	const VERSION = '1.2';
 	const REALNAME = 'Liste des espaces';
 	const DATADIRECTORY = ''; // Contenu localisé inclus par défaut (page.json et module.json)
 

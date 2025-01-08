@@ -1,3 +1,9 @@
+# Version 2.7
+- Remplacement du nom générique de classe dans les vues.
+# Version 2.6
+- Corrige d'un bug empêchat de terminer la procédure d'inscription après approbation.
+# Version 2.5
+- Reformatage du formulaire d'approbation pour mettre en avant les actions à réaliser par l'administrateur.
 # Version 2.4
 - L'approbation par un administrateur initialise le pseudo avec l'id de l'utilisateur.
 # Version 2.3

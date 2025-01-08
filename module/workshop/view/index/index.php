@@ -56,7 +56,7 @@
                     <div class="workshopAccessContainer">
                         <p>
                             <span class="workshopAccess">
-                                <?php echo sprintf(helper::translate($module::$coursesAccess[$courseValue['access']]), helper::dateUTF8('%d %B %Y', $courseValue['openingDate']) . helper::translate(' à ') . helper::dateUTF8('%H:%M', $courseValue['openingDate']), helper::dateUTF8('%d %B %Y', $courseValue['closingDate']) . helper::translate(' à ') . helper::dateUTF8('%H:%M', $courseValue['closingDate'])) ?>
+                                <?php echo sprintf(helper::translate(workshop::$coursesAccess[$courseValue['access']]), helper::dateUTF8('%d %B %Y', $courseValue['openingDate']) . helper::translate(' à ') . helper::dateUTF8('%H:%M', $courseValue['openingDate']), helper::dateUTF8('%d %B %Y', $courseValue['closingDate']) . helper::translate(' à ') . helper::dateUTF8('%H:%M', $courseValue['closingDate'])) ?>
                             </span>
                         </p>
                     </div>
@@ -66,7 +66,7 @@
                 <?php if ($this->getData(['module', $this->getUrl(0), 'config', 'enrolment']) === true): ?>
                     <p>
                         <span class="workshopEnrolment">
-                            <?php echo $module::$coursesEnrolment[$courseValue['enrolment']]; ?>
+                            <?php echo workshop::$coursesEnrolment[$courseValue['enrolment']]; ?>
                         </span>
                     </p>
                     <?php if ($this->getData(['course', $courseId, 'limitEnrolment']) === true): ?>

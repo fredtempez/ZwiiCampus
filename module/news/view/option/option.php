@@ -16,13 +16,25 @@
 		<div class="block">
 			<h4><?php echo helper::translate('Paramètres'); ?></h4>
 			<div class="row">
+				<div class="col6">
+					<?php echo template::checkbox('newsOptionButtonBack', true, 'Bouton de retour', [
+						'checked' => $this->getData(['module', $this->getUrl(0), 'config', 'buttonBack'])
+					]); ?>
+				</div>
+				<div class="col6">
+					<?php echo template::checkbox('newsOptionShowPseudo', true, 'Signature', [
+						'checked' => $this->getData(['module', $this->getUrl(0), 'config', 'showPseudo'])
+					]); ?>
+				</div>
+			</div>
+			<div class="row">
 				<div class="col3">
 					<?php echo template::checkbox('newsOptionShowDate', true, 'Afficher la date', [
 						'checked' => $this->getData(['module', $this->getUrl(0), 'config', 'showDate']),
 					]); ?>
 				</div>
 				<div class="col3">
-					<?php echo template::select('newsOptionDateFormat', $module::$dateFormats, [
+					<?php echo template::select('newsOptionDateFormat', news::$dateFormats, [
 						'label' => 'Format des dates',
 						'selected' => $this->getData(['module', $this->getUrl(0), 'config', 'dateFormat'])
 					]); ?>
@@ -33,7 +45,7 @@
 					]); ?>
 				</div>
 				<div class="col3 timeWrapper">
-					<?php echo template::select('newsOptionTimeFormat', $module::$timeFormats, [
+					<?php echo template::select('newsOptionTimeFormat', news::$timeFormats, [
 						'label' => 'Format des heures',
 						'selected' => $this->getData(['module', $this->getUrl(0), 'config', 'timeFormat'])
 					]); ?>
@@ -41,31 +53,26 @@
 			</div>
 			<div class="row">
 				<div class="col4">
-					<?php echo template::select('newsOptionItemsperCol', $module::$columns, [
+					<?php echo template::select('newsOptionItemsperCol', news::$columns, [
 						'label' => 'Nombre de colonnes',
 						'selected' => $this->getData(['module', $this->getUrl(0), 'config', 'itemsperCol'])
 					]); ?>
 				</div>
 				<div class="col4">
-					<?php echo template::select('newsOptionItemsperPage', $module::$itemsList, [
+					<?php echo template::select('newsOptionItemsperPage', news::$itemsList, [
 						'label' => 'Articles par page',
 						'selected' => $this->getData(['module', $this->getUrl(0), 'config', 'itemsperPage'])
 					]); ?>
 				</div>
 				<div class="col4">
-					<?php echo template::select('newsOptionHeight', $module::$height, [
+					<?php echo template::select('newsOptionHeight', news::$height, [
 						'label' => 'Abrégé de l\'article',
 						'selected' => $this->getData(['module', $this->getUrl(0), 'config', 'height'])
 					]); ?>
 				</div>
 			</div>
 			<div class="row">
-				<div class="col3">
-					<?php echo template::checkbox('newsOptionButtonBack', true, 'Bouton de retour', [
-						'checked' => $this->getData(['module', $this->getUrl(0), 'config', 'buttonBack'])
-					]); ?>
-				</div>
-				<div class="col3">
+				<div class="col6">
 					<?php echo template::checkbox('newsOptionShowFeeds', true, 'Lien du flux RSS', [
 						'checked' => $this->getData(['module', $this->getUrl(0), 'config', 'feeds']),
 						'help' => 'Flux limité aux articles de la première page.'
@@ -87,13 +94,13 @@
 			<h4><?php echo helper::translate('Thème'); ?></h4>
 			<div class="row">
 				<div class="col3">
-					<?php echo template::select('newsThemeBorderStyle', $module::$borderStyle, [
+					<?php echo template::select('newsThemeBorderStyle', news::$borderStyle, [
 						'label' => 'Bordure',
 						'selected' => $this->getData(['module', $this->getUrl(0), 'theme', 'borderStyle'])
 					]); ?>
 				</div>
 				<div class="col3">
-					<?php echo template::select('newsThemeBorderWidth', $module::$borderWidth, [
+					<?php echo template::select('newsThemeBorderWidth', news::$borderWidth, [
 						'label' => 'Épaisseur',
 						'selected' => $this->getData(['module', $this->getUrl(0), 'theme', 'borderWidth'])
 					]); ?>
@@ -120,5 +127,5 @@
 </div>
 <?php echo template::formClose(); ?>
 <div class="moduleVersion">Version n°
-	<?php echo $module::VERSION; ?>
+	<?php echo news::VERSION; ?>
 </div>
