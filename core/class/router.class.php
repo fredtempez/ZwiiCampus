@@ -552,7 +552,7 @@ class core extends common
 				and $this->getData(['course', self::$siteContent, 'enrolment']) > 0
 			) {
 				$_SESSION['ZWII_SITE_CONTENT'] = 'home';
-				header(header: 'Location:' . helper::baseUrl(true) . 'swap/' . self::$siteContent);
+				header('Location:' . helper::baseUrl(true) . 'swap/' . self::$siteContent);
 				exit();
 			}
 		}
