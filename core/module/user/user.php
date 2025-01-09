@@ -1675,12 +1675,13 @@ class user extends common
 						$item['groupe'] = ($item['groupe'] >= self::GROUP_BANNED and $item['groupe'] <= self::GROUP_ADMIN)
 							? $item['groupe'] : 1;
 						// L'utilisateur existe
-						if ($this->getData(['user', helper::filter($item['id'], helper::FILTER_ID)])) {
+						$userId = helper::filter($item['id'], helper::FILTER_ID);
+						if ($this->getData(['user', $userId])) {
 							// Notification du doublon
 							$item['notification'] = template::ico('cancel');
 							// Création du tableau de confirmation
 							self::$users[] = [
-								helper::filter($item['id'], helper::FILTER_ID),
+								$userId,
 								$item['nom'],
 								$item['prenom'],
 								self::$groups[$item['groupe']],
@@ -1695,7 +1696,6 @@ class user extends common
 							// L'utilisateur n'existe pas
 						} else {
 							// Nettoyage de l'identifiant
-							$userId = helper::filter($item['id'], helper::FILTER_ID);
 							// Enregistre le user
 							$create = $this->setData([
 								'user',
@@ -1761,7 +1761,7 @@ class user extends common
 
 				}
 				// Sauvegarde la base manuellement
-				$this->saveDB(module: 'user');
+				$this->saveDB('user');
 				if (empty(self::$users)) {
 					$notification = helper::translate('Rien à importer, erreur de format ou fichier incorrect');
 					$success = false;
@@ -1836,7 +1836,7 @@ class user extends common
 				}
 			}
 			// Sauvegarde la base manuellement
-			$this->saveDB(module: 'user');
+			$this->saveDB('user');
 			// Valeurs en sortie
 			$this->addOutput([
 				'redirect' => helper::baseUrl() . 'user/tag',
