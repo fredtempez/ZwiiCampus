@@ -52,7 +52,7 @@
         <div class="col3 offset7">
             <?php echo template::submit('courseSwapSubmit', [
                 'value' => course::$swapMessage['submitLabel'],
-                'disabled' => !(course->courseIsAvailable($this->getUrl(2))
+                'disabled' => !($this->courseIsAvailable($this->getUrl(2))
                     && !($this->getData(['course', $this->getUrl(2), 'limitEnrolment']) === true
                         && $this->getData(['course', $this->getUrl(2), 'limitEnrolmentDate']) <= time())
                 ),
