@@ -82,6 +82,8 @@ class course extends common
 
     public static $userStat = [];
 
+    public static $courseAvailable = false;
+
     public function index()
     {
         // Tableau à transmettre à la fvue
@@ -1590,9 +1592,13 @@ class course extends common
             }
         }
         // L'étudiant est-il  inscrit
+        // Etat du cours
+        self::$courseAvailable = $this->courseIsAvailable($this->getUrl(2));
+        // Message d'inscription
         self::$swapMessage['submitLabel'] = helper::translate('M\'inscrire');
         self::$swapMessage['enrolmentMessage'] = '';
         self::$swapMessage['enrolmentKey'] = '';
+        // L'étudiant est-il inscrit ?
         if ($this->courseIsUserEnroled($courseId) === false) {
             switch ($this->getData(['course', $courseId, 'enrolment'])) {
                 case self::COURSE_ENROLMENT_SELF:
