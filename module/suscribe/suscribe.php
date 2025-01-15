@@ -15,7 +15,7 @@
 class suscribe extends common
 {
 
-	const VERSION = '2.7';
+	const VERSION = '2.8';
 	const REALNAME = 'Auto Inscription';
 	const DELETE = true;
 	const UPDATE = '0.0';
@@ -240,10 +240,9 @@ class suscribe extends common
 			$email_to_check = $this->getInput('registrationAddMail', helper::FILTER_MAIL, true);
 			// Le domaine saisi est invalide si un filtre existe
 			if (
-				empty($this->getData(['module', $this->getUrl(0), 'config', 'filter'])) === true &&
-				empty($email_to_check) === true
+				$this->getData(['module', $this->getUrl(0), 'config', 'filter']) !== '' &&
+				$email_to_check !== ''
 			) {
-
 
 				// Récupérer la liste des domaines valides depuis la configuration et supprimer les espaces autour
 				$filter = trim($this->getData(['module', $this->getUrl(0), 'config', 'filter']));
@@ -255,12 +254,10 @@ class suscribe extends common
 
 				// Extraire le domaine de l'adresse email à vérifier
 				$email_domain = explode('@', $email_to_check)[1];
-
 				// Vérifier si le domaine de l'email est dans la liste des domaines valides
 				if (!in_array($email_domain, $valid_domains)) {
 					self::$inputNotices['registrationAddMail'] = 'Ce domaine n\'est pas autorisé';
 				}
-
 			}
 			// Email valide, on continue le traitement 
 			if (self::$inputNotices === []) {

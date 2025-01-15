@@ -1,3 +1,5 @@
+# Version 2.8
+- Corrige une défaillance du contrôle de la validité de l'email.
 # Version 2.7
 - Remplacement du nom générique de classe dans les vues.
 # Version 2.6
