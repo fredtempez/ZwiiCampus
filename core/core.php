@@ -421,7 +421,14 @@ class common
 		}
 
 		// Stocker le cookie de langue pour l'éditeur de texte ainsi que l'url du contenu pour le theme
-		setcookie('ZWII_UI', self::$i18nUI, time() + 3600, '', '', false, false);
+		setcookie('ZWII_UI', self::$i18nUI, [
+			'expires' => time() + 3600,
+			'path' => helper::baseUrl(false, false),
+			'domain' => '',
+			'secure' => false,
+			'httponly' => false,
+			'samesite' => 'Lax' // Vous pouvez aussi utiliser 'Strict' ou 'None'
+		]);
 		// Stocker l'courseId pour le thème de TinyMCE
 		//setcookie('ZWII_SITE_CONTENT', self::$siteContent, time() + 3600, '', '', false, false);
 		setlocale(LC_ALL, self::$i18nUI);
