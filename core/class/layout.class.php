@@ -497,7 +497,7 @@ class layout extends common
     {
         // Met en forme les items du menu si affiché
         $itemsLeft = '';
-        if ($this->getData(['theme', 'menu', 'hidePages'])) {
+        if ($this->getData(['theme', 'menu', 'hidePages']) === false) {
           $itemsLeft = $this->formatMenu();  
         }
         // Menu extra
