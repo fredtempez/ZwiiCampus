@@ -536,14 +536,13 @@ class layout extends common
                     break;
                 case self::GROUP_EDITOR:
                     if (
-                        $this->getData(['enrolment', self::$siteContent ]) && ($this->getUser('id') === $this->getData(['course', self::$siteContent , 'author']))
+                        $this->getData(['enrolment', self::$siteContent]) && ($this->getUser('id') === $this->getData(['course', self::$siteContent, 'author']))
                         // Permission d'accéder aux espaces dans lesquels le membre est inscrit
                         ||
-                        ($this->getData(['enrolment', self::$siteContent ])
-                        && $this->getUser('permission', __CLASS__, 'tutor') === true
-                        && array_key_exists($this->getUser('id'), $this->getData(['enrolment', self::$siteContent ])))
-                    )
-                        {
+                        ($this->getData(['enrolment', self::$siteContent])
+                            && $this->getUser('permission', __CLASS__, 'tutor') === true
+                            && array_key_exists($this->getUser('id'), $this->getData(['enrolment', self::$siteContent])))
+                    ) {
                         $href = helper::baseUrl() . 'course/users/' . self::$siteContent;
                     }
                     break;
@@ -625,93 +624,35 @@ class layout extends common
     {
         $items = '';
         $currentPageId = $this->getData(['page', $this->getUrl(0)]) ? $this->getUrl(0) : $this->getUrl(2);
-        foreach ($this->getHierarchy() as $parentPageId => $childrenPageIds) {
-            // Menu extra ou standard
+        // La liste des pages n'est générée si le thème ne l'autorise pas sauf pour la page home.
+        if (
+            self::$siteContent === 'home'
+            || (
+                self::$siteContent !== 'home'
+                && $this->getData(['theme', 'menu', 'hidePages']) === true
+            )
+        ) {
+            foreach ($this->getHierarchy() as $parentPageId => $childrenPageIds) {
+                // Menu extra ou standard
 
-            if (
-                // Absence de la position extra, la page est toujours affichée à gauche.
-                ($this->getData(['page', $parentPageId, 'extraPosition']) !== NULL || $extra === true)
-                &&
-                $this->getData(['page', $parentPageId, 'extraPosition']) !== $extra
-            ) {
-                continue;
-            }
-            // Propriétés de l'item
-            $active = ($parentPageId === $currentPageId or in_array($currentPageId, $childrenPageIds)) ? 'active ' : '';
-            $targetBlank = $this->getData(['page', $parentPageId, 'targetBlank']) ? ' target="_blank"' : '';
-            // Mise en page de l'item
-            $items .= '<li id="' . $parentPageId . '">';
-
-            if (
-                ($this->getData(['page', $parentPageId, 'disable']) === true
-                    and $this->isConnected() === false
-                ) or ($this->getData(['page', $parentPageId, 'disable']) === true
-                    and $this->isConnected() === true
-                    and $this->getUser('group') < self::GROUP_EDITOR
-                )
-            ) {
-                $pageUrl = ($this->getData(['config', 'homePageId']) === $this->getUrl(0)) ? helper::baseUrl(false) : helper::baseUrl() . $this->getUrl(0);
-                $items .= '<a href="' . $pageUrl . '">';
-            } else {
-                $pageUrl = ($this->getData(['config', 'homePageId']) === $parentPageId) ? helper::baseUrl(false) : helper::baseUrl() . $parentPageId;
-                $items .= '<a class="' . $active . '" href="' . $pageUrl . '"' . $targetBlank . '>';
-            }
-
-            switch ($this->getData(['page', $parentPageId, 'typeMenu'])) {
-                case '':
-                    $items .= $this->getData(['page', $parentPageId, 'shortTitle']);
-                    break;
-                case 'text':
-                    $items .= $this->getData(['page', $parentPageId, 'shortTitle']);
-                    break;
-                case 'icon':
-                    if ($this->getData(['page', $parentPageId, 'iconUrl']) != "") {
-                        $items .= '<img alt="' . $this->getData(['page', $parentPageId, 'shortTitle']) . '" src="' . helper::baseUrl(false) . self::FILE_DIR . 'source/' . $this->getData(['page', $parentPageId, 'iconUrl']) . '" />';
-                    } else {
-                        $items .= $this->getData(['page', $parentPageId, 'shortTitle']);
-                    }
-                    break;
-                case 'icontitle':
-                    if ($this->getData(['page', $parentPageId, 'iconUrl']) != "") {
-                        $items .= '<img alt="' . $this->getData(['page', $parentPageId, 'titlshortTitlee']) . '" src="' . helper::baseUrl(false) . self::FILE_DIR . 'source/' . $this->getData(['page', $parentPageId, 'iconUrl']) . '" data-tippy-content="';
-                        $items .= $this->getData(['page', $parentPageId, 'shortTitle']) . '"/>';
-                    } else {
-                        $items .= $this->getData(['page', $parentPageId, 'shortTitle']);
-                    }
-                    break;
-            }
-            // Cas où les pages enfants enfant sont toutes masquées dans le menu
-            // ne pas afficher de symbole lorsqu'il n'y a rien à afficher
-            $totalChild = 0;
-            $disableChild = 0;
-            foreach ($childrenPageIds as $childKey) {
-                $totalChild += 1;
-            }
-            if (
-                $childrenPageIds && $disableChild !== $totalChild &&
-                $this->getdata(['page', $parentPageId, 'hideMenuChildren']) === false
-            ) {
-                $items .= template::ico('down', ['margin' => 'left']);
-            }
-            // ------------------------------------------------
-            $items .= '</a>';
-            if (
-                $this->getdata(['page', $parentPageId, 'hideMenuChildren']) === true ||
-                empty($childrenPageIds)
-            ) {
-                continue;
-            }
-            $items .= '<ul class="navSub">';
-            foreach ($childrenPageIds as $childKey) {
-                // Propriétés de l'item
-                $active = ($childKey === $currentPageId) ? 'active ' : '';
-                $targetBlank = $this->getData(['page', $childKey, 'targetBlank']) ? ' target="_blank"' : '';
-                // Mise en page du sous-item
-                $items .= '<li id=' . $childKey . '>';
                 if (
-                    ($this->getData(['page', $childKey, 'disable']) === true
+                        // Absence de la position extra, la page est toujours affichée à gauche.
+                    ($this->getData(['page', $parentPageId, 'extraPosition']) !== NULL || $extra === true)
+                    &&
+                    $this->getData(['page', $parentPageId, 'extraPosition']) !== $extra
+                ) {
+                    continue;
+                }
+                // Propriétés de l'item
+                $active = ($parentPageId === $currentPageId or in_array($currentPageId, $childrenPageIds)) ? 'active ' : '';
+                $targetBlank = $this->getData(['page', $parentPageId, 'targetBlank']) ? ' target="_blank"' : '';
+                // Mise en page de l'item
+                $items .= '<li id="' . $parentPageId . '">';
+
+                if (
+                    ($this->getData(['page', $parentPageId, 'disable']) === true
                         and $this->isConnected() === false
-                    ) or ($this->getData(['page', $childKey, 'disable']) === true
+                    ) or ($this->getData(['page', $parentPageId, 'disable']) === true
                         and $this->isConnected() === true
                         and $this->getUser('group') < self::GROUP_EDITOR
                     )
@@ -719,45 +660,113 @@ class layout extends common
                     $pageUrl = ($this->getData(['config', 'homePageId']) === $this->getUrl(0)) ? helper::baseUrl(false) : helper::baseUrl() . $this->getUrl(0);
                     $items .= '<a href="' . $pageUrl . '">';
                 } else {
-                    $pageUrl = ($this->getData(['config', 'homePageId']) === $childKey) ? helper::baseUrl(false) : helper::baseUrl() . $childKey;
-                    $items .= '<a class="' . $active . ' ' . $parentPageId . '" href="' . $pageUrl . '"' . $targetBlank . '>';
+                    $pageUrl = ($this->getData(['config', 'homePageId']) === $parentPageId) ? helper::baseUrl(false) : helper::baseUrl() . $parentPageId;
+                    $items .= '<a class="' . $active . '" href="' . $pageUrl . '"' . $targetBlank . '>';
                 }
 
-                switch ($this->getData(['page', $childKey, 'typeMenu'])) {
+                switch ($this->getData(['page', $parentPageId, 'typeMenu'])) {
                     case '':
-                        $items .= $this->getData(['page', $childKey, 'shortTitle']);
+                        $items .= $this->getData(['page', $parentPageId, 'shortTitle']);
                         break;
                     case 'text':
-                        $items .= $this->getData(['page', $childKey, 'shortTitle']);
+                        $items .= $this->getData(['page', $parentPageId, 'shortTitle']);
                         break;
                     case 'icon':
-                        if ($this->getData(['page', $childKey, 'iconUrl']) != "") {
-                            $items .= '<img alt="' . $this->getData(['page', $parentPageId, 'shortTitle']) . '" src="' . helper::baseUrl(false) . self::FILE_DIR . 'source/' . $this->getData(['page', $childKey, 'iconUrl']) . '" />';
+                        if ($this->getData(['page', $parentPageId, 'iconUrl']) != "") {
+                            $items .= '<img alt="' . $this->getData(['page', $parentPageId, 'shortTitle']) . '" src="' . helper::baseUrl(false) . self::FILE_DIR . 'source/' . $this->getData(['page', $parentPageId, 'iconUrl']) . '" />';
                         } else {
                             $items .= $this->getData(['page', $parentPageId, 'shortTitle']);
                         }
                         break;
                     case 'icontitle':
-                        if ($this->getData(['page', $childKey, 'iconUrl']) != "") {
-                            $items .= '<img alt="' . $this->getData(['page', $parentPageId, 'shortTitle']) . '" src="' . helper::baseUrl(false) . self::FILE_DIR . 'source/' . $this->getData(['page', $childKey, 'iconUrl']) . '" data-tippy-content="';
-                            $items .= $this->getData(['page', $childKey, 'shortTitle']) . '"/>';
+                        if ($this->getData(['page', $parentPageId, 'iconUrl']) != "") {
+                            $items .= '<img alt="' . $this->getData(['page', $parentPageId, 'titlshortTitlee']) . '" src="' . helper::baseUrl(false) . self::FILE_DIR . 'source/' . $this->getData(['page', $parentPageId, 'iconUrl']) . '" data-tippy-content="';
+                            $items .= $this->getData(['page', $parentPageId, 'shortTitle']) . '"/>';
                         } else {
-                            $items .= $this->getData(['page', $childKey, 'shortTitle']);
-                        }
-                        break;
-                    case 'icontext':
-                        if ($this->getData(['page', $childKey, 'iconUrl']) != "") {
-                            $items .= '<img alt="' . $this->getData(['page', $parentPageId, 'shortTitle']) . '" src="' . helper::baseUrl(false) . self::FILE_DIR . 'source/' . $this->getData(['page', $childKey, 'iconUrl']) . '" />';
-                            $items .= $this->getData(['page', $childKey, 'shortTitle']);
-                        } else {
-                            $items .= $this->getData(['page', $childKey, 'shortTitle']);
+                            $items .= $this->getData(['page', $parentPageId, 'shortTitle']);
                         }
                         break;
                 }
-                $items .= '</a></li>';
+                // Cas où les pages enfants enfant sont toutes masquées dans le menu
+                // ne pas afficher de symbole lorsqu'il n'y a rien à afficher
+                $totalChild = 0;
+                $disableChild = 0;
+                foreach ($childrenPageIds as $childKey) {
+                    $totalChild += 1;
+                }
+                if (
+                    $childrenPageIds && $disableChild !== $totalChild &&
+                    $this->getdata(['page', $parentPageId, 'hideMenuChildren']) === false
+                ) {
+                    $items .= template::ico('down', ['margin' => 'left']);
+                }
+                // ------------------------------------------------
+                $items .= '</a>';
+                if (
+                    $this->getdata(['page', $parentPageId, 'hideMenuChildren']) === true ||
+                    empty($childrenPageIds)
+                ) {
+                    continue;
+                }
+                $items .= '<ul class="navSub">';
+                foreach ($childrenPageIds as $childKey) {
+                    // Propriétés de l'item
+                    $active = ($childKey === $currentPageId) ? 'active ' : '';
+                    $targetBlank = $this->getData(['page', $childKey, 'targetBlank']) ? ' target="_blank"' : '';
+                    // Mise en page du sous-item
+                    $items .= '<li id=' . $childKey . '>';
+                    if (
+                        ($this->getData(['page', $childKey, 'disable']) === true
+                            and $this->isConnected() === false
+                        ) or ($this->getData(['page', $childKey, 'disable']) === true
+                            and $this->isConnected() === true
+                            and $this->getUser('group') < self::GROUP_EDITOR
+                        )
+                    ) {
+                        $pageUrl = ($this->getData(['config', 'homePageId']) === $this->getUrl(0)) ? helper::baseUrl(false) : helper::baseUrl() . $this->getUrl(0);
+                        $items .= '<a href="' . $pageUrl . '">';
+                    } else {
+                        $pageUrl = ($this->getData(['config', 'homePageId']) === $childKey) ? helper::baseUrl(false) : helper::baseUrl() . $childKey;
+                        $items .= '<a class="' . $active . ' ' . $parentPageId . '" href="' . $pageUrl . '"' . $targetBlank . '>';
+                    }
+
+                    switch ($this->getData(['page', $childKey, 'typeMenu'])) {
+                        case '':
+                            $items .= $this->getData(['page', $childKey, 'shortTitle']);
+                            break;
+                        case 'text':
+                            $items .= $this->getData(['page', $childKey, 'shortTitle']);
+                            break;
+                        case 'icon':
+                            if ($this->getData(['page', $childKey, 'iconUrl']) != "") {
+                                $items .= '<img alt="' . $this->getData(['page', $parentPageId, 'shortTitle']) . '" src="' . helper::baseUrl(false) . self::FILE_DIR . 'source/' . $this->getData(['page', $childKey, 'iconUrl']) . '" />';
+                            } else {
+                                $items .= $this->getData(['page', $parentPageId, 'shortTitle']);
+                            }
+                            break;
+                        case 'icontitle':
+                            if ($this->getData(['page', $childKey, 'iconUrl']) != "") {
+                                $items .= '<img alt="' . $this->getData(['page', $parentPageId, 'shortTitle']) . '" src="' . helper::baseUrl(false) . self::FILE_DIR . 'source/' . $this->getData(['page', $childKey, 'iconUrl']) . '" data-tippy-content="';
+                                $items .= $this->getData(['page', $childKey, 'shortTitle']) . '"/>';
+                            } else {
+                                $items .= $this->getData(['page', $childKey, 'shortTitle']);
+                            }
+                            break;
+                        case 'icontext':
+                            if ($this->getData(['page', $childKey, 'iconUrl']) != "") {
+                                $items .= '<img alt="' . $this->getData(['page', $parentPageId, 'shortTitle']) . '" src="' . helper::baseUrl(false) . self::FILE_DIR . 'source/' . $this->getData(['page', $childKey, 'iconUrl']) . '" />';
+                                $items .= $this->getData(['page', $childKey, 'shortTitle']);
+                            } else {
+                                $items .= $this->getData(['page', $childKey, 'shortTitle']);
+                            }
+                            break;
+                    }
+                    $items .= '</a></li>';
+                }
+                $items .= '</ul>';
             }
-            $items .= '</ul>';
         }
+
         return ($items);
     }
 
@@ -1063,7 +1072,7 @@ class layout extends common
                     // Sur une page sans module
                     or $this->getData(['page', $this->getUrl(0), 'moduleId']) === ''
                     // Sur une page avec un module invalide
-                    or (empty($this->getData(['page', $this->getUrl(0), 'moduleId']))  === false
+                    or (empty($this->getData(['page', $this->getUrl(0), 'moduleId'])) === false
                         and class_exists($this->getData(['page', $this->getUrl(0), 'moduleId'])) === false
                     )
                     // Sur une page d'accueil
