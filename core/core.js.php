@@ -369,24 +369,25 @@ core.start = function () {
             }
         }
     }).trigger("resize");
+
     /**
-     * Masque les pages du menu si demandé dans la configuration du thème du menu
+     * Masque les pages du menu si demandé dans la configuration du thème du menu sauf dans home
      */
     // Option active
     var hidePages = "<?php echo $this->getData(['theme', 'menu', 'hidePages'])?>";
 
-    // Récupérer les valeurs de dimensions
-    var padding = "<?php echo $this->getData(['theme', 'menu', 'height'])?>";
-    var firstPadding = parseFloat(padding.split(" ")[0]); // Convertir la première valeur en nombre
-    var fontSize = parseFloat("<?php echo $this->getData(['theme', 'text', 'fontSize'])?>"); // Taille du texte
-    var menuFontSize = parseFloat("<?php echo $this->getData(['theme', 'menu', 'fontSize'])?>"); // Taille du menu
-
-    // Convertir menuFontSize en pixels
-    var menuFontSizeInPx = menuFontSize * fontSize;
-
-    // Calculer la hauteur totale
-    var totalHeight = firstPadding + fontSize + menuFontSizeInPx;
     if (hidePages == 1) {
+        // Récupérer les valeurs de dimensions
+        var padding = "<?php echo $this->getData(['theme', 'menu', 'height'])?>";
+        var firstPadding = parseFloat(padding.split(" ")[0]); // Convertir la première valeur en nombre
+        var fontSize = parseFloat("<?php echo $this->getData(['theme', 'text', 'fontSize'])?>"); // Taille du texte
+        var menuFontSize = parseFloat("<?php echo $this->getData(['theme', 'menu', 'fontSize'])?>"); // Taille du menu
+
+        // Convertir menuFontSize en pixels
+        var menuFontSizeInPx = menuFontSize * fontSize;
+
+        // Calculer la hauteur totale
+        var totalHeight = firstPadding + fontSize + menuFontSizeInPx;
         $("#menuLeft").css({
             "visibility": "hidden",
             "overflow": "hidden",

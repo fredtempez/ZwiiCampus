@@ -604,7 +604,9 @@ class theme extends common
 				]
 			]);
 			// Active le rapport des consultations si options active dans le thème
-			$this->setData(['course', self::$siteContent, 'report', true]);
+			if (self::$siteContent !== 'home') {
+				$this->setData(['course', self::$siteContent, 'report', true]);
+			}
 			// Valeurs en sortie
 			$this->addOutput([
 				'notification' => helper::translate('Modifications enregistrées'),
@@ -681,14 +683,14 @@ class theme extends common
 							'value' => template::ico('pencil'),
 							//'disabled' => !empty($fontUsed[$fontId])
 						])
-							: '',
+						: '',
 						$type !== 'websafe' ? template::button('themeFontDelete' . $fontId, [
 							'class' => 'themeFontDelete buttonRed',
 							'href' => helper::baseUrl() . $this->getUrl(0) . '/fontDelete/' . $type . '/' . $fontId,
 							'value' => template::ico('cancel'),
 							'disabled' => !empty($fontUsed[$fontId])
 						])
-							: ''
+						: ''
 					];
 				}
 			}
@@ -1015,7 +1017,8 @@ class theme extends common
 					'notification' => $data['notification'],
 					'state' => $data['success'],
 					'view' => 'manage'
-				]);;
+				]);
+				;
 			}
 		}
 
