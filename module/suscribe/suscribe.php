@@ -15,7 +15,7 @@
 class suscribe extends common
 {
 
-	const VERSION = '2.8';
+	const VERSION = '2.9';
 	const REALNAME = 'Auto Inscription';
 	const DELETE = true;
 	const UPDATE = '0.0';
@@ -256,7 +256,7 @@ class suscribe extends common
 				$email_domain = explode('@', $email_to_check)[1];
 				// Vérifier si le domaine de l'email est dans la liste des domaines valides
 				if (!in_array($email_domain, $valid_domains)) {
-					self::$inputNotices['registrationAddMail'] = 'Ce domaine n\'est pas autorisé';
+					self::$inputNotices['registrationAddMail'] = helper::translate('Ce domaine n\'est pas autorisé');
 				}
 			}
 			// Email valide, on continue le traitement 
@@ -267,13 +267,13 @@ class suscribe extends common
 				// L'identifiant d'utilisateur est indisponible
 				$userId = $this->getInput('registrationAddId', helper::FILTER_ID, true);
 				if (is_array($this->getData(['user', $userId]))) {
-					self::$inputNotices['registrationAddId'] = 'Identifiant invalide';
+					self::$inputNotices['registrationAddId'] = helper::translate('Identifiant déjà utilisé');
 					$check = false;
 				}
 				// Le compte existe déjà
 				foreach ($this->getData(['user']) as $usersId => $user) {
 					if ($user['mail'] === $this->getInput('registrationAddMail', helper::FILTER_MAIL, true)) {
-						self::$inputNotices['registrationAddMail'] = 'Vous ne pouvez pas utilisez cet email';
+						self::$inputNotices['registrationAddMail'] =  helper::translate('Vous ne pouvez pas utilisez cet email');
 						$check = false;
 						break;
 					}

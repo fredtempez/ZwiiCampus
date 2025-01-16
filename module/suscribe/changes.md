@@ -1,3 +1,5 @@
+# Version 2.9
+- Précision des libellés d'erreur.
 # Version 2.8
 - Corrige une défaillance du contrôle de la validité de l'email.
 # Version 2.7
