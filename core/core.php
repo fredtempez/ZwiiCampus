@@ -72,6 +72,9 @@ class common
 	const COURSE_ENROLMENT_SELF_KEY = 2; // Ouvert à tous les membres disposant de la clé
 	const COURSE_ENROLMENT_MANDATORY = 3;
 
+	// Taille et rotation des journaux
+	const LOG_MAXSIZE = 4 * 1024 * 1024;
+	const LOG_MAXARCHIVE = 5;
 
 	public static $actions = [];
 	public static $coreModuleIds = [
@@ -589,7 +592,7 @@ class common
 				$query .= '.' . $keys[$i];
 			}
 			// Appliquer la modification, le dernier élément étant la donnée à sauvegarder
-				$success = $db->set($query, $keys[count($keys) - 1], $save);
+			$success = $db->set($query, $keys[count($keys) - 1], $save);
 		}
 		return $success;
 	}
@@ -723,7 +726,7 @@ class common
 	public function saveDB($module): void
 	{
 		$db = (object) $this->dataFiles[$module];
-			$db->save();
+		$db->save();
 	}
 
 
@@ -1514,18 +1517,67 @@ class common
 	}
 
 	/**
-	 * Journalisation
+	 * Journalisation avec gestion de la taille maximale et compression
 	 */
 	public function saveLog($message = '')
 	{
-		// Journalisation
-		$dataLog = helper::dateUTF8('%Y%m%d', time(), self::$i18nUI) . ';' . helper::dateUTF8('%H:%M', time(), self::$i18nUI) . ';';
+		// Chemin du fichier journal
+		$logFile = self::DATA_DIR . 'journal.log';
+
+		// Vérifier la taille du fichier
+		if (file_exists($logFile) && filesize($logFile) > self::LOG_MAXSIZE) {
+			$this->rotateLogFile();
+		}
+
+		// Création de l'entrée de journal
+		$dataLog = helper::dateUTF8('%Y%m%d', time(), self::$i18nUI) . ';' .
+			helper::dateUTF8('%H:%M', time(), self::$i18nUI) . ';';
 		$dataLog .= helper::getIp($this->getData(['config', 'connect', 'anonymousIp'])) . ';';
 		$dataLog .= empty($this->getUser('id')) ? 'visitor;' : $this->getUser('id') . ';';
 		$dataLog .= $message ? $this->getUrl() . ';' . $message : $this->getUrl();
 		$dataLog .= PHP_EOL;
+
+		// Écriture dans le fichier si la journalisation est activée
 		if ($this->getData(['config', 'connect', 'log'])) {
-			file_put_contents(self::DATA_DIR . 'journal.log', $dataLog, FILE_APPEND);
+			file_put_contents($logFile, $dataLog, FILE_APPEND);
+		}
+	}
+
+	/**
+	 * Gère la rotation et la compression des fichiers journaux
+	 */
+	private function rotateLogFile()
+	{
+		$logFile = self::DATA_DIR . 'journal.log';
+
+		// Décaler tous les fichiers d'archive existants
+		for ($i = self::LOG_MAXARCHIVE - 1; $i > 0; $i--) {
+			$oldFile = self::DATA_DIR . 'journal-' . $i . '.log.gz';
+			$newFile = self::DATA_DIR . 'journal-' . ($i + 1) . '.log.gz';
+
+			if (file_exists($oldFile)) {
+				if ($i == self::LOG_MAXARCHIVE - 1) {
+					unlink($oldFile); // Supprimer le plus ancien
+				} else {
+					rename($oldFile, $newFile);
+				}
+			}
+		}
+
+		// Compresser le fichier journal actuel
+		if (file_exists($logFile)) {
+			$gz = gzopen(self::DATA_DIR . 'journal-1.log.gz', 'w9');
+			$handle = fopen($logFile, 'r');
+
+			while (!feof($handle)) {
+				gzwrite($gz, fread($handle, 8192));
+			}
+
+			fclose($handle);
+			gzclose($gz);
+
+			// Créer un nouveau fichier journal vide
+			file_put_contents($logFile, '');
 		}
 	}
 
@@ -1535,9 +1587,9 @@ class common
 	 * Retourne les contenus d'un utilisateur
 	 * @param string $userId identifiant
 	 * @param string $serStatus teacher ou student ou admin
-	 * 
+	 * @return array
 	 * CETTE FONCTION EST UTILISEE PAR LAYOUT
-	 * 
+	 *
 	 */
 	public function getCoursesByProfil()
 	{
