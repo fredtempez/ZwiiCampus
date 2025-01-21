@@ -20,7 +20,7 @@
 						]); ?>
 					</div>
 					<div class="col2">
-						<?php echo template::text('configProxyPort', [
+						<?php echo template::number('configProxyPort', [
 							'label' => 'Port du proxy',
 							'placeholder' => '6060',
 							'value' => $this->getData(['config', 'proxyPort'])

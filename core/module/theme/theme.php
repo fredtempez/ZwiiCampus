@@ -893,11 +893,11 @@ class theme extends common
 			$redirect = '';
 			switch ($this->getUrl(2)) {
 				case 'admin':
-					$this->initData('admin', self::$i18nUI);
+					$this->initData('admin', self::$siteContent);
 					$redirect = helper::baseUrl() . 'theme/admin';
 					break;
 				case 'manage':
-					$this->initData('theme', self::$i18nUI);
+					$this->initData('theme', self::$siteContent);
 					$redirect = helper::baseUrl() . 'theme/manage';
 					break;
 				case 'custom':
