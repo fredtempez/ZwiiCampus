@@ -893,7 +893,7 @@ class theme extends common
 			$redirect = '';
 			switch ($this->getUrl(2)) {
 				case 'admin':
-					$this->initData('admin', self::$siteContent);
+					unlink(self::DATA_DIR . 'admin.css');
 					$redirect = helper::baseUrl() . 'theme/admin';
 					break;
 				case 'manage':
