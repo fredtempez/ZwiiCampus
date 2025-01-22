@@ -736,7 +736,7 @@ class course extends common
                 }
                 self::$courseUsers[] = [
                     //$userId,
-                    $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']),
+                    sprintf('%s %s',$this->getData(['user', $userId, 'lastname']), $this->getData(['user', $userId, 'firstname'])),
                     array_key_exists('lastPageView', $userValue) && isset($pages[$userValue['lastPageView']]['title'])
                         ? $pages[$userValue['lastPageView']]['title']
                         : '',
