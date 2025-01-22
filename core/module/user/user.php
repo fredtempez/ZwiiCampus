@@ -594,11 +594,12 @@ class user extends common
 				);
 
 			}
-			// L'utilisateur n'existe pas, on ne le précise pas
+
 			// Valeurs en sortie
 			$this->addOutput([
-				'notification' => helper::translate('Un mail a été envoyé pour confirmer la réinitialisation'),
-				'state' => ($sent === true ? true : null)
+				'notification' => $sent ? helper::translate('Un mail a été envoyé pour confirmer la réinitialisation') : helper::translate('Impossible de réinitialiser le mot de passe de ce compte !'),
+				'state' => ($sent === true ? true : false),
+				'redirect' => helper::baseUrl()
 			]);
 		}
 		// Valeurs en sortie
