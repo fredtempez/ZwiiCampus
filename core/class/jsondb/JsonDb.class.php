@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Andrey Mistulov
@@ -112,75 +113,94 @@ class JsonDb extends \Prowebcraft\Dot
 
 
     /**
-     * Local database upload
-     * @param bool $reload Reboot data?
-     * @return array|mixed|null
+     * Charge les données depuis un fichier JSON.
+     *
+     * @param bool $reload Force le rechargement des données si true
+     * 
+     * @return array|null Les données chargées ou null si le fichier n'existe pas
+     * 
+     * @throws \RuntimeException En cas d'erreur lors de la création de la sauvegarde
+     * @throws \InvalidArgumentException Si le fichier contient des données JSON invalides
      */
-    protected function loadData($reload = false)
+    protected function loadData($reload = false): ?array
     {
         if ($this->data === null || $reload) {
             $this->db = $this->config['dir'] . $this->config['name'];
+
             if (!file_exists($this->db)) {
-                return null; // Rebuild database manage by CMS
-            } else {
-                if ($this->config['backup']) {
-                    try {
-                        copy($this->config['dir'] . DIRECTORY_SEPARATOR . $this->config['name'], $this->config['dir'] . DIRECTORY_SEPARATOR . $this->config['name'] . '.backup');
-                    } catch (\Exception $e) {
-                        error_log('Erreur de chargement : ' . $e);
-                        exit('Erreur de chargement : ' . $e);
+                return null; // Rebuild database managed by CMS
+            }
+
+            if ($this->config['backup']) {
+                $backup_path = $this->config['dir'] . DIRECTORY_SEPARATOR . $this->config['name'] . '.backup';
+
+                try {
+                    if (!copy($this->db, $backup_path)) {
+                        throw new \RuntimeException('Échec de la création de la sauvegarde');
                     }
+                } catch (\Exception $e) {
+                    throw new \RuntimeException('Erreur de sauvegarde : ' . $e->getMessage());
                 }
             }
-            $this->data = json_decode(file_get_contents($this->db), true);
-            if (!$this->data === null) {
-                throw new \InvalidArgumentException('Le fichier ' . $this->db
-                . ' contient des données invalides.');
+
+            $file_contents = file_get_contents($this->db);
+
+            $this->data = json_decode($file_contents, true);
+
+            if ($this->data === null) {
+                throw new \InvalidArgumentException('Le fichier ' . $this->db . ' contient des données invalides.');
             }
         }
+
         return $this->data;
     }
 
     /**
-     * Save database
+     * Charge les données depuis un fichier JSON.
+     *
+     * @param bool $reload Force le rechargement des données si true
+     * 
+     * @return array|null Les données chargées ou null si le fichier n'existe pas
+     * 
+     * @throws \RuntimeException En cas d'erreur lors de la création de la sauvegarde
+     * @throws \InvalidArgumentException Si le fichier contient des données JSON invalides
      */
     public function save(): void
     {
-       if ($this->data === null) {
-           throw new \RuntimeException('Tentative de sauvegarde de données nulles');
-       }
-    
-       try {
-           $encoded_data = json_encode($this->data, JSON_UNESCAPED_UNICODE | JSON_FORCE_OBJECT | JSON_THROW_ON_ERROR);
-       } catch (\JsonException $e) {
-           throw new \RuntimeException('Erreur d\'encodage JSON : ' . $e->getMessage());
-       }
-    
-       $encoded_length = strlen($encoded_data);
-       $max_attempts = 5;
-    
-       for ($attempt = 0; $attempt < $max_attempts; $attempt++) {
-           $temp_file = $this->db . '.tmp' . uniqid();
-           
-           try {
-               $write_result = file_put_contents($temp_file, $encoded_data, LOCK_EX);
-               
-               if ($write_result === $encoded_length) {
-                   if (rename($temp_file, $this->db)) {
-                       return;
-                   }
-               }
-           } catch (\Exception $e) {
-               // Nettoyer le fichier temporaire en cas d'exception
-               if (file_exists($temp_file)) {
-                   unlink($temp_file);
-               }
-           }
-    
-           usleep(pow(2, $attempt) * 250000);
-       }
-    
-       // Erreur fatale si tous les essais échouent
-       throw new \RuntimeException('Échec de sauvegarde après ' . $max_attempts . ' tentatives');
+        if ($this->data === null) {
+            throw new \RuntimeException('Tentative de sauvegarde de données nulles');
+        }
+        try {
+            $encoded_data = json_encode($this->data, JSON_UNESCAPED_UNICODE | JSON_FORCE_OBJECT | JSON_THROW_ON_ERROR);
+        } catch (\JsonException $e) {
+            throw new \RuntimeException('Erreur d\'encodage JSON : ' . $e->getMessage());
+        }
+
+        $encoded_length = strlen($encoded_data);
+        $max_attempts = 5;
+
+        for ($attempt = 0; $attempt < $max_attempts; $attempt++) {
+            $temp_file = $this->db . '.tmp' . uniqid();
+
+            try {
+                $write_result = file_put_contents($temp_file, $encoded_data, LOCK_EX);
+
+                if ($write_result === $encoded_length) {
+                    if (rename($temp_file, $this->db)) {
+                        return;
+                    }
+                }
+            } catch (\Exception $e) {
+                // Nettoyer le fichier temporaire en cas d'exception
+                if (file_exists($temp_file)) {
+                    unlink($temp_file);
+                }
+            }
+
+            usleep(pow(2, $attempt) * 250000);
+        }
+
+        // Erreur fatale si tous les essais échouent
+        throw new \RuntimeException('Échec de sauvegarde après ' . $max_attempts . ' tentatives');
     }
 }

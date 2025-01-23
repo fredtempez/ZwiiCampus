@@ -180,7 +180,7 @@ class course extends common
             $this->initData('theme', $courseId);
 
             // Pointer RFM sur le dossier de l'espace
-            self::$siteContent = $courseId;
+            // self::$siteContent = $courseId;
             // Ordonne les pages par position
             $this->buildHierarchy();
 
@@ -319,7 +319,7 @@ class course extends common
         $this->initDB('page', $courseId);
 
         // Pointer RFM sur le dossier de l'espace
-        self::$siteContent = $courseId;
+        // self::$siteContent = $courseId;
 
         // Ordonne les pages par position
         $this->buildHierarchy();
@@ -378,7 +378,7 @@ class course extends common
         $this->initDB('page', $courseId);
 
         // Pointer RFM sur le dossier de l'espace
-        self::$siteContent = $courseId;
+        // self::$siteContent = $courseId;
 
         // Ordonne les pages par position
         $this->buildHierarchy();
@@ -1740,7 +1740,7 @@ class course extends common
         $this->initDB('page', $courseId);
 
         // Pointer RFM sur le dossier de l'espace
-        self::$siteContent = $courseId;
+        // self::$siteContent = $courseId;
 
         // Ordonne les pages par position
         $this->buildHierarchy();
