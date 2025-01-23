@@ -395,7 +395,7 @@ core.start = function () {
         });
 
         // Par défaut pour tous les thèmes.
-        $("#menuLeft, nav").css("max-height", totalHeight + "px");
+        $("#menuLeft, nav").css("max-height", totalHeight + "px").css("min-height", totalHeight + "px");
     }
 };
 
