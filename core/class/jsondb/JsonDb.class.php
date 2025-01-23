@@ -144,46 +144,43 @@ class JsonDb extends \Prowebcraft\Dot
     /**
      * Save database
      */
-    public function save()
+    public function save(): void
     {
-        // Encode les données au format JSON avec les options spécifiées
-        //$encoded_data = json_encode($this->data, JSON_UNESCAPED_UNICODE | JSON_FORCE_OBJECT | JSON_PRETTY_PRINT);
-        $encoded_data = json_encode($this->data, JSON_UNESCAPED_UNICODE | JSON_FORCE_OBJECT);
-
-        // Vérifie la longueur de la chaîne JSON encodée
-        $encoded_length = strlen($encoded_data);
-
-        // Initialise le compteur de tentatives
-        $attempt = 0;
-
-        // Tente d'encoder les données en JSON et de les sauvegarder jusqu'à 5 fois en cas d'échec
-        while ($attempt < 5) {
-            // Essaye d'écrire les données encodées dans le fichier de base de données
-            $write_result = file_put_contents($this->db, $encoded_data, LOCK_EX); // Les utilisateurs multiples obtiennent un verrou
-
-            //$now = \DateTime::createFromFormat('U.u', microtime(true));
-            //file_put_contents("tmplog.txt", '[JsonDb][' . $now->format('H:i:s.u') . ']--' . $this->db . "\r\n", FILE_APPEND);
-
-            // Vérifie si l'écriture a réussi
-            if ($write_result === $encoded_length) {
-                // Sort de la boucle si l'écriture a réussi
-                break;
-            }
-
-            // Incrémente le compteur de tentatives
-            $attempt++;
-
-            // Attente 1/4 de seconde
-            usleep(0.25);
-        }
-
-        // Vérifie si l'écriture a échoué même après plusieurs tentatives
-        if ($write_result !== $encoded_length) {
-            // Enregistre un message d'erreur dans le journal des erreurs
-            error_log('Erreur d\'écriture, les données n\'ont pas été sauvegardées.');
-
-            // Affiche un message d'erreur et termine le script
-            exit('Erreur d\'écriture, les données n\'ont pas été sauvegardées.');
-        }
+       if ($this->data === null) {
+           throw new \RuntimeException('Tentative de sauvegarde de données nulles');
+       }
+    
+       try {
+           $encoded_data = json_encode($this->data, JSON_UNESCAPED_UNICODE | JSON_FORCE_OBJECT | JSON_THROW_ON_ERROR);
+       } catch (\JsonException $e) {
+           throw new \RuntimeException('Erreur d\'encodage JSON : ' . $e->getMessage());
+       }
+    
+       $encoded_length = strlen($encoded_data);
+       $max_attempts = 5;
+    
+       for ($attempt = 0; $attempt < $max_attempts; $attempt++) {
+           $temp_file = $this->db . '.tmp' . uniqid();
+           
+           try {
+               $write_result = file_put_contents($temp_file, $encoded_data, LOCK_EX);
+               
+               if ($write_result === $encoded_length) {
+                   if (rename($temp_file, $this->db)) {
+                       return;
+                   }
+               }
+           } catch (\Exception $e) {
+               // Nettoyer le fichier temporaire en cas d'exception
+               if (file_exists($temp_file)) {
+                   unlink($temp_file);
+               }
+           }
+    
+           usleep(pow(2, $attempt) * 250000);
+       }
+    
+       // Erreur fatale si tous les essais échouent
+       throw new \RuntimeException('Échec de sauvegarde après ' . $max_attempts . ' tentatives');
     }
 }
