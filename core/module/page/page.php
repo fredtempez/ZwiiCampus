@@ -474,7 +474,7 @@ class page extends common
 						$this->setData(['config', 'page302', $pageId], false);
 					}
 					// Sauvegarde la base manuellement
-					$this->saveDB(module: 'config');
+					$this->saveDB('config');
 					// Si la page est une page enfant, actualise les positions des autres enfants du parent, sinon actualise les pages sans parents
 					$lastPosition = 1;
 					$hierarchy = $this->getInput('pageEditParentPageId') ? $this->getHierarchy($this->getInput('pageEditParentPageId')) : array_keys($this->getHierarchy());
