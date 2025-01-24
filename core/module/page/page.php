@@ -24,7 +24,6 @@ class page extends common
 		'duplicate' => self::GROUP_EDITOR,
 		'jsEditor' => self::GROUP_EDITOR,
 		'cssEditor' => self::GROUP_EDITOR,
-		'register' => self::GROUP_EDITOR,
 	];
 	public static $pagesNoParentId = [
 		'' => 'Aucune'
@@ -594,6 +593,19 @@ class page extends common
 						]
 					]);
 
+					/**
+					 * Sauvegarde l'onglet de l'utilisateur
+					 */
+					$this->setData([
+						'user',
+						$this->getUser('id'),
+						'view',
+						[
+							'page' => $this->getInput('containerSelected'),
+							'config' => $this->getData(['user', $this->getUser('id'), 'view', 'config']),
+						]
+					]);
+
 					// Creation du contenu de la page
 					if (!is_dir(self::DATA_DIR . self::$siteContent . '/content')) {
 						mkdir(self::DATA_DIR . self::$siteContent . '/content', 0755);
@@ -758,27 +770,6 @@ class page extends common
 			return $d;
 		}, $p);
 		return json_encode($d);
-	}
-
-	/**
-	 * Stocke la variable dans les paramètres de l'utilisateur pour activer la tab à sa prochaine visite
-	 * @return never
-	 */
-	public function register(): void
-	{
-		$this->setData([
-			'user',
-			$this->getUser('id'),
-			'view',
-			[
-				'page' => $this->getUrl(2),
-				'config' => $this->getData(['user', $this->getUser('id'), 'view', 'config']),
-			]
-		]);
-		// Valeurs en sortie
-		$this->addOutput([
-			'redirect' => helper::baseUrl() . 'page/edit/' . $this->getUrl(3) . '/' . self::$siteContent,
-		]);
 	}
 
 }

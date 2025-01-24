@@ -54,15 +54,15 @@ function protectModule() {
 */
 $( document ).ready(function() {
 
-		// Changement de profil
+	// Changement de profil
+	$(".pageEditGroupProfil").hide();
+	$("#pageEditGroupProfil" + $("#pageEditGroup").val()).show();
+
+	$("#pageEditGroup").on("change", function () {
 		$(".pageEditGroupProfil").hide();
-		$("#pageEditGroupProfil" + $("#pageEditGroup").val()).show();
-	
-		$("#pageEditGroup").on("change", function () {
-			$(".pageEditGroupProfil").hide();
-			$("#pageEditGroupProfil" + $(this).val()).show();
-		});
-	
+		$("#pageEditGroupProfil" + $(this).val()).show();
+	});
+
 
 	/**
 	 * Sélection des onglets
@@ -70,7 +70,7 @@ $( document ).ready(function() {
 	var pageLayout = "<?php echo $this->getData(['user', $this->getUser('id'), 'view', 'page']);?>";
 	// Non défini, valeur par défaut
 	if (pageLayout == "") {
-		 pageLayout = "content"; 
+		 pageLayout = "content";
 	 }
 	 // Tout cacher
 	 $("#pageEditContentContainer").hide();
@@ -284,9 +284,17 @@ $( document ).ready(function() {
 	//--------------------------------------------------------------------------------------
 
 	/**
+     * Transmet le bouton de l'onglet sélectionné avant la soumission
+     */
+		$('#pageEditForm').on('submit', function () {
+			$('#containerSelected').val(pageLayout);
+		});
+
+	/**
      *  Sélection de la  page de configuration à afficher
      */
 		 $("#pageEditContentButton").on("click", function () {
+			pageLayout = "locale";
 			$("#pageEditContentContainer").show();
 			$("#pageEditExtensionContainer").hide();
 			$("#pageEditPositionContainer").hide();
@@ -294,23 +302,12 @@ $( document ).ready(function() {
 			$("#pageEditPermissionContainer").hide();
 			$("#pageEditContentButton").addClass("activeButton");
 			$("#pageEditExtensionButton").removeClass("activeButton");
-			$("#PageEditPositionButton").removeClass("activeButton");
+			$("#pageEditPositionButton").removeClass("activeButton");
 			$("#pageEditLayoutButton").removeClass("activeButton");
 			$("#pageEditPermissionButton").removeClass("activeButton");
 		});
-		$("#pageEditExtensionButton").on("click", function () {
-			$("#pageEditContentContainer").hide();
-			$("#pageEditExtensionContainer").show();
-			$("#pageEditPositionContainer").hide();
-			$("#pageEditLayoutContainer").hide();
-			$("#pageEditPermissionContainer").hide();
-			$("#pageEditContentButton").removeClass("activeButton");
-			$("#pageEditExtensionButton").addClass("activeButton");
-			$("#PageEditPositionButton").removeClass("activeButton");
-			$("#pageEditLayoutButton").removeClass("activeButton");
-			$("#pageEditPermissionButton").removeClass("activeButton");
-		});
-		$("#PageEditPositionButton").on("click", function () {
+		$("#pageEditPositionButton").on("click", function () {
+			pageLayout = "position";
 			$("#pageEditContentContainer").hide();
 			$("#pageEditExtensionContainer").hide();
 			$("#pageEditPositionContainer").show();
@@ -318,11 +315,25 @@ $( document ).ready(function() {
 			$("#pageEditPermissionContainer").hide();
 			$("#pageEditContentButton").removeClass("activeButton");
 			$("#pageEditExtensionButton").removeClass("activeButton");
-			$("#PageEditPositionButton").addClass("activeButton");
+			$("#pageEditPositionButton").addClass("activeButton");
+			$("#pageEditLayoutButton").removeClass("activeButton");
+			$("#pageEditPermissionButton").removeClass("activeButton");
+		});
+		$("#pageEditExtensionButton").on("click", function () {
+			pageLayout = "extension";
+			$("#pageEditContentContainer").hide();
+			$("#pageEditExtensionContainer").show();
+			$("#pageEditPositionContainer").hide();
+			$("#pageEditLayoutContainer").hide();
+			$("#pageEditPermissionContainer").hide();
+			$("#pageEditContentButton").removeClass("activeButton");
+			$("#pageEditExtensionButton").addClass("activeButton");
+			$("#pageEditPositionButton").removeClass("activeButton");
 			$("#pageEditLayoutButton").removeClass("activeButton");
 			$("#pageEditPermissionButton").removeClass("activeButton");
 		});
 		$("#pageEditLayoutButton").on("click", function () {
+			pageLayout = "layout";
 			$("#pageEditContentContainer").hide();
 			$("#pageEditExtensionContainer").hide();
 			$("#pageEditPositionContainer").hide();
@@ -330,11 +341,12 @@ $( document ).ready(function() {
 			$("#pageEditPermissionContainer").hide();
 			$("#pageEditContentButton").removeClass("activeButton");
 			$("#pageEditExtensionButton").removeClass("activeButton");
-			$("#PageEditPositionButton").removeClass("activeButton");
+			$("#pageEditPositionButton").removeClass("activeButton");
 			$("#pageEditLayoutButton").addClass("activeButton");
 			$("#pageEditPermissionButton").removeClass("activeButton");
 		});
 		$("#pageEditPermissionButton").on("click", function () {
+			pageLayout = "permission";
 			$("#pageEditContentContainer").hide();
 			$("#pageEditExtensionContainer").hide();
 			$("#pageEditPositionContainer").hide();
