@@ -374,7 +374,6 @@ core.start = function () {
         var totalHeight = firstPadding + fontSize + menuFontSizeInPx;
         $("#menuLeft").css({
             "visibility": "hidden",
-            "overflow": "hidden",
             "max-width": "10px"
         });
 
