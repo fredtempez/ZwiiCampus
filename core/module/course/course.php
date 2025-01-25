@@ -339,7 +339,7 @@ class course extends common
 
         // Valeurs en sortie
         $this->addOutput([
-            'title' => sprintf('%s %s (%s)', helper::translate('Editer l\'espace'), $this->getData(['course', $courseId, 'title' ]), $this->getUrl(2)),
+            'title' => sprintf('%s %s (%s)', helper::translate('Editer l\'espace'), $this->getData(['course', $courseId, 'title']), $this->getUrl(2)),
             'view' => 'edit'
         ]);
     }
@@ -398,7 +398,7 @@ class course extends common
 
         // Valeurs en sortie
         $this->addOutput([
-            'title' => sprintf('%s %s (%s)', helper::translate('Gérer l\'espace'), $this->getData(['course', $courseId, 'title' ]), $this->getUrl(2)),
+            'title' => sprintf('%s %s (%s)', helper::translate('Gérer l\'espace'), $this->getData(['course', $courseId, 'title']), $this->getUrl(2)),
             'view' => 'manage'
         ]);
     }
@@ -736,17 +736,15 @@ class course extends common
                 }
                 self::$courseUsers[] = [
                     //$userId,
-                    sprintf('%s %s',$this->getData(['user', $userId, 'lastname']), $this->getData(['user', $userId, 'firstname'])),
-                    array_key_exists('lastPageView', $userValue) && isset($pages[$userValue['lastPageView']]['title'])
-                        ? $pages[$userValue['lastPageView']]['title']
-                        : '',
-                    array_key_exists('lastPageView', $userValue)
-                        ? helper::dateUTF8('%d/%m/%Y', $userValue['datePageView'])
-                        : '',
-                    array_key_exists('datePageView', $userValue)
-                        ? helper::dateUTF8('%H:%M', $userValue['datePageView'])
+                    sprintf('%s %s', $this->getData(['user', $userId, 'lastname']), $this->getData(['user', $userId, 'firstname'])),
+                    array_key_exists('lastPageView', $userValue) && isset($pages['page'][$userValue['lastPageView']]['title'])
+                        ? $pages['page'][$userValue['lastPageView']]['title']
                         : '',
                     $this->getData(['user', $userId, 'tags']),
+                    array_key_exists('lastPageView', $userValue)
+                        // ? helper::dateUTF8('%d/%m/%Y', $userValue['datePageView'])
+                        ? $userValue['datePageView']
+                        : '',
                     $reportButton,
                     template::button('userDelete' . $userId, [
                         'class' => 'userDelete buttonRed',
@@ -1846,7 +1844,7 @@ class course extends common
 
         // Valeurs en sortie
         $this->addOutput([
-            'title' => sprintf('%s %s (%s)', helper::translate('Export des pages de l\'espace'), $this->getData(['course', $courseId, 'title' ]), $this->getUrl(2)),
+            'title' => sprintf('%s %s (%s)', helper::translate('Export des pages de l\'espace'), $this->getData(['course', $courseId, 'title']), $this->getUrl(2)),
             'view' => 'export'
         ]);
     }

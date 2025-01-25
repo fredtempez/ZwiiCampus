@@ -32,6 +32,13 @@ $(document).ready((function () {
         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Tout"]],
         "columnDefs": [
             {
+                target: 4,
+                type: 'numeric',
+                render: function (data) {
+                    return moment(data * 1000).format('DD/MM/YYYY HH:mm');
+                }
+            },
+            {
                 target: 5,
                 orderable: false,
                 searchable: false

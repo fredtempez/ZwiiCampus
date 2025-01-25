@@ -21,7 +21,6 @@ $(document).ready((function () {
             $(location).attr("href", _this.attr("href"))
         }))
     }));
-    $.fn.dataTable.moment( 'DD/MM/YYYY' );
     $('#dataTables').DataTable({
         language: {
             url: "core/vendor/datatables/french.json"
@@ -29,14 +28,20 @@ $(document).ready((function () {
         order: [[3, 'desc']],
         locale: 'fr',
         stateSave: true,
-        "lengthMenu": [[10, 25, 50, 100, 299,  -1], [10, 25, 50, 100, 200, "Tout"]],
+        "lengthMenu": [[10, 25, 50, 100, 299, -1], [10, 25, 50, 100, 200, "Tout"]],
         "columnDefs": [
             {
-                target: 6,
+                targets: 3,
+                type: 'numeric',
+                render: function (data) {
+                    return moment(data * 1000).format('DD/MM/YYYY HH:mm');
+                }
+            },
+            {
+                targets: 5,
                 orderable: false,
                 searchable: false
-            }
-        ]
+            }]
     });
 
 }));

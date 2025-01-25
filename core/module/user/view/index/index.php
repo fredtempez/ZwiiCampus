@@ -68,4 +68,4 @@
 	</div>
 </div>
 <?php echo template::formClose(); ?>
-<?php echo template::table([3, 2, 2, 2, 2, 1, 1], user::$users, ['Nom', 'Groupe', 'Profil', 'Étiquettes', 'Date dernière vue', '', ''], ['id' => 'dataTables']); ?>
+<?php echo template::table([3, 2, 2, 1, 3, 1, 1], user::$users, ['Nom', 'Groupe', 'Profil', 'Étiquettes', 'Date dernière vue', '', ''], ['id' => 'dataTables']); ?>
