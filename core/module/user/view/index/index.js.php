@@ -33,10 +33,17 @@ $(document).ready((function () {
         "columnDefs": [
             {
                 target: 4,
-                type: 'numeric',
+                type: 'num', // Utilisez 'num' pour le tri
                 render: function (data) {
-                    return moment(data * 1000).format('DD/MM/YYYY HH:mm');
-                }
+                    // Si data est un nombre, formatez-le en date
+                    if (typeof data === 'number' || !isNaN(data)) {
+                        return moment(Number(data) * 1000).format('DD/MM/YYYY HH:mm');
+                    } else {
+                        return data; // Sinon, affichez le texte tel quel
+                    }
+                },
+                orderable: false,
+                searchable: false
             },
             {
                 target: 5,
@@ -50,4 +57,15 @@ $(document).ready((function () {
             }
         ]
     });
+
+    // Injecter la règle CSS pour la colonne cible
+    $('<style>')
+    .prop('type', 'text/css')
+    .html(`
+        table.dataTable tbody td:nth-child(5) {
+            color: inherit !important; /* Rétablir la couleur du texte */
+        }
+    `)
+    .appendTo('head');
+
 }));

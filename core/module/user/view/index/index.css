@@ -16,3 +16,13 @@
 /** NE PAS EFFACER
 * admin.css
 */
+
+/** Hide the timestamp column in the user list
+*/
+tbody td:nth-child(5) {
+    color: transparent; /* Masquer le texte par défaut */
+}
+
+tbody td.visible-text {
+    color: inherit; /* Rétablir la couleur du texte */
+}
