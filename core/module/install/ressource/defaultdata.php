@@ -903,7 +903,8 @@ class init extends common
 				'selectSpace' => true,
 				'burgerLogo' => '',
 				'burgerContent' => 'title',
-				'width' => 'container'
+				'width' => 'container',
+				'hidePages' => false,
 			],
 			'site' => [
 				'backgroundColor' => 'rgba(255, 255, 255, 1)',
