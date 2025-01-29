@@ -254,18 +254,18 @@ class core extends common
 
 
 			// Déterminer la hauteur max du menu pour éviter les débordements
-			$padding = $this->getData(['theme', 'menu', 'height']); // Par exemple, "10px 20px"
-			$fontSize = (float) $this->getData(['theme', 'text', 'fontSize']); // Taille de référence en pixels
-			$menuFontSize = (float) $this->getData(['theme', 'menu', 'fontSize']); // Taille du menu en em
+			// $padding = $this->getData(['theme', 'menu', 'height']); // Par exemple, "10px 20px"
+			// $fontSize = (float) $this->getData(['theme', 'text', 'fontSize']); // Taille de référence en pixels
+			// $menuFontSize = (float) $this->getData(['theme', 'menu', 'fontSize']); // Taille du menu en em
 
 			// Extraire la première valeur du padding (par exemple "10px 20px" -> "10px")
-			$firstPadding = (float) explode(" ", $padding)[0]; // Nous prenons la première valeur, supposée être en px
+			// $firstPadding = (float) explode(" ", $padding)[0]; // Nous prenons la première valeur, supposée être en px
 
 			// Convertir menuFontSize (en em) en pixels
-			$menuFontSizeInPx = $menuFontSize * $fontSize;
+			// $menuFontSizeInPx = $menuFontSize * $fontSize;
 
 			// Calculer la hauteur totale
-			$totalHeight = $firstPadding + $fontSize + $menuFontSizeInPx;
+			// $totalHeight = $firstPadding + $fontSize + $menuFontSizeInPx;
 
 			// Fixer la hauteur maximale de la barre de menu
 			// $css .= '#menuLeft, nav, a.active {max-height:' . $totalHeight . 'px}';
