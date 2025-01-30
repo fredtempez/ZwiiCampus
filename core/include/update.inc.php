@@ -72,5 +72,5 @@ if (
             unlink(self::DATA_DIR . $courseId . '/theme.css');
         }
     }
-    //$this->setData(['core', 'dataVersion', 12002]);
+    $this->setData(['core', 'dataVersion', 12002]);
 }
