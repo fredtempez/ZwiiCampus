@@ -613,8 +613,7 @@ class layout extends common
         }
 
         // Retourne les items du menu
-        echo '<ul class="navMain" id="menuLeft">' . $itemsLeft . '</ul><ul class="navMain" id="menuRight">' . $itemsRight;
-        echo '</ul>';
+        echo '<ul class="navMain" id="menuLeft">' . $itemsLeft . '</ul><ul class="navMain" id="menuRight">' . $itemsRight . '</ul>';
     }
 
     /**

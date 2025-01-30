@@ -657,6 +657,7 @@ nav a:hover {
 
 #menuLeft {
     display: inline-flex;
+    float: left;
 }
 
 #menuRight {

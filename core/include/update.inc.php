@@ -22,7 +22,6 @@ if (
     $this->setData(['core', 'dataVersion', 1700]);
 }
 
-
 if (
     $this->getData(['core', 'dataVersion']) < 1800
 ) {
@@ -45,4 +44,33 @@ if (
         fclose($fp);
     }
     $this->setData(['core', 'dataVersion', 1800]);
+}
+
+if (
+    $this->getData(['core', 'dataVersion']) < 12002
+) {
+
+    /**
+     * Installe  dans le thème du menu la variable hidePages 
+     **/
+    // Tableau à insérer
+    $a = [
+        'theme' =>
+        ['menu' => [
+            'hidePages' => false
+    ]]];
+    // Parcourir la structure pour écrire dans les fichiers JSON
+    foreach ($this->getData(['course']) as $courseId => $courseValues) {
+        $d = json_decode(file_get_contents(self::DATA_DIR . $courseId . '/theme.json'), true);
+        //  Insérer la variable hidePages si elle n'existe pas
+        if (isset($d['theme']['menu']['hidePages']) === false) {
+             $result = array_replace_recursive($d, $a);
+             file_put_contents(self::DATA_DIR . $courseId . '/theme.json', json_encode($result,JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        }
+        // Forcer la régénération du fichier theme.css
+        if (file_exists(self::DATA_DIR . $courseId . '/theme.css')) {
+            unlink(self::DATA_DIR . $courseId . '/theme.css');
+        }
+    }
+    //$this->setData(['core', 'dataVersion', 12002]);
 }
