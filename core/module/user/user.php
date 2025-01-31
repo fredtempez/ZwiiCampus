@@ -151,9 +151,9 @@ class user extends common
 					$userMail,
 					'Compte créé sur ' . $this->getData(['config', 'title']),
 					'Bonjour <strong>' . $userFirstname . ' ' . $userLastname . '</strong>,<br><br>' .
-					'Un administrateur vous a créé un compte sur le site ' . $this->getData(['config', 'title']) . '. Vous trouverez ci-dessous les détails de votre compte.<br><br>' .
-					'<strong>Identifiant du compte :</strong> ' . $this->getInput('userAddId') . '<br>' .
-					'<small>Nous ne conservons pas les mots de passe, en conséquence nous vous conseillons de conserver ce message tant que vous ne vous êtes pas connecté. Vous pourrez modifier votre mot de passe après votre première connexion.</small>',
+						'Un administrateur vous a créé un compte sur le site ' . $this->getData(['config', 'title']) . '. Vous trouverez ci-dessous les détails de votre compte.<br><br>' .
+						'<strong>Identifiant du compte :</strong> ' . $this->getInput('userAddId') . '<br>' .
+						'<small>Nous ne conservons pas les mots de passe, en conséquence nous vous conseillons de conserver ce message tant que vous ne vous êtes pas connecté. Vous pourrez modifier votre mot de passe après votre première connexion.</small>',
 					null,
 					$this->getData(['config', 'smtp', 'from'])
 				);
@@ -284,7 +284,6 @@ class user extends common
 				'notification' => sprintf($count > 1 ? $notification . 's' : $notification, $count),
 				'state' => $success
 			]);
-
 		}
 
 		// Liste des groupes et des profils
@@ -367,7 +366,6 @@ class user extends common
 					$this->getData(['user', $userId, 'lastname']),
 					$this->getData(['user', $userId, 'tags']),
 				];
-
 			}
 		}
 
@@ -409,7 +407,7 @@ class user extends common
 				$this->getData(['user', $this->getUrl(2)]) === null
 				// Droit d'édition
 				and (
-						// Impossible de s'auto-éditer
+					// Impossible de s'auto-éditer
 					($this->getUser('id') === $this->getUrl(2)
 						and $this->getUrl('group') <= self::GROUP_VISITOR
 					)
@@ -571,28 +569,29 @@ class user extends common
 	public function forgot()
 	{
 		// Soumission du formulaire
-		if (
-			$this->isPost()
-		) {
+		if ($this->isPost()) {
 			$userId = $this->getInput('userForgotId', helper::FILTER_ID, true);
 			$sent = false;
 			if ($this->getData(['user', $userId])) {
-				// Enregistre la date de la demande dans le compte utilisateur
-				$this->setData(['user', $userId, 'forgot', time()]);
-				// Crée un id unique pour la réinitialisation
-				$uniqId = md5(json_encode($this->getData(['user', $userId, 'forgot'])));
+				// Génère une clé unique avec timestamp et partie aléatoire
+				$timestamp = time(); // Timestamp actuel
+				$randomPart = bin2hex(random_bytes(8)); // Partie aléatoire (16 caractères hexadécimaux)
+				$uniqId = $timestamp . '_' . $randomPart; // Combine les deux
+
+				// Enregistre la clé unique dans le compte utilisateur
+				$this->setData(['user', $userId, 'forgot', $uniqId]);
+
 				// Envoi le mail
 				$sent = $this->sendMail(
 					$this->getData(['user', $userId, 'mail']),
 					'Réinitialisation de votre mot de passe',
 					'Bonjour <strong>' . $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']) . '</strong>,<br><br>' .
-					'Vous avez demandé à changer le mot de passe lié à votre compte. Vous trouverez ci-dessous un lien vous permettant de modifier celui-ci.<br><br>' .
-					'<a href="' . helper::baseUrl() . 'user/reset/' . $userId . '/' . $uniqId . '" target="_blank">' . helper::baseUrl() . 'user/reset/' . $userId . '/' . $uniqId . '</a><br><br>' .
-					'<small>Si nous n\'avez pas demandé à réinitialiser votre mot de passe, veuillez ignorer ce mail.</small>',
+						'Vous avez demandé à changer le mot de passe lié à votre compte. Vous trouverez ci-dessous un lien vous permettant de modifier celui-ci.<br><br>' .
+						'<a href="' . helper::baseUrl() . 'user/reset/' . $userId . '/' . $uniqId . '" target="_blank">' . helper::baseUrl() . 'user/reset/' . $userId . '/' . $uniqId . '</a><br><br>' .
+						'<small>Si nous n\'avez pas demandé à réinitialiser votre mot de passe, veuillez ignorer ce mail.</small>',
 					null,
 					$this->getData(['config', 'smtp', 'from'])
 				);
-
 			}
 
 			// Valeurs en sortie
@@ -683,7 +682,7 @@ class user extends common
 				// Formatage de la liste
 				self::$users[] = [
 					//$userId,
-					sprintf('%s %s',$userLastNames, $this->getData(['user', $userId, 'firstname'])),
+					sprintf('%s %s', $userLastNames, $this->getData(['user', $userId, 'firstname'])),
 					helper::translate(self::$groups[(int) $this->getData(['user', $userId, 'group'])]),
 					empty($this->getData(['profil', $this->getData(['user', $userId, 'group']), $this->getData(['user', $userId, 'profil']), 'name']))
 						? helper::translate(self::$groups[(int) $this->getData(['user', $userId, 'group'])])
@@ -706,7 +705,6 @@ class user extends common
 						'help' => 'Supprimer'
 					])
 				];
-
 			}
 		}
 
@@ -1353,7 +1351,7 @@ class user extends common
 								$this->getData(['user', $userId, 'mail']),
 								'Validation de la connexion à votre compte',
 								'<p>Clé de validation à saisir dans le formulaire de connexion :</p>' .
-								'<h1><center>' . $keyByMail . '</center></h1>',
+									'<h1><center>' . $keyByMail . '</center></h1>',
 								null,
 								$this->getData(['config', 'smtp', 'from'])
 							);
@@ -1475,7 +1473,7 @@ class user extends common
 			$inputKey = $this->getInput('userAuthKey', helper::FILTER_INT);
 			// Redirection
 			$pageId = $this->getUrl(2);
-			$redirect = $pageId? helper::baseUrl() . $pageId : helper::baseUrl() ;
+			$redirect = $pageId ? helper::baseUrl() . $pageId : helper::baseUrl();
 			if (
 				// La clé est valide ou le message n'ayant pas été expédié, la double authentification est désactivée
 				$targetKey === $inputKey || $this->getData(['config', 'connect', 'mailAuth', 0]) === 0
@@ -1556,44 +1554,44 @@ class user extends common
 		if (
 			// L'utilisateur n'existe pas
 			$this->getData(['user', $this->getUrl(2)]) === null
-			// Lien de réinitialisation trop vieux
-			or $this->getData(['user', $this->getUrl(2), 'forgot']) + 86400 < time()
-			// Id unique incorrecte
-			or $this->getUrl(3) !== md5(json_encode($this->getData(['user', $this->getUrl(2), 'forgot'])))
+			// Lien de réinitialisation trop vieux (24 heures)
+			or $this->getData(['user', $this->getUrl(2), 'forgot']) === null
+			or (int) explode('_', $this->getData(['user', $this->getUrl(2), 'forgot']))[0] + 86400 < time()
+			// Clé unique incorrecte
+			or $this->getUrl(3) !== $this->getData(['user', $this->getUrl(2), 'forgot'])
 		) {
 			$this->saveLog(
 				' Erreur de réinitialisation de mot de passe ' . $this->getUrl(2) .
 				' Compte : ' . $this->getData(['user', $this->getUrl(2)]) .
-				' Temps : ' . ($this->getData(['user', $this->getUrl(2), 'forgot']) + 86400 < time()) .
-				' Clé : ' . ($this->getUrl(3) !== md5(json_encode($this->getData(['user', $this->getUrl(2), 'forgot']))))
+				' Temps : ' . ($this->getData(['user', $this->getUrl(2), 'forgot']) === null ? 'Clé manquante' : ((int) explode('_', $this->getData(['user', $this->getUrl(2), 'forgot']))[0] + 86400 < time() ? 'Temps dépassé' : 'Temps valide')) .
+				' Clé : ' . ($this->getUrl(3) !== $this->getData(['user', $this->getUrl(2), 'forgot']) ? 'Clé invalide' : 'Clé valide')
 			);
+	
 			// Message d'erreur en cas de problème de réinitialisation de mot de passe
 			$message = $this->getData(['user', $this->getUrl(2)]) === null
 				? ' Utilisateur inconnu '
 				: '';
-			$message = $this->getData(['user', $this->getUrl(2), 'forgot']) + 86400 < time()
+			$message = $this->getData(['user', $this->getUrl(2), 'forgot']) === null
+				? ' Clé manquante '
+				: $message;
+			$message = (int) explode('_', $this->getData(['user', $this->getUrl(2), 'forgot']))[0] + 86400 < time()
 				? ' Temps dépassé '
 				: $message;
-			$message = $this->getUrl(3) !== md5(json_encode($this->getData(['user', $this->getUrl(2)])))
+			$message = $this->getUrl(3) !== $this->getData(['user', $this->getUrl(2), 'forgot'])
 				? ' Clé invalide '
 				: $message;
-
+	
 			// Valeurs en sortie
 			$this->addOutput([
 				'redirect' => helper::baseurl(),
 				'notification' => helper::translate('Impossible de réinitialiser le mot de passe de ce compte !') . $message,
 				'state' => false
-				//'access' => false
 			]);
 		}
 		// Accès autorisé
 		else {
 			// Soumission du formulaire
-			if (
-				// Tous les users peuvent réinitialiser
-				// $this->getUser('permission', __CLASS__, __FUNCTION__) === true &&
-				$this->isPost()
-			) {
+			if ($this->isPost()) {
 				// Double vérification pour le mot de passe
 				if ($this->getInput('userResetNewPassword')) {
 					// La confirmation ne correspond pas au mot de passe
@@ -1692,8 +1690,8 @@ class user extends common
 								$item['prenom'],
 								self::$groups[$item['groupe']],
 								empty($this->getData(['profil', $this->getData(['user', $userId, 'group']), $this->getData(['user', $userId, 'profil']), 'name']))
-								? helper::translate(self::$groups[(int) $this->getData(['user', $userId, 'group'])])
-								: $this->getData(['profil', $this->getData(['user', $userId, 'group']), $this->getData(['user', $userId, 'profil']), 'name']),
+									? helper::translate(self::$groups[(int) $this->getData(['user', $userId, 'group'])])
+									: $this->getData(['profil', $this->getData(['user', $userId, 'group']), $this->getData(['user', $userId, 'profil']), 'name']),
 								$item['prenom'],
 								helper::filter($item['email'], helper::FILTER_MAIL),
 								$item['tags'],
@@ -1737,9 +1735,9 @@ class user extends common
 									$item['email'],
 									'Compte créé sur ' . $this->getData(['config', 'title']),
 									'Bonjour <strong>' . $item['prenom'] . ' ' . $item['nom'] . '</strong>,<br><br>' .
-									'Un administrateur vous a créé un compte sur le site ' . $this->getData(['config', 'title']) . '. Vous trouverez ci-dessous les détails de votre compte.<br><br>' .
-									'<strong>Identifiant du compte :</strong> ' . $userId . '<br>' .
-									'<small>Un mot de passe provisoire vous été attribué, à la première connexion cliquez sur Mot de passe Oublié.</small>',
+										'Un administrateur vous a créé un compte sur le site ' . $this->getData(['config', 'title']) . '. Vous trouverez ci-dessous les détails de votre compte.<br><br>' .
+										'<strong>Identifiant du compte :</strong> ' . $userId . '<br>' .
+										'<small>Un mot de passe provisoire vous été attribué, à la première connexion cliquez sur Mot de passe Oublié.</small>',
 									null,
 									$this->getData(['config', 'smtp', 'from'])
 								);
@@ -1755,8 +1753,8 @@ class user extends common
 								$item['prenom'],
 								self::$groups[$item['groupe']],
 								empty($this->getData(['profil', $this->getData(['user', $userId, 'group']), $this->getData(['user', $userId, 'profil']), 'name']))
-								? helper::translate(self::$groups[(int) $this->getData(['user', $userId, 'group'])])
-								: $this->getData(['profil', $this->getData(['user', $userId, 'group']), $this->getData(['user', $userId, 'profil']), 'name']),
+									? helper::translate(self::$groups[(int) $this->getData(['user', $userId, 'group'])])
+									: $this->getData(['profil', $this->getData(['user', $userId, 'group']), $this->getData(['user', $userId, 'profil']), 'name']),
 								$item['prenom'],
 								$item['email'],
 								$item['tags'],
@@ -1764,7 +1762,6 @@ class user extends common
 							];
 						}
 					}
-
 				}
 				// Sauvegarde la base manuellement
 				$this->saveDB('user');
@@ -1806,7 +1803,6 @@ class user extends common
 			readfile($path . $file);
 			exit();
 		}
-
 	}
 
 	public function tag()
@@ -1849,7 +1845,6 @@ class user extends common
 				'notification' => sprintf($count > 1 ? $notification . 's' : $notification, $count),
 				'state' => $success
 			]);
-
 		}
 
 
@@ -1933,7 +1928,6 @@ class user extends common
 					$this->getData(['user', $userId, 'lastname']),
 					$this->getData(['user', $userId, 'tags']),
 				];
-
 			}
 		}
 
@@ -1954,7 +1948,6 @@ class user extends common
 				'datatables'
 			]
 		]);
-
 	}
 
 	/**
@@ -1988,5 +1981,4 @@ class user extends common
 		closedir($dh);
 		return $subdirs;
 	}
-
 }
