@@ -1564,8 +1564,8 @@ class user extends common
 			$this->saveLog(
 				' Erreur de réinitialisation de mot de passe ' . $this->getUrl(2) .
 				' Compte : ' . $this->getData(['user', $this->getUrl(2)]) .
-				' Temps : ' . $this->getData(['user', $this->getUrl(2), 'forgot']) + 86400 < time() .
-				' Clé : ' . $this->getUrl(3) !== md5(json_encode($this->getData(['user', $this->getUrl(2), 'forgot'])))
+				' Temps : ' . ($this->getData(['user', $this->getUrl(2), 'forgot']) + 86400 < time()) .
+				' Clé : ' . ($this->getUrl(3) !== md5(json_encode($this->getData(['user', $this->getUrl(2), 'forgot']))))
 			);
 			// Message d'erreur en cas de problème de réinitialisation de mot de passe
 			$message = $this->getData(['user', $this->getUrl(2)]) === null
