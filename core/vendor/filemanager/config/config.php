@@ -17,7 +17,7 @@ date_default_timezone_set('Europe/Paris');
 $lang = isset($_GET['lang']) ? $_GET['lang'] : 'fr_FR';
 setlocale(LC_CTYPE, $lang);
 
-/* Lecture du groupe de l'utilisateur connecté pour attribuer les droits et les dossiers */
+/* Lecture du role de l'utilisateur connecté pour attribuer les droits et les dossiers */
 $userId = $_COOKIE['ZWII_USER_ID'];
 $courseId = isset($_GET['fldr']) ? $_GET['fldr'] : '';
 $u = json_decode(file_get_contents('../../../site/data/user.json'), true);
@@ -25,8 +25,8 @@ $g = json_decode(file_get_contents('../../../site/data/profil.json'), true);
 
 // Lecture les droits
 if (!is_null($u) && !is_null($g) && !is_null($userId)) {
-	$group = $u['user'][$userId]['group'];
-	switch ($group) {
+	$role = $u['user'][$userId]['role'];
+	switch ($role) {
 		case 3:
 			// Accès admin
 			$file['delete'] = true;
@@ -52,12 +52,12 @@ if (!is_null($u) && !is_null($g) && !is_null($userId)) {
 		case 1:
 			// Accès contrôlés par le profil
 			$profil = $u['user'][$userId]['profil'];
-			$file = $g['profil'][$group][$profil]['file'];
-			$folder = $g['profil'][$group][$profil]['folder'];
+			$file = $g['profil'][$role][$profil]['file'];
+			$folder = $g['profil'][$role][$profil]['folder'];
 			// membre sans profil déclaré ou accès interdit, pas d'accès
 			if (
 				is_null($profil)
-				|| $g['profil'][$group][$profil]['filemanager'] === false
+				|| $g['profil'][$role][$profil]['filemanager'] === false
 			) {
 				exit("<h1 style='color: red'>Accès interdit au gestionnaire de fichiers !</h1>");
 			}
@@ -88,7 +88,7 @@ if (!is_null($u) && !is_null($g) && !is_null($userId)) {
 	}
 }
 
-/* Fin lecture du groupe de l'utilisateur connecté pour attribuer les droits et les dossiers */
+/* Fin lecture du role de l'utilisateur connecté pour attribuer les droits et les dossiers */
 
 /*
 |--------------------------------------------------------------------------

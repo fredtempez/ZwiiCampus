@@ -25,11 +25,11 @@
 					]); ?>
 				</div>
 				<div class="col4">
-					<?php if ($this->getUser('group') === self::GROUP_ADMIN): ?>
+					<?php if ($this->getUser('role') === self::GROUP_ADMIN): ?>
 						<?php echo template::select('registrationUserEditGroup', suscribe::$groups, [
 							'disabled' => ($this->getUrl(2) === $this->getUser('id')),
-							'help' => ($this->getUrl(2) === $this->getUser('id') ? 'Impossible de modifier votre propre groupe.' : ''),
-							'label' => 'Groupe',
+							'help' => ($this->getUrl(2) === $this->getUser('id') ? 'Impossible de modifier votre propre role.' : ''),
+							'label' => 'Role',
 							'selected' => $this->getData(['module', $this->getUrl(0), 'registrationUsers', $this->getUrl(2), 'status'])
 						]); ?>
 					<?php endif; ?>
@@ -40,7 +40,7 @@
 						<?php echo template::select('registrationUserEditProfil' . self::GROUP_MEMBER, suscribe::$userProfils[self::GROUP_MEMBER], [
 							'label' => 'Profil',
 							'selected' => $this->getData(['user', $this->getUrl(2), 'profil']),
-							'disabled' => $this->getUser('group') !== self::GROUP_ADMIN,
+							'disabled' => $this->getUser('role') !== self::GROUP_ADMIN,
 						]); ?>
 					</div>
 					<div class="registrationUserEditGroupProfil"
@@ -48,7 +48,7 @@
 						<?php echo template::select('registrationUserEditProfil' . self::GROUP_EDITOR, suscribe::$userProfils[self::GROUP_EDITOR], [
 							'label' => 'Profil',
 							'selected' => $this->getData(['user', $this->getUrl(2), 'profil']),
-							'disabled' => $this->getUser('group') !== self::GROUP_ADMIN,
+							'disabled' => $this->getUser('role') !== self::GROUP_ADMIN,
 						]); ?>
 					</div>
 				</div>

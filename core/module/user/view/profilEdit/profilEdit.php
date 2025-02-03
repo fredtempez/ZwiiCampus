@@ -40,7 +40,7 @@
                         </div>
                         <div class="col12">
                             <?php echo template::text('profilEditDisplayGroup', [
-                                'label' => 'Groupe associé',
+                                'label' => 'Role associé',
                                 'value' => helper::translate(self::$groups[$this->getUrl(2)]),
                                 'disabled' => true
                             ]); ?>
