@@ -740,11 +740,11 @@ class course extends common
                     array_key_exists('lastPageView', $userValue) && isset($pages['page'][$userValue['lastPageView']]['title'])
                         ? $pages['page'][$userValue['lastPageView']]['title']
                         : '',
-                    $this->getData(['user', $userId, 'tags']),
                     array_key_exists('lastPageView', $userValue)
                         // ? helper::dateUTF8('%d/%m/%Y', $userValue['datePageView'])
                         ? $userValue['datePageView']
                         : '',
+                    $this->getData(['user', $userId, 'tags']),
                     $reportButton,
                     template::button('userDelete' . $userId, [
                         'class' => 'userDelete buttonRed',

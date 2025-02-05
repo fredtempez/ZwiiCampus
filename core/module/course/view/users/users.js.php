@@ -31,7 +31,7 @@ $(document).ready((function () {
         "lengthMenu": [[10, 25, 50, 100, 299, -1], [10, 25, 50, 100, 200, "Tout"]],
         "columnDefs": [
             {
-                targets: 3,
+                targets: 2,
                 type: 'numeric',
                 render: function (data) {
                     return moment(data * 1000).format('DD/MM/YYYY HH:mm');
