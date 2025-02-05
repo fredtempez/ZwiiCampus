@@ -3,7 +3,7 @@ class init extends form {
     public static $defaultData = [
                 'button'=> '',
                 'captcha'=> false,
-                'role'=> 0,
+                'group'=> 0,
                 'user'=> '',
                 'mail'=> '',
                 'pageId'=> '',

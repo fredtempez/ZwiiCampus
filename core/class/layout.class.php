@@ -353,7 +353,7 @@ class layout extends common
         }
         // Affichage de la barre de membre simple
         if (
-            $this->getUser('role') >= self::GROUP_MEMBER && $this->getUser('role') < self::GROUP_ADMIN
+            $this->getUser('group') >= self::GROUP_MEMBER && $this->getUser('group') < self::GROUP_ADMIN
             && $this->getData(['theme', 'footer', 'memberBar']) === true
         ) {
             $items .= '<span id="footerDisplayMemberAccount"';
@@ -508,7 +508,7 @@ class layout extends common
          * Affichage du sélecteur d'espaces
          */
         if (
-            $this->getUser('role') === self::GROUP_MEMBER
+            $this->getUser('group') === self::GROUP_MEMBER
             && $this->getData(['theme', 'menu', 'selectSpace']) === true
         ) {
             if ($this->getCoursesByProfil()) {
@@ -532,7 +532,7 @@ class layout extends common
             && $this->getData(['course', self::$siteContent, 'enrolment']) >= 1            
         ) {
             $href = '';
-            switch ($this->getUser('role')) {
+            switch ($this->getUser('group')) {
                 case self::GROUP_MEMBER:
                     $href = helper::baseUrl() . 'course/userReport/' . self::$siteContent . '/' . $this->getUser('id');
                     break;
@@ -565,7 +565,7 @@ class layout extends common
          * Affichage des boutons  gestionnaire de fichiers et mon compte
          */
         if (
-            $this->getUser('role') === self::GROUP_MEMBER
+            $this->getUser('group') === self::GROUP_MEMBER
             && $this->getData(['theme', 'menu', 'memberBar']) === true
         ) {
 
@@ -648,7 +648,7 @@ class layout extends common
                     and $this->isConnected() === false
                 ) or ($this->getData(['page', $parentPageId, 'disable']) === true
                     and $this->isConnected() === true
-                    and $this->getUser('role') < self::GROUP_EDITOR
+                    and $this->getUser('group') < self::GROUP_EDITOR
                 )
             ) {
                 $pageUrl = ($this->getData(['config', 'homePageId']) === $this->getUrl(0)) ? helper::baseUrl(false) : helper::baseUrl() . $this->getUrl(0);
@@ -714,7 +714,7 @@ class layout extends common
                         and $this->isConnected() === false
                     ) or ($this->getData(['page', $childKey, 'disable']) === true
                         and $this->isConnected() === true
-                        and $this->getUser('role') < self::GROUP_EDITOR
+                        and $this->getUser('group') < self::GROUP_EDITOR
                     )
                 ) {
                     $pageUrl = ($this->getData(['config', 'homePageId']) === $this->getUrl(0)) ? helper::baseUrl(false) : helper::baseUrl() . $this->getUrl(0);
@@ -975,7 +975,7 @@ class layout extends common
              * Les admins voient tous les contenus
              * Les enseignants les contenus dont ils sont auteurs
              */
-            if ($this->getUser('role') >= self::GROUP_EDITOR) {
+            if ($this->getUser('group') >= self::GROUP_EDITOR) {
                 if (is_array($this->getCoursesByProfil())) {
                     $leftItems .= '<li><select id="barSelectCourse" >';
                     $leftItems .= '<option name="' . helper::translate('Accueil') . '" value="' . helper::baseUrl(true) . 'course/swap/home" ' . ('home' === self::$siteContent ? 'selected' : '') . '>' . helper::translate('Accueil') . '</option>';
@@ -990,7 +990,7 @@ class layout extends common
                     'help' => 'Gérer les espaces'
                 ]) . '</li>';
             }
-            if ($this->getUser('role') >= self::GROUP_ADMIN) {
+            if ($this->getUser('group') >= self::GROUP_ADMIN) {
                 $leftItems .= '<li>' . template::ico('brush', [
                     'help' => 'Thème',
                     'href' => helper::baseUrl() . 'theme'
@@ -998,8 +998,8 @@ class layout extends common
             }
             // Liste des pages et bouton de gestion interdit pour l'accueil sauf admin
             if (
-                ($this->getUser('role') === self::GROUP_EDITOR && self::$siteContent != 'home')
-                || $this->getUser('role') === self::GROUP_ADMIN
+                ($this->getUser('group') === self::GROUP_EDITOR && self::$siteContent != 'home')
+                || $this->getUser('group') === self::GROUP_ADMIN
             ) {
                 $leftItems .= '<li><select id="barSelectPage">';
                 $leftItems .= '<option value="">' . helper::translate('Pages du site') . '</option>';
@@ -1122,11 +1122,11 @@ class layout extends common
             $rightItems = '';
             if (
                 (
-                    $this->getUser('role') === self::GROUP_EDITOR
+                    $this->getUser('group') === self::GROUP_EDITOR
                     && $this->getUser('permission', 'filemanager') === true
                     && $this->getUser('permission', 'folder', (self::$siteContent === 'home' ? 'homePath' : 'coursePath')) !== 'none'
                 )
-                || $this->getUser('role') === self::GROUP_ADMIN
+                || $this->getUser('group') === self::GROUP_ADMIN
             ) {
                 $folder = '&fldr=/' . (self::$siteContent === 'home' ? '' : self::$siteContent);
                 $rightItems .= '<li>' . template::ico('folder', [
@@ -1137,7 +1137,7 @@ class layout extends common
             }
             if (
                 self::$siteContent === 'home'
-                && $this->getUser('role') >= self::GROUP_ADMIN
+                && $this->getUser('group') >= self::GROUP_ADMIN
             ) {
                 $rightItems .= '<li>' . template::ico('flag', [
                     'help' => 'Langues',
@@ -1209,9 +1209,9 @@ class layout extends common
                     'href' => helper::baseUrl() . 'plugin'
                 ]) . '</li>';
             }
-            // Boutons depuis le role éditeur
+            // Boutons depuis le groupe éditeur
             if (
-                $this->getUser('role') >= self::GROUP_EDITOR
+                $this->getUser('group') >= self::GROUP_EDITOR
                 && $this->getUser('permission', 'user', 'edit')
 
             ) {
@@ -1297,7 +1297,7 @@ class layout extends common
         $vars .= 'var baseUrlQs = ' . json_encode(helper::baseUrl()) . ';';
         if (
             $this->isConnected() === true
-            and $this->getUser('role') >= self::GROUP_EDITOR
+            and $this->getUser('group') >= self::GROUP_EDITOR
         ) {
             $vars .= 'var privateKey = ' . json_encode(md5_file(self::DATA_DIR . 'core.json')) . ';';
         }
