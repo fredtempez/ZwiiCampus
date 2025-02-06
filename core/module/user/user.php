@@ -302,7 +302,7 @@ class user extends common
 				case "2":
 					foreach ($groupValue as $profilId => $profilValue) {
 						if ($profilId) {
-							self::$usersGroups[$groupId . $profilId] = sprintf(helper::translate('Role %s - Profil %s'), self::$groupPublics[$groupId], $profilValue['name']);
+							self::$usersGroups[$groupId . $profilId] = sprintf(helper::translate('Rôle %s - Profil %s'), self::$groupPublics[$groupId], $profilValue['name']);
 							$profils[$groupId . $profilId] = 0;
 						}
 					}
@@ -629,7 +629,7 @@ class user extends common
 				case "2":
 					foreach ($groupValue as $profilId => $profilValue) {
 						if ($profilId) {
-							self::$usersGroups[$groupId . $profilId] = sprintf(helper::translate('Role %s - Profil %s'), self::$groupPublics[$groupId], $profilValue['name']);
+							self::$usersGroups[$groupId . $profilId] = sprintf(helper::translate('Rôle %s - Profil %s'), self::$groupPublics[$groupId], $profilValue['name']);
 							$profils[$groupId . $profilId] = 0;
 						}
 					}
@@ -1864,7 +1864,7 @@ class user extends common
 				case "2":
 					foreach ($groupValue as $profilId => $profilValue) {
 						if ($profilId) {
-							self::$usersGroups[$groupId . $profilId] = sprintf(helper::translate('Role %s - Profil %s'), self::$groupPublics[$groupId], $profilValue['name']);
+							self::$usersGroups[$groupId . $profilId] = sprintf(helper::translate('Rôle %s - Profil %s'), self::$groupPublics[$groupId], $profilValue['name']);
 							$profils[$groupId . $profilId] = 0;
 						}
 					}

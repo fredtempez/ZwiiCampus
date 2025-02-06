@@ -112,7 +112,7 @@ class blog extends common
 	// Permissions d'un article
 	public static $articleConsent = [
 		self::EDIT_ALL => 'Tous les groupes',
-		self::EDIT_GROUP => 'Role du propriétaire',
+		self::EDIT_GROUP => 'Rôle du propriétaire',
 		self::EDIT_OWNER => 'Propriétaire'
 	];
 

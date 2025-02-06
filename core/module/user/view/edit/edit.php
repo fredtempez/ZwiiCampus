@@ -129,7 +129,7 @@
 						<?php echo template::select('userEditGroup', self::$groupEdits, [
 							'disabled' => ($this->getUrl(2) === $this->getUser('id')),
 							'help' => ($this->getUrl(2) === $this->getUser('id') ? 'Impossible de modifier votre propre role.' : ''),
-							'label' => 'Role',
+							'label' => 'Rôle',
 							'selected' => $this->getData(['user', $this->getUrl(2), 'role']),
 						]); ?>
 					<?php else: ?>
