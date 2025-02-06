@@ -106,41 +106,25 @@ if (
     $courses = array_merge($this->getData(['course']), ['home' => array()]);
 
     foreach ($courses as $courseId => $courseValue) {
-        echo $courseId;
         $filePath = self::DATA_DIR . $courseId . '/page.json';
-        $pages = json_decode(file_get_contents($filePath), true);
-        // Vérifie si la clé 'page' existe
-        if (isset($pages['page'])) {
-            foreach ($pages['page'] as $pageId => &$pageValue) {
-                // Parcourt chaque élément de la page
-                array_walk_recursive($pageValue, function (&$value, &$key) {
-                    if ($key === 'group') {
-                        $key = 'role'; // Remplace la clé 'group' par 'role'
-                    }
-                });
-            }
-        }
+        $jsonContent = file_get_contents($filePath);
+
+        $updatedJsonContent = str_replace('"group":', '"role":', $jsonContent);
 
         // Écrit les données modifiées dans le fichier
-        file_put_contents($filePath, json_encode($pages, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+        if ($updatedJsonContent !== $jsonContent) {
+            file_put_contents($filePath, $updatedJsonContent);
+        }
 
         $filePath = self::DATA_DIR . $courseId . '/module.json';
-        $pages = json_decode(file_get_contents($filePath), true);
+        $jsonContent = file_get_contents($filePath);
 
-        // Vérifie si la clé 'page' existe
-        if (isset($pages['page'])) {
-            foreach ($pages['page'] as $pageId => &$pageValue) {
-                // Parcourt chaque élément de la page
-                array_walk_recursive($pageValue, function (&$value, &$key) {
-                    if ($key === 'group') {
-                        $key = 'role'; // Remplace la clé 'group' par 'role'
-                    }
-                });
-            }
-        }
+        $updatedJsonContent = str_replace('"group":', '"role":', $jsonContent);
+
         // Écrit les données modifiées dans le fichier
-        //file_put_contents($filePath, json_encode($pages, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
-
+        if ($updatedJsonContent !== $jsonContent) {
+            file_put_contents($filePath, $updatedJsonContent);
+        }
     }
     //$this->setData(['core', 'dataVersion', 12100]);
 }
