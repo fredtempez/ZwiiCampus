@@ -4,7 +4,7 @@
  * Mises à jour suivant les versions de ZwiiCampus
  */
 
-
+// Version 1.7.00
 if (
     $this->getData(['core', 'dataVersion']) < 1700
 ) {
@@ -46,6 +46,7 @@ if (
     $this->setData(['core', 'dataVersion', 1800]);
 }
 
+// Version 1.20.02
 if (
     $this->getData(['core', 'dataVersion']) < 12002
 ) {
@@ -77,6 +78,8 @@ if (
     }
     $this->setData(['core', 'dataVersion', 12002]);
 }
+
+// Version 1.21.00
 
 if (
     $this->getData(['core', 'dataVersion']) < 12100
