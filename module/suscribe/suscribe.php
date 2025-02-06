@@ -113,10 +113,10 @@ class suscribe extends common
 					// Impossible de s'auto-éditer
 				(
 					$this->getUser('id') === 'user'
-					and $this->getUrl('group') <= self::GROUP_VISITOR
+					and $this->getUrl('role') <= self::GROUP_VISITOR
 				)
 				// Impossible d'éditer un autre utilisateur
-				or ($this->getUrl('group') < self::GROUP_EDITOR)
+				or ($this->getUrl('role') < self::GROUP_EDITOR)
 			)
 		) {
 			// Valeurs en sortie
@@ -138,7 +138,7 @@ class suscribe extends common
 					[
 						'firstname' => $this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'firstname']),
 						'forgot' => 0,
-						'group' => $this->getInput('registrationUserEditGroup', helper::FILTER_INT),
+						'role' => $this->getInput('registrationUserEditGroup', helper::FILTER_INT),
 						// Le profil vaut 0 pour les amdins et 1 pour les autres membres, profil par défaut.
 						'profil' => $this->getInput('registrationUserEditGroup', helper::FILTER_INT) === self::GROUP_ADMIN
 							? 0 : 1,
@@ -165,7 +165,7 @@ class suscribe extends common
 					'state' => true
 				]);
 			}
-			// Changement temporaire de libellé du groupe 0
+			// Changement temporaire de libellé du role 0
 			self::$groups = self::$groupEdits;
 			self::$groups[self::GROUP_BANNED] = 'En attente d\'approbation';
 
@@ -203,7 +203,7 @@ class suscribe extends common
 		if (
 			// L'utilisateur n'existe pas
 			$this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2)]) === null
-			// Groupe insuffisant
+			// Role insuffisant
 			&& $this->getUser('permission', __CLASS__, __FUNCTION__) !== true
 		) {
 			// Valeurs en sortie
@@ -303,7 +303,7 @@ class suscribe extends common
 							'lastname' => $userLastname,
 							'mail' => $userMail,
 							'password' => '',
-							// pas de groupe afin de le différencier dans la liste des users
+							// pas de role afin de le différencier dans la liste des users
 							'timer' => time(),
 							'pseudo' => $userId,
 							'auth' => $auth,
@@ -311,10 +311,10 @@ class suscribe extends common
 						]
 					]);
 					// Mail d'avertissement aux administrateurs
-					// Utilisateurs dans le groupe admin
+					// Utilisateurs dans le role admin
 					$to = [];
 					foreach ($this->getData(['user']) as $key => $user) {
-						if ($user['group'] == self::GROUP_ADMIN) {
+						if ($user['role'] == self::GROUP_ADMIN) {
 							$to[] = $user['mail'];
 						}
 					}
@@ -418,7 +418,7 @@ class suscribe extends common
 							'lastname' => $this->getData(['module', $this->getUrl(0), 'users', $userId, 'lastname']),
 							'mail' => $this->getData(['module', $this->getUrl(0), 'users', $userId, 'mail']),
 							'password' => $this->getInput('registrationValidPassword', helper::FILTER_PASSWORD, true),
-							'group' => self::GROUP_MEMBER,
+							'role' => self::GROUP_MEMBER,
 							'profil' => 1,
 							'forgot' => 0,
 							'pseudo' => $userId,

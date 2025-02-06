@@ -3,7 +3,7 @@
         <?php echo template::button('courseUserHistoryBack', [
             'class' => 'buttonGrey',
             // Le retour est différent selon que c'est un admin ou un tuteur ou l'utilisateur lui-même
-            'href' => $this->getUser('group') === self::GROUP_MEMBER ? helper::baseUrl(false) : helper::baseUrl() . 'course/users/' . $this->getUrl(2),
+            'href' => $this->getUser('role') === self::GROUP_MEMBER ? helper::baseUrl(false) : helper::baseUrl() . 'course/users/' . $this->getUrl(2),
             'value' => template::ico('left')
         ]); ?>
     </div>
@@ -13,7 +13,7 @@
             'value' => template::ico('download'),
             'help' => 'Exporter rapport',
             // Le memebre ne peut pas exporter
-            'disabled' => $this->getUser('group') === self::GROUP_MEMBER
+            'disabled' => $this->getUser('role') === self::GROUP_MEMBER
         ]) ?>
     </div>
 </div>

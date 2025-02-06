@@ -185,7 +185,7 @@ class form extends common
 				[
 					'button' => $this->getInput('formOptionButton'),
 					'captcha' => $this->getInput('formOptionCaptcha', helper::FILTER_BOOLEAN),
-					'group' => $this->getInput('formOptionGroup', helper::FILTER_INT),
+					'role' => $this->getInput('formOptionGroup', helper::FILTER_INT),
 					'user' => self::$listUsers[$this->getInput('formOptionUser', helper::FILTER_INT)],
 					'mail' => $this->getInput('formOptionMail'),
 					'pageId' => $this->getInput('formOptionPageIdToggle', helper::FILTER_BOOLEAN) === true ? $this->getInput('formOptionPageId', helper::FILTER_ID) : '',
@@ -454,19 +454,19 @@ class form extends common
 				'mail'
 			]);
 			$singlemail = $this->getData(['module', $this->getUrl(0), 'config', 'mail']);
-			$group = $this->getData(['module', $this->getUrl(0), 'config', 'group']);
+			$role = $this->getData(['module', $this->getUrl(0), 'config', 'role']);
 			// Verification si le mail peut être envoyé
 			if (
 				self::$inputNotices === [] && (
-					$group > 0 ||
+					$role > 0 ||
 					$singleuser !== '' ||
 					$singlemail !== '')
 			) {
-				// Utilisateurs dans le groupe
+				// Utilisateurs dans le role
 				$to = [];
-				if ($group > 0) {
+				if ($role > 0) {
 					foreach ($this->getData(['user']) as $userId => $user) {
-						if ($user['group'] >= $group) {
+						if ($user['role'] >= $role) {
 							$to[] = $user['mail'];
 						}
 					}
