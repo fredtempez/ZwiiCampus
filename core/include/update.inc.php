@@ -22,6 +22,7 @@ if (
     $this->setData(['core', 'dataVersion', 1700]);
 }
 
+// Version 1.8.00
 if (
     $this->getData(['core', 'dataVersion']) < 1800
 ) {
