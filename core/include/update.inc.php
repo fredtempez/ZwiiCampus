@@ -56,9 +56,11 @@ if (
     // Tableau à insérer
     $a = [
         'theme' =>
-        ['menu' => [
-            'hidePages' => false
-        ]]
+            [
+                'menu' => [
+                    'hidePages' => false
+                ]
+            ]
     ];
     // Parcourir la structure pour écrire dans les fichiers JSON
     foreach ($this->getData(['course']) as $courseId => $courseValues) {
@@ -79,8 +81,9 @@ if (
 if (
     $this->getData(['core', 'dataVersion']) < 12100
 ) {
-    // Renommer Group en Role
-    // Convertit les utilisateurs
+    /**
+     * Renomme la clé dans la base des utilisateurs
+     */
     if (
         is_array($this->getData(['user']))
         && empty($this->getData(['user'])) === false
@@ -102,29 +105,27 @@ if (
     $this->saveDb('user');
 
 
-    // convertit les profils des pages
+    /**
+     * Convertit les pages et les modules
+     */
     $courses = array_merge($this->getData(['course']), ['home' => array()]);
 
     foreach ($courses as $courseId => $courseValue) {
+        // Les pages
         $filePath = self::DATA_DIR . $courseId . '/page.json';
         $jsonContent = file_get_contents($filePath);
-
         $updatedJsonContent = str_replace('"group":', '"role":', $jsonContent);
-
-        // Écrit les données modifiées dans le fichier
         if ($updatedJsonContent !== $jsonContent) {
             file_put_contents($filePath, $updatedJsonContent);
         }
 
+        // Les modules
         $filePath = self::DATA_DIR . $courseId . '/module.json';
         $jsonContent = file_get_contents($filePath);
-
         $updatedJsonContent = str_replace('"group":', '"role":', $jsonContent);
-
-        // Écrit les données modifiées dans le fichier
         if ($updatedJsonContent !== $jsonContent) {
             file_put_contents($filePath, $updatedJsonContent);
         }
     }
-    //$this->setData(['core', 'dataVersion', 12100]);
+    $this->setData(['core', 'dataVersion', 12100]);
 }
