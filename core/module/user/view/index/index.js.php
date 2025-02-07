@@ -33,17 +33,19 @@ $(document).ready((function () {
         "columnDefs": [
             {
                 target: 4,
-                type: 'num', // Utilisez 'num' pour le tri
-                render: function (data) {
-                    // Si data est un nombre, formatez-le en date
-                    if (typeof data === 'number' || !isNaN(data)) {
-                        return moment(Number(data) * 1000).format('DD/MM/YYYY HH:mm');
-                    } else {
-                        return data; // Sinon, affichez le texte tel quel
+                type: 'datetime', // Utilisez 'datetime' pour le tri
+                searchable: false,
+                render: function (data, type, row) {
+                    if (type === 'display') {
+                        if (typeof data === 'number' || !isNaN(data)) {
+                            return moment(Number(data) * 1000).format('DD/MM/YYYY HH:mm');
+                        } else {
+                            return data;
+                        }
                     }
-                },
-                orderable: false,
-                searchable: false
+                    // Pour le tri, retournez la valeur au format ISO
+                    return moment(Number(data) * 1000).toISOString();
+                }
             },
             {
                 target: 5,

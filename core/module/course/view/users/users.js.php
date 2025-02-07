@@ -32,9 +32,18 @@ $(document).ready((function () {
         "columnDefs": [
             {
                 targets: 2,
-                type: 'numeric',
-                render: function (data) {
-                    return moment(data * 1000).format('DD/MM/YYYY HH:mm');
+                type: 'datetime', 
+                searchable: false,
+                render: function (data, type, row) {
+                    if (type === 'display') {
+                        if (typeof data === 'number' || !isNaN(data)) {
+                            return moment(Number(data) * 1000).format('DD/MM/YYYY HH:mm');
+                        } else {
+                            return data;
+                        }
+                    }
+                    // Pour le tri, retournez la valeur au format ISO
+                    return moment(Number(data) * 1000).toISOString();
                 }
             },
             {
