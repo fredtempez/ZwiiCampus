@@ -637,7 +637,7 @@ class course extends common
         // Contenu sélectionné
         $courseId = $this->getUrl(2);
 
-        // Liste des groupes et des profils
+        // Liste des rôles et des profils
         $courseGroups = $this->getData(['profil']);
         foreach ($courseGroups as $groupId => $groupValue) {
             switch ($groupId) {
@@ -808,7 +808,7 @@ class course extends common
             $this->saveDB('enrolment');
         }
 
-        // Liste des groupes et des profils
+        // Liste des rôles et des profils
         $courseGroups = $this->getData(['profil']);
         foreach ($courseGroups as $groupId => $groupValue) {
             switch ($groupId) {
@@ -976,7 +976,7 @@ class course extends common
             }
         }
 
-        // Liste des groupes et des profils
+        // Liste des rôles et des profils
         $courseGroups = $this->getData(['profil']);
         foreach ($courseGroups as $groupId => $groupValue) {
             switch ($groupId) {

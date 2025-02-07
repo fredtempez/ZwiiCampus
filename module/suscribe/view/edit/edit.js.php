@@ -11,7 +11,7 @@
  */
 
 /**
- * Droits des groupes
+ * Droits des rôles
  */
 
 

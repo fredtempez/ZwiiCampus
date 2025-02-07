@@ -37,7 +37,7 @@ $("#registrationAddId").on("change keydown keyup", function(event) {
 });
 
 /**
- * Droits des groupes
+ * Droits des rôles
  */
 $("#registrationAddGroup").on("change", function() {
 	$(".registrationAddGroupDescription").hide();
