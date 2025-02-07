@@ -26,7 +26,7 @@
 				</div>
 				<div class="col4">
 					<?php if ($this->getUser('role') === self::GROUP_ADMIN): ?>
-						<?php echo template::select('registrationUserEditGroup', suscribe::$groups, [
+						<?php echo template::select('registrationUserEditGroup', suscribe::$roles, [
 							'disabled' => ($this->getUrl(2) === $this->getUser('id')),
 							'help' => ($this->getUrl(2) === $this->getUser('id') ? 'Impossible de modifier votre propre role.' : ''),
 							'label' => 'Rôle',

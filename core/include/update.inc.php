@@ -9,13 +9,13 @@ if (
     $this->getData(['core', 'dataVersion']) < 1700
 ) {
     // Supprime la variable path des profils, seul l'accès à l'espace et autorisé.
-    foreach (['1', '2'] as $group) {
-        foreach (array_keys($this->getData(['profil', $group])) as $profil) {
-            if (is_null($this->getData(['profil', $group, $profil, 'folder', 'path'])) === false) {
-                $path = $this->getData(['profil', $group, $profil, 'folder', 'path']);
-                $this->setData(['profil', $group, $profil, 'folder', 'homePath', $path]);
-                $this->setData(['profil', $group, $profil, 'folder', 'coursePath', $path]);
-                $this->deleteData(['profil', $group, $profil, 'folder', 'path']);
+    foreach (['1', '2'] as $role) {
+        foreach (array_keys($this->getData(['profil', $role])) as $profil) {
+            if (is_null($this->getData(['profil', $role, $profil, 'folder', 'path'])) === false) {
+                $path = $this->getData(['profil', $role, $profil, 'folder', 'path']);
+                $this->setData(['profil', $role, $profil, 'folder', 'homePath', $path]);
+                $this->setData(['profil', $role, $profil, 'folder', 'coursePath', $path]);
+                $this->deleteData(['profil', $role, $profil, 'folder', 'path']);
             }
         }
     }

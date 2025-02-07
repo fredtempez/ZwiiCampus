@@ -639,8 +639,8 @@ class course extends common
 
         // Liste des rôles et des profils
         $courseGroups = $this->getData(['profil']);
-        foreach ($courseGroups as $groupId => $groupValue) {
-            switch ($groupId) {
+        foreach ($courseGroups as $roleId => $roleValue) {
+            switch ($roleId) {
                 case "-1":
                 case "0":
                     break;
@@ -650,10 +650,10 @@ class course extends common
                     break;
                 case "1":
                 case "2":
-                    foreach ($groupValue as $profilId => $profilValue) {
+                    foreach ($roleValue as $profilId => $profilValue) {
                         if ($profilId) {
-                            self::$courseGroups[$groupId . $profilId] = sprintf(helper::translate('Rôle %s - Profil %s'), self::$groupPublics[$groupId], $profilValue['name']);
-                            $profils[$groupId . $profilId] = 0;
+                            self::$courseGroups[$roleId . $profilId] = sprintf(helper::translate('Rôle %s - Profil %s'), self::$rolePublics[$roleId], $profilValue['name']);
+                            $profils[$roleId . $profilId] = 0;
                         }
                     }
             }
@@ -689,13 +689,13 @@ class course extends common
                 // Filtres
                 if ($this->isPost()) {
                     // Groupe et profils
-                    $group = (string) $this->getData(['user', $userId, 'role']);
+                    $role = (string) $this->getData(['user', $userId, 'role']);
                     $profil = (string) $this->getData(['user', $userId, 'profil']);
                     $firstName = $this->getData(['user', $userId, 'firstname']);
                     $lastName = $this->getData(['user', $userId, 'lastname']);
                     if (
                         $this->getInput('courseFilterGroup', helper::FILTER_INT) > 0
-                        && $this->getInput('courseFilterGroup', helper::FILTER_STRING_SHORT) !== $group . $profil
+                        && $this->getInput('courseFilterGroup', helper::FILTER_STRING_SHORT) !== $role . $profil
                     )
                         continue;
                     // Première lettre du prénom
@@ -757,11 +757,11 @@ class course extends common
         }
 
         // Ajoute les effectifs aux profils du sélecteur
-        foreach (self::$courseGroups as $groupId => $groupValue) {
-            if ($groupId === 'all') {
+        foreach (self::$courseGroups as $roleId => $roleValue) {
+            if ($roleId === 'all') {
                 self::$courseGroups['all'] = self::$courseGroups['all'] . ' (' . array_sum($profils) . ')';
             } else {
-                self::$courseGroups[$groupId] = self::$courseGroups[$groupId] . ' (' . $profils[$groupId] . ')';
+                self::$courseGroups[$roleId] = self::$courseGroups[$roleId] . ' (' . $profils[$roleId] . ')';
             }
         }
 
@@ -810,8 +810,8 @@ class course extends common
 
         // Liste des rôles et des profils
         $courseGroups = $this->getData(['profil']);
-        foreach ($courseGroups as $groupId => $groupValue) {
-            switch ($groupId) {
+        foreach ($courseGroups as $roleId => $roleValue) {
+            switch ($roleId) {
                 case "-1":
                 case "0":
                     break;
@@ -821,10 +821,10 @@ class course extends common
                     break;
                 case "1":
                 case "2":
-                    foreach ($groupValue as $profilId => $profilValue) {
+                    foreach ($roleValue as $profilId => $profilValue) {
                         if ($profilId) {
-                            self::$courseGroups[$groupId . $profilId] = sprintf(helper::translate('Rôle %s - Profil %s'), self::$groupPublics[$groupId], $profilValue['name']);
-                            $profils[$groupId . $profilId] = 0;
+                            self::$courseGroups[$roleId . $profilId] = sprintf(helper::translate('Rôle %s - Profil %s'), self::$rolePublics[$roleId], $profilValue['name']);
+                            $profils[$roleId . $profilId] = 0;
                         }
                     }
             }
@@ -862,13 +862,13 @@ class course extends common
             ) {
 
                 // Groupe et profils
-                $group = (string) $this->getData(['user', $userId, 'role']);
+                $role = (string) $this->getData(['user', $userId, 'role']);
                 $profil = (string) $this->getData(['user', $userId, 'profil']);
                 $firstName = $this->getData(['user', $userId, 'firstname']);
                 $lastName = $this->getData(['user', $userId, 'lastname']);
                 if (
                     $this->getInput('courseFilterGroup', helper::FILTER_INT) > 0
-                    && $this->getInput('courseFilterGroup', helper::FILTER_STRING_SHORT) !== $group . $profil
+                    && $this->getInput('courseFilterGroup', helper::FILTER_STRING_SHORT) !== $role . $profil
                 )
                     continue;
                 // Première lettre du prénom
@@ -896,11 +896,11 @@ class course extends common
         }
 
         // Ajoute les effectifs aux profils du sélecteur
-        foreach (self::$courseGroups as $groupId => $groupValue) {
-            if ($groupId === 'all') {
+        foreach (self::$courseGroups as $roleId => $roleValue) {
+            if ($roleId === 'all') {
                 self::$courseGroups['all'] = self::$courseGroups['all'] . ' (' . array_sum($profils) . ')';
             } else {
-                self::$courseGroups[$groupId] = self::$courseGroups[$groupId] . ' (' . $profils[$groupId] . ')';
+                self::$courseGroups[$roleId] = self::$courseGroups[$roleId] . ' (' . $profils[$roleId] . ')';
             }
         }
 
@@ -978,8 +978,8 @@ class course extends common
 
         // Liste des rôles et des profils
         $courseGroups = $this->getData(['profil']);
-        foreach ($courseGroups as $groupId => $groupValue) {
-            switch ($groupId) {
+        foreach ($courseGroups as $roleId => $roleValue) {
+            switch ($roleId) {
                 case "-1":
                 case "0":
                     break;
@@ -989,10 +989,10 @@ class course extends common
                     break;
                 case "1":
                 case "2":
-                    foreach ($groupValue as $profilId => $profilValue) {
+                    foreach ($roleValue as $profilId => $profilValue) {
                         if ($profilId) {
-                            self::$courseGroups[$groupId . $profilId] = sprintf(helper::translate('Rôle %s - Profil %s'), self::$groupPublics[$groupId], $profilValue['name']);
-                            $profils[$groupId . $profilId] = 0;
+                            self::$courseGroups[$roleId . $profilId] = sprintf(helper::translate('Rôle %s - Profil %s'), self::$rolePublics[$roleId], $profilValue['name']);
+                            $profils[$roleId . $profilId] = 0;
                         }
                     }
             }
@@ -1025,13 +1025,13 @@ class course extends common
                 ) {
 
                     // Groupe et profils
-                    $group = (string) $this->getData(['user', $userId, 'role']);
+                    $role = (string) $this->getData(['user', $userId, 'role']);
                     $profil = (string) $this->getData(['user', $userId, 'profil']);
                     $firstName = $this->getData(['user', $userId, 'firstname']);
                     $lastName = $this->getData(['user', $userId, 'lastname']);
                     if (
                         $this->getInput('courseFilterGroup', helper::FILTER_INT) > 0
-                        && $this->getInput('courseFilterGroup', helper::FILTER_STRING_SHORT) !== $group . $profil
+                        && $this->getInput('courseFilterGroup', helper::FILTER_STRING_SHORT) !== $role . $profil
                     )
                         continue;
                     // Première lettre du prénom
@@ -1060,11 +1060,11 @@ class course extends common
         }
 
         // Ajoute les effectifs aux profils du sélecteur
-        foreach (self::$courseGroups as $groupId => $groupValue) {
-            if ($groupId === 'all') {
+        foreach (self::$courseGroups as $roleId => $roleValue) {
+            if ($roleId === 'all') {
                 self::$courseGroups['all'] = self::$courseGroups['all'] . ' (' . array_sum($profils) . ')';
             } else {
-                self::$courseGroups[$groupId] = self::$courseGroups[$groupId] . ' (' . $profils[$groupId] . ')';
+                self::$courseGroups[$roleId] = self::$courseGroups[$roleId] . ' (' . $profils[$roleId] . ')';
             }
         }
 
@@ -2150,8 +2150,8 @@ class course extends common
     private function courseIsUserEnroled($courseId)
     {
         $userId = $this->getUser('id');
-        $group = $userId ? $this->getData(['user', $userId, 'role']) : null;
-        switch ($group) {
+        $role = $userId ? $this->getData(['user', $userId, 'role']) : null;
+        switch ($role) {
             case self::GROUP_ADMIN:
                 $r = true;
                 break;

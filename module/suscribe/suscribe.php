@@ -55,7 +55,7 @@ class suscribe extends common
 
 	public static $users = [];
 
-	public static $groups = [];
+	public static $roles = [];
 	public static $userProfils = [];
 	public static $userProfilsComments = [];
 
@@ -166,8 +166,8 @@ class suscribe extends common
 				]);
 			}
 			// Changement temporaire de libellé du groupe 0
-			self::$groups = self::$groupEdits;
-			self::$groups[self::GROUP_BANNED] = 'En attente d\'approbation';
+			self::$roles = self::$roleEdits;
+			self::$roles[self::GROUP_BANNED] = 'En attente d\'approbation';
 
 			// Profils disponibles
 			foreach ($this->getData(['profil']) as $profilId => $profilData) {
