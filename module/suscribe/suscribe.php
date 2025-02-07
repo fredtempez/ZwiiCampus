@@ -165,7 +165,7 @@ class suscribe extends common
 					'state' => true
 				]);
 			}
-			// Changement temporaire de libellé du groupe 0
+			// Changement temporaire de libellé du rôle 0
 			self::$roles = self::$roleEdits;
 			self::$roles[self::GROUP_BANNED] = 'En attente d\'approbation';
 
@@ -203,7 +203,7 @@ class suscribe extends common
 		if (
 			// L'utilisateur n'existe pas
 			$this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2)]) === null
-			// Groupe insuffisant
+			// Rôle insuffisant
 			&& $this->getUser('permission', __CLASS__, __FUNCTION__) !== true
 		) {
 			// Valeurs en sortie
@@ -303,7 +303,7 @@ class suscribe extends common
 							'lastname' => $userLastname,
 							'mail' => $userMail,
 							'password' => '',
-							// pas de groupe afin de le différencier dans la liste des users
+							// pas de rôle afin de le différencier dans la liste des users
 							'timer' => time(),
 							'pseudo' => $userId,
 							'auth' => $auth,
@@ -311,7 +311,7 @@ class suscribe extends common
 						]
 					]);
 					// Mail d'avertissement aux administrateurs
-					// Utilisateurs dans le groupe admin
+					// Utilisateurs dans le rôle admin
 					$to = [];
 					foreach ($this->getData(['user']) as $key => $user) {
 						if ($user['role'] == self::GROUP_ADMIN) {

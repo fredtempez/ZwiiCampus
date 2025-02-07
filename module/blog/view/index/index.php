@@ -80,7 +80,7 @@
 											or $this->getUser('role') === self::GROUP_ADMIN)
 									)
 									or (
-											// Groupe
+											// Rôle
 										($this->getData(['module', $this->getUrl(0), 'posts', $articleId, 'editConsent']) === self::GROUP_ADMIN
 											or $this->getData(['module', $this->getUrl(0), 'posts', $articleId, 'editConsent']) === self::GROUP_EDITOR)
 										and $this->getUser('role') >= $this->getData(['module', $this->getUrl(0), 'posts', $articleId, 'editConsent'])
