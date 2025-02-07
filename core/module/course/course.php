@@ -94,7 +94,7 @@ class course extends common
 
         if (
             $this->getUser('id')
-            && $this->getUser('group')
+            && $this->getUser('role')
         ) {
             foreach ($this->getData(['course']) as $courseId => $courseValue) {
                 /**
@@ -156,7 +156,7 @@ class course extends common
 
         // Accès limité aux admins
         if (
-            $this->getUser('group') !== self::GROUP_ADMIN
+            $this->getUser('role') !== self::GROUP_ADMIN
         ) {
             // Valeurs en sortie
             $this->addOutput([
@@ -414,7 +414,7 @@ class course extends common
 
         // Accès limité aux admins, à l'auteur ou éditeurs inscrits
         if (
-            $this->getUser('group') !== self::$actions[__FUNCTION__]
+            $this->getUser('role') !== self::$actions[__FUNCTION__]
         ) {
             // Valeurs en sortie
             $this->addOutput([
@@ -447,7 +447,7 @@ class course extends common
 
         if (
             // Accès limité aux admins
-            $this->getUser('group') !== self::$actions[__FUNCTION__]
+            $this->getUser('role') !== self::$actions[__FUNCTION__]
             // Le contenu n'existe pas
             || $this->getData(['course', $courseId]) === null
         ) {
@@ -487,7 +487,7 @@ class course extends common
 
         if (
             // Accès limité aux admins
-            $this->getUser('group') !== self::$actions[__FUNCTION__]
+            $this->getUser('role') !== self::$actions[__FUNCTION__]
         ) {
             // Valeurs en sortie
             $this->addOutput([
@@ -526,7 +526,7 @@ class course extends common
 
         if (
             // Accès limité aux admins
-            $this->getUser('group') !== self::$actions[__FUNCTION__]
+            $this->getUser('role') !== self::$actions[__FUNCTION__]
         ) {
             // Valeurs en sortie
             $this->addOutput([
@@ -557,7 +557,7 @@ class course extends common
     {
         if (
             // Accès limité aux admins
-            $this->getUser('group') !== self::$actions[__FUNCTION__]
+            $this->getUser('role') !== self::$actions[__FUNCTION__]
         ) {
             // Valeurs en sortie
             $this->addOutput([
@@ -592,7 +592,7 @@ class course extends common
 
         if (
             // Accès limité aux admins
-            $this->getUser('group') !== self::$actions[__FUNCTION__]
+            $this->getUser('role') !== self::$actions[__FUNCTION__]
         ) {
             // Valeurs en sortie
             $this->addOutput([
@@ -682,14 +682,14 @@ class course extends common
             foreach ($users as $userId => $userValue) {
 
                 // Compte les rôles valides
-                if (isset($profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])])) {
-                    $profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])]++;
+                if (isset($profils[$this->getData(['user', $userId, 'role']) . $this->getData(['user', $userId, 'profil'])])) {
+                    $profils[$this->getData(['user', $userId, 'role']) . $this->getData(['user', $userId, 'profil'])]++;
                 }
 
                 // Filtres
                 if ($this->isPost()) {
                     // Groupe et profils
-                    $group = (string) $this->getData(['user', $userId, 'group']);
+                    $group = (string) $this->getData(['user', $userId, 'role']);
                     $profil = (string) $this->getData(['user', $userId, 'profil']);
                     $firstName = $this->getData(['user', $userId, 'firstname']);
                     $lastName = $this->getData(['user', $userId, 'lastname']);
@@ -850,8 +850,8 @@ class course extends common
         foreach ($users as $userId => $userValue) {
 
             // Compte les rôles
-            if (isset($profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])])) {
-                $profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])]++;
+            if (isset($profils[$this->getData(['user', $userId, 'role']) . $this->getData(['user', $userId, 'profil'])])) {
+                $profils[$this->getData(['user', $userId, 'role']) . $this->getData(['user', $userId, 'profil'])]++;
             }
 
             // Filtres
@@ -862,7 +862,7 @@ class course extends common
             ) {
 
                 // Groupe et profils
-                $group = (string) $this->getData(['user', $userId, 'group']);
+                $group = (string) $this->getData(['user', $userId, 'role']);
                 $profil = (string) $this->getData(['user', $userId, 'profil']);
                 $firstName = $this->getData(['user', $userId, 'firstname']);
                 $lastName = $this->getData(['user', $userId, 'lastname']);
@@ -1013,8 +1013,8 @@ class course extends common
             foreach ($users as $userId => $userValue) {
 
                 // Compte les rôles
-                if (isset($profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])])) {
-                    $profils[$this->getData(['user', $userId, 'group']) . $this->getData(['user', $userId, 'profil'])]++;
+                if (isset($profils[$this->getData(['user', $userId, 'role']) . $this->getData(['user', $userId, 'profil'])])) {
+                    $profils[$this->getData(['user', $userId, 'role']) . $this->getData(['user', $userId, 'profil'])]++;
                 }
 
                 // Filtres
@@ -1025,7 +1025,7 @@ class course extends common
                 ) {
 
                     // Groupe et profils
-                    $group = (string) $this->getData(['user', $userId, 'group']);
+                    $group = (string) $this->getData(['user', $userId, 'role']);
                     $profil = (string) $this->getData(['user', $userId, 'profil']);
                     $firstName = $this->getData(['user', $userId, 'firstname']);
                     $lastName = $this->getData(['user', $userId, 'lastname']);
@@ -1892,7 +1892,7 @@ class course extends common
         ) {
 
             // Récupérer le dossier du profil
-            $userPath = $this->getData(['profil', $this->getuser('group'), $this->getuser('profil'), 'folder', 'path']);
+            $userPath = $this->getData(['profil', $this->getuser('role'), $this->getuser('profil'), 'folder', 'path']);
             $userPath = $userPath === '' ? self::$siteContent : $userPath;
             // Fichier avec le bon chemin selon le profil
             $zipName = self::FILE_DIR . 'source/' . $userPath . '/' . $this->getInput('courseRestoreFile', null, true);
@@ -2003,13 +2003,13 @@ class course extends common
      */
     public function permissionControl($function, $courseId)
     {
-        switch ($this->getUser('group')) {
+        switch ($this->getUser('role')) {
             case self::GROUP_ADMIN:
                 return true;
             case self::GROUP_EDITOR:
                 return (
                     $this->getUser('permission', __CLASS__, $function)
-                    && $this->getUser('group') === self::$actions[$function]
+                    && $this->getUser('role') === self::$actions[$function]
                     &&
                     // Permission d'accéder aux espaces dans lesquels le membre auteur
                     (
@@ -2043,7 +2043,7 @@ class course extends common
         // Si un utilisateur connecté est admin ou auteur, c'est autorisé
         if (
             $this->isConnected() === true &&
-            ($this->getUser('group') === self::GROUP_ADMIN ||
+            ($this->getUser('role') === self::GROUP_ADMIN ||
                 $this->getUser('id') === $this->getData(['course', $courseId, 'author']))
         ) {
             return true;
@@ -2150,7 +2150,7 @@ class course extends common
     private function courseIsUserEnroled($courseId)
     {
         $userId = $this->getUser('id');
-        $group = $userId ? $this->getData(['user', $userId, 'group']) : null;
+        $group = $userId ? $this->getData(['user', $userId, 'role']) : null;
         switch ($group) {
             case self::GROUP_ADMIN:
                 $r = true;

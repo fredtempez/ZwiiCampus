@@ -113,10 +113,10 @@ class suscribe extends common
 					// Impossible de s'auto-éditer
 				(
 					$this->getUser('id') === 'user'
-					and $this->getUrl('group') <= self::GROUP_VISITOR
+					and $this->getUrl('role') <= self::GROUP_VISITOR
 				)
 				// Impossible d'éditer un autre utilisateur
-				or ($this->getUrl('group') < self::GROUP_EDITOR)
+				or ($this->getUrl('role') < self::GROUP_EDITOR)
 			)
 		) {
 			// Valeurs en sortie
@@ -138,7 +138,7 @@ class suscribe extends common
 					[
 						'firstname' => $this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'firstname']),
 						'forgot' => 0,
-						'group' => $this->getInput('registrationUserEditGroup', helper::FILTER_INT),
+						'role' => $this->getInput('registrationUserEditGroup', helper::FILTER_INT),
 						// Le profil vaut 0 pour les amdins et 1 pour les autres membres, profil par défaut.
 						'profil' => $this->getInput('registrationUserEditGroup', helper::FILTER_INT) === self::GROUP_ADMIN
 							? 0 : 1,
@@ -314,7 +314,7 @@ class suscribe extends common
 					// Utilisateurs dans le groupe admin
 					$to = [];
 					foreach ($this->getData(['user']) as $key => $user) {
-						if ($user['group'] == self::GROUP_ADMIN) {
+						if ($user['role'] == self::GROUP_ADMIN) {
 							$to[] = $user['mail'];
 						}
 					}
@@ -418,7 +418,7 @@ class suscribe extends common
 							'lastname' => $this->getData(['module', $this->getUrl(0), 'users', $userId, 'lastname']),
 							'mail' => $this->getData(['module', $this->getUrl(0), 'users', $userId, 'mail']),
 							'password' => $this->getInput('registrationValidPassword', helper::FILTER_PASSWORD, true),
-							'group' => self::GROUP_MEMBER,
+							'role' => self::GROUP_MEMBER,
 							'profil' => 1,
 							'forgot' => 0,
 							'pseudo' => $userId,
