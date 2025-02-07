@@ -128,9 +128,9 @@
 					<?php if ($this->getUser('group') === self::GROUP_ADMIN): ?>
 						<?php echo template::select('userEditGroup', self::$groupEdits, [
 							'disabled' => ($this->getUrl(2) === $this->getUser('id')),
-							'help' => ($this->getUrl(2) === $this->getUser('id') ? 'Impossible de modifier votre propre groupe.' : ''),
-							'label' => 'Groupe',
-							'selected' => $this->getData(['user', $this->getUrl(2), 'group']),
+							'help' => ($this->getUrl(2) === $this->getUser('id') ? 'Impossible de modifier votre propre rôle.' : ''),
+							'label' => 'Rôle',
+							'selected' => $this->getData(['user', $this->getUrl(2), 'role']),
 						]); ?>
 					<?php else: ?>
 						<?php echo template::hidden('userEditGroup', [

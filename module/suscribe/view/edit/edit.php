@@ -28,8 +28,8 @@
 					<?php if ($this->getUser('group') === self::GROUP_ADMIN): ?>
 						<?php echo template::select('registrationUserEditGroup', suscribe::$groups, [
 							'disabled' => ($this->getUrl(2) === $this->getUser('id')),
-							'help' => ($this->getUrl(2) === $this->getUser('id') ? 'Impossible de modifier votre propre groupe.' : ''),
-							'label' => 'Groupe',
+							'help' => ($this->getUrl(2) === $this->getUser('id') ? 'Impossible de modifier votre propre role.' : ''),
+							'label' => 'Rôle',
 							'selected' => $this->getData(['module', $this->getUrl(0), 'registrationUsers', $this->getUrl(2), 'status'])
 						]); ?>
 					<?php endif; ?>

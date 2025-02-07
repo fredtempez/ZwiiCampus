@@ -4,7 +4,7 @@
  * Mises à jour suivant les versions de ZwiiCampus
  */
 
-
+// Version 1.7.00
 if (
     $this->getData(['core', 'dataVersion']) < 1700
 ) {
@@ -22,6 +22,7 @@ if (
     $this->setData(['core', 'dataVersion', 1700]);
 }
 
+// Version 1.8.00
 if (
     $this->getData(['core', 'dataVersion']) < 1800
 ) {
@@ -46,6 +47,7 @@ if (
     $this->setData(['core', 'dataVersion', 1800]);
 }
 
+// Version 1.20.02
 if (
     $this->getData(['core', 'dataVersion']) < 12002
 ) {
@@ -56,9 +58,12 @@ if (
     // Tableau à insérer
     $a = [
         'theme' =>
-        ['menu' => [
-            'hidePages' => false
-    ]]];
+            [
+                'menu' => [
+                    'hidePages' => false
+                ]
+            ]
+    ];
     // Parcourir la structure pour écrire dans les fichiers JSON
     foreach ($this->getData(['course']) as $courseId => $courseValues) {
         $d = json_decode(file_get_contents(self::DATA_DIR . $courseId . '/theme.json'), true);
@@ -73,4 +78,58 @@ if (
         }
     }
     $this->setData(['core', 'dataVersion', 12002]);
+}
+
+// Version 1.21.00
+
+if (
+    $this->getData(['core', 'dataVersion']) < 12100
+) {
+    /**
+     * Renomme la clé dans la base des utilisateurs
+     */
+    if (
+        is_array($this->getData(['user']))
+        && empty($this->getData(['user'])) === false
+    ) {
+        foreach ($this->getData(['user']) as $userId => $userValue) {
+            $d = $this->getData(['user', $userId]);
+            if (isset($d['group']) && $d['group'] !== '') {
+                $position = array_search('group', array_keys($d)) + 1;
+                $l = array_merge(
+                    array_slice($d, 0, $position),
+                    ['role' => $d['group']],
+                    array_slice($d, $position)
+                );
+                unset($l['group']);
+                $this->setData(['user', $userId, $l], false);
+            }
+        }
+    }
+    $this->saveDb('user');
+
+
+    /**
+     * Convertit les pages et les modules
+     */
+    $courses = array_merge($this->getData(['course']), ['home' => array()]);
+
+    foreach ($courses as $courseId => $courseValue) {
+        // Les pages
+        $filePath = self::DATA_DIR . $courseId . '/page.json';
+        $jsonContent = file_get_contents($filePath);
+        $updatedJsonContent = str_replace('"group":', '"role":', $jsonContent);
+        if ($updatedJsonContent !== $jsonContent) {
+            file_put_contents($filePath, $updatedJsonContent);
+        }
+
+        // Les modules
+        $filePath = self::DATA_DIR . $courseId . '/module.json';
+        $jsonContent = file_get_contents($filePath);
+        $updatedJsonContent = str_replace('"group":', '"role":', $jsonContent);
+        if ($updatedJsonContent !== $jsonContent) {
+            file_put_contents($filePath, $updatedJsonContent);
+        }
+    }
+    $this->setData(['core', 'dataVersion', 12100]);
 }
