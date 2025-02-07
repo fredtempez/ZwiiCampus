@@ -33,12 +33,12 @@ class suscribe extends common
 	];
 
 	public static $actions = [
-		'index' => self::GROUP_VISITOR,
-		'validate' => self::GROUP_VISITOR,
-		'config' => self::GROUP_EDITOR,
-		'users' => self::GROUP_EDITOR,
-		'delete' => self::GROUP_EDITOR,
-		'edit' => self::GROUP_EDITOR
+		'index' => self::ROLE_VISITOR,
+		'validate' => self::ROLE_VISITOR,
+		'config' => self::ROLE_EDITOR,
+		'users' => self::ROLE_EDITOR,
+		'delete' => self::ROLE_EDITOR,
+		'edit' => self::ROLE_EDITOR
 	];
 
 	public static $layout = [
@@ -113,10 +113,10 @@ class suscribe extends common
 					// Impossible de s'auto-éditer
 				(
 					$this->getUser('id') === 'user'
-					and $this->getUrl('role') <= self::GROUP_VISITOR
+					and $this->getUrl('role') <= self::ROLE_VISITOR
 				)
 				// Impossible d'éditer un autre utilisateur
-				or ($this->getUrl('role') < self::GROUP_EDITOR)
+				or ($this->getUrl('role') < self::ROLE_EDITOR)
 			)
 		) {
 			// Valeurs en sortie
@@ -140,7 +140,7 @@ class suscribe extends common
 						'forgot' => 0,
 						'role' => $this->getInput('registrationUserEditGroup', helper::FILTER_INT),
 						// Le profil vaut 0 pour les amdins et 1 pour les autres membres, profil par défaut.
-						'profil' => $this->getInput('registrationUserEditGroup', helper::FILTER_INT) === self::GROUP_ADMIN
+						'profil' => $this->getInput('registrationUserEditGroup', helper::FILTER_INT) === self::ROLE_ADMIN
 							? 0 : 1,
 						'lastname' => $this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'lastname']),
 						'mail' => $this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'mail']),
@@ -167,16 +167,16 @@ class suscribe extends common
 			}
 			// Changement temporaire de libellé du rôle 0
 			self::$roles = self::$roleEdits;
-			self::$roles[self::GROUP_BANNED] = 'En attente d\'approbation';
+			self::$roles[self::ROLE_BANNED] = 'En attente d\'approbation';
 
 			// Profils disponibles
 			foreach ($this->getData(['profil']) as $profilId => $profilData) {
-				if ($profilId < self::GROUP_MEMBER) {
+				if ($profilId < self::ROLE_MEMBER) {
 					continue;
 				}
-				if ($profilId === self::GROUP_ADMIN) {
-					self::$userProfils[$profilId][self::GROUP_ADMIN] = $profilData['name'];
-					self::$userProfilsComments[$profilId][self::GROUP_ADMIN] = $profilData['comment'];
+				if ($profilId === self::ROLE_ADMIN) {
+					self::$userProfils[$profilId][self::ROLE_ADMIN] = $profilData['name'];
+					self::$userProfilsComments[$profilId][self::ROLE_ADMIN] = $profilData['comment'];
 					continue;
 				}
 				foreach ($profilData as $key => $value) {
@@ -314,7 +314,7 @@ class suscribe extends common
 					// Utilisateurs dans le rôle admin
 					$to = [];
 					foreach ($this->getData(['user']) as $key => $user) {
-						if ($user['role'] == self::GROUP_ADMIN) {
+						if ($user['role'] == self::ROLE_ADMIN) {
 							$to[] = $user['mail'];
 						}
 					}
@@ -418,7 +418,7 @@ class suscribe extends common
 							'lastname' => $this->getData(['module', $this->getUrl(0), 'users', $userId, 'lastname']),
 							'mail' => $this->getData(['module', $this->getUrl(0), 'users', $userId, 'mail']),
 							'password' => $this->getInput('registrationValidPassword', helper::FILTER_PASSWORD, true),
-							'role' => self::GROUP_MEMBER,
+							'role' => self::ROLE_MEMBER,
 							'profil' => 1,
 							'forgot' => 0,
 							'pseudo' => $userId,

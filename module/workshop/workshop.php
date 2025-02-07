@@ -20,8 +20,8 @@ class workshop extends common
 	const DATADIRECTORY = ''; // Contenu localisé inclus par défaut (page.json et module.json)
 
 	public static $actions = [
-		'config' => self::GROUP_ADMIN,
-		'index' => self::GROUP_VISITOR
+		'config' => self::ROLE_ADMIN,
+		'index' => self::ROLE_VISITOR
 	];
 
 	public static $courseCategories = [

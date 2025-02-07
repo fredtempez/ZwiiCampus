@@ -17,30 +17,30 @@ class course extends common
 {
 
     public static $actions = [
-        'swap' => self::GROUP_VISITOR,
-        'suscribe' => self::GROUP_VISITOR,
-        'unsuscribe' => self::GROUP_MEMBER,
-        'index' => self::GROUP_EDITOR, // Fait
-        'edit' => self::GROUP_EDITOR, // Fait
-        'manage' => self::GROUP_EDITOR, // Fait
-        'users' => self::GROUP_EDITOR, // fait
-        'usersAdd' => self::GROUP_EDITOR, //Fait
-        'usersDelete' => self::GROUP_EDITOR, //Fait
-        'usersReportExport' => self::GROUP_EDITOR, //fait
-        'userDelete' => self::GROUP_EDITOR, //Fait
-        'userReport' => self::GROUP_MEMBER, //Fait
-        'userReportExport' => self::GROUP_EDITOR, //Fait
-        'backup' => self::GROUP_EDITOR, // Fait
-        'restore' => self::GROUP_EDITOR, //Fait
-        'reset' => self::GROUP_EDITOR,
-        'clone' => self::GROUP_ADMIN,
-        'add' => self::GROUP_ADMIN,
-        'delete' => self::GROUP_ADMIN,
-        'category' => self::GROUP_ADMIN,
-        'categoryAdd' => self::GROUP_ADMIN,
-        'categoryEdit' => self::GROUP_ADMIN,
-        'categoryDelete' => self::GROUP_ADMIN,
-        'export' => self::GROUP_ADMIN,
+        'swap' => self::ROLE_VISITOR,
+        'suscribe' => self::ROLE_VISITOR,
+        'unsuscribe' => self::ROLE_MEMBER,
+        'index' => self::ROLE_EDITOR, // Fait
+        'edit' => self::ROLE_EDITOR, // Fait
+        'manage' => self::ROLE_EDITOR, // Fait
+        'users' => self::ROLE_EDITOR, // fait
+        'usersAdd' => self::ROLE_EDITOR, //Fait
+        'usersDelete' => self::ROLE_EDITOR, //Fait
+        'usersReportExport' => self::ROLE_EDITOR, //fait
+        'userDelete' => self::ROLE_EDITOR, //Fait
+        'userReport' => self::ROLE_MEMBER, //Fait
+        'userReportExport' => self::ROLE_EDITOR, //Fait
+        'backup' => self::ROLE_EDITOR, // Fait
+        'restore' => self::ROLE_EDITOR, //Fait
+        'reset' => self::ROLE_EDITOR,
+        'clone' => self::ROLE_ADMIN,
+        'add' => self::ROLE_ADMIN,
+        'delete' => self::ROLE_ADMIN,
+        'category' => self::ROLE_ADMIN,
+        'categoryAdd' => self::ROLE_ADMIN,
+        'categoryEdit' => self::ROLE_ADMIN,
+        'categoryDelete' => self::ROLE_ADMIN,
+        'export' => self::ROLE_ADMIN,
     ];
 
     public static $courseAccess = [
@@ -156,7 +156,7 @@ class course extends common
 
         // Accès limité aux admins
         if (
-            $this->getUser('role') !== self::GROUP_ADMIN
+            $this->getUser('role') !== self::ROLE_ADMIN
         ) {
             // Valeurs en sortie
             $this->addOutput([
@@ -2004,9 +2004,9 @@ class course extends common
     public function permissionControl($function, $courseId)
     {
         switch ($this->getUser('role')) {
-            case self::GROUP_ADMIN:
+            case self::ROLE_ADMIN:
                 return true;
-            case self::GROUP_EDITOR:
+            case self::ROLE_EDITOR:
                 return (
                     $this->getUser('permission', __CLASS__, $function)
                     && $this->getUser('role') === self::$actions[$function]
@@ -2043,7 +2043,7 @@ class course extends common
         // Si un utilisateur connecté est admin ou auteur, c'est autorisé
         if (
             $this->isConnected() === true &&
-            ($this->getUser('role') === self::GROUP_ADMIN ||
+            ($this->getUser('role') === self::ROLE_ADMIN ||
                 $this->getUser('id') === $this->getData(['course', $courseId, 'author']))
         ) {
             return true;
@@ -2152,18 +2152,18 @@ class course extends common
         $userId = $this->getUser('id');
         $role = $userId ? $this->getData(['user', $userId, 'role']) : null;
         switch ($role) {
-            case self::GROUP_ADMIN:
+            case self::ROLE_ADMIN:
                 $r = true;
                 break;
-            case self::GROUP_EDITOR:
-            case self::GROUP_MEMBER:
+            case self::ROLE_EDITOR:
+            case self::ROLE_MEMBER:
                 $r = false;
                 if (!is_null($this->getData(['enrolment', $courseId]))) {
                     $r = in_array($userId, array_keys($this->getData(['enrolment', $courseId])));
                 }
                 break;
                 // Visiteur non connecté
-            case self::GROUP_VISITOR:
+            case self::ROLE_VISITOR:
             case null:
                 $r = $this->getData(['course', $courseId, 'enrolment']) === self::COURSE_ENROLMENT_GUEST;
                 break;

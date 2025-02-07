@@ -25,7 +25,7 @@
 					]); ?>
 				</div>
 				<div class="col4">
-					<?php if ($this->getUser('role') === self::GROUP_ADMIN): ?>
+					<?php if ($this->getUser('role') === self::ROLE_ADMIN): ?>
 						<?php echo template::select('registrationUserEditGroup', suscribe::$roles, [
 							'disabled' => ($this->getUrl(2) === $this->getUser('id')),
 							'help' => ($this->getUrl(2) === $this->getUser('id') ? 'Impossible de modifier votre propre role.' : ''),
@@ -36,49 +36,49 @@
 				</div>
 				<div class="col4">
 					<div class="registrationUserEditGroupProfil"
-						id="registrationUserEditGroupProfil<?php echo self::GROUP_MEMBER; ?>">
-						<?php echo template::select('registrationUserEditProfil' . self::GROUP_MEMBER, suscribe::$userProfils[self::GROUP_MEMBER], [
+						id="registrationUserEditGroupProfil<?php echo self::ROLE_MEMBER; ?>">
+						<?php echo template::select('registrationUserEditProfil' . self::ROLE_MEMBER, suscribe::$userProfils[self::ROLE_MEMBER], [
 							'label' => 'Profil',
 							'selected' => $this->getData(['user', $this->getUrl(2), 'profil']),
-							'disabled' => $this->getUser('role') !== self::GROUP_ADMIN,
+							'disabled' => $this->getUser('role') !== self::ROLE_ADMIN,
 						]); ?>
 					</div>
 					<div class="registrationUserEditGroupProfil"
-						id="registrationUserEditGroupProfil<?php echo self::GROUP_EDITOR; ?>">
-						<?php echo template::select('registrationUserEditProfil' . self::GROUP_EDITOR, suscribe::$userProfils[self::GROUP_EDITOR], [
+						id="registrationUserEditGroupProfil<?php echo self::ROLE_EDITOR; ?>">
+						<?php echo template::select('registrationUserEditProfil' . self::ROLE_EDITOR, suscribe::$userProfils[self::ROLE_EDITOR], [
 							'label' => 'Profil',
 							'selected' => $this->getData(['user', $this->getUrl(2), 'profil']),
-							'disabled' => $this->getUser('role') !== self::GROUP_ADMIN,
+							'disabled' => $this->getUser('role') !== self::ROLE_ADMIN,
 						]); ?>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col12">
-						<div id="registrationUserCommentProfil<?php echo self::GROUP_MEMBER; ?>"
+						<div id="registrationUserCommentProfil<?php echo self::ROLE_MEMBER; ?>"
 							class="col12  registrationUserCommentProfil">
-							<?php echo template::textarea('registrationUserEditProfilComment' . self::GROUP_MEMBER, [
+							<?php echo template::textarea('registrationUserEditProfilComment' . self::ROLE_MEMBER, [
 								'label' => 'Commentaire',
-								'value' => implode("\n", suscribe::$userProfilsComments[self::GROUP_MEMBER]),
+								'value' => implode("\n", suscribe::$userProfilsComments[self::ROLE_MEMBER]),
 								'readonly' => true,
 
 							]);
 							?>
 						</div>
-						<div id="registrationUserCommentProfil<?php echo self::GROUP_EDITOR; ?>"
+						<div id="registrationUserCommentProfil<?php echo self::ROLE_EDITOR; ?>"
 							class="col12  registrationUserCommentProfil">
-							<?php echo template::textarea('registrationUserEditProfilComment' . self::GROUP_EDITOR, [
+							<?php echo template::textarea('registrationUserEditProfilComment' . self::ROLE_EDITOR, [
 								'label' => 'Commentaire',
-								'value' => implode("\n", suscribe::$userProfilsComments[self::GROUP_EDITOR]),
+								'value' => implode("\n", suscribe::$userProfilsComments[self::ROLE_EDITOR]),
 								'readonly' => true,
 
 							]);
 							?>
 						</div>
-						<div id="registrationUserCommentProfil<?php echo self::GROUP_ADMIN; ?>"
+						<div id="registrationUserCommentProfil<?php echo self::ROLE_ADMIN; ?>"
 							class="col12  registrationUserCommentProfil">
-							<?php echo template::textarea('registrationUserEditProfilComment' . self::GROUP_ADMIN, [
+							<?php echo template::textarea('registrationUserEditProfilComment' . self::ROLE_ADMIN, [
 								'label' => 'Commentaire',
-								'value' => implode("\n", suscribe::$userProfilsComments[self::GROUP_ADMIN]),
+								'value' => implode("\n", suscribe::$userProfilsComments[self::ROLE_ADMIN]),
 								'readonly' => true,
 							]);
 							?>

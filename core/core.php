@@ -24,13 +24,13 @@ class common
 	const DISPLAY_LAYOUT_BLANK = 3;
 	const DISPLAY_LAYOUT_MAIN = 4;
 	const DISPLAY_LAYOUT_LIGHT = 5;
-	const GROUP_BANNED = -1;
-	const GROUP_VISITOR = 0;
-	const GROUP_MEMBER = 1;
-	const GROUP_EDITOR = 2;
+	const ROLE_BANNED = -1;
+	const ROLE_VISITOR = 0;
+	const ROLE_MEMBER = 1;
+	const ROLE_EDITOR = 2;
 	// Groupe MODERATOR, compatibilité avec les anciens modules :
-	const GROUP_MODERATOR = 2;
-	const GROUP_ADMIN = 3;
+	const ROLE_MODERATOR = 2;
+	const ROLE_ADMIN = 3;
 	const SIGNATURE_ID = 1;
 	const SIGNATURE_PSEUDO = 2;
 	const SIGNATURE_FIRSTLASTNAME = 3;
@@ -148,28 +148,28 @@ class common
 		'view' => ''
 	];
 	public static $roles = [
-		self::GROUP_BANNED => 'Banni',
-		self::GROUP_VISITOR => 'Visiteur',
-		self::GROUP_MEMBER => 'Étudiant',
-		self::GROUP_EDITOR => 'Formateur',
-		self::GROUP_ADMIN => 'Administrateur'
+		self::ROLE_BANNED => 'Banni',
+		self::ROLE_VISITOR => 'Visiteur',
+		self::ROLE_MEMBER => 'Étudiant',
+		self::ROLE_EDITOR => 'Formateur',
+		self::ROLE_ADMIN => 'Administrateur'
 	];
 	public static $roleEdits = [
-		self::GROUP_BANNED => 'Banni',
-		self::GROUP_MEMBER => 'Étudiant',
-		self::GROUP_EDITOR => 'Formateur',
-		self::GROUP_ADMIN => 'Administrateur'
+		self::ROLE_BANNED => 'Banni',
+		self::ROLE_MEMBER => 'Étudiant',
+		self::ROLE_EDITOR => 'Formateur',
+		self::ROLE_ADMIN => 'Administrateur'
 	];
 	public static $roleNews = [
-		self::GROUP_MEMBER => 'Étudiant',
-		self::GROUP_EDITOR => 'Formateur',
-		self::GROUP_ADMIN => 'Administrateur'
+		self::ROLE_MEMBER => 'Étudiant',
+		self::ROLE_EDITOR => 'Formateur',
+		self::ROLE_ADMIN => 'Administrateur'
 	];
 	public static $rolePublics = [
-		self::GROUP_VISITOR => 'Visiteur',
-		self::GROUP_MEMBER => 'Étudiant',
-		self::GROUP_EDITOR => 'Formateur',
-		self::GROUP_ADMIN => 'Administrateur'
+		self::ROLE_VISITOR => 'Visiteur',
+		self::ROLE_MEMBER => 'Étudiant',
+		self::ROLE_EDITOR => 'Formateur',
+		self::ROLE_ADMIN => 'Administrateur'
 	];
 
 	//Langues de l'UI
@@ -821,7 +821,7 @@ class common
 				// Page parent
 				$this->getData(['page', $pageId, 'parentPageId']) === ""
 				// Ignore les pages dont l'utilisateur n'a pas accès
-				and ($this->getData(['page', $pageId, 'role']) === self::GROUP_VISITOR
+				and ($this->getData(['page', $pageId, 'role']) === self::ROLE_VISITOR
 					or ($this->getUser('authKey') === $this->getInput('ZWII_AUTH_KEY')
 						//and $this->getUser('role') >= $this->getData(['page', $pageId, 'role'])
 						// Modification qui tient compte du profil de la page
@@ -848,9 +848,9 @@ class common
 				// Ignore les pages dont l'utilisateur n'a pas accès
 				and (
 					(
-						$this->getData(['page', $pageId, 'role']) === self::GROUP_VISITOR
+						$this->getData(['page', $pageId, 'role']) === self::ROLE_VISITOR
 						and
-						$this->getData(['page', $parentId, 'role']) === self::GROUP_VISITOR
+						$this->getData(['page', $parentId, 'role']) === self::ROLE_VISITOR
 					)
 					or (
 						$this->getUser('authKey') === $this->getInput('ZWII_AUTH_KEY')
@@ -1048,9 +1048,9 @@ class common
 	public function getPermission($key1, $key2 = null)
 	{
 		// Administrateur, toutes les permissions
-		if ($this->getUser('role') === self::GROUP_ADMIN) {
+		if ($this->getUser('role') === self::ROLE_ADMIN) {
 			return true;
-		} elseif ($this->getUser('role') <= self::GROUP_VISITOR) { // Groupe sans autorisation
+		} elseif ($this->getUser('role') <= self::ROLE_VISITOR) { // Groupe sans autorisation
 			return false;
 		} elseif (
 			// Groupe avec profil, consultation des autorisations sur deux clés
@@ -1625,10 +1625,10 @@ function makeThumb($src, $dest, $desired_width)
 		$courses = helper::arraycolumn($courses, 'title', 'SORT_ASC');
 		$filter = array();
 		switch ($this->getUser('role')) {
-			case self::GROUP_ADMIN:
+			case self::ROLE_ADMIN:
 				// Affiche tout
 				return $courses;
-			case self::GROUP_EDITOR:
+			case self::ROLE_EDITOR:
 				foreach ($courses as $courseId => $value) {
 					// Affiche les espaces gérés par l'éditeur, les espaces où il participe et les espaces anonymes
 					if (
@@ -1643,7 +1643,7 @@ function makeThumb($src, $dest, $desired_width)
 					}
 				}
 				return $filter;
-			case self::GROUP_MEMBER:
+			case self::ROLE_MEMBER:
 				foreach ($courses as $courseId => $value) {
 					// Affiche les espaces du participant et les espaces anonymes 
 					if (
@@ -1654,7 +1654,7 @@ function makeThumb($src, $dest, $desired_width)
 					}
 				}
 				return $filter;
-			case self::GROUP_VISITOR:
+			case self::ROLE_VISITOR:
 				foreach ($courses as $courseId => $value) {
 					// Affiche les espaces anonymes
 					if ($this->getData(['course', $courseId, 'enrolment']) === self::COURSE_ENROLMENT_GUEST) {

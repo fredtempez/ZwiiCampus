@@ -35,7 +35,7 @@
 </head>
 <body>
 	<!-- Barre d'administration -->
-	<?php if ($this->getUser('role') > self::GROUP_MEMBER) : ?>
+	<?php if ($this->getUser('role') > self::ROLE_MEMBER) : ?>
 		<?php $layout->showBar(); ?>
 	<?php endif; ?>
 	<!-- Notifications -->
@@ -48,7 +48,7 @@
 			$this->getData(['theme', 'menu', 'position']) === 'top'
 			and $this->getData(['theme', 'menu', 'fixed']) === true
 			and $this->isConnected() === true
-			and $this->getUser('role') > self::GROUP_MEMBER
+			and $this->getUser('role') > self::ROLE_MEMBER
 		) {
 			echo '<nav id="navfixedconnected" >';
 		} else {
