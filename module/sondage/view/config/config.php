@@ -77,7 +77,7 @@
 					'checked' => (bool) $this->getData(['module', $this->getUrl(0), 'config', 'role']) ||
 										!empty($this->getData(['module', $this->getUrl(0), 'config', 'user'])) ||
 										!empty($this->getData(['module', $this->getUrl(0), 'config', 'mail'])),
-					'help' => 'Sélectionnez au moins un groupe, un utilisateur ou saississez un email.'
+					'help' => 'Sélectionnez au moins un rôle, un utilisateur ou saississez un email.'
 				]); ?>
 				<div id="formConfigMailOptions" class="displayNone">
 					<div class="row">
@@ -97,7 +97,7 @@
 					<div class="row">
 						<div class="col6 offset1">
 							<?php echo template::select('formConfigGroup', $groupMembers, [
-								'label' => 'Les groupes hiérarchiques à partir du groupe :',
+								'label' => 'Les groupes hiérarchiques à partir du rôle :',
 								'selected' => $this->getData(['module', $this->getUrl(0), 'config', 'role']),
 								'help' => 'Editeurs = éditeurs + administrateurs<br/> Membres = membres + éditeurs + administrateurs'
 							]); ?>
