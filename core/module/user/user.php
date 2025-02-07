@@ -702,7 +702,7 @@ class user extends common
 					template::button('userDelete' . $userId, [
 						'class' => 'userDelete buttonRed',
 						'href' => helper::baseUrl() . 'user/delete/' . $userId,
-						'value' => template::ico('trash'),
+						'value' => template::ico('user-times'),
 						'help' => 'Supprimer'
 					])
 				];

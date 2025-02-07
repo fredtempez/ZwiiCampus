@@ -40,7 +40,7 @@
 	<div class="col1">
 		<?php echo template::button('userAdd', [
 			'href' => helper::baseUrl() . 'user/add',
-			'value' => template::ico('plus'),
+			'value' => template::ico('user-plus'),
 			'class' => 'buttonGreen',
 			'help' => 'Ajouter un utilisateur'
 		]); ?>

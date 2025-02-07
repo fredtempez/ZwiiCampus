@@ -120,7 +120,7 @@ class course extends common
                     if ($this->getUser('permission', 'course', 'users') === true) {
                         $users = template::button('categoryUser' . $this->getUrl(2), [
                             'href' => helper::baseUrl() . 'course/users/' . $courseId,
-                            'value' => template::ico('users'),
+                            'value' => template::ico('address-book'),
                         ]);
                     }
                     self::$courses[] = [
@@ -749,7 +749,7 @@ class course extends common
                     template::button('userDelete' . $userId, [
                         'class' => 'userDelete buttonRed',
                         'href' => helper::baseUrl() . 'course/userDelete/' . $courseId . '/' . $userId,
-                        'value' => template::ico('user'),
+                        'value' => template::ico('user-times'),
                         'help' => 'Désinscrire'
                     ])
                 ];

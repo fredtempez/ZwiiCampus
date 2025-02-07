@@ -77,6 +77,9 @@
 .zwiico-twitch:before { content: '\f1e8'; } /* '' */
 .zwiico-brush:before { content: '\f1fc'; } /* '' */
 .zwiico-pinterest:before { content: '\f231'; } /* '' */
+.zwiico-user-plus:before { content: '\f234'; } /* '' */
+.zwiico-user-times:before { content: '\f235'; } /* '' */
 .zwiico-reddit:before { content: '\f281'; } /* '' */
 .zwiico-shopping-basket:before { content: '\f291'; } /* '' */
+.zwiico-address-book:before { content: '\f2b9'; } /* '' */
 .zwiico-logout:before { content: '🎓'; } /* '\1f393' */

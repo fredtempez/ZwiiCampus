@@ -1,12 +1,12 @@
 @charset "UTF-8";
 @font-face {
   font-family: 'zwiico';
-  src: url('../font/zwiico.eot?24931130');
-  src: url('../font/zwiico.eot?24931130#iefix') format('embedded-opentype'),
-       url('../font/zwiico.woff2?24931130') format('woff2'),
-       url('../font/zwiico.woff?24931130') format('woff'),
-       url('../font/zwiico.ttf?24931130') format('truetype'),
-       url('../font/zwiico.svg?24931130#zwiico') format('svg');
+  src: url('../font/zwiico.eot?22250182');
+  src: url('../font/zwiico.eot?22250182#iefix') format('embedded-opentype'),
+       url('../font/zwiico.woff2?22250182') format('woff2'),
+       url('../font/zwiico.woff?22250182') format('woff'),
+       url('../font/zwiico.ttf?22250182') format('truetype'),
+       url('../font/zwiico.svg?22250182#zwiico') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -16,7 +16,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: 'zwiico';
-    src: url('../font/zwiico.svg?24931130#zwiico') format('svg');
+    src: url('../font/zwiico.svg?22250182#zwiico') format('svg');
   }
 }
 */
@@ -132,6 +132,9 @@
 .zwiico-twitch:before { content: '\f1e8'; } /* '' */
 .zwiico-brush:before { content: '\f1fc'; } /* '' */
 .zwiico-pinterest:before { content: '\f231'; } /* '' */
+.zwiico-user-plus:before { content: '\f234'; } /* '' */
+.zwiico-user-times:before { content: '\f235'; } /* '' */
 .zwiico-reddit:before { content: '\f281'; } /* '' */
 .zwiico-shopping-basket:before { content: '\f291'; } /* '' */
+.zwiico-address-book:before { content: '\f2b9'; } /* '' */
 .zwiico-logout:before { content: '🎓'; } /* '\1f393' */

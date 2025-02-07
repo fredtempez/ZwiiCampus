@@ -17,7 +17,7 @@
         <?php echo template::button('userDeleteAll', [
             'class' => 'userDeleteAll buttonRed',
             'href' => helper::baseUrl() . 'course/usersDelete/' . $this->getUrl(2),
-            'value' => template::ico('users'),
+            'value' => template::ico('user-times'),
             'help' => 'Désinscrire en masse',
         ])?>
     </div>
@@ -25,7 +25,7 @@
         <?php echo template::button('userDeleteAll', [
             'class' => 'buttonGreen',
             'href' => helper::baseUrl() . 'course/usersAdd/' . $this->getUrl(2),
-            'value' => template::ico('users'),
+            'value' => template::ico('user-plus'),
             'help' => 'Inscription en masse',
         ]) ?>
     </div>
