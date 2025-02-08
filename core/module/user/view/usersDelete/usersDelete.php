@@ -18,7 +18,7 @@
 <div class="row" id="Bfrtip">
     <div class="col3">
         <?php echo template::select('usersFilterGroup', user::$usersGroups, [
-            'label' => 'Groupes / Profils',
+            'label' => 'Rôles/ Profils',
             'selected' => isset($_POST['usersFilterGroup']) ? $_POST['usersFilterGroup'] : 'all',
         ]); ?>
     </div>

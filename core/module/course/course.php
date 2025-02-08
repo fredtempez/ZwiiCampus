@@ -99,7 +99,7 @@ class course extends common
             foreach ($this->getData(['course']) as $courseId => $courseValue) {
                 /**
                  * Filtres :
-                 * Groupes acceptés :
+                 * Rôlesacceptés :
                  * admin : tous les espaces
                  * editor : gère son espace son espace dans lequel il est inscrit
                  */
