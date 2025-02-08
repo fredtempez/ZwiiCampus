@@ -739,11 +739,11 @@ class course extends common
                     sprintf('%s %s', $this->getData(['user', $userId, 'lastname']), $this->getData(['user', $userId, 'firstname'])),
                     array_key_exists('lastPageView', $userValue) && isset($pages['page'][$userValue['lastPageView']]['title'])
                         ? $pages['page'][$userValue['lastPageView']]['title']
-                        : '',
+                        : helper::translate('Aucune'),
                     array_key_exists('lastPageView', $userValue)
                         // ? helper::dateUTF8('%d/%m/%Y', $userValue['datePageView'])
                         ? $userValue['datePageView']
-                        : '',
+                        : helper::translate('Jamais'),
                     $this->getData(['user', $userId, 'tags']),
                     $reportButton,
                     template::button('userDelete' . $userId, [

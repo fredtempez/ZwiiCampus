@@ -6,35 +6,34 @@
 			'value' => template::ico('home')
 		]); ?>
 	</div>
-	<div class="col2 offset2">
-		<?php echo template::button('userImport', [
-			'href' => helper::baseUrl() . 'user/import',
-			'ico' => 'users',
-			'value' => 'Importer en masse'
-		]); ?>
-	</div>
-	<div class="col2">
-	<?php echo template::button('userDeleteAll', [
-		'class' => 'userDeleteAll buttonRed',
-		'href' => helper::baseUrl() . 'user/usersDelete/' . $this->getUrl(2),
-		'ico' => 'users',
-		'value' => 'Désinscrire en masse',
-	]) ?>
-	</div>
-	<div class="col2">
+	<div class="col1 offset6">
 		<?php echo template::button('userTag', [
 			'href' => helper::baseUrl() . 'user/tag',
-			'ico' => 'tags',
-			'value' => 'Étiquettes',
-			'help' => 'Filtrer les utilisateurs avec des tags'
+			'value' => template::ico('tags'),
+			'help' => 'Ajouter des étiquettes'
 		]); ?>
 	</div>
-	<div class="col2">
+	<div class="col1">
 		<?php echo template::button('userGroup', [
 			'href' => helper::baseUrl() . 'user/profil',
-			'ico' => 'lock',
-			'value' => 'Profils',
+			'value' => template::ico('lock'),
 			'help' => 'Permissions par profils'
+		]); ?>
+	</div>
+	<div class="col1">
+		<?php echo template::button('userDeleteAll', [
+			'class' => 'userDeleteAll buttonRed',
+			'href' => helper::baseUrl() . 'user/usersDelete/' . $this->getUrl(2),
+			'value' => template::ico('user-times'),
+			'help' => 'Désinscrire en masse',
+		]) ?>
+	</div>
+	<div class="col1">
+		<?php echo template::button('userImport', [
+			'href' => helper::baseUrl() . 'user/import',
+			'value' => template::ico('download'),
+			'class' => 'buttonGreen',
+			'help' => 'Importer en masse'
 		]); ?>
 	</div>
 	<div class="col1">
@@ -68,4 +67,4 @@
 	</div>
 </div>
 <?php echo template::formClose(); ?>
-<?php echo template::table([3, 2, 2, 2, 2, 1, 1], user::$users, ['Nom', 'Rôle', 'Profil', 'Étiquettes', 'Dernière connexion', '', ''], ['id' => 'dataTables'], ['name','role','profile','tag','data-timestamp','edit','delete']); ?>
+<?php echo template::table([3, 2, 2, 2, 2, 1, 1], user::$users, ['Nom', 'Rôle', 'Profil', 'Étiquette', 'Date connexion', '', ''], ['id' => 'dataTables'], ['name', 'role', 'profile', 'tag', 'data-timestamp', 'edit', 'delete']); ?>

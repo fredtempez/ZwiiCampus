@@ -7,16 +7,6 @@
         ]); ?>
     </div>
     <div class="col1 offset8">
-        <?php if ($this->getUser('permission', 'course', 'add') === true): ?>
-            <?php echo template::button('courseAdd', [
-                'class' => 'buttonGreen',
-                'href' => helper::baseUrl() . 'course/add',
-                'value' => template::ico('plus'),
-                'help' => 'Ajouter un espace'
-            ]); ?>
-        <?php endif; ?>
-    </div>
-    <div class="col1">
         <?php if ($this->getUser('permission', 'course', 'category') === true): ?>
             <?php echo template::button('courseCategory', [
                 'href' => helper::baseUrl() . 'course/category',
@@ -33,7 +23,16 @@
                 'help' => 'Restaurer un espace'
             ]); ?>
         <?php endif; ?>
-
+    </div>
+    <div class="col1">
+        <?php if ($this->getUser('permission', 'course', 'add') === true): ?>
+            <?php echo template::button('courseAdd', [
+                'class' => 'buttonGreen',
+                'href' => helper::baseUrl() . 'course/add',
+                'value' => template::ico('plus'),
+                'help' => 'Ajouter un espace'
+            ]); ?>
+        <?php endif; ?>
     </div>
 </div>
 <?php if (course::$courses): ?>
