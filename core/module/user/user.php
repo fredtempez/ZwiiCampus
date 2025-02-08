@@ -703,7 +703,7 @@ class user extends common
 						'class' => 'userDelete buttonRed',
 						'href' => helper::baseUrl() . 'user/delete/' . $userId,
 						'value' => template::ico('user-times'),
-						'help' => 'Supprimer'
+						'help' => 'Désinscrire'
 					])
 				];
 
