@@ -80,6 +80,7 @@ class common
 	public static $coreModuleIds = [
 		'config',
 		'course',
+		'group',
 		'install',
 		'language',
 		'maintenance',
@@ -92,6 +93,7 @@ class common
 	public static $concurrentAccess = [
 		'config',
 		'edit',
+		'group',
 		'language',
 		'plugin',
 		'theme',
@@ -211,6 +213,7 @@ class common
 		'core' => null,
 		'course' => null,
 		'font' => null,
+		'group'=> null,
 		'module' => null,
 		'page' => null,
 		'theme' => null,
@@ -228,6 +231,7 @@ class common
 		'course' => '',
 		'core' => '',
 		'font' => '',
+		'group'=> '',
 		'user' => '',
 		'language' => '',
 		'profil' => '',

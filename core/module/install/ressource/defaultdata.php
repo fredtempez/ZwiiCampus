@@ -627,7 +627,8 @@ class init extends common
 		'enrolment' => [],
 		'category' => [
 			'general' => 'Générale'
-		]
+		],
+		'group' => []
 	];
 
 	public static $siteTemplate = [
