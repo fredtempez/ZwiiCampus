@@ -414,7 +414,7 @@ class course extends common
 
         // Accès limité aux admins, à l'auteur ou éditeurs inscrits
         if (
-            $this->getUser('role') !== self::$actions[__FUNCTION__]
+            $this->getUser('permission', __CLASS__, __FUNCTION__) !== true
         ) {
             // Valeurs en sortie
             $this->addOutput([
@@ -447,7 +447,7 @@ class course extends common
 
         if (
             // Accès limité aux admins
-            $this->getUser('role') !== self::$actions[__FUNCTION__]
+            $this->getUser('permission', __CLASS__, __FUNCTION__) !== true
             // Le contenu n'existe pas
             || $this->getData(['course', $courseId]) === null
         ) {
@@ -487,7 +487,7 @@ class course extends common
 
         if (
             // Accès limité aux admins
-            $this->getUser('role') !== self::$actions[__FUNCTION__]
+            $this->getUser('permission', __CLASS__, __FUNCTION__) !== true
         ) {
             // Valeurs en sortie
             $this->addOutput([
@@ -526,7 +526,7 @@ class course extends common
 
         if (
             // Accès limité aux admins
-            $this->getUser('role') !== self::$actions[__FUNCTION__]
+            $this->getUser('permission', __CLASS__, __FUNCTION__) !== true
         ) {
             // Valeurs en sortie
             $this->addOutput([
@@ -557,7 +557,7 @@ class course extends common
     {
         if (
             // Accès limité aux admins
-            $this->getUser('role') !== self::$actions[__FUNCTION__]
+            $this->getUser('permission', __CLASS__, __FUNCTION__) !== true
         ) {
             // Valeurs en sortie
             $this->addOutput([
@@ -592,7 +592,7 @@ class course extends common
 
         if (
             // Accès limité aux admins
-            $this->getUser('role') !== self::$actions[__FUNCTION__]
+            $this->getUser('permission', __CLASS__, __FUNCTION__) !== true
         ) {
             // Valeurs en sortie
             $this->addOutput([
