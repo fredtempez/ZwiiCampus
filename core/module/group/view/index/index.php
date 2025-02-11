@@ -18,7 +18,7 @@
 	</div>
 </div>
 <?php if (group::$groups): ?>
-	<?php echo template::table([6, 1, 1, 1, 1], group::$groups, ['Groupe', '', '', '', '',], ['id' => 'dataTables']); ?>
+	<?php echo template::table([5, 5, 1, 1], group::$groups, ['Groupe', 'Inscrits', '', ''], ['id' => 'dataTables']); ?>
 <?php else: ?>
 	<?php echo template::speech('Aucun groupe'); ?>
 <?php endif; ?>

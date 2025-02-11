@@ -51,21 +51,27 @@ class group extends common
 				'access' => false
 			]);
 		} else {
-			$group = $this->getData(['group']);
-			ksort($group);
-			foreach ($group as $groupId => $groupTitle) {
+			// Les groupes déclarés 
+			$usersGroups = array_column($this->getData(['user']), 'group');
+			// Les groupes triés
+			$groups = $this->getData(['group']);
+			ksort($groups);
+			// Construire le tableau
+
+			foreach ($groups as $groupId => $groupTitle) {
+				$suscribers = 0;
+				if (empty($usersGroups) === false) {
+					foreach ($usersGroups as $item) {
+						if ($item === $groupId) {
+							$suscribers++;
+						}
+					}
+				}
+				$message = $suscribers === 0 ? helper::translate('Pas d\'inscrit') : sprintf(helper::translate('%s inscrits'), $suscribers);
 				self::$groups[] = [
 					$groupTitle,
-					template::button('groupEdit' . $groupId, [
-						'href' => helper::baseUrl() . 'group/usersAdd/' . $groupId,
-						'value' => template::ico('user-plus'),
-						'help' => 'Inscrire'
-					]),
-					template::button('groupEdit' . $groupId, [
-						'href' => helper::baseUrl() . 'group/usersdelete/' . $groupId,
-						'value' => template::ico('user-times'),
-						'help' => 'Désinscrire'
-					]),
+					$suscribers === 0 ? '<a href="' . helper::baseUrl() . 'group/usersAdd/' . $groupId . '">' . $message . '</a>'
+									  : '<a href="' . helper::baseUrl() . 'group/users/' . $groupId . '">' . $message . '</a>',
 					template::button('groupEdit' . $groupId, [
 						'href' => helper::baseUrl() . 'group/edit/' . $groupId,
 						'value' => template::ico('pencil'),
@@ -171,7 +177,9 @@ class group extends common
 				'access' => false
 			]);
 		} else {
-			$groups = helper::arrayColumn($this->getData(['group']), 'group', 'SORT_ASC');
+			$groups = $this->getData(['group']);
+			$groups = array_keys($groups);
+			;
 			$users = $this->getUrl('user');
 			$message = helper::translate('Un groupe affecté ne peut pas être effacé');
 			$state = false;
@@ -191,10 +199,26 @@ class group extends common
 		}
 	}
 
+	public function users()
+	{
+		// Groupe sélectionné
+		$groupId = $this->getUrl(2);
+		// Accès limité au propriétaire ou éditeurs inscrits ou admin
+		if (
+			$this->getUser('role') <= self::$actions[__FUNCTION__]
+		) {
+			// Valeurs en sortie
+			$this->addOutput([
+				'access' => false
+			]);
+		}
+	}
+
+
 	public function usersAdd()
 	{
 
-		// Contenu sélectionné
+		// Grouope sélectionné
 		$groupId = $this->getUrl(2);
 		// Accès limité au propriétaire ou éditeurs inscrits ou admin
 		if (
@@ -216,7 +240,7 @@ class group extends common
 					continue;
 				}
 				// Lire les inscriptions existantes
-				$groups =  $this->getData(['user', $userId, 'group']) !== NULL ? $this->getData(['user', $userId, 'group']) : [];
+				$groups = $this->getData(['user', $userId, 'group']) !== NULL ? $this->getData(['user', $userId, 'group']) : [];
 				// N'est pas déjà inscrit
 				if (in_array($groupId, $groups) === false) {
 					// Ajouter le groupe
@@ -314,8 +338,8 @@ class group extends common
 				template::checkbox($userId, true, '', [
 					'class' => 'checkboxSelect',
 					'checked' => is_array($this->getData(['user', $userId, 'group'])) ?
-								in_array($groupId, $this->getData(['user', $userId, 'group']))
-								: false,
+						in_array($groupId, $this->getData(['user', $userId, 'group']))
+						: false,
 				]),
 				$userId,
 				$this->getData(['user', $userId, 'firstname']),
