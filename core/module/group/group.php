@@ -75,13 +75,15 @@ class group extends common
 					template::button('groupEdit' . $groupId, [
 						'href' => helper::baseUrl() . 'group/edit/' . $groupId,
 						'value' => template::ico('pencil'),
-						'help' => 'Éditer'
+						'help' => 'Éditer',
+						'class' => 'buttonEdit'
 					]),
 					template::button('groupDelete' . $groupId, [
 						'class' => 'groupDelete buttonRed',
 						'href' => helper::baseUrl() . 'group/delete/' . $groupId,
 						'value' => template::ico('trash'),
-						'help' => 'Supprimer'
+						'help' => 'Supprimer',
+						'class' => 'buttonDelete'
 					])
 				];
 			}
@@ -250,13 +252,26 @@ class group extends common
 
 		// Inscription des utilisateurs cochés
 		if (
-			isset($_POST['groupUsersAddSubmit'])
+			$this->isPost()
 		) {
+			// Drapeau pour forcer la sauvegarde finale
 			$flag = false;
-			foreach ($_POST as $userId => $userPost) {
-				if (is_null($this->getUser($userId)) === true) {
-					continue;
-				}
+
+			// Clés à exclure
+			$keysToExclude = array(
+				"csrf",
+				"groupUsersAddSubmit",
+				"groupFilterGroup",
+				"groupFilterFirstName",
+				"groupFilterLastName",
+				"dataTables_length"
+			);
+
+			// Utiliser array_diff_key pour exclure les clés spécifiées
+			$filteredArray = array_diff_key($_POST, array_flip($keysToExclude));
+
+			foreach ($filteredArray as $userId => $userPost) {
+
 				// Lire les inscriptions existantes
 				$groups = $this->getData(['user', $userId, 'group']) !== NULL ? $this->getData(['user', $userId, 'group']) : [];
 				// N'est pas déjà inscrit
