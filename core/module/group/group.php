@@ -22,7 +22,7 @@ class group extends common
 		'index' => self::ROLE_EDITOR,
 		'edit' => self::ROLE_EDITOR,
 		'usersAdd' => self::ROLE_EDITOR,
-		'usersDelete' => self::ROLE_EDITOR,
+		'users' => self::ROLE_EDITOR,
 	];
 
 	public static $groups = [];
@@ -51,23 +51,30 @@ class group extends common
 				'access' => false
 			]);
 		} else {
-			// Les groupes déclarés 
+			// Les groupes déclarés
 			$usersGroups = array_column($this->getData(['user']), 'group');
+
+			// Fusionner les sous-tableaux
+			$usersGroups = array_merge(...$usersGroups);
+
+			// URéindexer les clés
+			$usersGroups = array_values($usersGroups);
+
 			// Les groupes triés
 			$groups = $this->getData(['group']);
 			ksort($groups);
-			// Construire le tableau
 
+			// Construire le tableau
 			foreach ($groups as $groupId => $groupTitle) {
 				$suscribers = 0;
 				if (empty($usersGroups) === false) {
-					foreach ($usersGroups as $item) {
+					foreach ($usersGroups as $itemKey => $item) {
 						if ($item === $groupId) {
 							$suscribers++;
 						}
 					}
 				}
-				$message = $suscribers === 0 ? helper::translate('Pas d\'inscrit') : sprintf(helper::translate('%s inscrits'), $suscribers);
+				$message = $suscribers === 0 ? helper::translate('Aucun inscrit') : sprintf(helper::translate('%s inscrits'), $suscribers);
 				self::$groups[] = [
 					$groupTitle,
 					$suscribers === 0 ? '<a href="' . helper::baseUrl() . 'group/usersAdd/' . $groupId . '">' . $message . '</a>'
@@ -76,14 +83,14 @@ class group extends common
 						'href' => helper::baseUrl() . 'group/edit/' . $groupId,
 						'value' => template::ico('pencil'),
 						'help' => 'Éditer',
-						'class' => 'buttonEdit'
+						//'class' => 'buttonEdit'
 					]),
 					template::button('groupDelete' . $groupId, [
 						'class' => 'groupDelete buttonRed',
 						'href' => helper::baseUrl() . 'group/delete/' . $groupId,
 						'value' => template::ico('trash'),
 						'help' => 'Supprimer',
-						'class' => 'buttonDelete'
+						//'class' => 'buttonDelete'
 					])
 				];
 			}
@@ -232,6 +239,14 @@ class group extends common
 				'access' => false
 			]);
 		}
+		// Valeurs en sortie
+		$this->addOutput([
+			'title' => helper::translate('Inscrits'),
+			'view' => 'users',
+			'vendor' => [
+				'datatables'
+			]
+		]);
 	}
 
 
