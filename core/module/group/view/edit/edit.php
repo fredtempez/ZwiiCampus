@@ -19,8 +19,9 @@
             </h4>
             <div class="row">
                 <div class="col12">
-                    <?php 
-                    echo template::text('groupEditTitle', [
+                    <?php  echo template::hidden('groupEditGroupid');
+                    ?>
+                    <?php echo template::text('groupEditTitle', [
                         'label' => 'Nom du groupe',
                         'value' => $this->getData(['group',$this->getUrl(2)])
                     ]); ?>

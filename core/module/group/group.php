@@ -103,7 +103,7 @@ class group extends common
 				'access' => false
 			]); // Soumission du formulaire
 		} elseif ($this->isPost()) {
-			$groupId = $this->getInput('groupAddTitle', helper::FILTER_ID, true);
+			$groupId = uniqid();
 			$this->setData([
 				'group',
 				$groupId,
@@ -135,13 +135,24 @@ class group extends common
 			$this->addOutput([
 				'access' => false
 			]);
-		} else {
+		} elseif ($this->isPost()) {
+			$this->setData([
+				'group',
+				$this->getUrl(2),
+				$this->getInput('groupEditTitle', helper::FILTER_STRING_SHORT, true)
+			]);
+			// Valeurs en sortie
+			$this->addOutput([
+				'redirect' => helper::baseUrl() . 'group',
+				'notification' => helper::translate('groupe modifié'),
+				'state' => true
+			]);
 		}
 
 		// Valeurs en sortie
 		$this->addOutput([
 			'title' => helper::translate('Utilisateurs'),
-			'view' => 'index',
+			'view' => 'edit',
 			'vendor' => [
 				'datatables'
 			]
