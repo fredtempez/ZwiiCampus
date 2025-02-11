@@ -127,7 +127,7 @@ class group extends common
 				// Valeurs en sortie
 				$this->addOutput([
 					'redirect' => helper::baseUrl() . 'group/add',
-					'notification' => helper::translate('Le nom du groupe existe déjà'),
+					'notification' => helper::translate('Ce nom du groupe existe déjà'),
 					'state' => false
 				]);
 			}
@@ -167,8 +167,8 @@ class group extends common
 			} else {
 				// Valeurs en sortie
 				$this->addOutput([
-					'redirect' => helper::baseUrl() . 'group',
-					'notification' => helper::translate('Le nom du groupe existe déjà'),
+					'redirect' => helper::baseUrl() . 'group/edit/' . $this->getUrl(2),
+					'notification' => helper::translate('Ce nom du groupe existe déjà'),
 					'state' => false
 				]);
 			}
