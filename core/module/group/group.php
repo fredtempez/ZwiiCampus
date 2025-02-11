@@ -71,7 +71,7 @@ class group extends common
 				self::$groups[] = [
 					$groupTitle,
 					$suscribers === 0 ? '<a href="' . helper::baseUrl() . 'group/usersAdd/' . $groupId . '">' . $message . '</a>'
-									  : '<a href="' . helper::baseUrl() . 'group/users/' . $groupId . '">' . $message . '</a>',
+						: '<a href="' . helper::baseUrl() . 'group/users/' . $groupId . '">' . $message . '</a>',
 					template::button('groupEdit' . $groupId, [
 						'href' => helper::baseUrl() . 'group/edit/' . $groupId,
 						'value' => template::ico('pencil'),
@@ -110,18 +110,27 @@ class group extends common
 			]); // Soumission du formulaire
 		} elseif ($this->isPost()) {
 			$groupId = uniqid();
-			$this->setData([
-				'group',
-				$groupId,
-				$this->getInput('groupAddTitle', helper::FILTER_STRING_SHORT, true)
-			]);
-			// Valeurs en sortie
-			$this->addOutput([
-				'redirect' => helper::baseUrl() . 'group',
-				'notification' => helper::translate('groupe créé'),
-				'state' => true
-			]);        // Valeurs en sortie
-
+			$groupTitle = $this->getInput('groupAddTitle', helper::FILTER_STRING_SHORT, true);
+			if (in_array($groupTitle, $this->getData(['group'])) === false) {
+				$this->setData([
+					'group',
+					$groupId,
+					$groupTitle
+				]);
+				// Valeurs en sortie
+				$this->addOutput([
+					'redirect' => helper::baseUrl() . 'group',
+					'notification' => helper::translate('Groupe créé'),
+					'state' => true
+				]);        // Valeurs en sortie
+			} else {
+				// Valeurs en sortie
+				$this->addOutput([
+					'redirect' => helper::baseUrl() . 'group/add',
+					'notification' => helper::translate('Le nom du groupe existe déjà'),
+					'state' => false
+				]);
+			}
 		}
 		$this->addOutput([
 			'title' => helper::translate('Ajouter un groupe'),
@@ -142,17 +151,27 @@ class group extends common
 				'access' => false
 			]);
 		} elseif ($this->isPost()) {
-			$this->setData([
-				'group',
-				$this->getUrl(2),
-				$this->getInput('groupEditTitle', helper::FILTER_STRING_SHORT, true)
-			]);
-			// Valeurs en sortie
-			$this->addOutput([
-				'redirect' => helper::baseUrl() . 'group',
-				'notification' => helper::translate('groupe modifié'),
-				'state' => true
-			]);
+			$groupTitle = $this->getInput('groupEditTitle', helper::FILTER_STRING_SHORT, true);
+			if (in_array($groupTitle, $this->getData(['group'])) === false) {
+				$this->setData([
+					'group',
+					$this->getUrl(2),
+					$groupTitle
+				]);
+				// Valeurs en sortie
+				$this->addOutput([
+					'redirect' => helper::baseUrl() . 'group',
+					'notification' => helper::translate('Groupe modifié'),
+					'state' => true
+				]);
+			} else {
+				// Valeurs en sortie
+				$this->addOutput([
+					'redirect' => helper::baseUrl() . 'group',
+					'notification' => helper::translate('Le nom du groupe existe déjà'),
+					'state' => false
+				]);
+			}
 		}
 
 		// Valeurs en sortie
@@ -178,8 +197,7 @@ class group extends common
 			]);
 		} else {
 			$groups = $this->getData(['group']);
-			$groups = array_keys($groups);
-			;
+			$groups = array_keys($groups);;
 			$users = $this->getUrl('user');
 			$message = helper::translate('Un groupe affecté ne peut pas être effacé');
 			$state = false;
