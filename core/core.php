@@ -641,7 +641,7 @@ class common
 	/**
 	 * Ecrire les données de la page
 	 * @param string pageId
-	 * @param array contenu de la page
+	 * @param string contenu de la page
 	 * @return int nombre d'octets écrits ou erreur
 	 */
 	public function setPage($page, $value, $path)
@@ -1663,7 +1663,7 @@ function makeThumb($src, $dest, $desired_width)
 				}
 				return $filter;
 			default:
-				return null;
+				return [];
 		}
 	}
 
