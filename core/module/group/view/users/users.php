@@ -10,12 +10,15 @@
     <div class="col1 offset9">
         <?php echo template::button('groupUsersBack', [
             'href' => helper::baseUrl() . 'group/usersAdd/' . $this->getUrl(2),
-            'value' => template::ico('user-plus')
+            'value' => template::ico('user-plus'),
+            'class' => 'buttonGreen',
         ]); ?>
     </div>
     <div class="col1">
-        <?php echo template::submit('groupUsersSubmit',[
-            'value' => ''
+        <?php echo template::submit('groupUsersSubmit', [
+            'class' => 'buttonRed',
+            'value' => '',
+            'ico' => 'user-times',
         ]); ?>
     </div>
 </div>

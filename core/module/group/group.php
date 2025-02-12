@@ -246,33 +246,29 @@ class group extends common
 		if (
 			$this->isPost()
 		) {
-			// Clés à exclure
-			$keysToExclude = array(
-				"csrf",
-				"groupUsersSubmit",
-				"groupFilterGroup",
-				"groupFilterFirstName",
-				"groupFilterLastName",
-				"dataTables_length"
-			);
-
-			// Utiliser array_diff_key pour exclure les clés spécifiées
-			$users = array_diff_key($_POST, array_flip($keysToExclude));
 
 			// Inverse le tableau
-			$users = array_flip($users);
+			$posts = array_flip($_POST);
 
 			// Drapeau pour forcer la sauvegarde finale
 			$flag = false;
 
-			foreach ($users as $userId) {
+			foreach ($posts as $userId) {
+
+				// On passe les posts qui ne sont pas des utilisateurs
+				if ($this->getData(['user', $userId, 'group']) === NULL) {
+					continue;
+				}
+
 				// Lire les groupes existantes
 				$groups = $this->getData(['user', $userId, 'group']);
 
-				// Supprime le groupe
+				// Désinscrit du groupe
 				$groups = array_diff($groups, [$groupId]);
+
 				// Enregistrer sans sauvegarder
 				$this->setData(['user', $userId, 'group', $groups], false);
+
 				// Drapeau d'enregistrement
 				$flag = true;
 			}
@@ -280,6 +276,7 @@ class group extends common
 			if ($flag) {
 				$this->saveDB('user');
 			}
+
 			// Valeurs en sortie
 			$this->addOutput([
 				'redirect' => helper::baseUrl() . 'group',
@@ -372,7 +369,7 @@ class group extends common
 			self::$groupUsers[] = [
 				template::checkbox($userId, true, '', [
 					'class' => 'checkboxSelect',
-					'checked' => true,
+					'checked' => false,
 				]),
 				$this->getData(['user', $userId, 'firstname']),
 				$this->getData(['user', $userId, 'lastname']),
@@ -392,7 +389,7 @@ class group extends common
 
 		// Valeurs en sortie
 		$this->addOutput([
-			'title' => helper::translate('Inscrits'),
+			'title' => helper::translate('Inscrits dans le groupe'),
 			'view' => 'users',
 			'vendor' => [
 				'datatables'
@@ -563,7 +560,7 @@ class group extends common
 
 		// Valeurs en sortie
 		$this->addOutput([
-			'title' => helper::translate('Inscription en masse'),
+			'title' => helper::translate('Inscrire dans le groupe'),
 			'view' => 'usersAdd',
 			'vendor' => [
 				'datatables'

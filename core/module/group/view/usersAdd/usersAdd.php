@@ -7,10 +7,10 @@
             'value' => template::ico('left')
         ]); ?>
     </div>
-    <div class="col2 offset9">
+    <div class="col1 offset10">
         <?php echo template::submit('groupUsersAddSubmit', [
-            'value' => 'Inscrire',
-            'ico' => 'plus',
+            'value' => '',
+            'ico' => 'user-plus',
         ]); ?>
     </div>
 </div>
