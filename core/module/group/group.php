@@ -231,6 +231,7 @@ class group extends common
 	{
 		// Groupe sélectionné
 		$groupId = $this->getUrl(2);
+
 		// Accès limité au propriétaire ou éditeurs inscrits ou admin
 		if (
 			$this->getUser('role') <= self::$actions[__FUNCTION__]
@@ -245,13 +246,10 @@ class group extends common
 		if (
 			$this->isPost()
 		) {
-			// Drapeau pour forcer la sauvegarde finale
-			$flag = false;
-
 			// Clés à exclure
 			$keysToExclude = array(
 				"csrf",
-				"groupUsersAddSubmit",
+				"groupUsersSubmit",
 				"groupFilterGroup",
 				"groupFilterFirstName",
 				"groupFilterLastName",
@@ -259,27 +257,33 @@ class group extends common
 			);
 
 			// Utiliser array_diff_key pour exclure les clés spécifiées
-			$filteredArray = array_diff_key($_POST, array_flip($keysToExclude));
+			$users = array_diff_key($_POST, array_flip($keysToExclude));
 
-			foreach ($filteredArray as $userId => $userPost) {
+			// Inverse le tableau
+			$users = array_flip($users);
 
+			// Drapeau pour forcer la sauvegarde finale
+			$flag = false;
 
-				// Lire les inscriptions existantes
-				$groups = $this->getData(['user', $userId, 'group']) !== NULL ? $this->getData(['user', $userId, 'group']) : [];
-				// Deux cas de figure, le participant est désincrit ou il reste inscrit.
-				if ($userPost === false) {
-
-				}
-
+			foreach ($users as $userId) {
+				// Lire les groupes existantes
+				$groups = $this->getData(['user', $userId, 'group']);
+	
+				// Supprime le groupe
+				$groups = array_diff($groups, [$groupId]);
+				// Enregistrer sans sauvegarder
+				$this->setData(['user', $userId, 'group', $groups], false);				
+				// Drapeau d'enregistrement
+				$flag = true;
 			}
-			// Sauvegarde la base manuellement
+			// Sauvegarder la base si un modification a été faite
 			if ($flag) {
 				$this->saveDB('user');
 			}
 			// Valeurs en sortie
 			$this->addOutput([
 				'redirect' => helper::baseUrl() . 'group',
-				'notification' => helper::translate('Inscriptions modifiés'),
+				'notification' => helper::translate('Inscriptions modifiées'),
 				'state' => true
 			]);
 		}
@@ -367,10 +371,8 @@ class group extends common
 
 			self::$groupUsers[] = [
 				template::checkbox($userId, true, '', [
-					'class' => 'checkboxSelect',
 					'checked' => true,
 				]),
-				$userId,
 				$this->getData(['user', $userId, 'firstname']),
 				$this->getData(['user', $userId, 'lastname']),
 				$this->getData(['user', $userId, 'tags']),
