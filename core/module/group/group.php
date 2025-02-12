@@ -207,7 +207,7 @@ class group extends common
 		} else {
 			$groups = $this->getData(['group']);
 			$groups = array_keys($groups);;
-			$users = $this->getUrl('user');
+			$users = $this->getData(['user']);
 			$message = helper::translate('Un groupe affecté ne peut pas être effacé');
 			$state = false;
 			if (in_array($users, $groups) === false) {
