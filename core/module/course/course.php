@@ -231,8 +231,8 @@ class course extends common
         // Liste des enseignants pour le sélecteur d'auteurs
         $teachers = $this->getData(['user']);
         foreach ($teachers as $teacherId => $teacherInfo) {
-            if ($teacherInfo["group"] >= 2) {
-                self::$courseTeachers[$teacherId] = $teacherInfo["firstname"] . ' ' . $teacherInfo["lastname"];
+            if ($teacherInfo['role'] >= 2) {
+                self::$courseTeachers[$teacherId] = $teacherInfo['firstname'] . ' ' . $teacherInfo['lastname'];
             }
         }
 
@@ -307,8 +307,8 @@ class course extends common
         // Liste des enseignants pour le sélecteur d'auteurs
         $teachers = $this->getData(['user']);
         foreach ($teachers as $teacherId => $teacherInfo) {
-            if ($teacherInfo["group"] >= 2) {
-                self::$courseTeachers[$teacherId] = $teacherInfo["firstname"] . ' ' . $teacherInfo["lastname"];
+            if ($teacherInfo['role'] >= 2) {
+                self::$courseTeachers[$teacherId] = $teacherInfo['firstname'] . ' ' . $teacherInfo['lastname'];
             }
         }
 
@@ -366,8 +366,8 @@ class course extends common
         // Liste des enseignants pour le sélecteur d'auteurs
         $teachers = $this->getData(['user']);
         foreach ($teachers as $teacherId => $teacherInfo) {
-            if ($teacherInfo["group"] >= 2) {
-                self::$courseTeachers[$teacherId] = $teacherInfo["firstname"] . ' ' . $teacherInfo["lastname"];
+            if ($teacherInfo['group'] >= 2) {
+                self::$courseTeachers[$teacherId] = $teacherInfo['firstname'] . ' ' . $teacherInfo['lastname'];
             }
         }
 
