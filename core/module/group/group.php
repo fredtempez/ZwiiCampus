@@ -78,7 +78,7 @@ class group extends common
 				self::$groups[] = [
 					$groupTitle,
 					$suscribers === 0 ? '<a href="' . helper::baseUrl() . 'group/usersAdd/' . $groupId . '">' . $message . '</a>'
-						: '<a href="' . helper::baseUrl() . 'group/users/' . $groupId . '">' . $message . '</a>',
+					: '<a href="' . helper::baseUrl() . 'group/users/' . $groupId . '">' . $message . '</a>',
 					template::button('groupEdit' . $groupId, [
 						'href' => helper::baseUrl() . 'group/edit/' . $groupId,
 						'value' => template::ico('pencil'),
@@ -206,7 +206,8 @@ class group extends common
 			]);
 		} else {
 			$groups = $this->getData(['group']);
-			$groups = array_keys($groups);;
+			$groups = array_keys($groups);
+
 			$users = $this->getData(['user']);
 			$message = helper::translate('Un groupe affecté ne peut pas être effacé');
 			$state = false;
@@ -239,6 +240,153 @@ class group extends common
 				'access' => false
 			]);
 		}
+
+		// Inscription des utilisateurs cochés
+		if (
+			$this->isPost()
+		) {
+			// Drapeau pour forcer la sauvegarde finale
+			$flag = false;
+
+			// Clés à exclure
+			$keysToExclude = array(
+				"csrf",
+				"groupUsersAddSubmit",
+				"groupFilterGroup",
+				"groupFilterFirstName",
+				"groupFilterLastName",
+				"dataTables_length"
+			);
+
+			// Utiliser array_diff_key pour exclure les clés spécifiées
+			$filteredArray = array_diff_key($_POST, array_flip($keysToExclude));
+
+			foreach ($filteredArray as $userId => $userPost) {
+
+
+				// Lire les inscriptions existantes
+				$groups = $this->getData(['user', $userId, 'group']) !== NULL ? $this->getData(['user', $userId, 'group']) : [];
+				// Deux cas de figure, le participant est désincrit ou il reste inscrit.
+				if ($userPost === false) {
+
+				}
+
+			}
+			// Sauvegarde la base manuellement
+			if ($flag) {
+				$this->saveDB('user');
+			}
+			// Valeurs en sortie
+			$this->addOutput([
+				'redirect' => helper::baseUrl() . 'group',
+				'notification' => helper::translate('Inscriptions modifiés'),
+				'state' => true
+			]);
+		}
+
+		// Liste des rôles et des profils
+		$groupGroups = $this->getData(['profil']);
+		foreach ($groupGroups as $roleId => $roleValue) {
+			switch ($roleId) {
+				case "-1":
+				case "0":
+					break;
+				case "3":
+					self::$groupRoles['30'] = 'Administrateur';
+					$profils['30'] = 0;
+					break;
+				case "1":
+				case "2":
+					foreach ($roleValue as $profilId => $profilValue) {
+						if ($profilId) {
+							self::$groupRoles[$roleId . $profilId] = sprintf(helper::translate('Rôle %s - Profil %s'), self::$rolePublics[$roleId], $profilValue['name']);
+							$profils[$roleId . $profilId] = 0;
+						}
+					}
+			}
+		}
+
+		// Liste alphabétique
+		self::$alphabet = range('A', 'Z');
+		$alphabet = range('A', 'Z');
+		self::$alphabet = array_combine($alphabet, self::$alphabet);
+		self::$alphabet = array_merge(['all' => 'Tout'], self::$alphabet);
+
+		// Liste des inscrits dans l'espace sélectionné afin de les supprimer de la liste des candidats
+		$users = $this->getData(['user']);
+
+		// Filtrer les utilisateurs qui appartiennent au groupe recherché
+		$users = array_filter($users, function ($user) use ($groupId) {
+			return isset($user['group']) && in_array($groupId, $user['group']);
+		});
+
+
+		// Tri du tableau par défaut par $userId
+		ksort($users);
+
+		foreach ($users as $userId => $userValue) {
+
+			// Compte les rôles
+			if (isset($profils[$this->getData(['user', $userId, 'role']) . $this->getData(['user', $userId, 'profil'])])) {
+				$profils[$this->getData(['user', $userId, 'role']) . $this->getData(['user', $userId, 'profil'])]++;
+			}
+
+			// Filtres
+			if (
+				isset($_POST['groupFilterGroup'])
+				|| isset($_POST['groupFilterFirstName'])
+				|| isset($_POST['groupFilterLastName'])
+			) {
+
+				// Groupe et profils
+				$role = (string) $this->getData(['user', $userId, 'role']);
+				$profil = (string) $this->getData(['user', $userId, 'profil']);
+				$firstName = $this->getData(['user', $userId, 'firstname']);
+				$lastName = $this->getData(['user', $userId, 'lastname']);
+				if (
+					$this->getInput('groupFilterGroup', helper::FILTER_INT) > 0
+					&& $this->getInput('groupFilterGroup', helper::FILTER_STRING_SHORT) !== $role . $profil
+				)
+					continue;
+				// Première lettre du prénom
+				if (
+					$this->getInput('groupFilterFirstName', helper::FILTER_STRING_SHORT) !== 'all'
+					&& $this->getInput('groupFilterFirstName', helper::FILTER_STRING_SHORT) !== strtoupper(substr($firstName, 0, 1))
+				)
+					continue;
+				// Première lettre du nom
+				if (
+					$this->getInput('groupFilterLastName', helper::FILTER_STRING_SHORT) !== 'all'
+					&& $this->getInput('groupFilterLastName', helper::FILTER_STRING_SHORT) !== strtoupper(substr($lastName, 0, 1))
+				)
+					continue;
+			}
+
+			// Construction du tableau
+			// Exclure les participants n'étant pas inscrit dans le groupe
+
+			self::$groupUsers[] = [
+				template::checkbox($userId, true, '', [
+					'class' => 'checkboxSelect',
+					'checked' => true,
+				]),
+				$userId,
+				$this->getData(['user', $userId, 'firstname']),
+				$this->getData(['user', $userId, 'lastname']),
+				$this->getData(['user', $userId, 'tags']),
+			];
+		}
+
+		// Ajoute les effectifs aux profils du sélecteur
+		foreach (self::$groupRoles as $roleId => $roleValue) {
+			if ($roleId === 'all') {
+				self::$groupRoles['all'] = self::$groupRoles['all'] . ' (' . array_sum($profils) . ')';
+			} else {
+				self::$groupRoles[$roleId] = self::$groupRoles[$roleId] . ' (' . $profils[$roleId] . ')';
+			}
+		}
+
+
 		// Valeurs en sortie
 		$this->addOutput([
 			'title' => helper::translate('Inscrits'),
