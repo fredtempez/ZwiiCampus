@@ -20,10 +20,17 @@ $(document).ready((function () {
         });
     });
 
+    $('#groupUsersSelectAll').on('click', function() {
+        $('.checkboxSelect').prop('checked', true);
+    });
+    $('#groupUsersSelectNone').on('click', function() {
+        $('.checkboxSelect').prop('checked', false);
+
+    });
 
     $('#groupFilterGroup, #groupFilterFirstName, #groupFilterLastName').change(function () {
         saveCheckboxState();
-        $('#groupUserssForm').submit();
+        $('#groupUsersForm').submit();
     });
 
     var table = $('#dataTables').DataTable({
@@ -41,8 +48,6 @@ $(document).ready((function () {
             }
         ]
     });
-
-
 
     // Empty local storage after submit
     $("#groupUserssSubmit").on("click", function () {

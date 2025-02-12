@@ -268,11 +268,11 @@ class group extends common
 			foreach ($users as $userId) {
 				// Lire les groupes existantes
 				$groups = $this->getData(['user', $userId, 'group']);
-	
+
 				// Supprime le groupe
 				$groups = array_diff($groups, [$groupId]);
 				// Enregistrer sans sauvegarder
-				$this->setData(['user', $userId, 'group', $groups], false);				
+				$this->setData(['user', $userId, 'group', $groups], false);
 				// Drapeau d'enregistrement
 				$flag = true;
 			}
@@ -371,6 +371,7 @@ class group extends common
 
 			self::$groupUsers[] = [
 				template::checkbox($userId, true, '', [
+					'class' => 'checkboxSelect',
 					'checked' => true,
 				]),
 				$this->getData(['user', $userId, 'firstname']),
@@ -441,9 +442,9 @@ class group extends common
 				$groups = $this->getData(['user', $userId, 'group']) !== NULL ? $this->getData(['user', $userId, 'group']) : [];
 				// N'est pas déjà inscrit
 				if (in_array($groupId, $groups) === false) {
-					// Ajouter le groupe
+					// Ajoute le groupe
 					$groups = array_merge($groups, array($groupId));
-					// Enregistrer les inscriptions
+					// Enregistre les inscriptions
 					$this->setData(['user', $userId, 'group', $groups], false);
 					$flag = true;
 				}
@@ -452,6 +453,12 @@ class group extends common
 			if ($flag) {
 				$this->saveDB('user');
 			}
+			// Valeurs en sortie
+			$this->addOutput([
+				'redirect' => helper::baseUrl() . 'group',
+				'notification' => helper::translate('Inscriptions ajoutées'),
+				'state' => true
+			]);
 		}
 
 		// Liste des rôles et des profils
@@ -539,7 +546,6 @@ class group extends common
 						in_array($groupId, $this->getData(['user', $userId, 'group']))
 						: false,
 				]),
-				$userId,
 				$this->getData(['user', $userId, 'firstname']),
 				$this->getData(['user', $userId, 'lastname']),
 				$this->getData(['user', $userId, 'tags']),

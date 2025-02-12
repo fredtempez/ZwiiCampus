@@ -3,7 +3,7 @@
     <div class="col1">
         <?php echo template::button('groupUserAddBack', [
             'class' => 'buttonGrey',
-            'href' => helper::baseUrl() . 'group/users/' . $this->getUrl(2),
+            'href' => helper::baseUrl() . 'group/',
             'value' => template::ico('left')
         ]); ?>
     </div>
@@ -47,7 +47,7 @@
     </div>
 </div>
 <?php if (group::$groupUsers): ?>
-    <?php echo template::table([1, 2, 3, 3, 3], group::$groupUsers, ['', 'Id',  'Prénom', 'Nom', 'Étiquettes'], ['id' => 'dataTables']); ?>
+    <?php echo template::table([1, 4, 4, 7], group::$groupUsers, ['', 'Prénom', 'Nom', 'Étiquettes'], ['id' => 'dataTables']); ?>
 <?php else: ?>
     <?php echo template::speech('Aucun inscrit'); ?>
 <?php endif; ?>
