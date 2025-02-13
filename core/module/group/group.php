@@ -557,7 +557,7 @@ class group extends common
 
 		// Valeurs en sortie
 		$this->addOutput([
-			'title' => sprintf(helper::translate('Inscription dans le groupe %s'), $this->getData(['group', $groupId]) ),
+			'title' => sprintf(helper::translate('Inscrire dans le groupe %s'), $this->getData(['group', $groupId]) ),
 			'view' => 'usersAdd',
 			'vendor' => [
 				'datatables'

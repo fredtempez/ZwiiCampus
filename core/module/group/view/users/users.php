@@ -12,12 +12,13 @@
             'class' => 'buttonGreen',
             'href' => helper::baseUrl() . 'group/usersAdd/' . $this->getUrl(2),
             'value' => template::ico('user-plus'),
-            'help' => 'Inscrire',
+            'help' => 'Inscrire dans le groupe',
         ]); ?>
     </div>
     <div class="col2">
         <?php echo template::submit('groupUsersSubmit',[
-            'value' => 'Désinscrire'
+            'value' => 'Désinscrire',
+
         ]); ?>
     </div>
 </div>
