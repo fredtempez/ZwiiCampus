@@ -388,7 +388,7 @@ class group extends common
 
 		// Valeurs en sortie
 		$this->addOutput([
-			'title' => helper::translate('Inscrits dans le groupe'),
+			'title' => sprintf(helper::translate('Inscription dans le groupe %s'), $this->getData(['group', $groupId]) ),
 			'view' => 'users',
 			'vendor' => [
 				'datatables'
@@ -419,29 +419,22 @@ class group extends common
 			// Drapeau pour forcer la sauvegarde finale
 			$flag = false;
 
-			// Clés à exclure
-			$keysToExclude = array(
-				"csrf",
-				"groupUsersAddSubmit",
-				"groupFilterGroup",
-				"groupFilterFirstName",
-				"groupFilterLastName",
-				"dataTables_length"
-			);
+			// Parcourir les posts
+			foreach ($_POST as $key => $values) {
 
-			// Utiliser array_diff_key pour exclure les clés spécifiées
-			$filteredArray = array_diff_key($_POST, array_flip($keysToExclude));
-
-			foreach ($filteredArray as $userId => $userPost) {
+				// On passe les posts qui ne sont pas des utilisateurs
+				if ($this->getData(['user', $key, 'group']) === NULL) {
+					continue;
+				}
 
 				// Lire les inscriptions existantes
-				$groups = $this->getData(['user', $userId, 'group']) !== NULL ? $this->getData(['user', $userId, 'group']) : [];
+				$groups = $this->getData(['user', $key, 'group']) !== NULL ? $this->getData(['user', $key, 'group']) : [];
 				// N'est pas déjà inscrit
 				if (in_array($groupId, $groups) === false) {
 					// Ajoute le groupe
 					$groups = array_merge($groups, array($groupId));
 					// Enregistre les inscriptions
-					$this->setData(['user', $userId, 'group', $groups], false);
+					$this->setData(['user', $key, 'group', $groups], false);
 					$flag = true;
 				}
 			}
@@ -498,6 +491,13 @@ class group extends common
 
 		foreach ($users as $userId => $userValue) {
 
+			// Supprime les inscrits
+			if (is_array($this->getData(['user', $userId, 'group']))
+			&& in_array($groupId, $this->getData(['user', $userId, 'group']))) {
+				continue;
+			}
+
+
 			// Compte les rôles
 			if (isset($profils[$this->getData(['user', $userId, 'role']) . $this->getData(['user', $userId, 'profil'])])) {
 				$profils[$this->getData(['user', $userId, 'role']) . $this->getData(['user', $userId, 'profil'])]++;
@@ -538,9 +538,7 @@ class group extends common
 			self::$groupUsers[] = [
 				template::checkbox($userId, true, '', [
 					'class' => 'checkboxSelect',
-					'checked' => is_array($this->getData(['user', $userId, 'group'])) ?
-						in_array($groupId, $this->getData(['user', $userId, 'group']))
-						: false,
+					'checked' => false,
 				]),
 				$this->getData(['user', $userId, 'firstname']),
 				$this->getData(['user', $userId, 'lastname']),
@@ -559,7 +557,7 @@ class group extends common
 
 		// Valeurs en sortie
 		$this->addOutput([
-			'title' => helper::translate('Inscrire dans le groupe'),
+			'title' => sprintf(helper::translate('Inscription dans le groupe %s'), $this->getData(['group', $groupId]) ),
 			'view' => 'usersAdd',
 			'vendor' => [
 				'datatables'
