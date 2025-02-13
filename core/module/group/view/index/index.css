@@ -16,19 +16,3 @@
 /** NE PAS EFFACER
 * admin.css
 */
-/** 
-.buttonEdit {
-    background-color: transparent;
-    border: none;
-}
-
-.buttonDelete {
-    background-color: transparent;
-    border: none;
-    color: red;
-}
-
-.buttonDelete:hover, .buttonEdit:hover {
-    background-color: transparent;
-}
-    */

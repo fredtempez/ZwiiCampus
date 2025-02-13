@@ -373,12 +373,15 @@ class core extends common
 			$css .= '.button {background-color:' . $colors['normal'] . ';color:' . $colors['text'] . ';}.button:hover {background-color:' . $colors['darken'] . ';color:' . $colors['text'] . ';}.button:active {background-color:' . $colors['veryDarken'] . ';color:' . $colors['text'] . ';}';
 			$colors = helper::colorVariants($this->getData(['admin', 'backgroundColorButtonGrey']));
 			$css .= '.button.buttonGrey {background-color: ' . $colors['normal'] . ';color: ' . $colors['text'] . ';}.button.buttonGrey:hover {background-color:' . $colors['darken'] . ';color:' . $colors['text'] . ';}.button.buttonGrey:active {background-color:' . $colors['veryDarken'] . ';color:' . $colors['text'] . ';}';
+			$css .= '.icoTextGrey {color:' . $colors['normal'] . ';}';
 			$colors = helper::colorVariants($this->getData(['admin', 'backgroundColorButtonRed']));
 			$css .= '.button.buttonRed {background-color: ' . $colors['normal'] . ';color: ' . $colors['text'] . ';}.button.buttonRed:hover {background-color:' . $colors['darken'] . ';color:' . $colors['text'] . ';}.button.buttonRed:active {background-color:' . $colors['veryDarken'] . ';color:' . $colors['text'] . ';}';
+			$css .= '.icoTextRed {color:' . $colors['normal'] . ';}';
 			$colors = helper::colorVariants($this->getData(['admin', 'backgroundColorButtonHelp']));
 			$css .= '.button.buttonHelp {background-color: ' . $colors['normal'] . ';color: ' . $colors['text'] . ';}.button.buttonHelp:hover {background-color:' . $colors['darken'] . ';color:' . $colors['text'] . ';}.button.buttonHelp:active {background-color:' . $colors['veryDarken'] . ';color:' . $colors['text'] . ';}';
 			$colors = helper::colorVariants($this->getData(['admin', 'backgroundColorButtonGreen']));
 			$css .= '.button.buttonGreen, button[type=submit] {background-color: ' . $colors['normal'] . ';color: ' . $colors['text'] . ';}.button.buttonGreen:hover, button[type=submit]:hover {background-color: ' . $colors['darken'] . ';color: ' . $colors['text'] . ';}.button.buttonGreen:active, button[type=submit]:active {background-color: ' . $colors['darken'] . ';color: ' . $colors['text'] . ';}';
+			$css .= '.icoTextGreen {color:' . $colors['normal'] . ';}';
 			$colors = helper::colorVariants($this->getData(['admin', 'backgroundBlockColor']));
 			$css .= '.buttonTab, .block {border: 1px solid ' . $this->getData(['admin', 'borderBlockColor']) . ';}.buttonTab, .block h4 {background-color: ' . $colors['normal'] . ';color:' . $colors['text'] . ';}';
 			$css .= 'table tr,input[type=email],input[type=date],input[type=time],input[type=month],input[type=week],input[type=datetime-local],input[type=text],input[type=number],input[type=password],select:not(#barSelectLanguage),select:not(#barSelectPage),textarea:not(.editorWysiwyg), textarea:not(.editorWysiwygComment),.inputFile{background-color: ' . $colors['normal'] . ';color:' . $colors['text'] . ';border: 1px solid ' . $this->getData(['admin', 'borderBlockColor']) . ';}';

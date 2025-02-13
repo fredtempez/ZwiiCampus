@@ -79,18 +79,19 @@ class group extends common
 					$groupTitle,
 					$suscribers === 0 ? '<a href="' . helper::baseUrl() . 'group/usersAdd/' . $groupId . '">' . $message . '</a>'
 					: '<a href="' . helper::baseUrl() . 'group/users/' . $groupId . '">' . $message . '</a>',
-					template::button('groupEdit' . $groupId, [
+					template::ico('pencil',  [
+						'id' => 'groupEdit' . $groupId,
 						'href' => helper::baseUrl() . 'group/edit/' . $groupId,
 						'value' => template::ico('pencil'),
+						'margin' => 'right',
 						'help' => 'Éditer',
-						//'class' => 'buttonEdit'
-					]),
-					template::button('groupDelete' . $groupId, [
-						'class' => 'groupDelete buttonRed',
+					]) 
+					. template::ico('trash', [
+						'id' => 'groupDelete' . $groupId,
+						'class' => 'groupDelete icoTextRed',
 						'href' => helper::baseUrl() . 'group/delete/' . $groupId,
-						'value' => template::ico('trash'),
+						'margin' => 'left',
 						'help' => 'Supprimer',
-						//'class' => 'buttonDelete'
 					])
 				];
 			}

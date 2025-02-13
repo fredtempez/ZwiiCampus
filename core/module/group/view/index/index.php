@@ -20,7 +20,7 @@
 <?php if (group::$groups): ?>
 	<div class="row">
 		<div class="col12">
-			<?php echo template::table([7, 3, 1, 1], group::$groups, ['Groupe', 'Inscrits', '', ''], ['id' => 'dataTables']); ?>
+			<?php echo template::table([8, 3, 1], group::$groups, ['Groupe', 'Inscrits', ''], ['id' => 'dataTables']); ?>
 		</div>
 	</div>
 <?php else: ?>
