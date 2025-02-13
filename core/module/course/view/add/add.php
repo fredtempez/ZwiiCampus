@@ -19,92 +19,106 @@
             </h4>
             <div class="row">
                 <div class="col12">
-                    <?php echo template::text('courseAddTitle', [
-                        'label' => 'Titre'
-                    ]); ?>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col7">
                     <?php echo template::text('courseAddShortTitle', [
-                        'label' => 'Titre court'
+                        'label' => 'Titre',
                     ]); ?>
                 </div>
-                <div class="col5">
-                    <?php echo template::select('courseAddAuthor', course::$courseTeachers, [
-                        'label' => 'Auteur'
-                    ]); ?>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col6">
-                    <?php echo template::select('courseAddTheme', course::$courses, [
-                        'label' => 'Copier le thème depuis',
-                    ]); ?>
-                </div>
-                <div class="col6">
-                    <?php echo template::select('courseAddCategorie', course::$courseCategories, [
-                        'label' => 'Catégorie',
-                    ]); ?>
-                </div>
+
             </div>
             <div class="row">
                 <div class="col12">
                     <?php echo template::textarea('courseAddDescription', [
-                        'label' => 'Description'
+                        'label' => 'Description',
                     ]); ?>
                 </div>
             </div>
             <div class="row">
                 <div class="col4">
-                    <?php echo template::select('courseAddAccess', course::$courseAccess, [
-                        'label' => 'Accès'
+                    <?php echo template::select('courseAddAuthor', course::$courseTeachers, [
+                        'label' => 'Auteur',
                     ]); ?>
                 </div>
                 <div class="col4">
-                    <?php echo template::date('courseAddOpeningDate', [
-                        'type' => 'datetime-local',
-                        'label' => 'Ouverture',
+                    <?php echo template::select('courseAddCategorie', course::$courseCategories, [
+                        'label' => 'Catégorie',
                     ]); ?>
                 </div>
                 <div class="col4">
-                    <?php echo template::date('courseAddClosingDate', [
-                        'type' => 'datetime-local',
-                        'label' => 'Fermeture',
+                    <?php echo template::select('courseAddTheme', course::$courses, [
+                        'label' => 'Copier le thème depuis l\'espace',
                     ]); ?>
                 </div>
             </div>
             <div class="row">
-                <div class="col6">
-                    <?php echo template::select('courseAddEnrolment', course::$courseEnrolment, [
-                        'label' => 'Participation'
-                    ]); ?>
-                </div>
-                <div class="col6">
-                    <?php echo template::text('courseAddEnrolmentKey', [
-                        'label' => 'Clé'
-                    ]); ?>
-                </div>
-            </div>
-            <div class="row">
-            <div class="col4">
-                    <?php echo template::checkbox('courseAddEnrolmentReport', true, 'Rapport des consultations', [
+                <div class="col4">
+                    <?php echo template::checkbox('courseAddEnrolmentReport', true, 'Statistique des consultations', [
+                        'checked' => true,
                         'help' => 'Enregistre une trace des consultations. Ne s\'applique pas à l\'inscription anonyme',
-                        'checked' => true
-                    ]); ?>
-                </div>
-                <div class="col4">
-                    <?php echo template::checkbox('courseAddEnrolmentLimit', true, 'Date de fin d\'inscription', [
-                        'help' => 'Ne s\'applique pas à l\'inscription anonyme',
-                    ]); ?>
-                </div>
-                <div class="col4">
-                    <?php echo template::date('courseAddEnrolmentLimitDate', [
-                        'type' => 'datetime-local',
-                        'label' => 'Fermeture',
                     ]); ?>
                 </div>
             </div>
         </div>
     </div>
-    <?php echo template::formClose(); ?>
+</div>
+<div class="row">
+    <div class="col12">
+        <div class="block">
+            <h4>
+                <?php echo helper::translate('Modalités de disponibilité'); ?>
+            </h4>
+            <div class="row">
+                <div class="col3">
+                    <?php echo template::select('courseAddAccess', course::$courseAccess, [
+                        'label' => 'Méthode',
+                    ]); ?>
+                </div>
+                <div class="col2">
+                    <?php echo template::date('courseOpeningDate', [
+                        'type' => 'datetime-local',
+                        'label' => 'Ouvre le',
+                    ]); ?>
+                </div>
+                <div class="col2">
+                    <?php echo template::date('courseClosingDate', [
+                        'type' => 'datetime-local',
+                        'label' => 'Ferme le',
+                    ]); ?>
+                </div>
+                <div class="col3 verticalAlignBottom">
+                    <?php echo template::checkbox('courseAddEnrolmentLimit', true, 'Date limite d\'inscription', [
+                        'help' => 'Ne s\'applique pas à l\'inscription anonyme',
+                    ]); ?>
+                </div>
+                <div class="col2">
+                    <?php echo template::date('courseAddEnrolmentLimitDate', [
+                        'type' => 'datetime-local',
+                        'label' => 'Jusqu\'au',
+                    ]); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col12">
+        <div class="block">
+            <h4>
+                <?php echo helper::translate('Modalités d\'inscription'); ?>
+            </h4>
+            <div class="row">
+                <div class="col4">
+                    <?php echo template::select('courseAddEnrolment', course::$courseEnrolment, [
+                        'label' => 'Méthode',
+                    ]); ?>
+                </div>
+                <div class="col4">
+                    <?php echo template::text('courseAddEnrolmentKey', [
+                        'label' => 'Nécessite une clé',
+                    ]); ?>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<?php echo template::formClose(); ?>
