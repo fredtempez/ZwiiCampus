@@ -9,9 +9,10 @@
     </div>
     <div class="col1 offset8">
         <?php echo template::button('groupUsersBack', [
+            'class' => 'buttonGreen',
             'href' => helper::baseUrl() . 'group/usersAdd/' . $this->getUrl(2),
             'value' => template::ico('user-plus'),
-            'help' => 'Inscrire'
+            'help' => 'Inscrire',
         ]); ?>
     </div>
     <div class="col2">

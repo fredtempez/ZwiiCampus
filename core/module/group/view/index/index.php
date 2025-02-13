@@ -19,8 +19,8 @@
 </div>
 <?php if (group::$groups): ?>
 	<div class="row">
-		<div class="col8 offset2">
-			<?php echo template::table([5, 5, 1, 1], group::$groups, ['Groupe', 'Inscrits', '', ''], ['id' => 'dataTables']); ?>
+		<div class="col12">
+			<?php echo template::table([7, 3, 1, 1], group::$groups, ['Groupe', 'Inscrits', '', ''], ['id' => 'dataTables']); ?>
 		</div>
 	</div>
 <?php else: ?>

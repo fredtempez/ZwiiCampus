@@ -247,27 +247,27 @@ class group extends common
 			$this->isPost()
 		) {
 
-			// Inverse le tableau
-			$posts = array_flip($_POST);
-
 			// Drapeau pour forcer la sauvegarde finale
 			$flag = false;
 
-			foreach ($posts as $userId) {
+			// Groupe à traiter 
+			$groupId = $this->getUrl(2);
+
+			// Parcourir les posts
+			foreach ($_POST as $key => $values) {
 
 				// On passe les posts qui ne sont pas des utilisateurs
-				if ($this->getData(['user', $userId, 'group']) === NULL) {
+				if ($this->getData(['user', $key, 'group']) === NULL) {
 					continue;
 				}
 
-				// Lire les groupes existantes
-				$groups = $this->getData(['user', $userId, 'group']);
-
+				// Lire les groupes de l'utilisateur
+				$groups = $this->getData(['user', $key, 'group']);
 				// Désinscrit du groupe
 				$groups = array_diff($groups, [$groupId]);
 
 				// Enregistrer sans sauvegarder
-				$this->setData(['user', $userId, 'group', $groups], false);
+				$this->setData(['user', $key, 'group', $groups], false);
 
 				// Drapeau d'enregistrement
 				$flag = true;
@@ -276,7 +276,6 @@ class group extends common
 			if ($flag) {
 				$this->saveDB('user');
 			}
-
 			// Valeurs en sortie
 			$this->addOutput([
 				'redirect' => helper::baseUrl() . 'group',
