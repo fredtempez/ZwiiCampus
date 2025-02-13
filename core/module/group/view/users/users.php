@@ -7,18 +7,16 @@
             'value' => template::ico('left')
         ]); ?>
     </div>
-    <div class="col1 offset9">
+    <div class="col1 offset8">
         <?php echo template::button('groupUsersBack', [
             'href' => helper::baseUrl() . 'group/usersAdd/' . $this->getUrl(2),
             'value' => template::ico('user-plus'),
-            'class' => 'buttonGreen',
+            'help' => 'Inscrire'
         ]); ?>
     </div>
-    <div class="col1">
-        <?php echo template::submit('groupUsersSubmit', [
-            'class' => 'buttonRed',
-            'value' => '',
-            'ico' => 'user-times',
+    <div class="col2">
+        <?php echo template::submit('groupUsersSubmit',[
+            'value' => 'Désinscrire'
         ]); ?>
     </div>
 </div>
