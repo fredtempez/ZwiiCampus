@@ -224,7 +224,7 @@ class group extends common
 			// URéindexer les clés
 			$usersGroups = array_values($usersGroups);
 
-			// Parcour les groupes affectés
+			// Parcourir les groupes affectés
 			if (empty($usersGroups) === false) {
 				foreach ($usersGroups as $itemKey => $item) {
 					if ($item === $groupId) {
@@ -446,7 +446,7 @@ class group extends common
 			foreach ($_POST as $key => $values) {
 
 				// On passe les posts qui ne sont pas des utilisateurs
-				if ($this->getData(['user', $key, 'group']) === NULL) {
+				if ($this->getData(['user', $key]) === NULL) {
 					continue;
 				}
 
@@ -463,7 +463,7 @@ class group extends common
 			}
 			// Sauvegarde la base manuellement
 			if ($flag) {
-				$this->saveDB('user');
+				$this->saveDB('user'); 
 			}
 			// Valeurs en sortie
 			$this->addOutput([
