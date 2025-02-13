@@ -85,6 +85,7 @@ class group extends common
 						'value' => template::ico('pencil'),
 						'margin' => 'right',
 						'help' => 'Éditer',
+						'fontSize' => '1.2em',
 					]) 
 					. template::ico('trash', [
 						'id' => 'groupDelete' . $groupId,
@@ -92,6 +93,7 @@ class group extends common
 						'href' => helper::baseUrl() . 'group/delete/' . $groupId,
 						'margin' => 'left',
 						'help' => 'Supprimer',
+						'fontSize' => '1.2em',
 					])
 				];
 			}
@@ -206,17 +208,37 @@ class group extends common
 				'access' => false
 			]);
 		} else {
-			$groups = $this->getData(['group']);
-			$groups = array_keys($groups);
 
-			$users = $this->getData(['user']);
-			$message = helper::translate('Un groupe affecté ne peut pas être effacé');
-			$state = false;
-			if (in_array($users, $groups) === false) {
-				$this->deleteData(['group', $this->getUrl(2)]);
-				// Valeurs en sortie
-				$message = helper::translate('Groupe effacé');
-				$state = true;
+			// Id et titre d'un groupe
+			$groupId = $this->getUrl(2);
+			$groupTitle = $this->getData(['group', $groupId]);
+
+			$message = $message = sprintf(helper::translate('Groupe %s effacé'), $groupTitle);
+			$state = true;
+
+			// Recherche des inscriptions dans ce groupe
+			// Les groupes déclarés
+			$usersGroups = array_column($this->getData(['user']), 'group');
+			// Fusionner les sous-tableaux
+			$usersGroups = array_merge(...$usersGroups);
+			// URéindexer les clés
+			$usersGroups = array_values($usersGroups);
+
+			// Parcour les groupes affectés
+			if (empty($usersGroups) === false) {
+				foreach ($usersGroups as $itemKey => $item) {
+					if ($item === $groupId) {
+						// Pas du suppression, le groupe est affecté
+						$message = helper::translate('Un groupe affecté ne peut pas être effacé');
+						$state = false;
+						break;
+					}
+				}
+			}
+
+			// Supprime le groupe orphelin
+			if ($state === true) {
+				$this->deleteData(['group', $groupId]);				
 			}
 
 			// Valeurs en sortie
