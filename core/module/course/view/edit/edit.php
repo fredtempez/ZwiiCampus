@@ -71,12 +71,12 @@
     <div class="col12">
         <div class="block">
             <h4>
-                <?php echo helper::translate('Modalités de disponibilité'); ?>
+                <?php echo helper::translate('Disponibilité'); ?>
             </h4>
             <div class="row">
                 <div class="col3">
                     <?php echo template::select('courseEditAccess', course::$courseAccess, [
-                        'label' => 'Méthode',
+                        'label' => 'Modalité',
                         'selected' => $this->getdata(['course', $this->getUrl(2), 'access'])
                     ]); ?>
                 </div>
@@ -115,7 +115,7 @@
     <div class="col12">
         <div class="block">
             <h4>
-                <?php echo helper::translate('Modalités d\'inscription'); ?>
+                <?php echo helper::translate('Inscription'); ?>
             </h4>
             <div class="row">
                 <div class="col4">

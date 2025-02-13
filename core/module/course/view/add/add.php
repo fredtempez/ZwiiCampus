@@ -64,12 +64,12 @@
     <div class="col12">
         <div class="block">
             <h4>
-                <?php echo helper::translate('Modalités de disponibilité'); ?>
+                <?php echo helper::translate('Disponibilité'); ?>
             </h4>
             <div class="row">
                 <div class="col3">
                     <?php echo template::select('courseAddAccess', course::$courseAccess, [
-                        'label' => 'Méthode',
+                        'label' => 'Modalité',
                     ]); ?>
                 </div>
                 <div class="col2">
@@ -103,7 +103,7 @@
     <div class="col12">
         <div class="block">
             <h4>
-                <?php echo helper::translate('Modalités d\'inscription'); ?>
+                <?php echo helper::translate('Inscription'); ?>
             </h4>
             <div class="row">
                 <div class="col4">
