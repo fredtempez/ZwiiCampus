@@ -74,7 +74,7 @@ class group extends common
 						}
 					}
 				}
-				$message = $suscribers === 0 ? helper::translate('Aucun inscrit') : sprintf(helper::translate('%s inscrits'), $suscribers);
+				$message = $suscribers === 0 ? helper::translate('Inscrire des participants') : sprintf(helper::translate('%s inscrits'), $suscribers);
 				self::$groups[] = [
 					$groupTitle,
 					$suscribers === 0 ? '<a href="' . helper::baseUrl() . 'group/usersAdd/' . $groupId . '">' . $message . '</a>'
@@ -413,7 +413,7 @@ class group extends common
 
 		// Valeurs en sortie
 		$this->addOutput([
-			'title' => sprintf(helper::translate('Inscription dans le groupe %s'), $this->getData(['group', $groupId])),
+			'title' => sprintf(helper::translate('Inscriptions dans le groupe %s'), $this->getData(['group', $groupId])),
 			'view' => 'users',
 			'vendor' => [
 				'datatables'
