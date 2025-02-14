@@ -48,7 +48,7 @@
     </div>
 </div>
 <?php if (course::$courseUsers): ?>
-    <?php echo template::table([1, 2, 3, 3, 3], course::$courseUsers, ['', 'Id', 'Prénom', 'Nom', 'Étiquettes'], ['id' => 'dataTables']); ?>
+    <?php echo template::table([1, 3, 3, 3, 2], course::$courseUsers, ['', 'Prénom', 'Nom', 'Groupes', 'Étiquettes'], ['id' => 'dataTables']); ?>
 <?php else: ?>
     <?php echo template::speech('Aucun inscrit'); ?>
 <?php endif; ?>

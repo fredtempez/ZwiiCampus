@@ -67,4 +67,4 @@
 	</div>
 </div>
 <?php echo template::formClose(); ?>
-<?php echo template::table([2, 2, 2, 2, 2, 1, 1], user::$users, ['Nom', 'Rôle', 'Profil', 'Étiquette', 'Date connexion', '', ''], ['id' => 'dataTables'], ['name', 'role', 'profile', 'tag', 'data-timestamp', 'edit', 'delete']); ?>
+<?php echo template::table([2, 2, 2, 2, 2, 1, 1], user::$users, ['Nom', 'Rôle / Profil', 'Groupes', 'Étiquettes', 'Dernière connexion', '', ''], ['id' => 'dataTables'], ['name', 'role', 'profile', 'tag', 'data-timestamp', 'edit', 'delete']); ?>

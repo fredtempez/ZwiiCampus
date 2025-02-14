@@ -885,12 +885,16 @@ class course extends common
                     continue;
             }
 
+            // Les groupes sous forme de chaine
+            $group = $this->getData(['user', $userId, 'group']);
+            $group = is_null($group) === false ? implode('', array_map(fn($valeur) => sprintf('<span class="groupLabel">%s</span>', $this->getData(['group', htmlspecialchars($valeur)])), $group)) : '';
             // Construction du tableau
             self::$courseUsers[] = [
                 template::checkbox($userId, true, '', ['class' => 'checkboxSelect']),
-                $userId,
+                //$userId,
                 $this->getData(['user', $userId, 'firstname']),
                 $this->getData(['user', $userId, 'lastname']),
+                $group,
                 $this->getData(['user', $userId, 'tags']),
             ];
         }
@@ -1048,12 +1052,16 @@ class course extends common
                         continue;
                 }
 
+                // Les groupes sous forme de chaine
+                $group = $this->getData(['user', $userId, 'group']);
+                $group = is_null($group) === false ? implode('', array_map(fn($valeur) => sprintf('<span class="groupLabel">%s</span>', $this->getData(['group', htmlspecialchars($valeur)])), $group)) : '';
                 // Construction du tableau
                 self::$courseUsers[] = [
                     template::checkbox($userId, true, '', ['class' => 'checkboxSelect']),
-                    $userId,
+                    //$userId,
                     $this->getData(['user', $userId, 'firstname']),
                     $this->getData(['user', $userId, 'lastname']),
+                    $group,
                     $this->getData(['user', $userId, 'tags']),
                 ];
             }

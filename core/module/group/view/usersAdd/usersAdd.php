@@ -47,7 +47,7 @@
     </div>
 </div>
 <?php if (group::$groupUsers): ?>
-    <?php echo template::table([1, 4, 4, 7], group::$groupUsers, ['', 'Prénom', 'Nom', 'Étiquettes'], ['id' => 'dataTables']); ?>
+    <?php echo template::table([1, 3, 3, 3, 2], group::$groupUsers, ['', 'Prénom', 'Nom', 'Groupes', 'Étiquettes'], ['id' => 'dataTables']); ?>
 <?php else: ?>
     <?php echo template::speech('Aucun inscrit'); ?>
 <?php endif; ?>

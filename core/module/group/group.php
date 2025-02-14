@@ -386,8 +386,9 @@ class group extends common
 			}
 
 			// Construction du tableau
-			// Exclure les participants n'étant pas inscrit dans le groupe
-
+			// Les groupes sous forme de chaine
+			$group = $this->getData(['user', $userId, 'group']);
+			$group = is_null($group) === false ? implode('', array_map(fn($valeur) => sprintf('<span class="groupLabel">%s</span>', $this->getData(['group', htmlspecialchars($valeur)])), $group)) : '';
 			self::$groupUsers[] = [
 				template::checkbox($userId, true, '', [
 					'class' => 'checkboxSelect',
@@ -395,6 +396,7 @@ class group extends common
 				]),
 				$this->getData(['user', $userId, 'firstname']),
 				$this->getData(['user', $userId, 'lastname']),
+				$group,
 				$this->getData(['user', $userId, 'tags']),
 			];
 		}
@@ -560,6 +562,9 @@ class group extends common
 					continue;
 			}
 
+			// Les groupes sous forme de chaine
+			$group = $this->getData(['user', $userId, 'group']);
+			$group = is_null($group) === false ? implode('', array_map(fn($valeur) => sprintf('<span class="groupLabel">%s</span>', $this->getData(['group', htmlspecialchars($valeur)])), $group)) : '';
 			// Construction du tableau
 			self::$groupUsers[] = [
 				template::checkbox($userId, true, '', [
@@ -568,6 +573,7 @@ class group extends common
 				]),
 				$this->getData(['user', $userId, 'firstname']),
 				$this->getData(['user', $userId, 'lastname']),
+				$group,
 				$this->getData(['user', $userId, 'tags']),
 			];
 		}
