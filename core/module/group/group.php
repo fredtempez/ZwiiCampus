@@ -87,14 +87,14 @@ class group extends common
 						'help' => 'Éditer',
 						'fontSize' => '1.2em',
 					])
-						. template::ico('trash', [
-							'id' => 'groupDelete' . $groupId,
-							'class' => 'groupDelete icoTextRed',
-							'href' => helper::baseUrl() . 'group/delete/' . $groupId,
-							'margin' => 'left',
-							'help' => 'Supprimer',
-							'fontSize' => '1.2em',
-						])
+					. template::ico('trash', [
+						'id' => 'groupDelete' . $groupId,
+						'class' => 'groupDelete icoTextRed',
+						'href' => helper::baseUrl() . 'group/delete/' . $groupId,
+						'margin' => 'left',
+						'help' => 'Supprimer',
+						'fontSize' => '1.2em',
+					])
 				];
 			}
 			// Valeurs en sortie
@@ -229,7 +229,7 @@ class group extends common
 				foreach ($usersGroups as $itemKey => $item) {
 					if ($item === $groupId) {
 						// Pas du suppression, le groupe est affecté
-						$message = helper::translate('Un groupe affecté ne peut pas être effacé');
+						$message = helper::translate('Un groupe affecté ne peut pas être supprimé !');
 						$state = false;
 						break;
 					}
