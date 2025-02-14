@@ -39,6 +39,7 @@ $(document).ready((function () {
         },
         locale: 'fr',
         stateSave: true,
+        info: false,
         "lengthMenu": [[10, 25, 50, 100, 299,  -1], [10, 25, 50, 100, 200, "Tout"]],
         "columnDefs": [
             {

@@ -13,18 +13,18 @@
 
 $(document).ready((function () {
 
-    $('tr').click(function(){
+    $('tr').click(function () {
         // Cochez ou décochez la case à cocher dans cette ligne
-        $(this).find('input[type="checkbox"]').prop('checked', function(i, val){
+        $(this).find('input[type="checkbox"]').prop('checked', function (i, val) {
             return !val; // Inverse l'état actuel de la case à cocher
         });
     });
 
-    $('#courseUserAddSelectAll').on('click', function() {
+    $('#courseUserAddSelectAll').on('click', function () {
         $('.checkboxSelect').prop('checked', true);
         saveCheckboxState();
     });
-    $('#courseUserAddSelectNone').on('click', function() {
+    $('#courseUserAddSelectNone').on('click', function () {
         $('.checkboxSelect').prop('checked', false);
         saveCheckboxState();
     });
@@ -40,7 +40,8 @@ $(document).ready((function () {
         },
         locale: 'fr',
         stateSave: true,
-        "lengthMenu": [[10, 25, 50, 100, 299,  -1], [10, 25, 50, 100, 200, "Tout"]],
+        info: false,
+        "lengthMenu": [[10, 25, 50, 100, 299, -1], [10, 25, 50, 100, 200, "Tout"]],
         "columnDefs": [
             {
                 target: 0,
@@ -89,7 +90,7 @@ $(document).ready((function () {
     // Function to restore checkbox state
     function restoreCheckboxState() {
         var checkboxState = JSON.parse(localStorage.getItem('checkboxState')) || {};
-       // console.log(checkboxState);
+        // console.log(checkboxState);
         for (var checkboxId in checkboxState) {
             if (checkboxState.hasOwnProperty(checkboxId)) {
                 var checked = checkboxState[checkboxId];

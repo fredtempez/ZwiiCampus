@@ -78,7 +78,7 @@ class group extends common
 				self::$groups[] = [
 					$groupTitle,
 					$suscribers === 0 ? '<a href="' . helper::baseUrl() . 'group/usersAdd/' . $groupId . '">' . $message . '</a>'
-					: '<a href="' . helper::baseUrl() . 'group/users/' . $groupId . '">' . $message . '</a>',
+						: '<a href="' . helper::baseUrl() . 'group/users/' . $groupId . '">' . $message . '</a>',
 					template::ico('pencil',  [
 						'id' => 'groupEdit' . $groupId,
 						'href' => helper::baseUrl() . 'group/edit/' . $groupId,
@@ -86,15 +86,15 @@ class group extends common
 						'margin' => 'right',
 						'help' => 'Éditer',
 						'fontSize' => '1.2em',
-					]) 
-					. template::ico('trash', [
-						'id' => 'groupDelete' . $groupId,
-						'class' => 'groupDelete icoTextRed',
-						'href' => helper::baseUrl() . 'group/delete/' . $groupId,
-						'margin' => 'left',
-						'help' => 'Supprimer',
-						'fontSize' => '1.2em',
 					])
+						. template::ico('trash', [
+							'id' => 'groupDelete' . $groupId,
+							'class' => 'groupDelete icoTextRed',
+							'href' => helper::baseUrl() . 'group/delete/' . $groupId,
+							'margin' => 'left',
+							'help' => 'Supprimer',
+							'fontSize' => '1.2em',
+						])
 				];
 			}
 			// Valeurs en sortie
@@ -238,7 +238,7 @@ class group extends common
 
 			// Supprime le groupe orphelin
 			if ($state === true) {
-				$this->deleteData(['group', $groupId]);				
+				$this->deleteData(['group', $groupId]);
 			}
 
 			// Valeurs en sortie
@@ -411,7 +411,7 @@ class group extends common
 
 		// Valeurs en sortie
 		$this->addOutput([
-			'title' => sprintf(helper::translate('Inscription dans le groupe %s'), $this->getData(['group', $groupId]) ),
+			'title' => sprintf(helper::translate('Inscription dans le groupe %s'), $this->getData(['group', $groupId])),
 			'view' => 'users',
 			'vendor' => [
 				'datatables'
@@ -463,14 +463,15 @@ class group extends common
 			}
 			// Sauvegarde la base manuellement
 			if ($flag) {
-				$this->saveDB('user'); 
+				$this->saveDB('user');
+
+				// Valeurs en sortie
+				$this->addOutput([
+					'redirect' => helper::baseUrl() . 'group',
+					'notification' => helper::translate('Inscriptions ajoutées'),
+					'state' => true
+				]);
 			}
-			// Valeurs en sortie
-			$this->addOutput([
-				'redirect' => helper::baseUrl() . 'group',
-				'notification' => helper::translate('Inscriptions ajoutées'),
-				'state' => true
-			]);
 		}
 
 		// Liste des rôles et des profils
@@ -515,8 +516,10 @@ class group extends common
 		foreach ($users as $userId => $userValue) {
 
 			// Supprime les inscrits
-			if (is_array($this->getData(['user', $userId, 'group']))
-			&& in_array($groupId, $this->getData(['user', $userId, 'group']))) {
+			if (
+				is_array($this->getData(['user', $userId, 'group']))
+				&& in_array($groupId, $this->getData(['user', $userId, 'group']))
+			) {
 				continue;
 			}
 
@@ -580,7 +583,7 @@ class group extends common
 
 		// Valeurs en sortie
 		$this->addOutput([
-			'title' => sprintf(helper::translate('Inscrire dans le groupe %s'), $this->getData(['group', $groupId]) ),
+			'title' => sprintf(helper::translate('Inscrire dans le groupe %s'), $this->getData(['group', $groupId])),
 			'view' => 'usersAdd',
 			'vendor' => [
 				'datatables'
