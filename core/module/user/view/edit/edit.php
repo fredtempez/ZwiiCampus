@@ -86,7 +86,7 @@
 </div>
 <div class="row">
 	<div class="col6">
-		<div class="block">7
+		<div class="block">
 			<h4>
 				<?php echo helper::translate('Authentification'); ?>
 			</h4>
@@ -185,4 +185,16 @@
 		</div>
 	</div>
 </div>
-<?php echo template::formClose(); ?>
+<div class="block">
+	<h4>
+		<?php echo helper::translate('Groupes'); ?>
+	</h4>
+	<div class="row">
+		<?php foreach (user::$userGroups as $groupId):?>
+			<div class="col2">
+			<?php echo ($groupId); ?>
+			</div>
+		<?php endforeach; ?>
+	</div>
+</div>
+</div <?php echo template::formClose(); ?>
