@@ -20,13 +20,13 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col6">
+	<div class="col12">
 		<div class="block">
 			<h4>
 				<?php echo helper::translate('Identité'); ?>
 			</h4>
 			<div class="row">
-				<div class="col6">
+				<div class="col4">
 					<?php echo template::text('userEditFirstname', [
 						'autocomplete' => 'off',
 						'disabled' => $this->getUser('role') > self::ROLE_EDITOR ? false : true,
@@ -34,7 +34,7 @@
 						'value' => $this->getData(['user', $this->getUrl(2), 'firstname'])
 					]); ?>
 				</div>
-				<div class="col6">
+				<div class="col4">
 					<?php echo template::text('userEditLastname', [
 						'autocomplete' => 'off',
 						'disabled' => $this->getUser('role') > self::ROLE_EDITOR ? false : true,
@@ -42,31 +42,29 @@
 						'value' => $this->getData(['user', $this->getUrl(2), 'lastname'])
 					]); ?>
 				</div>
-			</div>
-			<div class="row">
-				<div class="col6">
-					<?php echo template::text('userEditPseudo', [
-						'autocomplete' => 'off',
-						'label' => 'Pseudo',
-						'value' => $this->getData(['user', $this->getUrl(2), 'pseudo'])
-					]); ?>
-				</div>
-				<div class="col6">
-					<?php echo template::select('userEditSignature', user::$signature, [
-						'label' => 'Signature',
-						'selected' => $this->getData(['user', $this->getUrl(2), 'signature'])
-					]); ?>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col6">
+				<div class="col4">
 					<?php echo template::mail('userEditMail', [
 						'autocomplete' => 'off',
 						'label' => 'Adresse électronique',
 						'value' => $this->getData(['user', $this->getUrl(2), 'mail'])
 					]); ?>
 				</div>
-				<div class="col6">
+			</div>
+			<div class="row">
+				<div class="col4">
+					<?php echo template::text('userEditPseudo', [
+						'autocomplete' => 'off',
+						'label' => 'Pseudo',
+						'value' => $this->getData(['user', $this->getUrl(2), 'pseudo'])
+					]); ?>
+				</div>
+				<div class="col4">
+					<?php echo template::select('userEditSignature', user::$signature, [
+						'label' => 'Signature',
+						'selected' => $this->getData(['user', $this->getUrl(2), 'signature'])
+					]); ?>
+				</div>
+				<div class="col4">
 					<?php echo template::select('userEditLanguage', user::$languagesInstalled, [
 						'label' => 'Langue',
 						'selected' => $this->getData(['user', $this->getUrl(2), 'language'])
@@ -75,7 +73,7 @@
 			</div>
 			<div class="row">
 				<div class="col12">
-				<?php echo template::text('userEditTags', [
+					<?php echo template::text('userEditTags', [
 						'label' => 'Étiquettes',
 						'readonly' => $this->getUser('role') > self::ROLE_EDITOR ? false : true,
 						'value' => $this->getData(['user', $this->getUrl(2), 'tags']),
@@ -85,6 +83,8 @@
 			</div>
 		</div>
 	</div>
+</div>
+<div class="row">
 	<div class="col6">
 		<div class="block">
 			<h4>
@@ -116,9 +116,7 @@
 			]); ?>
 		</div>
 	</div>
-</div>
-<div class="row">
-	<div class="col6 offset3">
+	<div class="col6">
 		<div class="block">
 			<h4>
 				<?php echo helper::translate('Permissions'); ?>
