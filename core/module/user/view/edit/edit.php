@@ -86,7 +86,7 @@
 </div>
 <div class="row">
 	<div class="col6">
-		<div class="block">
+		<div class="block">7
 			<h4>
 				<?php echo helper::translate('Authentification'); ?>
 			</h4>
