@@ -119,6 +119,13 @@ class user extends common
 				$profil = $this->getInput('userAddProfil' . $role, helper::FILTER_INT);
 			}
 
+			// Groupes
+			foreach ($this->getData(['group']) as $id => $title) {
+				if ($this->getInput('userAddGroup' . $id, helper::FILTER_BOOLEAN)) {
+					$groups[] = $id;
+				}
+			}
+
 			// Stockage des données
 			$this->setData([
 				'user',
@@ -140,6 +147,7 @@ class user extends common
 					'accessCsrf' => null,
 					'language' => $this->getInput('userAddLanguage', helper::FILTER_STRING_SHORT),
 					'tags' => $this->getInput('userAddTags', helper::FILTER_STRING_SHORT),
+					'group' => $groups,
 				]
 			]);
 
@@ -191,7 +199,10 @@ class user extends common
 				self::$userProfilsComments[$profilId][$key] = $profilData[$key]['name'] . ' : ' . $profilData[$key]['comment'];
 			}
 		}
-
+		// listes des groupes
+		foreach ($this->getData(['group']) as $id => $title) {
+			self::$userGroups[] = template::checkbox('userAddGroup' . $id, $id, $title);
+		}
 
 		// Valeurs en sortie
 		$this->addOutput([
@@ -487,6 +498,12 @@ class user extends common
 					if ($newGroup === 1 || $newGroup === 2) {
 						$profil = $this->getInput('userEditProfil' . $newGroup, helper::FILTER_INT);
 					}
+					// Groupes
+					foreach ($this->getData(['group']) as $id => $title) {
+						if ($this->getInput('userEditGroup' . $id, helper::FILTER_BOOLEAN)) {
+							$groups[] = $id;
+						}
+					}
 					// Modifie l'utilisateur
 					$this->setData([
 						'user',
@@ -510,6 +527,7 @@ class user extends common
 							'language' => $this->getInput('userEditLanguage', helper::FILTER_STRING_SHORT),
 							'tags' => $this->getInput('userEditTags', helper::FILTER_STRING_SHORT),
 							'authKey' => $this->getData(['user', $this->getUrl(2), 'authKey']),
+							'group' => $groups,
 						]
 					]);
 					// Redirection spécifique si l'utilisateur change son mot de passe
@@ -559,9 +577,9 @@ class user extends common
 				// listes des groupes
 				foreach ($this->getData(['group']) as $id => $title) {
 					self::$userGroups[] = template::checkbox('userEditGroup' . $id, $id, $title, [
-											'checked' => is_null($this->getData(['user', $this->getUrl(2), 'group'])) === false ?
-												in_array($id, $this->getData(['user', $this->getUrl(2), 'group']))
-												: '',
+						'checked' => is_null($this->getData(['user', $this->getUrl(2), 'group'])) === false ?
+							in_array($id, $this->getData(['user', $this->getUrl(2), 'group']))
+							: '',
 					]);
 				}
 
@@ -1172,12 +1190,12 @@ class user extends common
 
 		// Exclure les espaces des cours
 		/*
-																					  foreach (array_keys($this->getData(['course'])) as $courseId) {
-																						  self::$sharePath = array_filter(self::$sharePath, function ($key) use ($courseId) {
-																							  return strpos($key, $courseId) === false;
-																						  });
-																					  }
-																					  */
+																											  foreach (array_keys($this->getData(['course'])) as $courseId) {
+																												  self::$sharePath = array_filter(self::$sharePath, function ($key) use ($courseId) {
+																													  return strpos($key, $courseId) === false;
+																												  });
+																											  }
+																											  */
 
 		self::$sharePath = array_flip(self::$sharePath);
 		self::$sharePath = array_merge(['none' => 'Aucun Accès'], self::$sharePath);

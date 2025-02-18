@@ -143,4 +143,17 @@
 		</div>
 	</div>
 </div>
+<div class="block">
+	<h4>
+		<?php echo helper::translate('Groupes'); ?>
+	</h4>
+	<div class="row">
+		<?php foreach (user::$userGroups as $groupId):?>
+			<div class="col2">
+			<?php echo ($groupId); ?>
+			</div>
+		<?php endforeach; ?>
+	</div>
+</div>
+</div <?php echo template::formClose(); ?>
 <?php echo template::formClose(); ?>
