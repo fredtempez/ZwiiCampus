@@ -76,6 +76,7 @@ class group extends common
 				}
 				$message = $suscribers === 0 ? helper::translate('Inscrire des participants') : sprintf(helper::translate('%s inscrits'), $suscribers);
 				self::$groups[] = [
+					$groupId,
 					$groupTitle,
 					$suscribers === 0 ? '<a href="' . helper::baseUrl() . 'group/usersAdd/' . $groupId . '">' . $message . '</a>'
 						: '<a href="' . helper::baseUrl() . 'group/users/' . $groupId . '">' . $message . '</a>',
