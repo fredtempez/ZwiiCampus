@@ -374,6 +374,8 @@ class core extends common
 			$colors = helper::colorVariants($this->getData(['admin', 'backgroundColorButtonGrey']));
 			$css .= '.button.buttonGrey {background-color: ' . $colors['normal'] . ';color: ' . $colors['text'] . ';}.button.buttonGrey:hover {background-color:' . $colors['darken'] . ';color:' . $colors['text'] . ';}.button.buttonGrey:active {background-color:' . $colors['veryDarken'] . ';color:' . $colors['text'] . ';}';
 			$css .= '.icoTextGrey {color:' . $colors['normal'] . ';}';
+			$css .= '.groupTitleLabel{background-color: ' . $colors['normal'] . ';color: ' . $colors['text'] . ';border-color:' . $colors['darken'] . ';}' ;
+			$css .= '.groupTitleLabel:hover{background-color: ' . $colors['veryDarken'] . ';}';
 			$colors = helper::colorVariants($this->getData(['admin', 'backgroundColorButtonRed']));
 			$css .= '.button.buttonRed {background-color: ' . $colors['normal'] . ';color: ' . $colors['text'] . ';}.button.buttonRed:hover {background-color:' . $colors['darken'] . ';color:' . $colors['text'] . ';}.button.buttonRed:active {background-color:' . $colors['veryDarken'] . ';color:' . $colors['text'] . ';}';
 			$css .= '.icoTextRed {color:' . $colors['normal'] . ';}';

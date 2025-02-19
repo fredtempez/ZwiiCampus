@@ -388,7 +388,7 @@ class group extends common
 			// Construction du tableau
 			// Les groupes sous forme de chaine
 			$group = $this->getData(['user', $userId, 'group']);
-			$group = is_null($group) === false ? implode('', array_map(fn($valeur) => sprintf('<span class="groupLabel">%s</span>', $this->getData(['group', htmlspecialchars($valeur)])), $group)) : '';
+			$group = is_null($group) === false ? implode('', array_map(fn($valeur) => sprintf('<span class="groupTitleLabel">%s</span>', $this->getData(['group', htmlspecialchars($valeur)])), $group)) : '';
 			self::$groupUsers[] = [
 				template::checkbox($userId, true, '', [
 					'class' => 'checkboxSelect',
@@ -409,7 +409,6 @@ class group extends common
 				self::$groupRoles[$roleId] = self::$groupRoles[$roleId] . ' (' . $profils[$roleId] . ')';
 			}
 		}
-
 
 		// Valeurs en sortie
 		$this->addOutput([
@@ -564,7 +563,7 @@ class group extends common
 
 			// Les groupes sous forme de chaine
 			$group = $this->getData(['user', $userId, 'group']);
-			$group = is_null($group) === false ? implode('', array_map(fn($valeur) => sprintf('<span class="groupLabel">%s</span>', $this->getData(['group', htmlspecialchars($valeur)])), $group)) : '';
+			$group = is_null($group) === false ? implode('', array_map(fn($valeur) => sprintf('<span class="groupTitleLabel">%s</span>', $this->getData(['group', htmlspecialchars($valeur)])), $group)) : '';
 			// Construction du tableau
 			self::$groupUsers[] = [
 				template::checkbox($userId, true, '', [
