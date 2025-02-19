@@ -121,4 +121,36 @@
         </div>
     </div>
 </div>
+<div class="row">
+    <div class="col12">
+        <div class="block">
+            <h4>
+                <?php echo helper::translate('Restriction de groupe'); ?>
+            </h4>
+            <div class="row">
+                <?php foreach (course::$userGroups as $groupId): ?>
+                    <div class="col2">
+                        <?php echo ($groupId); ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col12">
+        <div class="block">
+            <h4>
+                <?php echo helper::translate('Restriction de groupe'); ?>
+            </h4>
+            <div class="row">
+                <?php foreach (course::$userGroups as $groupId): ?>
+                    <div class="col2">
+                        <?php echo ($groupId); ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </div>
+</div>
 <?php echo template::formClose(); ?>
