@@ -142,6 +142,11 @@
                 <?php echo helper::translate('Restriction de groupe'); ?>
             </h4>
             <div class="row">
+                <div class="col12">
+                    <?php echo template::label('courseEditGroups', 'Groupes autorisés à consulter cet espace :'); ?>
+                </div>
+            </div>
+            <div class="row">
                 <?php foreach (course::$userGroups as $groupId): ?>
                     <div class="col2">
                         <?php echo ($groupId); ?>
