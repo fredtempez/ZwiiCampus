@@ -145,7 +145,9 @@
             </h4>
             <div class="row">
                 <div class="col12">
-                    <?php echo template::label('courseAddGroups', 'Cochez les groupes dont l\'accès est restreint :'); ?>
+                    <?php echo template::label('courseManageGroups', 'Accès limité aux groupes cochés :', [
+                        'help' => 'Pas de restriction si aucun groupe n\'est cochée, sinon accès limité à un ou aux groupes cochés.',
+                    ]); ?>
                 </div>
             </div>
             <div class="row">
