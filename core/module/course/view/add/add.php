@@ -72,24 +72,24 @@
                         'label' => 'Modalité',
                     ]); ?>
                 </div>
-                <div class="col2">
+                <div class="col2 periodSetup">
                     <?php echo template::date('courseOpeningDate', [
                         'type' => 'datetime-local',
                         'label' => 'Ouvre le',
                     ]); ?>
                 </div>
-                <div class="col2">
+                <div class="col2 periodSetup">
                     <?php echo template::date('courseClosingDate', [
                         'type' => 'datetime-local',
                         'label' => 'Ferme le',
                     ]); ?>
                 </div>
-                <div class="col3 verticalAlignBottom">
+                <div class="col3 periodSetup">
                     <?php echo template::checkbox('courseAddEnrolmentLimit', true, 'Date limite d\'inscription', [
                         'help' => 'Ne s\'applique pas à l\'inscription anonyme',
                     ]); ?>
                 </div>
-                <div class="col2">
+                <div class="col2 periodSetup">
                     <?php echo template::date('courseAddEnrolmentLimitDate', [
                         'type' => 'datetime-local',
                         'label' => 'Jusqu\'au',
@@ -113,27 +113,11 @@
                 </div>
                 <div class="col4">
                     <?php echo template::text('courseAddEnrolmentKey', [
-                        'label' => 'Nécessite une clé',
+                        'label' => 'Clé',
                     ]); ?>
                 </div>
             </div>
 
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col12">
-        <div class="block">
-            <h4>
-                <?php echo helper::translate('Restriction de groupe'); ?>
-            </h4>
-            <div class="row">
-                <?php foreach (course::$userGroups as $groupId): ?>
-                    <div class="col2">
-                        <?php echo ($groupId); ?>
-                    </div>
-                <?php endforeach; ?>
-            </div>
         </div>
     </div>
 </div>

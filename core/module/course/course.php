@@ -254,11 +254,7 @@ class course extends common
 
         // listes des groupes
         foreach ($this->getData(['group']) as $id => $title) {
-            self::$userGroups[] = template::checkbox('courseAddGroup' . $id, $id, $title, [
-                'checked' => is_null($this->getData(['course', $courseId, 'group'])) === false ?
-                    in_array($id, $this->getData(['course', $courseId, 'group']))
-                    : '',
-            ]);
+            self::$userGroups[] = template::checkbox('courseAddGroup' . $id, $id, $title);
         }
 
         // Valeurs en sortie

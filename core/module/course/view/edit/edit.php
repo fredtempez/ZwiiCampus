@@ -80,27 +80,27 @@
                         'selected' => $this->getdata(['course', $this->getUrl(2), 'access'])
                     ]); ?>
                 </div>
-                <div class="col2">
+                <div class="col2 periodSetup">
                     <?php echo template::date('courseOpeningDate', [
                         'type' => 'datetime-local',
                         'label' => 'Ouvre le',
                         'value' => is_null($this->getdata(['course', $this->getUrl(2), 'openingDate'])) ? '' : floor($this->getdata(['course', $this->getUrl(2), 'openingDate']) / 60) * 60
                     ]); ?>
                 </div>
-                <div class="col2">
+                <div class="col2 periodSetup">
                     <?php echo template::date('courseClosingDate', [
                         'type' => 'datetime-local',
                         'label' => 'Ferme le',
                         'value' => is_null($this->getdata(['course', $this->getUrl(2), 'closingDate'])) ? '' : floor($this->getdata(['course', $this->getUrl(2), 'closingDate']) / 60) * 60
                     ]); ?>
                 </div>
-                <div class="col3 verticalAlignBottom">
+                <div class="col3 periodSetup">
                     <?php echo template::checkbox('courseEditEnrolmentLimit', true, 'Date limite d\'inscription', [
                         'checked' => $this->getdata(['course', $this->getUrl(2), 'limitEnrolment']),
                         'help' => 'Ne s\'applique pas à l\'inscription anonyme',
                     ]); ?>
                 </div>
-                <div class="col2">
+                <div class="col2 periodSetup">
                     <?php echo template::date('courseEditEnrolmentLimitDate', [
                         'type' => 'datetime-local',
                         'label' => 'Jusqu\'au',
@@ -126,7 +126,7 @@
                 </div>
                 <div class="col4">
                     <?php echo template::text('courseEditEnrolmentKey', [
-                        'label' => 'Nécessite une clé',
+                        'label' => 'Clé',
                         'value' => $this->getdata(['course', $this->getUrl(2), 'enrolmentKey'])
                     ]); ?>
                 </div>
