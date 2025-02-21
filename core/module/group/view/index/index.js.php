@@ -19,4 +19,22 @@ $(document).ready((function () {
             $(location).attr("href", _this.attr("href"))
         }))
     }));
+
+    var table = $('#dataTables').DataTable({
+        language: {
+            url: 'core/vendor/datatables/french.json'
+        },
+        locale: 'fr',
+        stateSave: true,
+        info: false,
+        "lengthMenu": [[10, 25, 50,  -1], [10, 25, 50, "Tout"]],
+        "columnDefs": [
+            {
+                target: 3,
+                orderable: false,
+                searchable: false,
+            }
+        ]
+    });
+
 }));

@@ -101,7 +101,10 @@ class group extends common
 			// Valeurs en sortie
 			$this->addOutput([
 				'title' => helper::translate('Groupes'),
-				'view' => 'index'
+				'view' => 'index',
+				'vendor' => [
+					'datatables'
+				]
 			]);
 		}
 	}
