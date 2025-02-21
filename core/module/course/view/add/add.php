@@ -145,7 +145,7 @@
             </h4>
             <div class="row">
                 <div class="col12">
-                    <?php echo template::label('courseAddGroups', 'Groupes autorisés à consulter cet espace :'); ?>
+                    <?php echo template::label('courseAddGroups', 'Cochez les groupes dont l\'accès est restreint :'); ?>
                 </div>
             </div>
             <div class="row">
