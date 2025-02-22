@@ -23,6 +23,8 @@ class group extends common
 		'edit' => self::ROLE_EDITOR,
 		'usersAdd' => self::ROLE_EDITOR,
 		'users' => self::ROLE_EDITOR,
+		'import' => self::ROLE_EDITOR,
+		'template' => self::ROLE_EDITOR,
 	];
 
 	public static $groups = [];
@@ -79,8 +81,8 @@ class group extends common
 					$groupId,
 					$groupTitle,
 					$suscribers === 0 ? '<a href="' . helper::baseUrl() . 'group/usersAdd/' . $groupId . '">' . $message . '</a>'
-						: '<a href="' . helper::baseUrl() . 'group/users/' . $groupId . '">' . $message . '</a>',
-					template::ico('pencil',  [
+					: '<a href="' . helper::baseUrl() . 'group/users/' . $groupId . '">' . $message . '</a>',
+					template::ico('pencil', [
 						'id' => 'groupEdit' . $groupId,
 						'href' => helper::baseUrl() . 'group/edit/' . $groupId,
 						'value' => template::ico('pencil'),
@@ -598,6 +600,117 @@ class group extends common
 				'datatables'
 			]
 		]);
+	}
+
+	/**
+	 * Création et affectation de groupes par importation
+	 */
+	public function import()
+	{
+		// Soumission du formulaire
+		$notification = '';
+		$success = true;
+		if (
+			$this->getUser('permission', __CLASS__, __FUNCTION__) === true &&
+			$this->isPost()
+		) {
+			// Lecture du CSV et construction du tableau
+			$file = $this->getInput('groupImportCSVFile', helper::FILTER_STRING_SHORT, true);
+			$filePath = self::FILE_DIR . 'source/' . $file;
+			if ($file and file_exists($filePath)) {
+				// Analyse et extraction du CSV
+				$rows = array_map(function ($row) {
+					return str_getcsv($row, $this->getInput('groupImportSeparator'));
+				}, file($filePath));
+				$header = array_shift($rows);
+				$csv = array();
+				foreach ($rows as $row) {
+					$csv[] = array_combine($header, $row);
+				}
+
+				// Initialisation des variables de retour
+				$notification = helper::translate('Importation effectuée');
+				$success = true;
+
+				// Traitement des données
+				foreach ($csv as $item) {
+					// Données valides
+					if (
+						array_key_exists('id_user', $item)
+						and array_key_exists('id_group', $item)
+						and isset($item['id_user'])
+						and isset($item['id_group'])
+					) {
+						// Les données sont invalides, on passe à la ligne suivante
+
+						$userId = helper::filter($item['id_user'], helper::FILTER_ID);
+						var_dump($this->getData(['user', $userId]));
+
+						// Vérifier la validité du groupe sinon  renseigner le tableau groupe invalide
+						if (
+							$this->getData(['group', $item['id_group']]) === NULL )
+							{
+								// 
+						}
+						// Identifiant utilisateur non valide
+						// Vérifier si l'utilisateur existe et si l'utilisateur dispose d'une groupe de groupe sinon la créer.
+						// Si l'utilisateur n'existe pas, on passe à la ligne suivante mais on rensiegne le tableau de sortie.
+							|| $this->getData(['user', helper::filter($item['id_user'], helper::FILTER_ID)]) === NULL
+						) {
+							echo "sortie";
+							//continue;
+						}
+
+						// Les données sont valides, on ajoute le groupe à l'utilisateur si celui-ci n'est pas déjà inscrit
+						if (
+							$this->getData(['user', $item['id_user'], 'group'])
+							&& in_array($item['id_group'], $this->getData(['user', $item['id_user'], 'group'])) === false
+						) {
+							$groups = $this->getData(['user', $item['id_user'], 'group']);
+							$groups[] = $item['id_group'];
+							$this->setData(['user', $item['id_user'], 'group', $groups], false);
+							echo 'Utilisateur ' . $item['id_user'] . ' inscrit dans le groupe ' . $item['id_group'] . '<br>';
+						}
+					}
+				}
+				die();
+				// Sauvegarde la base manuellement
+				$this->saveDB('user');
+				if (empty(self::$groups)) {
+					$notification = helper::translate('Rien à importer, erreur de format ou fichier incorrect');
+					$success = false;
+				}
+			} else {
+				$notification = helper::translate('Erreur de lecture, vérifiez les permissions');
+				$success = false;
+			}
+		}
+		// Valeurs en sortie
+		$this->addOutput([
+			'title' => 'Création et affectation de groupes par importation',
+			'view' => 'import',
+			'notification' => $notification,
+			'state' => $success
+		]);
+	}
+
+	/** 
+	 * Télécharge un modèle
+	 */
+	public function template()
+	{
+		if ($this->getUser('permission', __CLASS__, __FUNCTION__) === true) {
+			$file = 'template.csv';
+			$path = 'core/module/group/ressource/';
+			// Téléchargement du CSV
+			header('Content-Description: File Transfer');
+			header('Content-Type: application/octet-stream');
+			header('Content-Transfer-Encoding: binary');
+			header('Content-Disposition: attachment; filename="' . $file . '"');
+			header('Content-Length: ' . filesize($path . $file));
+			readfile($path . $file);
+			exit();
+		}
 	}
 
 	/**

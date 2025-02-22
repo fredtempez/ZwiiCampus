@@ -6,7 +6,14 @@
 			'value' => template::ico('home')
 		]); ?>
 	</div>
-	<div class="col1 offset10">
+	<div class="col1 offset9">
+		<?php echo template::button('groupImport', [
+			'href' =>helper::baseUrl() . 'group/import',
+			'value' => template::ico('download-cloud'),
+			'help' => 'Créer et affecter des groupes par importation de fichier CSV'
+		]); ?>
+	</div>	
+	<div class="col1">
 		<?php if ($this->getUser('permission', 'group', 'add') === true): ?>
 			<?php echo template::button('groupAdd', [
 				'class' => 'buttonGreen',
