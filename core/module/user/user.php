@@ -583,6 +583,7 @@ class user extends common
 						'checked' => is_null($this->getData(['user', $this->getUrl(2), 'group'])) === false ?
 							in_array($id, $this->getData(['user', $this->getUrl(2), 'group']))
 							: '',
+						'disabled' => $this->getUser('role') === self::ROLE_MEMBER
 					]);
 				}
 
