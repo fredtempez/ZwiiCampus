@@ -402,8 +402,7 @@ class group extends common
 					'class' => 'checkboxSelect',
 					'checked' => false,
 				]),
-				$this->getData(['user', $userId, 'firstname']),
-				$this->getData(['user', $userId, 'lastname']),
+				$this->getData(['user', $userId, 'lastname']) . ' ' . $this->getData(['user', $userId, 'firstname']),
 				$group,
 				$this->getData(['user', $userId, 'tags']),
 			];
@@ -578,8 +577,7 @@ class group extends common
 					'class' => 'checkboxSelect',
 					'checked' => false,
 				]),
-				$this->getData(['user', $userId, 'firstname']),
-				$this->getData(['user', $userId, 'lastname']),
+				$this->getData(['user', $userId, 'lastname']) . ' ' . $this->getData(['user', $userId, 'firstname']),
 				$group,
 				$this->getData(['user', $userId, 'tags']),
 			];
@@ -686,7 +684,7 @@ class group extends common
 						}
 
 						// Variables communes
-						$names = $this->getData(['user', $item['id_user'], 'firstname']) . ' ' . $this->getData(['user', $item['id_user'], 'lastname']);
+						$names = $this->getData(['user', $item['id_user'], 'lastname']) . ' ' . $this->getData(['user', $item['id_user'], 'firstname']);
 						$group = $this->getData(['user', $userId, 'group']);
 						$groups = implode('', array_map(fn($valeur) => sprintf('<span class="groupTitleLabel">%s</span>', $this->getData(['group', htmlspecialchars($valeur)])), $group));
 
