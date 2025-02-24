@@ -54,7 +54,9 @@ class group extends common
 			]);
 		} else {
 			// Les groupes déclarés
-			$usersGroups = array_column($this->getData(['user']), 'group');
+			$usersGroups = array_filter(array_column($this->getData(['user']), 'group'), function ($group) {
+				return !is_null($group);
+			});
 
 			// Fusionner les sous-tableaux
 			$usersGroups = array_merge(...$usersGroups);
@@ -81,7 +83,7 @@ class group extends common
 					$groupId,
 					$groupTitle,
 					$suscribers === 0 ? '<a href="' . helper::baseUrl() . 'group/usersAdd/' . $groupId . '">' . $message . '</a>'
-					: '<a href="' . helper::baseUrl() . 'group/users/' . $groupId . '">' . $message . '</a>',
+						: '<a href="' . helper::baseUrl() . 'group/users/' . $groupId . '">' . $message . '</a>',
 					template::ico('pencil', [
 						'id' => 'groupEdit' . $groupId,
 						'href' => helper::baseUrl() . 'group/edit/' . $groupId,
@@ -90,14 +92,14 @@ class group extends common
 						'help' => 'Éditer',
 						'fontSize' => '1.2em',
 					])
-					. template::ico('trash', [
-						'id' => 'groupDelete' . $groupId,
-						'class' => 'groupDelete icoTextRed',
-						'href' => helper::baseUrl() . 'group/delete/' . $groupId,
-						'margin' => 'left',
-						'help' => 'Supprimer',
-						'fontSize' => '1.2em',
-					])
+						. template::ico('trash', [
+							'id' => 'groupDelete' . $groupId,
+							'class' => 'groupDelete icoTextRed',
+							'href' => helper::baseUrl() . 'group/delete/' . $groupId,
+							'margin' => 'left',
+							'help' => 'Supprimer',
+							'fontSize' => '1.2em',
+						])
 				];
 			}
 			// Valeurs en sortie
@@ -634,46 +636,85 @@ class group extends common
 
 				// Traitement des données
 				foreach ($csv as $item) {
+
+					$userId = $item['id_user'];
+					$groupId = $item['id_group'];
+					$error = false;
+
 					// Données valides
 					if (
 						array_key_exists('id_user', $item)
 						and array_key_exists('id_group', $item)
-						and isset($item['id_user'])
-						and isset($item['id_group'])
+						and isset($userId)
+						and isset($groupId)
 					) {
-						// Les données sont invalides, on passe à la ligne suivante
+// var_dump($userId);
 
-						$userId = helper::filter($item['id_user'], helper::FILTER_ID);
-						var_dump($this->getData(['user', $userId]));
-
-						// Vérifier la validité du groupe sinon  renseigner le tableau groupe invalide
+						// Si l'utilisateur n'existe pas, on passe à la ligne suivante mais on renseigne le tableau de sortie.
 						if (
-							$this->getData(['group', $item['id_group']]) === NULL )
-							{
-								// 
-						}
-						// Identifiant utilisateur non valide
-						// Vérifier si l'utilisateur existe et si l'utilisateur dispose d'une groupe de groupe sinon la créer.
-						// Si l'utilisateur n'existe pas, on passe à la ligne suivante mais on rensiegne le tableau de sortie.
-							|| $this->getData(['user', helper::filter($item['id_user'], helper::FILTER_ID)]) === NULL
+							$this->getData(['user', $userId]) === NULL
 						) {
-							echo "sortie";
-							//continue;
+							// Construction du tableau de confirmation
+							self::$groups[] = [
+								$item['id_user'],
+								'',
+								helper::translate('Utilisateur inconnu')
+							];
+							$error = true;
 						}
+
+						// Vérifier la validité du groupe sinon  renseigner le tableau de retour
+						if (
+							$this->getData(['group', $groupId]) === NULL
+						) {
+							// Construction du tableau de confirmation
+							self::$groups[] = [
+								'',
+								$groupId,
+								helper::translate('Groupe inconnu')
+							];
+							$error = true;
+						}
+
+						if ($error) {
+							continue;
+						}
+
+						// Vérifier si l'utilisateur dispose d'une clé "group" sinon la créer COMPATIBILITE
+						if ($this->getData(['user', $userId, 'group']) === NULL) {
+							$this->setData(['user', $userId, 'group', []], false);
+						}
+
+						// Variables communes
+						$names = $this->getData(['user', $item['id_user'], 'firstname']) . ' ' . $this->getData(['user', $item['id_user'], 'lastname']);
+						$group = $this->getData(['user', $userId, 'group']);
+						$groups = implode('', array_map(fn($valeur) => sprintf('<span class="groupTitleLabel">%s</span>', $this->getData(['group', htmlspecialchars($valeur)])), $group));
 
 						// Les données sont valides, on ajoute le groupe à l'utilisateur si celui-ci n'est pas déjà inscrit
 						if (
-							$this->getData(['user', $item['id_user'], 'group'])
-							&& in_array($item['id_group'], $this->getData(['user', $item['id_user'], 'group'])) === false
+							in_array($groupId, $this->getData(['user', $item['id_user'], 'group'])) === false
 						) {
 							$groups = $this->getData(['user', $item['id_user'], 'group']);
-							$groups[] = $item['id_group'];
+							$groups[] = $groupId;
 							$this->setData(['user', $item['id_user'], 'group', $groups], false);
-							echo 'Utilisateur ' . $item['id_user'] . ' inscrit dans le groupe ' . $item['id_group'] . '<br>';
+
+							// Construction du tableau de confirmation
+							self::$groups[] = [
+								$names,
+								$groups,
+								helper::translate('Affectation réussie')
+							];
+						} else {
+							// Construction du tableau de confirmation
+							self::$groups[] = [
+								$names,
+								$groups,
+								helper::translate('Utilisateur déjà inscrit')
+							];
 						}
 					}
 				}
-				die();
+
 				// Sauvegarde la base manuellement
 				$this->saveDB('user');
 				if (empty(self::$groups)) {
@@ -687,7 +728,7 @@ class group extends common
 		}
 		// Valeurs en sortie
 		$this->addOutput([
-			'title' => 'Création et affectation de groupes par importation',
+			'title' => 'Affectation en masse',
 			'view' => 'import',
 			'notification' => $notification,
 			'state' => $success

@@ -24,7 +24,7 @@
     <div class="col12">
         <div class="block">
             <h4>
-                <?php echo helper::translate('Importation de fichier plat CSV'); ?>
+                <?php echo helper::translate('Fichier CSV'); ?>
             </h4>
             <div class="row">
                 <div class="col10">
@@ -45,10 +45,7 @@
 <?php if (group::$groups): ?>
     <div class="row">
         <div class="col12 textAlignCenter">
-            <?php echo template::table([1, 2, 2, 1, 1, 1, 2, 1, 1], group::$groups, ['Id', 'Nom', 'Prénom', 'Rôle', 'Profil', 'Pseudo', 'eMail', 'Étiquettes', '']); ?>
-            <?php echo template::ico('check'); ?> Compte créé |
-            <?php echo template::ico('mail'); ?> Compte créé et notifié |
-            <?php echo template::ico('cancel'); ?> Erreur dans le fichier ou le compte existe.
+            <?php echo template::table([4, 4, 4], group::$groups, ['Utilisateur','Groupe', 'Message']); ?>
         </div>
     </div>
 <?php endif; ?>
