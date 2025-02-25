@@ -23,13 +23,14 @@ $(document).ready((function () {
         $("#userFilterUserForm").submit();
     });
     $.fn.dataTable.moment( 'DD/MM/YYYY' );
-    $('#dataTables').DataTable({
+    var table = $('#dataTables').DataTable({
         language: {
             url: "core/vendor/datatables/french.json"
         },
         locale: 'fr',
         stateSave: true,
-        info: false,
+        info: true,
+        dom: '<"top"lBf>rt<"bottom"p>',
         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Tout"]],
         "columnDefs": [
             {
@@ -60,6 +61,14 @@ $(document).ready((function () {
             }
         ]
     });
+
+    new $.fn.dataTable.Buttons(table, {
+        buttons: [
+            'csv',
+            'pdf'
+        ]
+    });
+
 
     // Injecter la règle CSS pour la colonne cible
     $('<style>')
