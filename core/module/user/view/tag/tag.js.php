@@ -40,7 +40,25 @@ $(document).ready((function () {
         },
         locale: 'fr',
         stateSave: true,
-        info: false,
+        info: true,
+        buttons: [
+            {
+                extend: 'csv',
+                text: 'CSV',
+                titleAttr: 'Exporter les données au format CSV',
+            },
+            {
+                extend: 'copy',
+                text: 'Copier',
+                titleAttr: 'Copier dans le presse papier',
+            }, 
+            {
+                extend: 'print',
+                text: 'Imprimer',
+                titleAttr: 'Imprimer ou générer un PDF',
+            }
+        ],
+        dom: '<"top"lBf>rt<"bottom"p>',
         "lengthMenu": [[10, 25, 50, 100, 200,  -1], [10, 25, 50, 100, 200, "Tout"]],
         "columnDefs": [
             {

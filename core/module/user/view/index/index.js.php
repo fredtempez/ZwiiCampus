@@ -22,7 +22,7 @@ $(document).ready((function () {
     $("#userFilterGroup, #userFilterFirstName, #userFilterLastName").change(function () {
         $("#userFilterUserForm").submit();
     });
-    $.fn.dataTable.moment( 'DD/MM/YYYY' );
+    $.fn.dataTable.moment('DD/MM/YYYY');
     var table = $('#dataTables').DataTable({
         language: {
             url: "core/vendor/datatables/french.json"
@@ -30,6 +30,23 @@ $(document).ready((function () {
         locale: 'fr',
         stateSave: true,
         info: true,
+        buttons: [
+            {
+                extend: 'csv',
+                text: 'CSV',
+                titleAttr: 'Exporter les données au format CSV',
+            },
+            {
+                extend: 'copy',
+                text: 'Copier',
+                titleAttr: 'Copier dans le presse papier',
+            }, 
+            {
+                extend: 'print',
+                text: 'Imprimer',
+                titleAttr: 'Imprimer ou générer un PDF',
+            }
+        ],
         dom: '<"top"lBf>rt<"bottom"p>',
         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Tout"]],
         "columnDefs": [
@@ -62,22 +79,15 @@ $(document).ready((function () {
         ]
     });
 
-    new $.fn.dataTable.Buttons(table, {
-        buttons: [
-            'csv',
-            'pdf'
-        ]
-    });
-
 
     // Injecter la règle CSS pour la colonne cible
     $('<style>')
-    .prop('type', 'text/css')
-    .html(`
+        .prop('type', 'text/css')
+        .html(`
         table.dataTable tbody td:nth-child(5) {
             color: inherit !important; /* Rétablir la couleur du texte */
         }
     `)
-    .appendTo('head');
+        .appendTo('head');
 
 }));
