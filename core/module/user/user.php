@@ -716,6 +716,7 @@ class user extends common
 				$group = is_null($group) === false ? implode('', array_map(fn($valeur) => sprintf('<span class="groupTitleLabel">%s</span>', $this->getData(['group', htmlspecialchars($valeur)])), $group)) : '';
 				// Formatage de la liste
 				self::$users[] = [
+					$userId,
 					// Nom
 					sprintf('%s %s', $userLastNames, $this->getData(['user', $userId, 'firstname'])),
 					// Rôle et Profil

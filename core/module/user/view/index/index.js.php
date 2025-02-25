@@ -33,17 +33,17 @@ $(document).ready((function () {
         buttons: [
             {
                 extend: 'csv',
-                text: 'CSV',
+                text: '<i class="zwiico-code"></i>',
                 titleAttr: 'Exporter les données au format CSV',
             },
             {
                 extend: 'copy',
-                text: 'Copier',
+                text: '<i class="zwiico-docs"></i>',
                 titleAttr: 'Copier dans le presse papier',
             }, 
             {
                 extend: 'print',
-                text: 'Imprimer',
+                text: '<i class="zwiico-print"></i>',
                 titleAttr: 'Imprimer ou générer un PDF',
             }
         ],
@@ -51,7 +51,7 @@ $(document).ready((function () {
         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Tout"]],
         "columnDefs": [
             {
-                target: 4,
+                target: 5,
                 type: 'datetime', // Utilisez 'datetime' pour le tri
                 searchable: false,
                 render: function (data, type, row) {
@@ -67,12 +67,12 @@ $(document).ready((function () {
                 }
             },
             {
-                target: 5,
+                target: 6,
                 orderable: false,
                 searchable: false
             },
             {
-                target: 6,
+                target: 7,
                 orderable: false,
                 searchable: false
             }

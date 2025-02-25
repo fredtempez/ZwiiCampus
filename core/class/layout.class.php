@@ -1148,7 +1148,7 @@ class layout extends common
                     'href' => helper::baseUrl() . 'group'
                 ]) . '</li>';
                 $rightItems .= '<li>' . template::ico('address-book', [
-                    'help' => 'Utilisateurs',
+                    'help' => 'Participants',
                     'href' => helper::baseUrl() . 'user'
                 ]) . '</li>';
                 $rightItems .= '<li>' . template::ico('cog-alt', [

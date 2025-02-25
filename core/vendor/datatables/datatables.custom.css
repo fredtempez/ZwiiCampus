@@ -20,7 +20,5 @@
     gap: 20px;
     flex: 0 0 auto;
     margin: 0 auto;
-}
-.dt-buttons > button {
-    width: 100px;
+    width: 250px;
 }

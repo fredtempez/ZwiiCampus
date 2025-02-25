@@ -30,17 +30,17 @@ $(document).ready((function () {
         buttons: [
             {
                 extend: 'csv',
-                text: 'CSV',
+                text: '<i class="zwiico-code"></i>',
                 titleAttr: 'Exporter les données au format CSV',
             },
             {
                 extend: 'copy',
-                text: 'Copier',
+                text: '<i class="zwiico-docs"></i>',
                 titleAttr: 'Copier dans le presse papier',
             }, 
             {
                 extend: 'print',
-                text: 'Imprimer',
+                text: '<i class="zwiico-print"></i>',
                 titleAttr: 'Imprimer ou générer un PDF',
             }
         ],
