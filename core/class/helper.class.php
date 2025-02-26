@@ -35,12 +35,12 @@ class helper
 
 		// La traduction existe déjà dans le core
 		/*
-								if (array_key_exists($text, core::$dialog) === false && !empty($text)) {
-								$dialogues = json_decode(file_get_contents('core/module/install/ressource/i18n/fr_FR.json' ), true);
-								$data = array_merge($dialogues,[$text =>  '']);
-								file_put_contents ('core/module/install/ressource/i18n/fr_FR.json', json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT), LOCK_EX);
-								}
-								*/
+									  if (array_key_exists($text, core::$dialog) === false && !empty($text)) {
+									  $dialogues = json_decode(file_get_contents('core/module/install/ressource/i18n/fr_FR.json' ), true);
+									  $data = array_merge($dialogues,[$text =>  '']);
+									  file_put_contents ('core/module/install/ressource/i18n/fr_FR.json', json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT), LOCK_EX);
+									  }
+									  */
 		return (array_key_exists($text, core::$dialog) && !empty(core::$dialog[$text]) ? core::$dialog[$text] : $text);
 	}
 
@@ -201,15 +201,15 @@ class helper
 		$baseName = str_replace('/', '', helper::baseUrl(false, false));
 		$baseName = empty($baseName) ? 'ZwiiCMS' : $baseName;
 		$fileName = $baseName . '-backup-' . date('Y-m-d-H-i-s') . '.zip';
-	
+
 		// Initialisation de l'archive ZIP
 		$zip = new ZipArchive();
 		if ($zip->open($folder . $fileName, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
 			return false; // Retourne false si l'ouverture échoue
 		}
-	
+
 		$directory = 'site/';
-	
+
 		// Récupération des fichiers et des dossiers
 		$files = new RecursiveIteratorIterator(
 			new RecursiveCallbackFilterIterator(
@@ -223,7 +223,7 @@ class helper
 				}
 			)
 		);
-	
+
 		// Ajout des fichiers à l'archive
 		foreach ($files as $file) {
 			if (!$file->isDir()) {
@@ -232,10 +232,10 @@ class helper
 				$zip->addFile($filePath, $relativePath);
 			}
 		}
-	
+
 		// Fermeture de l'archive ZIP
 		$zip->close();
-	
+
 		return $fileName;
 	}
 
@@ -364,13 +364,14 @@ class helper
 		}
 		return self::$rewriteStatus;
 	}
-	
+
 	/**
 	 * Retourne vrai ou faux selon que le serveur est comptatible avec htaccess
 	 * @return bool
 	 */
-	public static function checkServerSoftware() {
-		return (stripos($_SERVER['SERVER_SOFTWARE'], 'Apache') !== false || stripos($_SERVER['SERVER_SOFTWARE'], 'LiteSpeed')  !== false);
+	public static function checkServerSoftware()
+	{
+		return (stripos($_SERVER['SERVER_SOFTWARE'], 'Apache') !== false || stripos($_SERVER['SERVER_SOFTWARE'], 'LiteSpeed') !== false);
 	}
 
 	/**
@@ -446,9 +447,11 @@ class helper
 				break;
 			case self::FILTER_DATETIME:
 				$timezone = new DateTimeZone(core::$timezone);
-				$date = new DateTime($text);
-				$date->setTimezone($timezone);
-				$text = (int) $date->format('U');
+				if ($text) {
+					$date = new DateTime($text);
+					$date->setTimezone($timezone);
+					$text = (int) $date->format('U');
+				}
 				break;
 			case self::FILTER_FLOAT:
 				$text = str_replace(',', '.', $text);  // Remplacer les virgules par des points
