@@ -113,7 +113,7 @@ class course extends common
                         ? sprintf('%s %s', $this->getData(['user', $this->getData(['course', $courseId, 'author']), 'firstname']), $this->getData(['user', $this->getData(['course', $courseId, 'author']), 'lastname']))
                         : '';
                     $categorieUrl = helper::baseUrl() . 'course/swap/' . $courseId;
-                    $info = sprintf(' <a href="%s">%s</a><br />Auteur : %s<br />Id : %s<br />', $categorieUrl, $this->getData(['course', $courseId, 'title']), $author, $courseId,);
+                    $info = sprintf(' <a href="%s">%s</a><br />Auteur : %s<br />Id : %s<br />', $categorieUrl, $this->getData(['course', $courseId, 'title']), $author, $courseId, );
                     $enrolment = sprintf(
                         'Accès : %s<br />Inscription : %s<br />',
                         self::$courseAccess[$this->getData(['course', $courseId, 'access'])],
@@ -772,17 +772,21 @@ class course extends common
                         'help' => 'Rapport désactivé',
                     ]);
                 }
+                // Les groupes sous forme de chaine
+                $group = $this->getData(['user', $userId, 'group']);
+                $group = is_null($group) === false ? implode('', array_map(fn($valeur) => sprintf('<span class="groupTitleLabel">%s</span>', $this->getData(['group', htmlspecialchars($valeur)])), $group)) : '';
                 self::$courseUsers[] = [
                     //$userId,
                     sprintf('%s %s', $this->getData(['user', $userId, 'lastname']), $this->getData(['user', $userId, 'firstname'])),
-                    array_key_exists('lastPageView', $userValue) && isset($pages['page'][$userValue['lastPageView']]['title'])
-                        ? $pages['page'][$userValue['lastPageView']]['title']
-                        : helper::translate('Aucune'),
-                    array_key_exists('lastPageView', $userValue)
-                        // ? helper::dateUTF8('%d/%m/%Y', $userValue['datePageView'])
-                        ? $userValue['datePageView']
-                        : helper::translate('Jamais'),
+                    $group,
                     $this->getData(['user', $userId, 'tags']),
+                    array_key_exists('lastPageView', $userValue) && isset($pages['page'][$userValue['lastPageView']]['title'])
+                    ? $pages['page'][$userValue['lastPageView']]['title']
+                    : helper::translate('Aucune'),
+                    array_key_exists('lastPageView', $userValue)
+                    // ? helper::dateUTF8('%d/%m/%Y', $userValue['datePageView'])
+                    ? $userValue['datePageView']
+                    : helper::translate('Jamais'),
                     $reportButton,
                     template::button('userDelete' . $userId, [
                         'class' => 'userDelete buttonRed',
@@ -1233,13 +1237,13 @@ class course extends common
         ) {
             // Gérer les modalités d'inscription
             switch ($this->getData(['course', $courseId, 'enrolment'])) {
-                    // Anonyme
+                // Anonyme
                 case self::COURSE_ENROLMENT_GUEST:
                     $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
                     // Accès direct à la page
                     $redirect = helper::baseUrl() . $pageId;
                     break;
-                    // Auto avec ou sans clé
+                // Auto avec ou sans clé
                 case self::COURSE_ENROLMENT_SELF:
                     //le participant doit disposer d'un compte
                     if ($this->getUser('id')) {
@@ -1258,7 +1262,7 @@ class course extends common
                         $state = false;
                     }
                     break;
-                    // Par le prof
+                // Par le prof
                 case self::COURSE_ENROLMENT_MANDATORY:
                     $message = helper::translate('L\'enseignant doit vous inscrire');
                     $state = false;
@@ -1299,78 +1303,84 @@ class course extends common
 
         $userId = $this->getUrl(3);
         $h = $this->getReport($courseId, $userId);
-        $h = $h[$userId];
 
-        // Inversion des clés et des valeurs
-        $report = array();
-        foreach ($h as $key => $values) {
-            foreach ($values as $value) {
-                $report[$value] = $key;
+        // Préparation du graphe si le rapport existe
+        if (empty($h) === false) {
+            $h = $h[$userId];
+
+            // Inversion des clés et des valeurs
+            $report = array();
+            foreach ($h as $key => $values) {
+                foreach ($values as $value) {
+                    $report[$value] = $key;
+                }
             }
-        }
-
-        ksort($report);
-
-        // Liste des pages contenues dans cet espace et exclure les barres et les pages masquées
-        $p = json_decode(file_get_contents(self::DATA_DIR . $courseId . '/page.json'), true);
-        foreach ($p['page'] as $pageId => $pageData) {
-            if ($pageData['position'] > 0) {
-                $pages[$pageId] = [
-                    'title' => $pageData['title'],
-                ];
-            }
-        }
-
-        $floorTime = 99999999999;
-        $topTime = 0;
-        $lastView = 0;
-
-        foreach ($report as $time => $pageId) {
-            if (isset($pages[$pageId]['title'])) {
-                $lastView = ($lastView === 0) ? $time : $lastView;
-                $diff = $time - $lastView;
-                self::$userReport[] = [
-                    html_entity_decode($pages[$pageId]['title']),
-                    $time,
-                    ($diff < 1800) ? sprintf("%d' %d''", floor($diff / 60), $diff % 60) : "Non significatif",
-                ];
-                if ($diff < 1800) {
-                    self::$userGraph[] = [
-                        helper::dateUTF8('%Y-%m-%d %H:%M:%S', $time),
-                        $diff,
-                        html_entity_decode($pages[$pageId]['title']) . ' (' . helper::dateUTF8('%M\'%S"', $diff) . ')'
+    
+            ksort($report);
+    
+            // Liste des pages contenues dans cet espace et exclure les barres et les pages masquées
+            $p = json_decode(file_get_contents(self::DATA_DIR . $courseId . '/page.json'), true);
+            foreach ($p['page'] as $pageId => $pageData) {
+                if ($pageData['position'] > 0) {
+                    $pages[$pageId] = [
+                        'title' => $pageData['title'],
                     ];
                 }
-                $lastView = $time;
-                $floorTime = isset($floorTime) && $floorTime < $time ? $floorTime : $time;
-                $topTime = isset($topTime) && $topTime > $time ? $topTime : $time;
             }
+    
+            $floorTime = 99999999999;
+            $topTime = 0;
+            $lastView = 0;
+    
+            foreach ($report as $time => $pageId) {
+                if (isset($pages[$pageId]['title'])) {
+                    $lastView = ($lastView === 0) ? $time : $lastView;
+                    $diff = $time - $lastView;
+                    self::$userReport[] = [
+                        html_entity_decode($pages[$pageId]['title']),
+                        $time,
+                        ($diff < 1800) ? sprintf("%d' %d''", floor($diff / 60), $diff % 60) : "Non significatif",
+                    ];
+                    if ($diff < 1800) {
+                        self::$userGraph[] = [
+                            helper::dateUTF8('%Y-%m-%d %H:%M:%S', $time),
+                            $diff,
+                            html_entity_decode($pages[$pageId]['title']) . ' (' . helper::dateUTF8('%M\'%S"', $diff) . ')'
+                        ];
+                    }
+                    $lastView = $time;
+                    $floorTime = isset($floorTime) && $floorTime < $time ? $floorTime : $time;
+                    $topTime = isset($topTime) && $topTime > $time ? $topTime : $time;
+                }
+            }
+    
+            // Décale les temps de consultation
+            for ($i = 0; $i < count(self::$userReport) - 1; $i++) {
+                self::$userReport[$i][2] = self::$userReport[$i + 1][2];
+            }
+            // Décale les temps de consultation
+            for ($i = 0; $i < count(self::$userGraph) - 1; $i++) {
+                self::$userReport[$i][1] = self::$userReport[$i + 1][1];
+            }
+    
+            // Formate le timestamp
+            array_walk(self::$userReport, function (&$item) {
+                $item[1] = helper::dateUTF8('%d/%m/%Y %H:%M:%S', $item[1]);
+            });
+    
+            self::$userStat['floor'] = helper::dateUTF8('%d %B %Y %H:%M', $floorTime);
+            self::$userStat['top'] = helper::dateUTF8('%d %B %Y %H:%M', $topTime);
+            $d = $topTime - $floorTime;
+            // Conversion de la différence en jours, heures et minutes
+            $d_days = floor($d / 86400);  // 1 jour = 86400 secondes (24 heures * 60 minutes * 60 secondes)
+            $d_hours = floor(($d % 86400) / 3600);
+            $d_minutes = floor(($d % 3600) / 60);
+    
+            // Affichage du résultat
+            self::$userStat['time'] = $d_days . ' jours, ' . $d_hours . ' heures, ' . $d_minutes . ' minutes ';
         }
 
-        // Décale les temps de consultation
-        for ($i = 0; $i < count(self::$userReport) - 1; $i++) {
-            self::$userReport[$i][2] = self::$userReport[$i + 1][2];
-        }
-        // Décale les temps de consultation
-        for ($i = 0; $i < count(self::$userGraph) - 1; $i++) {
-            self::$userReport[$i][1] = self::$userReport[$i + 1][1];
-        }
-
-        // Formate le timestamp
-        array_walk(self::$userReport, function (&$item) {
-            $item[1] = helper::dateUTF8('%d/%m/%Y %H:%M:%S', $item[1]);
-        });
-
-        self::$userStat['floor'] = helper::dateUTF8('%d %B %Y %H:%M', $floorTime);
-        self::$userStat['top'] = helper::dateUTF8('%d %B %Y %H:%M', $topTime);
-        $d = $topTime - $floorTime;
-        // Conversion de la différence en jours, heures et minutes
-        $d_days = floor($d / 86400);  // 1 jour = 86400 secondes (24 heures * 60 minutes * 60 secondes)
-        $d_hours = floor(($d % 86400) / 3600);
-        $d_minutes = floor(($d % 3600) / 60);
-
-        // Affichage du résultat
-        self::$userStat['time'] = $d_days . ' jours, ' . $d_hours . ' heures, ' . $d_minutes . ' minutes ';
+     
 
         // Valeurs en sortie
         $this->addOutput([
@@ -1460,8 +1470,8 @@ class course extends common
                     $this->getData(['user', $userId, 'lastname']),
                     $this->getData(['user', $userId, 'mail']),
                     isset($pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])])
-                        ? $pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])]
-                        : $this->getData(['enrolment', $courseId, $userId, 'lastPageView']) . ' (supprimée)',
+                    ? $pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])]
+                    : $this->getData(['enrolment', $courseId, $userId, 'lastPageView']) . ' (supprimée)',
                     helper::dateUTF8('%d/%d/%Y', $this->getData(['enrolment', $courseId, $userId, 'datePageView'])),
                     helper::dateUTF8('%H:%M', $this->getData(['enrolment', $courseId, $userId, 'datePageView'])),
                     /** La lecture de la progression s'effectue selon la nouvelle méthode (progression dans la base des enrolements)
@@ -1469,8 +1479,8 @@ class course extends common
                      *  TRANSITOIRE A SUPPRIMER EN FIN D'ANNEE
                      **/
                     array_key_exists('progress', $userValue)
-                        ? $userValue['progress']
-                        : ($viewPages ? min(round(($viewPages * 100) / $sumPages, 1), 100) . ' %' : '0%'),
+                    ? $userValue['progress']
+                    : ($viewPages ? min(round(($viewPages * 100) / $sumPages, 1), 100) . ' %' : '0%'),
                     //number_format(min(round(($viewPages * 100) / $sumPages, 1) / 100, 1), 2, ','),
                 ];
 
@@ -1972,7 +1982,8 @@ class course extends common
                     if (file_exists(self::TEMP_DIR . $tempFolder . '/course.json')) {
                         $courseData = json_decode(file_get_contents(self::TEMP_DIR . $tempFolder . '/course.json'), true);
                         // Lire l'id du cours
-                        $courseIds = array_keys($courseData);;
+                        $courseIds = array_keys($courseData);
+                        ;
                         $courseId = $courseIds[0];
                         $success = true;
                     } else {
@@ -2063,7 +2074,7 @@ class course extends common
                     $this->getUser('permission', __CLASS__, $function)
                     && $this->getUser('role') === self::$actions[$function]
                     &&
-                    // Permission d'accéder aux espaces dans lesquels le membre auteur
+                        // Permission d'accéder aux espaces dans lesquels le membre auteur
                     (
                         $this->getData(['enrolment', $courseId]) && ($this->getUser('id') === $this->getData(['course', $courseId, 'author']))
                     )
@@ -2239,7 +2250,7 @@ class course extends common
                     $r = in_array($userId, array_keys($this->getData(['enrolment', $courseId])));
                 }
                 break;
-                // Visiteur non connecté
+            // Visiteur non connecté
             case self::ROLE_VISITOR:
             case null:
                 $r = $this->getData(['course', $courseId, 'enrolment']) === self::COURSE_ENROLMENT_GUEST;
