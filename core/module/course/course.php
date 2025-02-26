@@ -174,28 +174,6 @@ class course extends common
             // Id du nouveau cours
             $courseId = uniqid();
 
-            // Créer la structure de données
-            mkdir(self::DATA_DIR . $courseId);
-
-            $this->initDB('page', $courseId);
-            $this->initDB('module', $courseId);
-            $this->initDB('theme', $courseId);
-            $this->initData('page', $courseId);
-            $this->initData('module', $courseId);
-            $this->initData('theme', $courseId);
-
-            // Pointer RFM sur le dossier de l'espace
-            // self::$siteContent = $courseId;
-            // Ordonne les pages par position
-            $this->buildHierarchy();
-
-            // BDD des inscrits
-            $this->setData([
-                'enrolment',
-                $courseId,
-                []
-            ]);
-
             // Groupes
             $groups = [];
             if ($this->getData(['group'])) {
@@ -227,13 +205,39 @@ class course extends common
                 ]
             ]);
 
-            // Dossier du gestionnaire de fichier
-            mkdir(self::FILE_DIR . 'source/' . $courseId);
+            // Les dossiers de l'espace sont créés en l'absence de notice
+            if (empty(self::$inputNotices)) {
 
-            // Copie du thème
-            $sourceId = $this->getInput('courseAddTheme');
-            copy(self::DATA_DIR . $sourceId . '/theme.json', self::DATA_DIR . $courseId . '/theme.json');
-            copy(self::DATA_DIR . $sourceId . '/theme.css', self::DATA_DIR . $courseId . '/theme.css');
+                // Créer la structure de données
+                mkdir(self::DATA_DIR . $courseId);
+
+                $this->initDB('page', $courseId);
+                $this->initDB('module', $courseId);
+                $this->initDB('theme', $courseId);
+                $this->initData('page', $courseId);
+                $this->initData('module', $courseId);
+                $this->initData('theme', $courseId);
+
+                // Pointer RFM sur le dossier de l'espace
+                // self::$siteContent = $courseId;
+                // Ordonne les pages par position
+                $this->buildHierarchy();
+
+                // BDD des inscrits
+                $this->setData([
+                    'enrolment',
+                    $courseId,
+                    []
+                ]);
+
+                // Dossier du gestionnaire de fichier
+                mkdir(self::FILE_DIR . 'source/' . $courseId);
+
+                // Copie du thème
+                $sourceId = $this->getInput('courseAddTheme');
+                copy(self::DATA_DIR . $sourceId . '/theme.json', self::DATA_DIR . $courseId . '/theme.json');
+                copy(self::DATA_DIR . $sourceId . '/theme.css', self::DATA_DIR . $courseId . '/theme.css');
+            }
 
             // Valeurs en sortie
             $this->addOutput([
