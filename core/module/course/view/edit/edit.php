@@ -19,7 +19,7 @@
             </h4>
             <div class="row">
                 <div class="col12">
-                    <?php echo template::text('courseEditShortTitle', [
+                    <?php echo template::text('courseEditTitle', [
                         'label' => 'Titre',
                         'value' => $this->getdata(['course', $this->getUrl(2), 'title'])
                     ]); ?>

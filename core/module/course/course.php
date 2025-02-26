@@ -171,7 +171,9 @@ class course extends common
         if (
             $this->isPost()
         ) {
+            // Id du nouveau cours
             $courseId = uniqid();
+
             // Créer la structure de données
             mkdir(self::DATA_DIR . $courseId);
 
@@ -195,11 +197,15 @@ class course extends common
             ]);
 
             // Groupes
-            foreach ($this->getData(['group']) as $id => $title) {
-                if ($this->getInput('courseAddGroup' . $id, helper::FILTER_BOOLEAN)) {
-                    $groups[] = $id;
+            $groups = [];
+            if ($this->getData(['group'])) {
+                foreach ($this->getData(['group']) as $id => $title) {
+                    if ($this->getInput('courseAddGroup' . $id, helper::FILTER_BOOLEAN)) {
+                        $groups[] = $id;
+                    }
                 }
             }
+            // Sauvegarder les données
             $this->setData([
                 'course',
                 $courseId,
@@ -299,7 +305,7 @@ class course extends common
                 'course',
                 $courseId,
                 [
-                    'title' => $this->getInput('courseEditShortTitle', helper::FILTER_STRING_SHORT, true),
+                    'title' => $this->getInput('courseEditTitle', helper::FILTER_STRING_SHORT, true),
                     'author' => $this->getInput('courseEditAuthor'),
                     'homePageId' => $this->getInput('courseEditHomePageId'),
                     'category' => $this->getInput('courseEditCategorie'),
@@ -1316,9 +1322,9 @@ class course extends common
                     $report[$value] = $key;
                 }
             }
-    
+
             ksort($report);
-    
+
             // Liste des pages contenues dans cet espace et exclure les barres et les pages masquées
             $p = json_decode(file_get_contents(self::DATA_DIR . $courseId . '/page.json'), true);
             foreach ($p['page'] as $pageId => $pageData) {
@@ -1328,11 +1334,11 @@ class course extends common
                     ];
                 }
             }
-    
+
             $floorTime = 99999999999;
             $topTime = 0;
             $lastView = 0;
-    
+
             foreach ($report as $time => $pageId) {
                 if (isset($pages[$pageId]['title'])) {
                     $lastView = ($lastView === 0) ? $time : $lastView;
@@ -1354,7 +1360,7 @@ class course extends common
                     $topTime = isset($topTime) && $topTime > $time ? $topTime : $time;
                 }
             }
-    
+
             // Décale les temps de consultation
             for ($i = 0; $i < count(self::$userReport) - 1; $i++) {
                 self::$userReport[$i][2] = self::$userReport[$i + 1][2];
@@ -1363,12 +1369,12 @@ class course extends common
             for ($i = 0; $i < count(self::$userGraph) - 1; $i++) {
                 self::$userReport[$i][1] = self::$userReport[$i + 1][1];
             }
-    
+
             // Formate le timestamp
             array_walk(self::$userReport, function (&$item) {
                 $item[1] = helper::dateUTF8('%d/%m/%Y %H:%M:%S', $item[1]);
             });
-    
+
             self::$userStat['floor'] = helper::dateUTF8('%d %B %Y %H:%M', $floorTime);
             self::$userStat['top'] = helper::dateUTF8('%d %B %Y %H:%M', $topTime);
             $d = $topTime - $floorTime;
@@ -1376,12 +1382,12 @@ class course extends common
             $d_days = floor($d / 86400);  // 1 jour = 86400 secondes (24 heures * 60 minutes * 60 secondes)
             $d_hours = floor(($d % 86400) / 3600);
             $d_minutes = floor(($d % 3600) / 60);
-    
+
             // Affichage du résultat
             self::$userStat['time'] = $d_days . ' jours, ' . $d_hours . ' heures, ' . $d_minutes . ' minutes ';
         }
 
-     
+
 
         // Valeurs en sortie
         $this->addOutput([

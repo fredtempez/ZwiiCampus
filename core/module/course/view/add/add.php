@@ -19,7 +19,7 @@
             </h4>
             <div class="row">
                 <div class="col12">
-                    <?php echo template::text('courseAddShortTitle', [
+                    <?php echo template::text('courseAddTitle', [
                         'label' => 'Titre',
                     ]); ?>
                 </div>
