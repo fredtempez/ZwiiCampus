@@ -83,7 +83,7 @@ class group extends common
 					$groupId,
 					$groupTitle,
 					$suscribers === 0 ? '<a href="' . helper::baseUrl() . 'group/usersAdd/' . $groupId . '">' . $message . '</a>'
-						: '<a href="' . helper::baseUrl() . 'group/users/' . $groupId . '">' . $message . '</a>',
+					: '<a href="' . helper::baseUrl() . 'group/users/' . $groupId . '">' . $message . '</a>',
 					template::ico('pencil', [
 						'id' => 'groupEdit' . $groupId,
 						'href' => helper::baseUrl() . 'group/edit/' . $groupId,
@@ -92,14 +92,14 @@ class group extends common
 						'help' => 'Éditer',
 						'fontSize' => '1.2em',
 					])
-						. template::ico('trash', [
-							'id' => 'groupDelete' . $groupId,
-							'class' => 'groupDelete icoTextRed',
-							'href' => helper::baseUrl() . 'group/delete/' . $groupId,
-							'margin' => 'left',
-							'help' => 'Supprimer',
-							'fontSize' => '1.2em',
-						])
+					. template::ico('trash', [
+						'id' => 'groupDelete' . $groupId,
+						'class' => 'groupDelete icoTextRed',
+						'href' => helper::baseUrl() . 'group/delete/' . $groupId,
+						'margin' => 'left',
+						'help' => 'Supprimer',
+						'fontSize' => '1.2em',
+					])
 				];
 			}
 			// Valeurs en sortie
@@ -629,39 +629,50 @@ class group extends common
 				}
 
 				// Initialisation des variables de retour
-				$notification = helper::translate('Importation effectuée');
-				$success = true;
+				$notification = helper::translate('Erreur de lecture, vérifiez les permissions');
+				$success = false;
 
 				// Traitement des données
 				foreach ($csv as $item) {
-
-					$userId = $item['id_user'];
-					$groupId = $item['id_group'];
 					$error = false;
+					$groupId = $item['id_group'] ?? null;
+					$userId = null;
+					$userEmail = null;
 
-					// Données valides
+					// Vérification si on a un ID utilisateur ou un email
+					if (array_key_exists('id_user', $item) && !empty($item['id_user'])) {
+						$userId = $item['id_user'];
+					} elseif (array_key_exists('mail_user', $item) && !empty($item['mail_user'])) {
+						$userEmail = $item['mail_user'];
+						// Récupérer tous les utilisateurs
+						$users = $this->getData(['user']);
+						// Chercher l'utilisateur par email
+						$emails = array_column($users, 'mail');
+						$userIdKey = array_search($userEmail, $emails, true); // Le true assure une comparaison stricte
+						$userId = ($userIdKey !== false) ? array_keys($users)[$userIdKey] : null;
+					}
+
+					// Données des utilisateurs valides
 					if (
-						array_key_exists('id_user', $item)
-						and array_key_exists('id_group', $item)
-						and isset($userId)
-						and isset($groupId)
+						(($userId !== null) || ($userEmail !== null))
+						&& array_key_exists('id_group', $item)
+						&& isset($groupId)
 					) {
-// var_dump($userId);
-
-						// Si l'utilisateur n'existe pas, on passe à la ligne suivante mais on renseigne le tableau de sortie.
+						// Si on n'a pas trouvé l'utilisateur par email ou si l'utilisateur n'existe pas
 						if (
-							$this->getData(['user', $userId]) === NULL
+							($userId === null && $userEmail !== null) ||
+							($userId !== null && $this->getData(['user', $userId]) === NULL)
 						) {
 							// Construction du tableau de confirmation
 							self::$groups[] = [
-								$item['id_user'],
+								$userId ?? $userEmail,
 								'',
 								helper::translate('Utilisateur inconnu')
 							];
 							$error = true;
 						}
 
-						// Vérifier la validité du groupe sinon  renseigner le tableau de retour
+						// Vérifier la validité du groupe
 						if (
 							$this->getData(['group', $groupId]) === NULL
 						) {
@@ -684,18 +695,21 @@ class group extends common
 						}
 
 						// Variables communes
-						$names = $this->getData(['user', $item['id_user'], 'lastname']) . ' ' . $this->getData(['user', $item['id_user'], 'firstname']);
+						$names = $this->getData(['user', $userId, 'lastname']) . ' ' . $this->getData(['user', $userId, 'firstname']);
 						$group = $this->getData(['user', $userId, 'group']);
 						$groups = implode('', array_map(fn($valeur) => sprintf('<span class="groupTitleLabel">%s</span>', $this->getData(['group', htmlspecialchars($valeur)])), $group));
 
 						// Les données sont valides, on ajoute le groupe à l'utilisateur si celui-ci n'est pas déjà inscrit
-						if (
-							in_array($groupId, $this->getData(['user', $item['id_user'], 'group'])) === false
-						) {
-							$groups = $this->getData(['user', $item['id_user'], 'group']);
-							$groups[] = $groupId;
-							$this->setData(['user', $item['id_user'], 'group', $groups], false);
+						$groups = $this->getData(['user', $userId, 'group']);
+						$groups[] = $groupId;
+						$this->setData(['user', $userId, 'group', $groups], false);
 
+						// Les groupes sous forme de chaine
+						$groups = is_null($group) === false ? implode('', array_map(fn($valeur) => sprintf('<span class="groupTitleLabel">%s</span>', $this->getData(['group', htmlspecialchars($valeur)])), $group)) : '';
+
+						if (
+							in_array($groupId, $this->getData(['user', $userId, 'group'])) === false
+						) {
 							// Construction du tableau de confirmation
 							self::$groups[] = [
 								$names,
@@ -710,18 +724,16 @@ class group extends common
 								helper::translate('Utilisateur déjà inscrit')
 							];
 						}
+
+						// Sauvegarde la base manuellement
+						$this->saveDB('user');
 					}
 				}
 
-				// Sauvegarde la base manuellement
-				$this->saveDB('user');
 				if (empty(self::$groups)) {
 					$notification = helper::translate('Rien à importer, erreur de format ou fichier incorrect');
 					$success = false;
 				}
-			} else {
-				$notification = helper::translate('Erreur de lecture, vérifiez les permissions');
-				$success = false;
 			}
 		}
 		// Valeurs en sortie

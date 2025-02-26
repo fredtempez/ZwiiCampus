@@ -38,6 +38,7 @@
                     ]); ?>
                 </div>
             </div>
+            <div>Format CSV en UTF8, les clés sont mail_user et id_group ou id_user et id_group.</div>
         </div>
     </div>
 </div>
