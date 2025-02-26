@@ -76,12 +76,14 @@
                     <?php echo template::date('courseOpeningDate', [
                         'type' => 'datetime-local',
                         'label' => 'Ouvre le',
+                        'value' => time()
                     ]); ?>
                 </div>
                 <div class="col2 periodSetup">
                     <?php echo template::date('courseClosingDate', [
                         'type' => 'datetime-local',
                         'label' => 'Ferme le',
+                        'value' => time()
                     ]); ?>
                 </div>
                 <div class="col3 periodSetup">
@@ -93,6 +95,7 @@
                     <?php echo template::date('courseAddEnrolmentLimitDate', [
                         'type' => 'datetime-local',
                         'label' => 'Jusqu\'au',
+                        'value' => time()
                     ]); ?>
                 </div>
             </div>

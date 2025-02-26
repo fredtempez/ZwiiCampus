@@ -151,7 +151,7 @@
                     <?php echo template::date('courseOpeningDate', [
                         'type' => 'datetime-local',
                         'label' => 'Ouvre le',
-                        'value' => is_null($this->getdata(['course', $this->getUrl(2), 'openingDate'])) ? '' : floor($this->getdata(['course', $this->getUrl(2), 'openingDate']) / 60) * 60,
+                        'value' => is_int($this->getdata(['course', $this->getUrl(2), 'openingDate'])) ? floor($this->getdata(['course', $this->getUrl(2), 'openingDate']) / 60) * 60 : 0,
                         'readonly' => true,
                     ]); ?>
                 </div>
@@ -159,7 +159,7 @@
                     <?php echo template::date('courseClosingDate', [
                         'type' => 'datetime-local',
                         'label' => 'Ferme le',
-                        'value' => is_null($this->getdata(['course', $this->getUrl(2), 'closingDate'])) ? '' : floor($this->getdata(['course', $this->getUrl(2), 'closingDate']) / 60) * 60,
+                        'value' => is_int($this->getdata(['course', $this->getUrl(2), 'closingDate'])) ?  floor($this->getdata(['course', $this->getUrl(2), 'closingDate']) / 60) * 60 : 0,
                         'readonly' => true,
                     ]); ?>
                 </div>
@@ -174,7 +174,7 @@
                     <?php echo template::date('courseEditEnrolmentLimitDate', [
                         'type' => 'datetime-local',
                         'label' => 'Jusqu\'au',
-                        'value' => is_null($this->getdata(['course', $this->getUrl(2), 'limitEnrolmentDate'])) ? '' : floor($this->getdata(['course', $this->getUrl(2), 'limitEnrolmentDate']) / 60) * 60,
+                        'value' => is_int($this->getdata(['course', $this->getUrl(2), 'limitEnrolmentDate'])) ? floor($this->getdata(['course', $this->getUrl(2), 'limitEnrolmentDate']) / 60) * 60 : 0,
                         'readonly' => true,
                     ]); ?>
                 </div>
