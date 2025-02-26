@@ -2223,14 +2223,22 @@ class course extends common
      */
     private function userGroupIntersectCourseGroup($courseId, $userId)
     {
-        $userGroups = is_null($this->getData(['user', $userId, 'group'])) ? [] : $this->getData(['user', $userId, 'group']);
-        $courseGroups = is_null($this->getData(['course', $courseId, 'group'])) ? [] : $this->getData(['course', $courseId, 'group']);
-        return (
-            // Si le cours n'est pas restreint à un groupe
-            $courseGroups === [] ||
-            // Oui si l'utilisateur appartient à un groupe du cours
-            array_intersect($userGroups, $courseGroups) !== []
-        );
+        switch ($this->getUser('role')) {
+            case self::ROLE_ADMIN:
+            case self::ROLE_EDITOR:
+                return true;
+            case self::ROLE_MEMBER:
+                $userGroups = is_null($this->getData(['user', $userId, 'group'])) ? [] : $this->getData(['user', $userId, 'group']);
+                $courseGroups = is_null($this->getData(['course', $courseId, 'group'])) ? [] : $this->getData(['course', $courseId, 'group']);
+                return (
+                    // Si le cours n'est pas restreint à un groupe
+                    $courseGroups === [] ||
+                    // Oui si l'utilisateur appartient à un groupe du cours
+                    array_intersect($userGroups, $courseGroups) !== []
+                );
+            default:
+                return false;
+        }
     }
 
     /**
