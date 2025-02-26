@@ -26,3 +26,8 @@ tbody td:nth-child(5) {
 tbody td.visible-text {
     color: inherit; /* Rétablir la couleur du texte */
 }
+
+tbody td:nth-child(7) {
+    text-align: right;
+   }
+   

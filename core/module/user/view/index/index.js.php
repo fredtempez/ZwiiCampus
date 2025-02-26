@@ -67,12 +67,7 @@ $(document).ready((function () {
                 }
             },
             {
-                target: 6,
-                orderable: false,
-                searchable: false
-            },
-            {
-                target: 7,
+                target: 5,
                 orderable: false,
                 searchable: false
             }

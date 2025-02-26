@@ -735,18 +735,29 @@ class user extends common
 						? 'Jamais'
 						: $this->getData(['user', $userId, 'accessTimer']),
 					// Bouton Edit
-					template::button('userEdit' . $userId, [
+					template::ico('pencil', [
+						'id' => 'userEdit' . $userId,
 						'href' => helper::baseUrl() . 'user/edit/' . $userId,
 						'value' => template::ico('pencil'),
-						'help' => 'Éditer'
-					]),
-					// Bouton Delete
-					template::button('userDelete' . $userId, [
-						'class' => 'userDelete buttonRed',
-						'href' => helper::baseUrl() . 'user/delete/' . $userId,
-						'value' => template::ico('user-times'),
-						'help' => 'Désinscrire'
+						'margin' => 'right',
+						'help' => 'Éditer',
+						'fontSize' => '1.2em',
 					])
+					// Bouton supprimée concaténé
+					. template::ico('trash', [
+						'id' => 'userDelete' . $userId,
+						'class' => 'userDelete icoTextRed',
+						'href' => helper::baseUrl() . 'user/delete/' . $userId,
+						'margin' => 'left',
+						'help' => 'Supprimer',
+						'fontSize' => '1.2em',
+					])
+
+
+
+
+
+
 				];
 			}
 		}
