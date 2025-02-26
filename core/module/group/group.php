@@ -761,7 +761,7 @@ class group extends common
 	public function template()
 	{
 		if ($this->getUser('permission', __CLASS__, __FUNCTION__) === true) {
-			$file = 'template.csv';
+			$file = 'template_' . $this->getUrl(2) . '.csv';
 			$path = 'core/module/group/ressource/';
 			// Téléchargement du CSV
 			header('Content-Description: File Transfer');

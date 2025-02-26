@@ -7,14 +7,7 @@
             'value' => template::ico('left')
         ]); ?>
     </div>
-    <div class="col1 offset8">
-        <?php echo template::button('groupImporTemplate', [
-            'href' => helper::baseUrl() . 'group/template',
-            'value' => template::ico('table'),
-            'help' => 'Télécharger un modèle'
-        ]); ?>
-    </div>
-    <div class="col2">
+    <div class="col2 offset9">
         <?php echo template::submit('groupImportSubmit', [
             'value' => 'Importer'
         ]); ?>
@@ -24,7 +17,7 @@
     <div class="col12">
         <div class="block">
             <h4>
-                <?php echo helper::translate('Fichier CSV'); ?>
+            Format CSV en UTF8, les clés sont soit <code>mail_user</code> et <code>id_group</code> (<a href="<?php echo helper::baseUrl() . 'group/template/id_user';?>">modèle</a>), soit <code>id_user</code> et <code>id_group</code> (<a href="<?php echo helper::baseUrl() . 'group/template/id_user.csv'; ?>">modèle</a>).
             </h4>
             <div class="row">
                 <div class="col10">
@@ -38,7 +31,7 @@
                     ]); ?>
                 </div>
             </div>
-            <div>Format CSV en UTF8, les clés sont mail_user et id_group ou id_user et id_group.</div>
+            <div></div>
         </div>
     </div>
 </div>
