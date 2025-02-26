@@ -629,7 +629,7 @@ class group extends common
 				}
 
 				// Initialisation des variables de retour
-				$notification = helper::translate('Erreur de lecture, vérifiez les permissions');
+				$notification = helper::translate('Erreur de lecture du fichier');
 				$success = false;
 
 				// Traitement des données
@@ -691,45 +691,55 @@ class group extends common
 
 						// Vérifier si l'utilisateur dispose d'une clé "group" sinon la créer COMPATIBILITE
 						if ($this->getData(['user', $userId, 'group']) === NULL) {
-							$this->setData(['user', $userId, 'group', []], false);
+							$this->setData(['user', $userId, 'group', []]);
 						}
 
 						// Variables communes
 						$names = $this->getData(['user', $userId, 'lastname']) . ' ' . $this->getData(['user', $userId, 'firstname']);
-						$group = $this->getData(['user', $userId, 'group']);
-						$groups = implode('', array_map(fn($valeur) => sprintf('<span class="groupTitleLabel">%s</span>', $this->getData(['group', htmlspecialchars($valeur)])), $group));
-
-						// Les données sont valides, on ajoute le groupe à l'utilisateur si celui-ci n'est pas déjà inscrit
 						$groups = $this->getData(['user', $userId, 'group']);
-						$groups[] = $groupId;
-						$this->setData(['user', $userId, 'group', $groups], false);
 
-						// Les groupes sous forme de chaine
-						$groups = is_null($group) === false ? implode('', array_map(fn($valeur) => sprintf('<span class="groupTitleLabel">%s</span>', $this->getData(['group', htmlspecialchars($valeur)])), $group)) : '';
+						// Variables de retour
+						$notification = helper::translate('Importation effectuée');
+						$success = true;
 
 						if (
 							in_array($groupId, $this->getData(['user', $userId, 'group'])) === false
 						) {
+
+							// Sauvegarder le nouveau groupe
+							$groups[] = $groupId;
+
+							//Sauvegarder
+							$this->setData(['user', $userId, 'group', $groups], false);
+							// Les groupes sous forme de chaine
+							$tablegroups = is_null($groups) === false ? implode('', array_map(fn($valeur) => sprintf('<span class="groupTitleLabel">%s</span>', $this->getData(['group', htmlspecialchars($valeur)])), $groups)) : '';
+
 							// Construction du tableau de confirmation
 							self::$groups[] = [
 								$names,
-								$groups,
+								$tablegroups,
 								helper::translate('Affectation réussie')
 							];
 						} else {
+
+							// Les groupes sous forme de chaine
+							$tablegroups = is_null($groups) === false ? implode('', array_map(fn($valeur) => sprintf('<span class="groupTitleLabel">%s</span>', $this->getData(['group', htmlspecialchars($valeur)])), $groups)) : '';
+
 							// Construction du tableau de confirmation
 							self::$groups[] = [
 								$names,
-								$groups,
-								helper::translate('Utilisateur déjà inscrit')
+								$tablegroups,
+								helper::translate('Déjà inscrit')
 							];
+
 						}
 
-						// Sauvegarde la base manuellement
-						$this->saveDB('user');
 					}
 				}
 
+				// Sauvegarde la base manuellement
+				$this->saveDB('user');
+				// Message d'erreur
 				if (empty(self::$groups)) {
 					$notification = helper::translate('Rien à importer, erreur de format ou fichier incorrect');
 					$success = false;
