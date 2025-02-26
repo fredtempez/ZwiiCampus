@@ -746,6 +746,11 @@ class group extends common
 				}
 			}
 		}
+			
+		// Vider le formulaire
+		unset($_POST['groupImportSeparator']);
+		$groups = null;
+
 		// Valeurs en sortie
 		$this->addOutput([
 			'title' => 'Affectation en masse',
