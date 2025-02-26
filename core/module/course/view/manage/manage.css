@@ -16,3 +16,11 @@
 /** NE PAS EFFACER
 * admin.css
 */
+
+/* Empêche l'action du navigateur sur les champs cachés */
+input[readonly], textarea[readonly], select:disabled {
+    background-color: inherit !important;   /*Garde la couleur d'origine */
+    color: inherit !important;            /* Garde la couleur du texte */
+    cursor: not-allowed;                   /* Indique que c'est non modifiable */
+    opacity: 1 !important;              /*    Évite l'effet de transparence */
+}

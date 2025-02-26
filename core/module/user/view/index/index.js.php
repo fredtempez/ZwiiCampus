@@ -22,17 +22,36 @@ $(document).ready((function () {
     $("#userFilterGroup, #userFilterFirstName, #userFilterLastName").change(function () {
         $("#userFilterUserForm").submit();
     });
-    $.fn.dataTable.moment( 'DD/MM/YYYY' );
-    $('#dataTables').DataTable({
+    $.fn.dataTable.moment('DD/MM/YYYY');
+    var table = $('#dataTables').DataTable({
         language: {
             url: "core/vendor/datatables/french.json"
         },
         locale: 'fr',
         stateSave: true,
+        info: true,
+        buttons: [
+            {
+                extend: 'csv',
+                text: '<i class="zwiico-code"></i>',
+                titleAttr: 'Exporter les données au format CSV',
+            },
+            {
+                extend: 'copy',
+                text: '<i class="zwiico-docs"></i>',
+                titleAttr: 'Copier dans le presse papier',
+            }, 
+            {
+                extend: 'print',
+                text: '<i class="zwiico-print"></i>',
+                titleAttr: 'Imprimer ou générer un PDF',
+            }
+        ],
+        dom: '<"top"lBf>rt<"bottom"p>',
         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Tout"]],
         "columnDefs": [
             {
-                target: 4,
+                target: 5,
                 type: 'datetime', // Utilisez 'datetime' pour le tri
                 searchable: false,
                 render: function (data, type, row) {
@@ -51,23 +70,19 @@ $(document).ready((function () {
                 target: 5,
                 orderable: false,
                 searchable: false
-            },
-            {
-                target: 6,
-                orderable: false,
-                searchable: false
             }
         ]
     });
 
+
     // Injecter la règle CSS pour la colonne cible
     $('<style>')
-    .prop('type', 'text/css')
-    .html(`
+        .prop('type', 'text/css')
+        .html(`
         table.dataTable tbody td:nth-child(5) {
             color: inherit !important; /* Rétablir la couleur du texte */
         }
     `)
-    .appendTo('head');
+        .appendTo('head');
 
 }));

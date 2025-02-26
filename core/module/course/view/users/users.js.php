@@ -25,13 +25,32 @@ $(document).ready((function () {
         language: {
             url: "core/vendor/datatables/french.json"
         },
-        order: [[3, 'desc']],
+        order: [[0, 'desc']],
         locale: 'fr',
         stateSave: true,
-        "lengthMenu": [[10, 25, 50, 100, 299, -1], [10, 25, 50, 100, 200, "Tout"]],
+        info: true,
+        buttons: [
+            {
+                extend: 'csv',
+                text: '<i class="zwiico-code"></i>',
+                titleAttr: 'Exporter les données au format CSV',
+            },
+            {
+                extend: 'copy',
+                text: '<i class="zwiico-docs"></i>',
+                titleAttr: 'Copier dans le presse papier',
+            }, 
+            {
+                extend: 'print',
+                text: '<i class="zwiico-print"></i>',
+                titleAttr: 'Imprimer ou générer un PDF',
+            }
+        ],
+        dom: '<"top"lBf>rt<"bottom"p>',
+        "lengthMenu": [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "Tout"]],
         "columnDefs": [
             {
-                targets: 2,
+                targets: 4,
                 type: 'datetime', 
                 searchable: false,
                 render: function (data, type, row) {
@@ -47,7 +66,7 @@ $(document).ready((function () {
                 }
             },
             {
-                targets: 5,
+                targets: 6,
                 orderable: false,
                 searchable: false
             }]

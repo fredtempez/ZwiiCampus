@@ -51,11 +51,11 @@ class common
 	const ACCESS_TIMER = 1800;
 
 	// Numéro de version
-	const ZWII_VERSION = '1.21.03';
+	const ZWII_VERSION = '2.0.00a';
 
 	// URL autoupdate
 	const ZWII_UPDATE_URL = 'https://forge.chapril.org/ZwiiCMS-Team/campus-update/raw/branch/master/';
-	const ZWII_UPDATE_CHANNEL = 'v1';
+	const ZWII_UPDATE_CHANNEL = 'v2';
 
 	// Valeurs possibles multiple de 10, 10 autorise 9 profils, 100 autorise 99 profils
 	const MAX_PROFILS = 10;
@@ -80,6 +80,7 @@ class common
 	public static $coreModuleIds = [
 		'config',
 		'course',
+		'group',
 		'install',
 		'language',
 		'maintenance',
@@ -92,6 +93,7 @@ class common
 	public static $concurrentAccess = [
 		'config',
 		'edit',
+		'group',
 		'language',
 		'plugin',
 		'theme',
@@ -211,6 +213,7 @@ class common
 		'core' => null,
 		'course' => null,
 		'font' => null,
+		'group'=> null,
 		'module' => null,
 		'page' => null,
 		'theme' => null,
@@ -228,6 +231,7 @@ class common
 		'course' => '',
 		'core' => '',
 		'font' => '',
+		'group'=> '',
 		'user' => '',
 		'language' => '',
 		'profil' => '',
@@ -1023,7 +1027,7 @@ class common
 	 * @param string $key Clé de la valeur
 	 * @param mixed $perm1
 	 * @param mixed $perm2
-	 * @return string|null
+	 * @return string|array|null
 	 */
 	public function getUser($key, $perm1 = null, $perm2 = null)
 	{

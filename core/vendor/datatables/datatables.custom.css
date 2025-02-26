@@ -1,13 +1,24 @@
 .dataTables_length {
+    display: flex;
     margin-bottom: 10px;
     width: 250px;
 }
 
 .dataTables_length label {
-    float: left;
+    display: flex;
+    align-items: center;
 }
 
 .dataTables_length select {
     margin-left: 5px;
     width: 80px;
+}
+
+.dt-buttons {
+    display: flex;
+    justify-content: space-between; 
+    gap: 20px;
+    flex: 0 0 auto;
+    margin: 0 auto;
+    width: 250px;
 }

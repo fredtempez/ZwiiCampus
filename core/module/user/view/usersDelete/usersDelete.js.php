@@ -39,7 +39,27 @@ $(document).ready((function () {
             url: "core/vendor/datatables/french.json"
         },
         locale: 'fr',
-        "lengthMenu": [[10, 25, 50, 100, 299,  -1], [10, 25, 50, 100, 200, "Tout"]],
+        stateSave: true,
+        info: true,
+        buttons: [
+            {
+                extend: 'csv',
+                text: '<i class="zwiico-code"></i>',
+                titleAttr: 'Exporter les données au format CSV',
+            },
+            {
+                extend: 'copy',
+                text: '<i class="zwiico-docs"></i>',
+                titleAttr: 'Copier dans le presse papier',
+            }, 
+            {
+                extend: 'print',
+                text: '<i class="zwiico-print"></i>',
+                titleAttr: 'Imprimer ou générer un PDF',
+            }
+        ],
+        dom: '<"top"lBf>rt<"bottom"p>',
+        "lengthMenu": [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "Tout"]],
         "columnDefs": [
             {
                 target: 0,

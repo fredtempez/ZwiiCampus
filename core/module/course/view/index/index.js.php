@@ -18,6 +18,25 @@ $(document).ready(function () {
         },
         locale: 'fr',
         stateSave: true,
+        info: true,
+        buttons: [
+            {
+                extend: 'csv',
+                text: '<i class="zwiico-code"></i>',
+                titleAttr: 'Exporter les données au format CSV',
+            },
+            {
+                extend: 'copy',
+                text: '<i class="zwiico-docs"></i>',
+                titleAttr: 'Copier dans le presse papier',
+            }, 
+            {
+                extend: 'print',
+                text: '<i class="zwiico-print"></i>',
+                titleAttr: 'Imprimer ou générer un PDF',
+            }
+        ],
+        dom: '<"top"lBf>rt<"bottom"p>',
         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Tout"]],
         "columnDefs": [
             {

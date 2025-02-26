@@ -1,3 +1,7 @@
+/**
+Feuille de style pour les exportation HTMl des pages
+*/
+
 /* Réinitialisation de base pour supprimer les marges et les espacements par défaut */
 body, h1, h2, h3, h4, h5, h6, p, ul, ol, li {
     margin: 0;

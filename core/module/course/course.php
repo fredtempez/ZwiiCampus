@@ -84,6 +84,8 @@ class course extends common
 
     public static $courseAvailable = false;
 
+    public static $userGroups = [];
+
     public function index()
     {
         // Tableau à transmettre à la fvue
@@ -111,12 +113,13 @@ class course extends common
                         ? sprintf('%s %s', $this->getData(['user', $this->getData(['course', $courseId, 'author']), 'firstname']), $this->getData(['user', $this->getData(['course', $courseId, 'author']), 'lastname']))
                         : '';
                     $categorieUrl = helper::baseUrl() . 'course/swap/' . $courseId;
-                    $info = sprintf(' <a href="%s">%s</a><br />Auteur : %s<br />Id : %s<br />', $categorieUrl, $this->getData(['course', $courseId, 'title']), $author, $courseId,);
+                    $info = sprintf(' <a href="%s">%s</a><br />Auteur : %s<br />Id : %s<br />', $categorieUrl, $this->getData(['course', $courseId, 'title']), $author, $courseId, );
                     $enrolment = sprintf(
                         'Accès : %s<br />Inscription : %s<br />',
                         self::$courseAccess[$this->getData(['course', $courseId, 'access'])],
                         self::$courseEnrolment[$this->getData(['course', $courseId, 'enrolment'])]
                     );
+                    $users = '';
                     if ($this->getUser('permission', 'course', 'users') === true) {
                         $users = template::button('categoryUser' . $this->getUrl(2), [
                             'href' => helper::baseUrl() . 'course/users/' . $courseId,
@@ -191,7 +194,12 @@ class course extends common
                 []
             ]);
 
-
+            // Groupes
+            foreach ($this->getData(['group']) as $id => $title) {
+                if ($this->getInput('courseAddGroup' . $id, helper::FILTER_BOOLEAN)) {
+                    $groups[] = $id;
+                }
+            }
             $this->setData([
                 'course',
                 $courseId,
@@ -209,6 +217,7 @@ class course extends common
                     'limitEnrolment' => $this->getInput('courseAddEnrolmentLimit', helper::FILTER_BOOLEAN),
                     'limitEnrolmentDate' => $this->getInput('courseAddEnrolmentLimitDate', helper::FILTER_DATETIME),
                     'report' => $this->getInput('courseAddEnrolmentReport', helper::FILTER_BOOLEAN),
+                    'group' => $groups,
                 ]
             ]);
 
@@ -244,6 +253,11 @@ class course extends common
         self::$courses = helper::arrayColumn(self::$courses, 'title', 'SORT_ASC');
         self::$courses = array_merge(['home' => 'Accueil de la plate-forme'], self::$courses);
 
+        // listes des groupes
+        foreach ($this->getData(['group']) as $id => $title) {
+            self::$userGroups[] = template::checkbox('courseAddGroup' . $id, $id, $title);
+        }
+
         // Valeurs en sortie
         $this->addOutput([
             'title' => helper::translate('Ajouter un espace'),
@@ -275,7 +289,12 @@ class course extends common
             //$this->getUser('permission', __CLASS__, __FUNCTION__) === true &&
             $this->isPost()
         ) {
-
+            // Groupes
+            foreach ($this->getData(['group']) as $id => $title) {
+                if ($this->getInput('courseEditGroup' . $id, helper::FILTER_BOOLEAN)) {
+                    $groups[] = $id;
+                }
+            }
             $this->setData([
                 'course',
                 $courseId,
@@ -293,6 +312,7 @@ class course extends common
                     'limitEnrolment' => $this->getInput('courseEditEnrolmentLimit', helper::FILTER_BOOLEAN),
                     'limitEnrolmentDate' => $this->getInput('courseEditEnrolmentLimitDate', helper::FILTER_DATETIME),
                     'report' => $this->getInput('courseEditEnrolmentReport', helper::FILTER_BOOLEAN),
+                    'group' => $groups,
                 ]
             ]);
 
@@ -335,6 +355,15 @@ class course extends common
             ) {
                 unset(self::$pagesList[$pageId]);
             }
+        }
+
+        // listes des groupes
+        foreach ($this->getData(['group']) as $id => $title) {
+            self::$userGroups[] = template::checkbox('courseEditGroup' . $id, $id, $title, [
+                'checked' => is_null($this->getData(['course', $courseId, 'group'])) === false ?
+                    in_array($id, $this->getData(['course', $courseId, 'group']))
+                    : '',
+            ]);
         }
 
         // Valeurs en sortie
@@ -394,6 +423,16 @@ class course extends common
             ) {
                 unset(self::$pagesList[$pageId]);
             }
+        }
+
+        // listes des groupes
+        foreach ($this->getData(['group']) as $id => $title) {
+            self::$userGroups[] = template::checkbox('courseManageGroup' . $id, $id, $title, [
+                'checked' => is_null($this->getData(['course', $courseId, 'group'])) === false ?
+                    in_array($id, $this->getData(['course', $courseId, 'group']))
+                    : '',
+                'disabled' => true,
+            ]);
         }
 
         // Valeurs en sortie
@@ -734,17 +773,21 @@ class course extends common
                         'help' => 'Rapport désactivé',
                     ]);
                 }
+                // Les groupes sous forme de chaine
+                $group = $this->getData(['user', $userId, 'group']);
+                $group = is_null($group) === false ? implode('', array_map(fn($valeur) => sprintf('<span class="groupTitleLabel">%s</span>', $this->getData(['group', htmlspecialchars($valeur)])), $group)) : '';
                 self::$courseUsers[] = [
                     //$userId,
                     sprintf('%s %s', $this->getData(['user', $userId, 'lastname']), $this->getData(['user', $userId, 'firstname'])),
-                    array_key_exists('lastPageView', $userValue) && isset($pages['page'][$userValue['lastPageView']]['title'])
-                        ? $pages['page'][$userValue['lastPageView']]['title']
-                        : helper::translate('Aucune'),
-                    array_key_exists('lastPageView', $userValue)
-                        // ? helper::dateUTF8('%d/%m/%Y', $userValue['datePageView'])
-                        ? $userValue['datePageView']
-                        : helper::translate('Jamais'),
+                    $group,
                     $this->getData(['user', $userId, 'tags']),
+                    array_key_exists('lastPageView', $userValue) && isset($pages['page'][$userValue['lastPageView']]['title'])
+                    ? $pages['page'][$userValue['lastPageView']]['title']
+                    : helper::translate('Aucune'),
+                    array_key_exists('lastPageView', $userValue)
+                    // ? helper::dateUTF8('%d/%m/%Y', $userValue['datePageView'])
+                    ? $userValue['datePageView']
+                    : helper::translate('Jamais'),
                     $reportButton,
                     template::button('userDelete' . $userId, [
                         'class' => 'userDelete buttonRed',
@@ -885,12 +928,16 @@ class course extends common
                     continue;
             }
 
+            // Les groupes sous forme de chaine
+            $group = $this->getData(['user', $userId, 'group']);
+            $group = is_null($group) === false ? implode('', array_map(fn($valeur) => sprintf('<span class="groupTitleLabel">%s</span>', $this->getData(['group', htmlspecialchars($valeur)])), $group)) : '';
             // Construction du tableau
             self::$courseUsers[] = [
                 template::checkbox($userId, true, '', ['class' => 'checkboxSelect']),
-                $userId,
+                //$userId,
                 $this->getData(['user', $userId, 'firstname']),
                 $this->getData(['user', $userId, 'lastname']),
+                $group,
                 $this->getData(['user', $userId, 'tags']),
             ];
         }
@@ -1048,12 +1095,16 @@ class course extends common
                         continue;
                 }
 
+                // Les groupes sous forme de chaine
+                $group = $this->getData(['user', $userId, 'group']);
+                $group = is_null($group) === false ? implode('', array_map(fn($valeur) => sprintf('<span class="groupTitleLabel">%s</span>', $this->getData(['group', htmlspecialchars($valeur)])), $group)) : '';
                 // Construction du tableau
                 self::$courseUsers[] = [
                     template::checkbox($userId, true, '', ['class' => 'checkboxSelect']),
-                    $userId,
+                    //$userId,
                     $this->getData(['user', $userId, 'firstname']),
                     $this->getData(['user', $userId, 'lastname']),
+                    $group,
                     $this->getData(['user', $userId, 'tags']),
                 ];
             }
@@ -1119,12 +1170,12 @@ class course extends common
     }
 
     /*
-     * Traitement du changement de langue
+     * Traitement du changement d'espace
      */
     public function swap()
     {
         $courseId = $this->getUrl(2);
-        // pageIfd est transmis lors de l'appel de la page depuis un lien direct alors que l'espace n'est pas sélectionné.
+        // pageId est transmis lors de l'appel de la page depuis un lien direct alors que l'espace n'est pas sélectionné.
         $pageId = $this->getUrl(3);
         $userId = $this->getuser('id');
         $message = '';
@@ -1134,7 +1185,6 @@ class course extends common
         // Récupérer les pages pour contrôler la dernière page vue
         $p = json_decode(file_get_contents(self::DATA_DIR . $courseId . '/page.json'), true);
         $pages = $p['page'];
-
         // Routage
         if (
             // Sortir du contenu et afficher l'accueil
@@ -1142,11 +1192,13 @@ class course extends common
         ) {
             $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
         }
-        // l'étudiant est inscrit dans le contenu ET le contenu est ouvert
-        // ou un admin  ou le prof du contenu sont connectés
+        // le participant est inscrit dans le contenu ET le contenu est ouvert ou un admin  ou le prof du contenu sont connectés
+        //
         elseif (
             $this->courseIsUserEnroled($courseId)
             && $this->courseIsAvailable($courseId)
+            // L'accès à l'espace est limité aux membres du groupe de l'espace
+            && $this->userGroupIntersectCourseGroup($courseId, $userId)
         ) {
             // Récupérer la dernière page visitée par cet utilisateur si elle existe
             $redirect = ($this->getData(['enrolment', $courseId, $userId, 'lastPageView']) !== null
@@ -1174,22 +1226,27 @@ class course extends common
                 $message = sprintf(helper::translate('Cet espace ouvre le <br>%s <br> et ferme le %s'), $from, $to);
             }
         }
-        // le contenu est ouvert, l'étudiant n'est pas inscrit, l'accès au contenu est anonyme
+        // Message du groupe qui ne correspond pas à celui de l'espace
+        elseif ($this->userGroupIntersectCourseGroup($courseId, $userId) === false) {
+            $message = helper::translate('Votre groupe n\'a pas accès à cet espace');
+            $state = false;
+        }
+        // le contenu est ouvert, le participant n'est pas inscrit, l'accès au contenu est anonyme
         elseif (
             $this->courseIsAvailable($courseId) &&
             $this->courseIsUserEnroled($courseId) === false
         ) {
             // Gérer les modalités d'inscription
             switch ($this->getData(['course', $courseId, 'enrolment'])) {
-                    // Anonyme
+                // Anonyme
                 case self::COURSE_ENROLMENT_GUEST:
                     $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
                     // Accès direct à la page
                     $redirect = helper::baseUrl() . $pageId;
                     break;
-                    // Auto avec ou sans clé
+                // Auto avec ou sans clé
                 case self::COURSE_ENROLMENT_SELF:
-                    //L'étudiant doit disposer d'un compte
+                    //le participant doit disposer d'un compte
                     if ($this->getUser('id')) {
                         $redirect = helper::baseUrl() . 'course/suscribe/' . $courseId;
                     } else {
@@ -1198,7 +1255,7 @@ class course extends common
                     }
                     break;
                 case self::COURSE_ENROLMENT_SELF_KEY:
-                    //L'étudiant doit disposer d'un compte
+                    //le participant doit disposer d'un compte
                     if ($this->getUser('id')) {
                         $redirect = helper::baseUrl() . 'course/suscribe/' . $courseId;
                     } else {
@@ -1206,7 +1263,7 @@ class course extends common
                         $state = false;
                     }
                     break;
-                    // Par le prof
+                // Par le prof
                 case self::COURSE_ENROLMENT_MANDATORY:
                     $message = helper::translate('L\'enseignant doit vous inscrire');
                     $state = false;
@@ -1247,78 +1304,84 @@ class course extends common
 
         $userId = $this->getUrl(3);
         $h = $this->getReport($courseId, $userId);
-        $h = $h[$userId];
 
-        // Inversion des clés et des valeurs
-        $report = array();
-        foreach ($h as $key => $values) {
-            foreach ($values as $value) {
-                $report[$value] = $key;
+        // Préparation du graphe si le rapport existe
+        if (empty($h) === false) {
+            $h = $h[$userId];
+
+            // Inversion des clés et des valeurs
+            $report = array();
+            foreach ($h as $key => $values) {
+                foreach ($values as $value) {
+                    $report[$value] = $key;
+                }
             }
-        }
-
-        ksort($report);
-
-        // Liste des pages contenues dans cet espace et exclure les barres et les pages masquées
-        $p = json_decode(file_get_contents(self::DATA_DIR . $courseId . '/page.json'), true);
-        foreach ($p['page'] as $pageId => $pageData) {
-            if ($pageData['position'] > 0) {
-                $pages[$pageId] = [
-                    'title' => $pageData['title'],
-                ];
-            }
-        }
-
-        $floorTime = 99999999999;
-        $topTime = 0;
-        $lastView = 0;
-
-        foreach ($report as $time => $pageId) {
-            if (isset($pages[$pageId]['title'])) {
-                $lastView = ($lastView === 0) ? $time : $lastView;
-                $diff = $time - $lastView;
-                self::$userReport[] = [
-                    html_entity_decode($pages[$pageId]['title']),
-                    $time,
-                    ($diff < 1800) ? sprintf("%d' %d''", floor($diff / 60), $diff % 60) : "Non significatif",
-                ];
-                if ($diff < 1800) {
-                    self::$userGraph[] = [
-                        helper::dateUTF8('%Y-%m-%d %H:%M:%S', $time),
-                        $diff,
-                        html_entity_decode($pages[$pageId]['title']) . ' (' . helper::dateUTF8('%M\'%S"', $diff) . ')'
+    
+            ksort($report);
+    
+            // Liste des pages contenues dans cet espace et exclure les barres et les pages masquées
+            $p = json_decode(file_get_contents(self::DATA_DIR . $courseId . '/page.json'), true);
+            foreach ($p['page'] as $pageId => $pageData) {
+                if ($pageData['position'] > 0) {
+                    $pages[$pageId] = [
+                        'title' => $pageData['title'],
                     ];
                 }
-                $lastView = $time;
-                $floorTime = isset($floorTime) && $floorTime < $time ? $floorTime : $time;
-                $topTime = isset($topTime) && $topTime > $time ? $topTime : $time;
             }
+    
+            $floorTime = 99999999999;
+            $topTime = 0;
+            $lastView = 0;
+    
+            foreach ($report as $time => $pageId) {
+                if (isset($pages[$pageId]['title'])) {
+                    $lastView = ($lastView === 0) ? $time : $lastView;
+                    $diff = $time - $lastView;
+                    self::$userReport[] = [
+                        html_entity_decode($pages[$pageId]['title']),
+                        $time,
+                        ($diff < 1800) ? sprintf("%d' %d''", floor($diff / 60), $diff % 60) : "Non significatif",
+                    ];
+                    if ($diff < 1800) {
+                        self::$userGraph[] = [
+                            helper::dateUTF8('%Y-%m-%d %H:%M:%S', $time),
+                            $diff,
+                            html_entity_decode($pages[$pageId]['title']) . ' (' . helper::dateUTF8('%M\'%S"', $diff) . ')'
+                        ];
+                    }
+                    $lastView = $time;
+                    $floorTime = isset($floorTime) && $floorTime < $time ? $floorTime : $time;
+                    $topTime = isset($topTime) && $topTime > $time ? $topTime : $time;
+                }
+            }
+    
+            // Décale les temps de consultation
+            for ($i = 0; $i < count(self::$userReport) - 1; $i++) {
+                self::$userReport[$i][2] = self::$userReport[$i + 1][2];
+            }
+            // Décale les temps de consultation
+            for ($i = 0; $i < count(self::$userGraph) - 1; $i++) {
+                self::$userReport[$i][1] = self::$userReport[$i + 1][1];
+            }
+    
+            // Formate le timestamp
+            array_walk(self::$userReport, function (&$item) {
+                $item[1] = helper::dateUTF8('%d/%m/%Y %H:%M:%S', $item[1]);
+            });
+    
+            self::$userStat['floor'] = helper::dateUTF8('%d %B %Y %H:%M', $floorTime);
+            self::$userStat['top'] = helper::dateUTF8('%d %B %Y %H:%M', $topTime);
+            $d = $topTime - $floorTime;
+            // Conversion de la différence en jours, heures et minutes
+            $d_days = floor($d / 86400);  // 1 jour = 86400 secondes (24 heures * 60 minutes * 60 secondes)
+            $d_hours = floor(($d % 86400) / 3600);
+            $d_minutes = floor(($d % 3600) / 60);
+    
+            // Affichage du résultat
+            self::$userStat['time'] = $d_days . ' jours, ' . $d_hours . ' heures, ' . $d_minutes . ' minutes ';
         }
 
-        // Décale les temps de consultation
-        for ($i = 0; $i < count(self::$userReport) - 1; $i++) {
-            self::$userReport[$i][2] = self::$userReport[$i + 1][2];
-        }
-        // Décale les temps de consultation
-        for ($i = 0; $i < count(self::$userGraph) - 1; $i++) {
-            self::$userReport[$i][1] = self::$userReport[$i + 1][1];
-        }
-
-        // Formate le timestamp
-        array_walk(self::$userReport, function (&$item) {
-            $item[1] = helper::dateUTF8('%d/%m/%Y %H:%M:%S', $item[1]);
-        });
-
-        self::$userStat['floor'] = helper::dateUTF8('%d %B %Y %H:%M', $floorTime);
-        self::$userStat['top'] = helper::dateUTF8('%d %B %Y %H:%M', $topTime);
-        $d = $topTime - $floorTime;
-        // Conversion de la différence en jours, heures et minutes
-        $d_days = floor($d / 86400);  // 1 jour = 86400 secondes (24 heures * 60 minutes * 60 secondes)
-        $d_hours = floor(($d % 86400) / 3600);
-        $d_minutes = floor(($d % 3600) / 60);
-
-        // Affichage du résultat
-        self::$userStat['time'] = $d_days . ' jours, ' . $d_hours . ' heures, ' . $d_minutes . ' minutes ';
+     
 
         // Valeurs en sortie
         $this->addOutput([
@@ -1408,8 +1471,8 @@ class course extends common
                     $this->getData(['user', $userId, 'lastname']),
                     $this->getData(['user', $userId, 'mail']),
                     isset($pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])])
-                        ? $pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])]
-                        : $this->getData(['enrolment', $courseId, $userId, 'lastPageView']) . ' (supprimée)',
+                    ? $pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])]
+                    : $this->getData(['enrolment', $courseId, $userId, 'lastPageView']) . ' (supprimée)',
                     helper::dateUTF8('%d/%d/%Y', $this->getData(['enrolment', $courseId, $userId, 'datePageView'])),
                     helper::dateUTF8('%H:%M', $this->getData(['enrolment', $courseId, $userId, 'datePageView'])),
                     /** La lecture de la progression s'effectue selon la nouvelle méthode (progression dans la base des enrolements)
@@ -1417,8 +1480,8 @@ class course extends common
                      *  TRANSITOIRE A SUPPRIMER EN FIN D'ANNEE
                      **/
                     array_key_exists('progress', $userValue)
-                        ? $userValue['progress']
-                        : ($viewPages ? min(round(($viewPages * 100) / $sumPages, 1), 100) . ' %' : '0%'),
+                    ? $userValue['progress']
+                    : ($viewPages ? min(round(($viewPages * 100) / $sumPages, 1), 100) . ' %' : '0%'),
                     //number_format(min(round(($viewPages * 100) / $sumPages, 1) / 100, 1), 2, ','),
                 ];
 
@@ -1589,14 +1652,14 @@ class course extends common
                 }
             }
         }
-        // L'étudiant est-il  inscrit
+        // le participant est-il  inscrit
         // Etat du cours
         self::$courseAvailable = $this->courseIsAvailable($this->getUrl(2));
         // Message d'inscription
         self::$swapMessage['submitLabel'] = helper::translate('M\'inscrire');
         self::$swapMessage['enrolmentMessage'] = '';
         self::$swapMessage['enrolmentKey'] = '';
-        // L'étudiant est-il inscrit ?
+        // le participant est-il inscrit ?
         if ($this->courseIsUserEnroled($courseId) === false) {
             switch ($this->getData(['course', $courseId, 'enrolment'])) {
                 case self::COURSE_ENROLMENT_SELF:
@@ -1920,7 +1983,8 @@ class course extends common
                     if (file_exists(self::TEMP_DIR . $tempFolder . '/course.json')) {
                         $courseData = json_decode(file_get_contents(self::TEMP_DIR . $tempFolder . '/course.json'), true);
                         // Lire l'id du cours
-                        $courseIds = array_keys($courseData);;
+                        $courseIds = array_keys($courseData);
+                        ;
                         $courseId = $courseIds[0];
                         $success = true;
                     } else {
@@ -2011,7 +2075,7 @@ class course extends common
                     $this->getUser('permission', __CLASS__, $function)
                     && $this->getUser('role') === self::$actions[$function]
                     &&
-                    // Permission d'accéder aux espaces dans lesquels le membre auteur
+                        // Permission d'accéder aux espaces dans lesquels le membre auteur
                     (
                         $this->getData(['enrolment', $courseId]) && ($this->getUser('id') === $this->getData(['course', $courseId, 'author']))
                     )
@@ -2141,15 +2205,38 @@ class course extends common
         ]);
     }
 
+
+    /**
+     * Méthode pour retourner les données la concordance entre la liste des groupes de l'utilisateur et la liste des groupes du cours
+     * Quand un espace est restreint à un groupe, l'utilisateur doit appartenir à ce groupe pour y accéder
+     * Un espace ouvert ne contient aucune retriction.
+     *
+     * @param int $courseId L'ID du cours.
+     * @param int $userId L'ID de l'utilisateur.
+     * @return bool True en l'absence de restriction
+     */
+    private function userGroupIntersectCourseGroup($courseId, $userId)
+    {
+        $userGroups = is_null($this->getData(['user', $userId, 'group'])) ? [] : $this->getData(['user', $userId, 'group']);
+        $courseGroups = is_null($this->getData(['course', $courseId, 'group'])) ? [] : $this->getData(['course', $courseId, 'group']);
+        return (
+            // Si le cours n'est pas restreint à un groupe
+            $courseGroups === [] ||
+            // Oui si l'utilisateur appartient à un groupe du cours
+            array_intersect($userGroups, $courseGroups) !== []
+        );
+    }
+
     /**
      * Autorise l'accès à un contenu
-     * @return bool le user a le droit d'entrée dans le contenu
+     * @return bool le participant a le droit d'entrée dans le contenu
      * @param string $userId identifiant de l'utilisateur
      * @param string $courseId identifiant du contenu sollicité
      */
     private function courseIsUserEnroled($courseId)
     {
         $userId = $this->getUser('id');
+        // Rôle du participant
         $role = $userId ? $this->getData(['user', $userId, 'role']) : null;
         switch ($role) {
             case self::ROLE_ADMIN:
@@ -2158,11 +2245,13 @@ class course extends common
             case self::ROLE_EDITOR:
             case self::ROLE_MEMBER:
                 $r = false;
-                if (!is_null($this->getData(['enrolment', $courseId]))) {
+                if (
+                    is_null($this->getData(['enrolment', $courseId])) === false
+                ) {
                     $r = in_array($userId, array_keys($this->getData(['enrolment', $courseId])));
                 }
                 break;
-                // Visiteur non connecté
+            // Visiteur non connecté
             case self::ROLE_VISITOR:
             case null:
                 $r = $this->getData(['course', $courseId, 'enrolment']) === self::COURSE_ENROLMENT_GUEST;

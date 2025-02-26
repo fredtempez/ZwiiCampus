@@ -498,7 +498,7 @@ class layout extends common
         // Met en forme les items du menu si affiché
         $itemsLeft = '';
         if ($this->getData(['theme', 'menu', 'hidePages']) === false) {
-          $itemsLeft = $this->formatMenu();  
+            $itemsLeft = $this->formatMenu();
         }
         // Menu extra
         $itemsRight = $this->formatMenu(true);
@@ -529,7 +529,7 @@ class layout extends common
             $this->getData(['theme', 'menu', 'userReport']) === true
             && self::$siteContent !== 'home'
             // Pas de statistiques pour les espaces ouverts
-            && $this->getData(['course', self::$siteContent, 'enrolment']) >= 1            
+            && $this->getData(['course', self::$siteContent, 'enrolment']) >= 1
         ) {
             $href = '';
             switch ($this->getUser('role')) {
@@ -541,8 +541,9 @@ class layout extends common
                         $this->getData(['enrolment', self::$siteContent]) && ($this->getUser('id') === $this->getData(['course', self::$siteContent, 'author']))
                         // Permission d'accéder aux espaces dans lesquels le membre est inscrit
                         ||
-                        ($this->getData(['enrolment', self::$siteContent])
-                            && $this->getUser('permission', __CLASS__, 'tutor') === true
+                        (
+                            $this->getData(['enrolment', self::$siteContent])
+                            // && $this->getUser('permission', __CLASS__, 'tutor') === true
                             && array_key_exists($this->getUser('id'), $this->getData(['enrolment', self::$siteContent])))
                     ) {
                         $href = helper::baseUrl() . 'course/users/' . self::$siteContent;
@@ -1143,8 +1144,12 @@ class layout extends common
                     'help' => 'Langues',
                     'href' => helper::baseUrl() . 'language'
                 ]) . '</li>';
+                $rightItems .= '<li>' . template::ico('users', [
+                    'help' => 'Groupes',
+                    'href' => helper::baseUrl() . 'group'
+                ]) . '</li>';
                 $rightItems .= '<li>' . template::ico('address-book', [
-                    'help' => 'Utilisateurs',
+                    'help' => 'Participants',
                     'href' => helper::baseUrl() . 'user'
                 ]) . '</li>';
                 $rightItems .= '<li>' . template::ico('cog-alt', [

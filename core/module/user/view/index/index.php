@@ -48,7 +48,7 @@
 <?php echo template::formOpen('userFilterUserForm'); ?>
 <div class="row">
 	<div class="col3">
-		<?php echo template::select('userFilterGroup', user::$usersGroups, [
+		<?php echo template::select('userFilterGroup', user::$usersRoles, [
 			'label' => 'Rôles/ Profils',
 			'selected' => isset($_POST['userFilterGroup']) ? $_POST['userFilterGroup'] : 'all',
 		]); ?>
@@ -67,4 +67,4 @@
 	</div>
 </div>
 <?php echo template::formClose(); ?>
-<?php echo template::table([2, 2, 2, 2, 2, 1, 1], user::$users, ['Nom', 'Rôle', 'Profil', 'Étiquette', 'Date connexion', '', ''], ['id' => 'dataTables'], ['name', 'role', 'profile', 'tag', 'data-timestamp', 'edit', 'delete']); ?>
+<?php echo template::table([2, 2, 1, 2, 2, 2, 1,], user::$users, ['Nom', 'Courriel', 'Rôle / Profil', 'Groupes', 'Étiquettes', 'Dernière connexion', ''], ['id' => 'dataTables'], ['name', 'mail', 'role', 'profile', 'tag', 'data-timestamp', 'commands']); ?>

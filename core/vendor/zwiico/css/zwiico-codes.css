@@ -52,6 +52,7 @@
 .zwiico-square-check-empty:before { content: '\e830'; } /* '' */
 .zwiico-spin:before { content: '\e831'; } /* '' */
 .zwiico-tags:before { content: '\e832'; } /* '' */
+.zwiico-print:before { content: '\e833'; } /* '' */
 .zwiico-twitter:before { content: '\f099'; } /* '' */
 .zwiico-facebook:before { content: '\f09a'; } /* '' */
 .zwiico-docs:before { content: '\f0c5'; } /* '' */

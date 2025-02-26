@@ -491,6 +491,7 @@ class template
      * @param string $href lien vers une url
      * @param string $help popup d'aide
      * @param string $id de l'élement
+     * @param string $class classe à appliquer, sont natives icoTextRed, icoTextGret et icoTextGreen
      * @return string
      */
     // public static function ico($ico, $margin = '', $animate = false, $fontSize = '1em') {
@@ -498,6 +499,7 @@ class template
     {
         // Attributs par défaut
         $attributes = array_merge([
+            'class' => '',
             'margin' => '',
             'animate' => false,
             'fontSize' => '1em',
@@ -510,7 +512,7 @@ class template
         $attributes['help'] = helper::translate($attributes['help']);
         // Contenu de l'icône
         $alt = $attributes['help'] ? $attributes['help'] : $ico;
-        $item = $attributes['href'] ? '<a id="' . $attributes['id'] . '" data-tippy-content="' . $attributes['help'] . '" alt="' . $alt . '" href="' . $attributes['href'] . '" ' . $attributes['attr'] . ' >' : '';
+        $item = $attributes['href'] ? '<a class="' . $attributes['class'] . '" id="' . $attributes['id'] . '" data-tippy-content="' . $attributes['help'] . '" alt="' . $alt . '" href="' . $attributes['href'] . '" ' . $attributes['attr'] . ' >' : '';
         $item .= '<span class="zwiico-' . $ico . ($attributes['margin'] ? ' zwiico-margin-' . $attributes['margin'] : '') . ($attributes['animate'] ? ' animate-spin' : '') . '" style="font-size:' . $attributes['fontSize'] . '"><!----></span>';
         $item .= ($attributes['href']) ? '</a>' : '';
         return $item;

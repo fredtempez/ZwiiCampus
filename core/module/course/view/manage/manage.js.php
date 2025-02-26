@@ -23,7 +23,7 @@ $(".courseDelete").on("click", function () {
 });
 
 /**
-  * Confirmation de suppression
+  * Confirmation de reset
   */
  $(".courseReset").on("click", function () {
   var _this = $(this);
