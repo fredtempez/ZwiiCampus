@@ -1,24 +1,68 @@
+/* Ajustement du sélecteur de pagination */
 .dataTables_length {
     display: flex;
+    align-items: center;
+    gap: 10px;
     margin-bottom: 10px;
-    width: 250px;
+    max-width: 100%;
 }
 
 .dataTables_length label {
     display: flex;
     align-items: center;
+    font-size: 14px;
+    font-weight: 500;
 }
 
 .dataTables_length select {
     margin-left: 5px;
-    width: 80px;
+    width: auto;
+    min-width: 80px;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
 }
 
+/* Boutons d'exportation */
 .dt-buttons {
     display: flex;
-    justify-content: space-between; 
-    gap: 20px;
-    flex: 0 0 auto;
+    justify-content: center;
+    align-items: center;
+    gap: 10px; /* Moins d’espace entre les boutons */
+    flex-wrap: wrap; /* Permet un retour à la ligne si l'espace est limité */
     margin: 0 auto;
-    width: 250px;
+    max-width: 100%;
+}
+
+.dt-buttons button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+
+.dt-buttons button:hover {
+    background-color: #0056b3;
+}
+
+/* Ajustement du tableau */
+.dataTable {
+    width: 100% !important; /* Empêche le changement de taille */
+    border-collapse: collapse;
+}
+
+.dataTable th, .dataTable td {
+    padding: 10px;
+    text-align: left;
+}
+
+/* Pagination en bas */
+.dataTables_paginate {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
 }
