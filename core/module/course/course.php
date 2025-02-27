@@ -184,7 +184,7 @@ class course extends common
                 }
             }
             // Sauvegarder les données
-            $this->setData([
+            $r = $this->setData([
                 'course',
                 $courseId,
                 [
@@ -206,7 +206,7 @@ class course extends common
             ]);
 
             // Les dossiers de l'espace sont créés en l'absence de notice
-            if (empty(self::$inputNotices)) {
+            if ($r !== NULL) {
 
                 // Créer la structure de données
                 mkdir(self::DATA_DIR . $courseId);
