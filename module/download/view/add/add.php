@@ -180,7 +180,7 @@
 						]); ?>
 					</div>
 					<div class="col4 commentOptionsWrapper">
-						<?php echo template::select('downloadAddCommentGroupNotification', self::$groupNews, [
+						<?php echo template::select('downloadAddCommentGroupNotification', self::$roleNews, [
 							'selected' => $this->getData(['module', $this->getUrl(0), 'posts', $this->getUrl(2), 'commentGroupNotification']),
 							'help' => 'Editeurs = éditeurs + administrateurs<br/> Membres = membres + éditeurs + administrateurs'
 						]); ?>
