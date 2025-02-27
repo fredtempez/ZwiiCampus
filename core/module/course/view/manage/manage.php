@@ -79,7 +79,7 @@
             </h4>
             <div class="row">
                 <div class="col12">
-                    <?php echo template::text('courseEditShortTitle', [
+                    <?php echo template::text('courseManageShortTitle', [
                         'label' => 'Titre',
                         'value' => $this->getdata(['course', $this->getUrl(2), 'title']),
                         'readonly' => true,
@@ -89,7 +89,7 @@
             </div>
             <div class="row">
                 <div class="col12">
-                    <?php echo template::textarea('courseEditDescription', [
+                    <?php echo template::textarea('courseManageDescription', [
                         'label' => 'Description',
                         'value' => $this->getdata(['course', $this->getUrl(2), 'description']),
                         'readonly' => true,
@@ -98,21 +98,21 @@
             </div>
             <div class="row">
                 <div class="col4">
-                    <?php echo template::select('courseEditAuthor', course::$courseTeachers, [
+                    <?php echo template::select('courseManageAuthor', course::$courseTeachers, [
                         'label' => 'Auteur',
                         'selected' => $this->getdata(['course', $this->getUrl(2), 'author']),
                         'disabled' => true,
                     ]); ?>
                 </div>
                 <div class="col4">
-                    <?php echo template::select('courseEditHomePageId', helper::arrayColumn(course::$pagesList, 'title'), [
+                    <?php echo template::select('courseManageHomePageId', helper::arrayColumn(course::$pagesList, 'title'), [
                         'label' => 'Page d\'accueil',
                         'selected' => $this->getdata(['course', $this->getUrl(2), 'homePageId']),
                         'disabled' => true,
                     ]); ?>
                 </div>
                 <div class="col4">
-                    <?php echo template::select('courseEditCategorie', course::$courseCategories, [
+                    <?php echo template::select('courseManageCategorie', course::$courseCategories, [
                         'label' => 'Catégorie',
                         'selected' => $this->getdata(['course', $this->getUrl(2), 'category']),
                         'disabled' => true,
@@ -122,7 +122,7 @@
 
             <div class="row">
                 <div class="col4">
-                    <?php echo template::checkbox('courseEditEnrolmentReport', true, 'Statistique des consultations', [
+                    <?php echo template::checkbox('courseManageEnrolmentReport', true, 'Statistique des consultations', [
                         'checked' => $this->getdata(['course', $this->getUrl(2), 'report']),
                         'help' => 'Enregistre une trace des consultations. Ne s\'applique pas à l\'inscription anonyme',
                         'disabled' => true,
@@ -141,13 +141,13 @@
             </h4>
             <div class="row">
                 <div class="col3">
-                    <?php echo template::select('courseEditAccess', course::$courseAccess, [
+                    <?php echo template::select('courseManageAccess', course::$courseAccess, [
                         'label' => 'Modalité',
                         'selected' => $this->getdata(['course', $this->getUrl(2), 'access']),
                         'disabled' => true,
                     ]); ?>
                 </div>
-                <div class="col2">
+                <div class="col2 periodSetup">
                     <?php echo template::date('courseOpeningDate', [
                         'type' => 'datetime-local',
                         'label' => 'Ouvre le',
@@ -155,7 +155,7 @@
                         'readonly' => true,
                     ]); ?>
                 </div>
-                <div class="col2">
+                <div class="col2 periodSetup">
                     <?php echo template::date('courseClosingDate', [
                         'type' => 'datetime-local',
                         'label' => 'Ferme le',
@@ -163,15 +163,15 @@
                         'readonly' => true,
                     ]); ?>
                 </div>
-                <div class="col3 verticalAlignBottom">
-                    <?php echo template::checkbox('courseEditEnrolmentLimit', true, 'Date limite d\'inscription', [
+                <div class="col3 periodSetup">
+                    <?php echo template::checkbox('courseManageEnrolmentLimit', true, 'Date limite d\'inscription', [
                         'checked' => $this->getdata(['course', $this->getUrl(2), 'limitEnrolment']),
                         'help' => 'Ne s\'applique pas à l\'inscription anonyme',
                         'disabled' => true,
                     ]); ?>
                 </div>
-                <div class="col2">
-                    <?php echo template::date('courseEditEnrolmentLimitDate', [
+                <div class="col2 periodSetup">
+                    <?php echo template::date('courseManageEnrolmentLimitDate', [
                         'type' => 'datetime-local',
                         'label' => 'Jusqu\'au',
                         'value' => is_int($this->getdata(['course', $this->getUrl(2), 'limitEnrolmentDate'])) ? floor($this->getdata(['course', $this->getUrl(2), 'limitEnrolmentDate']) / 60) * 60 : 0,
@@ -190,14 +190,14 @@
             </h4>
             <div class="row">
                 <div class="col4">
-                    <?php echo template::select('courseEditEnrolment', course::$courseEnrolment, [
+                    <?php echo template::select('courseManageEnrolment', course::$courseEnrolment, [
                         'label' => 'Méthode',
                         'selected' => $this->getdata(['course', $this->getUrl(2), 'enrolment']),
                         'disabled' => true,
                     ]); ?>
                 </div>
                 <div class="col4">
-                    <?php echo template::text('courseEditEnrolmentKey', [
+                    <?php echo template::text('courseManageEnrolmentKey', [
                         'label' => 'Nécessite une clé',
                         'value' => $this->getdata(['course', $this->getUrl(2), 'enrolmentKey']),
                         'readonly' => true,
