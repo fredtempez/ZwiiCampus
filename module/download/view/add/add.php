@@ -56,13 +56,13 @@
 					]); ?>
 				</div>
 				<div class="col3">
-					<?php echo template::select('downloadAddLicense', $module::$licenses, [
+					<?php echo template::select('downloadAddLicense', download::$licenses, [
 						'label' => 'Licence'
 					]); ?>
 				</div>
 				<div class="col3">
-					<?php if ($module::$categories) {
-						echo template::select('downloadAddCategorie', $module::$categories, [
+					<?php if (download::$categories) {
+						echo template::select('downloadAddCategorie', download::$categories, [
 							'label' => 'Catégorie'
 						]);
 					} else {
@@ -83,7 +83,7 @@
 			</div>
 			<div class="row">
 				<div class="col3">
-					<?php echo template::select('downloadAddRessourceType', $module::$ressourceType, [
+					<?php echo template::select('downloadAddRessourceType', download::$ressourceType, [
 						'label' => 'Type de ressource',
 						'selected' => $this->getData(['module', $this->getUrl(0), 'posts', $this->getUrl(2), 'ressourceType'])
 					]); ?>
@@ -123,7 +123,7 @@
 				<h4>Options de publication</h4>
 				<div class="row">
 					<div class="col4">
-						<?php echo template::select('downloadAddUserId', $module::$users, [
+						<?php echo template::select('downloadAddUserId', download::$users, [
 							'label' => 'Auteur',
 							'selected' => $this->getUser('id'),
 							'disabled' => $this->getUser('role') !== self::ROLE_ADMIN ? true : false
@@ -138,7 +138,7 @@
 						]); ?>
 					</div>
 					<div class="col4">
-						<?php echo template::select('downloadAddConsent', $module::$itemConsent, [
+						<?php echo template::select('downloadAddConsent', download::$itemConsent, [
 							'label' => 'Edition - Suppression',
 							'selected' => is_numeric($this->getData(['module', $this->getUrl(0), 'posts', $this->getUrl(2), 'editConsent'])) ? $module::EDIT_ROLE : $this->getData(['module', $this->getUrl(0), 'posts', $this->getUrl(2), 'editConsent']),
 							'help' => 'Les utilisateurs des groupes supérieurs accèdent à l\'item sans restriction'
@@ -165,7 +165,7 @@
 						]); ?>
 					</div>
 					<div class="col4 commentOptionsWrapper">
-						<?php echo template::select('downloadAddCommentMaxlength', $module::$commentLength, [
+						<?php echo template::select('downloadAddCommentMaxlength', download::$commentLength, [
 							'help' => 'Choix du nombre maximum de caractères pour chaque commentaire de l\'item, mise en forme html comprise.',
 							'label' => 'Caractères par commentaire',
 							'selected' => $this->getData(['module', $this->getUrl(0), 'posts', $this->getUrl(2), 'commentMaxlength'])
@@ -180,7 +180,7 @@
 						]); ?>
 					</div>
 					<div class="col4 commentOptionsWrapper">
-						<?php echo template::select('downloadAddCommentGroupNotification', $module::$groupNews, [
+						<?php echo template::select('downloadAddCommentGroupNotification', self::$groupNews, [
 							'selected' => $this->getData(['module', $this->getUrl(0), 'posts', $this->getUrl(2), 'commentGroupNotification']),
 							'help' => 'Editeurs = éditeurs + administrateurs<br/> Membres = membres + éditeurs + administrateurs'
 						]); ?>

@@ -16,7 +16,7 @@
 				]); ?>
 			</div>
 			<div class="col4">
-				<?php echo template::select('formConfigType[]', $module::$types, [
+				<?php echo template::select('formConfigType[]', sondage::$types, [
 					'class' => 'formConfigType'
 				]); ?>
 			</div>
@@ -91,7 +91,7 @@
 					</div>
 					<?php
 						// Element 0 quand aucun membre a été sélectionné
-						$groupMembers = [''] + $module::$groupNews;
+						$groupMembers = [''] + self::$groupNews;
 					?>
 					Destinataires  :
 					<div class="row">
@@ -105,9 +105,9 @@
 					</div>
 					<div class="row">
 						<div class="col6 offset1">
-							<?php echo template::select('formConfigUser', $module::$listUsers, [
+							<?php echo template::select('formConfigUser', sondage::$listUsers, [
 								'label' => 'Un membre :',
-								'selected' => array_search($this->getData(['module', $this->getUrl(0), 'config', 'user']),$module::$listUsers)
+								'selected' => array_search($this->getData(['module', $this->getUrl(0), 'config', 'user']),sondage::$listUsers)
 							]); ?>
 						</div>
 					</div>
@@ -124,7 +124,7 @@
 					'checked' => (bool) $this->getData(['module', $this->getUrl(0), 'config', 'pageId'])
 				]); ?>
 				<div class="col6 offset1">
-					<?php echo template::select('formConfigPageId', $module::$pages, [
+					<?php echo template::select('formConfigPageId', sondage::$pages, [
 						'classWrapper' => 'displayNone',
 						'label' => 'Sélectionner une page du site :',
 						'selected' => $this->getData(['module', $this->getUrl(0), 'config', 'pageId'])
@@ -137,7 +137,7 @@
 						]); ?>
 					</div>
 					<div class="col6">
-							<?php echo template::select('formConfigItemsperPage', $module::$itemsList, [
+							<?php echo template::select('formConfigItemsperPage', sondage::$itemsList, [
 								'label' => 'Pagination des réponses',
 								'selected' => $this->getData(['module', $this->getUrl(0),'config', 'itemsperPage'])
 							]); ?>

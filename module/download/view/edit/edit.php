@@ -68,14 +68,14 @@
 					]); ?>
 				</div>
 				<div class="col3">
-					<?php echo template::select('downloadEditLicense', $module::$licenses, [
+					<?php echo template::select('downloadEditLicense', download::$licenses, [
 						'label' => 'Licence',
 						'selected' => $this->getData(['module', $this->getUrl(0), 'posts', $this->getUrl(2), 'license'])
 					]); ?>
 				</div>
 				<div class="col3">
-					<?php if ($module::$categories) {
-						echo template::select('downloadEditCategorie', $module::$categories, [
+					<?php if (download::$categories) {
+						echo template::select('downloadEditCategorie', download::$categories, [
 							'label' => 'Catégorie',
 							'selected' => $this->getData(['module', $this->getUrl(0), 'posts', $this->getUrl(2), 'category'])
 						]);
@@ -99,7 +99,7 @@
 			</div>
 			<div class="row">
 				<div class="col3">
-					<?php echo template::select('downloadEditRessourceType', $module::$ressourceType, [
+					<?php echo template::select('downloadEditRessourceType', download::$ressourceType, [
 						'label' => 'Type de ressource',
 						'selected' => $this->getData(['module', $this->getUrl(0), 'posts', $this->getUrl(2), 'ressourceType'])
 					]); ?>
@@ -141,7 +141,7 @@
 			<h4>Options de publication</h4>
 			<div class="row">
 				<div class="col4">
-					<?php echo template::select('downloadEditUserId', $module::$users, [
+					<?php echo template::select('downloadEditUserId', download::$users, [
 						'label' => 'Auteur',
 						'selected' => $this->getUser('id'),
 						'disabled' => $this->getUser('role') !== self::ROLE_ADMIN ? true : false
@@ -156,7 +156,7 @@
 					]); ?>
 				</div>
 				<div class="col4">
-					<?php echo template::select('downloadEditConsent', $module::$itemConsent, [
+					<?php echo template::select('downloadEditConsent', download::$itemConsent, [
 						'label' => 'Edition - Suppression',
 						'selected' => is_numeric($this->getData(['module', $this->getUrl(0), 'posts', $this->getUrl(2), 'editConsent'])) ? $module::EDIT_ROLE : $this->getData(['module', $this->getUrl(0), 'posts', $this->getUrl(2), 'editConsent']),
 						'help' => 'Les utilisateurs des groupes supérieurs accèdent à l\'item sans restriction'
@@ -183,7 +183,7 @@
 					]); ?>
 				</div>
 				<div class="col4 commentOptionsWrapper">
-					<?php echo template::select('downloadEditCommentMaxlength', $module::$commentLength, [
+					<?php echo template::select('downloadEditCommentMaxlength', download::$commentLength, [
 						'help' => 'Choix du nombre maximum de caractères pour chaque commentaire de l\'item, mise en forme html comprise.',
 						'label' => 'Caractères par commentaire',
 						'selected' => $this->getData(['module', $this->getUrl(0), 'posts', $this->getUrl(2), 'commentMaxlength'])
@@ -198,7 +198,7 @@
 					]); ?>
 				</div>
 				<div class="col4 commentOptionsWrapper">
-					<?php echo template::select('downloadEditCommentGroupNotification', $module::$groupNews, [
+					<?php echo template::select('downloadEditCommentGroupNotification', self::$groupNews, [
 						'selected' => $this->getData(['module', $this->getUrl(0), 'posts', $this->getUrl(2), 'commentGroupNotification']),
 						'help' => 'Editeurs = éditeurs + administrateurs<br/> Membres = membres + éditeurs + administrateurs'
 					]); ?>
