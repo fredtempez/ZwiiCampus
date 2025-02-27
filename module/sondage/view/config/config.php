@@ -91,7 +91,7 @@
 					</div>
 					<?php
 						// Element 0 quand aucun membre a été sélectionné
-						$groupMembers = [''] + self::$groupNews;
+						$groupMembers = [''] + self::$roleNews;
 					?>
 					Destinataires  :
 					<div class="row">
