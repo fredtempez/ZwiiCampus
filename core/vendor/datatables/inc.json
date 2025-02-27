@@ -1,11 +1,5 @@
 [
 	"datatables.min.js",	
-	"moment.min.js",
-	"datetime.min.js",
-	"buttons.dataTables.min.js",
-	"buttons.html5.min.js",
-	"buttons.print.min.js",
 	"datatables.min.css",
-	"buttons.dataTables.min.css",
 	"datatables.custom.css"
 ]
