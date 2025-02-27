@@ -20,13 +20,16 @@ $(document).ready((function () {
         }))
     }));
 
-    var table = $('#dataTables').DataTable({
+    var table = new DataTable('#dataTables', {
         language: {
             url: 'core/vendor/datatables/french.json'
         },
         locale: 'fr',
         stateSave: true,
         info: true,
+        lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "Tout"]],
+        dom: '<"top"lBf>rt<"bottom"p>',
+        
         buttons: [
             {
                 extend: 'csv',
@@ -37,22 +40,22 @@ $(document).ready((function () {
                 extend: 'copy',
                 text: '<i class="zwiico-docs"></i>',
                 titleAttr: 'Copier dans le presse papier',
-            }, 
+            },
             {
                 extend: 'print',
                 text: '<i class="zwiico-print"></i>',
                 titleAttr: 'Imprimer ou générer un PDF',
             }
         ],
-        dom: '<"top"lBf>rt<"bottom"p>',
-        "lengthMenu": [[10, 25, 50,  -1], [10, 25, 50, "Tout"]],
-        "columnDefs": [
+    
+        columnDefs: [
             {
-                target: 3,
+                targets: 3, // Désactiver le tri et la recherche sur la 4e colonne (index 3)
                 orderable: false,
                 searchable: false,
             }
         ]
     });
+    
 
 }));

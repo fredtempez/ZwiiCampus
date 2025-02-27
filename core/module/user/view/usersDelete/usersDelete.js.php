@@ -34,13 +34,16 @@ $(document).ready((function () {
         $("#usersDeleteForm").submit();
     });
 
-    var table = $('#dataTables').DataTable({
+    var table = new DataTable('#dataTables', {
         language: {
             url: "core/vendor/datatables/french.json"
         },
         locale: 'fr',
         stateSave: true,
         info: true,
+        lengthMenu: [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "Tout"]],
+        dom: '<"top"lBf>rt<"bottom"p>',
+    
         buttons: [
             {
                 extend: 'csv',
@@ -51,23 +54,23 @@ $(document).ready((function () {
                 extend: 'copy',
                 text: '<i class="zwiico-docs"></i>',
                 titleAttr: 'Copier dans le presse papier',
-            }, 
+            },
             {
                 extend: 'print',
                 text: '<i class="zwiico-print"></i>',
                 titleAttr: 'Imprimer ou générer un PDF',
             }
         ],
-        dom: '<"top"lBf>rt<"bottom"p>',
-        "lengthMenu": [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "Tout"]],
-        "columnDefs": [
+    
+        columnDefs: [
             {
-                target: 0,
+                targets: 0,
                 orderable: false,
                 searchable: false,
             }
         ]
     });
+    
 
     // Handle checkbox change event
     $('.checkboxSelect').on('change', function () {

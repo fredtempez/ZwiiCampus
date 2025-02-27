@@ -8,15 +8,17 @@
  * @license CC Attribution-NonCommercial-NoDerivatives 4.0 International
  * @link http://zwiicms.fr/
  */
-$(".themeFontDelete").on("click", (function() {
+$(".themeFontDelete").on("click", (function () {
     var _this = $(this);
-    return core.confirm("Êtes-vous sûr de vouloir supprimer cette fonte ?", (function() {
+    return core.confirm("Êtes-vous sûr de vouloir supprimer cette fonte ?", (function () {
         $(location).attr("href", _this.attr("href"))
     }))
 }));
-$('#dataTables').DataTable({
+
+
+var table = new DataTable('#dataTables', {
     language: {
-        url: "core/vendor/datatables/french.json",
+        url: 'core/vendor/datatables/french.json'
     },
     locale: 'fr',
     stateSave: true,
@@ -24,31 +26,31 @@ $('#dataTables').DataTable({
     buttons: [
         {
             extend: 'csv',
-            text: 'CSV',
+            text: '<i class="zwiico-code"></i>',
             titleAttr: 'Exporter les données au format CSV',
         },
         {
             extend: 'copy',
-            text: 'Copier',
+            text: '<i class="zwiico-docs"></i>',
             titleAttr: 'Copier dans le presse papier',
-        }, 
+        },
         {
             extend: 'print',
-            text: 'Imprimer',
+            text: '<i class="zwiico-print"></i>',
             titleAttr: 'Imprimer ou générer un PDF',
         }
     ],
     dom: '<"top"lBf>rt<"bottom"p>',
     "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Tout"]],
     "columnDefs": [{
-            target: 5,
+            targets: 5,
             orderable: false,
             searchable: false
         },
         {
-            target: 6,
+            targets: 6,
             orderable: false,
-            searchable: false
+            searchable: false,
         }
     ]
 });

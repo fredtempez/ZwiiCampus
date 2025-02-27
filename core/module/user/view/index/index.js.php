@@ -22,7 +22,10 @@ $(document).ready((function () {
     $("#userFilterGroup, #userFilterFirstName, #userFilterLastName").change(function () {
         $("#userFilterUserForm").submit();
     });
-    $.fn.dataTable.moment('DD/MM/YYYY');
+
+    // Ajout du format de date pour le tri
+    DataTable.datetime('DD/MM/YYYY');
+
     var table = $('#dataTables').DataTable({
         language: {
             url: "core/vendor/datatables/french.json"
@@ -30,6 +33,9 @@ $(document).ready((function () {
         locale: 'fr',
         stateSave: true,
         info: true,
+        lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "Tout"]],
+        dom: '<"top"lBf>rt<"bottom"p>',
+
         buttons: [
             {
                 extend: 'csv',
@@ -40,20 +46,18 @@ $(document).ready((function () {
                 extend: 'copy',
                 text: '<i class="zwiico-docs"></i>',
                 titleAttr: 'Copier dans le presse papier',
-            }, 
+            },
             {
                 extend: 'print',
                 text: '<i class="zwiico-print"></i>',
                 titleAttr: 'Imprimer ou générer un PDF',
             }
         ],
-        dom: '<"top"lBf>rt<"bottom"p>',
-        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Tout"]],
-        "columnDefs": [
+
+        columnDefs: [
             {
-                target: 5,
-                type: 'datetime', // Utilisez 'datetime' pour le tri
-                searchable: false,
+                targets: 5,
+                type: 'datetime',
                 render: function (data, type, row) {
                     if (type === 'display') {
                         if (typeof data === 'number' || !isNaN(data)) {
@@ -62,14 +66,13 @@ $(document).ready((function () {
                             return data;
                         }
                     }
-                    // Pour le tri, retournez la valeur au format ISO
                     return moment(Number(data) * 1000).toISOString();
                 }
             },
             {
-                target: 5,
+                targets: 6,
+                searchable: false,
                 orderable: false,
-                searchable: false
             }
         ]
     });

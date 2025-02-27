@@ -32,7 +32,7 @@ $(document).ready((function () {
         $('#groupUsersForm').submit();
     });
 
-    var table = $('#dataTables').DataTable({
+    var table = new DataTable('#dataTables', {
         language: {
             url: 'core/vendor/datatables/french.json'
         },
@@ -49,7 +49,7 @@ $(document).ready((function () {
                 extend: 'copy',
                 text: '<i class="zwiico-docs"></i>',
                 titleAttr: 'Copier dans le presse papier',
-            }, 
+            },
             {
                 extend: 'print',
                 text: '<i class="zwiico-print"></i>',
@@ -60,12 +60,13 @@ $(document).ready((function () {
         "lengthMenu": [[10, 25, 50, 100,  -1], [10, 25, 50, 100, 200, "Tout"]],
         "columnDefs": [
             {
-                target: 0,
+                targets: 0, // Index de la colonne (1ère colonne)
                 orderable: false,
                 searchable: false,
             }
         ]
     });
+    
 
     // Empty local storage after submit
     $("#groupUserssSubmit").on("click", function () {
