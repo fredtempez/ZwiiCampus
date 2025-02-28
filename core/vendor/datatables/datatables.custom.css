@@ -70,15 +70,13 @@
     flex-wrap: nowrap;
     justify-content: center;
     align-items: center;
-    gap: 10px;
 }
 
 .dt-paging button {
     display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 60px;
+    width: 80px;
 }
+
 
 .bottom nav{
     background-color: inherit;
