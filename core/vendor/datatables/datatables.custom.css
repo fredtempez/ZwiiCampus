@@ -7,10 +7,11 @@
     gap: 15px;
 }
 
-.dt-length {
+.dt-length,
+.dt-search {
     align-items: center;
     gap: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     max-width: 100%;
 }
 
@@ -30,7 +31,6 @@
 }
 
 /* Bouton de commande */
-
 .dt-button {
     justify-content: center;
     align-items: center;
@@ -66,19 +66,20 @@
 
 /* Boutons de pagination */
 .dt-paging {
-    display: flex !important;
-    flex-wrap: nowrap !important;
+    display: flex;
+    flex-wrap: nowrap;
     justify-content: center;
     align-items: center;
     gap: 10px;
 }
 
 .dt-paging button {
-    display: inline-flex !important;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     width: 60px;
 }
-nav[aria-label="pagination"] a{
-    background-color: inherit !important;
+
+.bottom nav{
+    background-color: inherit;
 }
