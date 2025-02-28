@@ -133,3 +133,26 @@ if (
     }
     $this->setData(['core', 'dataVersion', 12100]);
 }
+
+// Version 2.00.00
+
+if (
+    $this->getData(['core', 'dataVersion']) < 20000
+) {
+    // Purge du dossier datatables.net suite MAJ v2
+    $files = [
+        'datetime.min.js',
+        'moment.min.js',
+        'buttons.dataTables.min.css',
+        'buttons.dataTables.min.js',
+        'buttons.html5.min.js',
+        'buttons.print.min.js'
+    ];
+    foreach($files as $file) {
+        if (file_exists('core/vendor/datatables/' . $file)) {
+            unlink('core/vendor/datatables/' . $file);
+        }
+    }
+
+    $this->setData(['core', 'dataVersion', 20000]);
+}
