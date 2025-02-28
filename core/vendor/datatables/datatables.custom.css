@@ -1,52 +1,56 @@
 /* Ajustement du sélecteur de pagination */
-.dataTables_length {
-    display: flex;
+.top {
+    display: flex !important;
+    flex-wrap: wrap; /* Permet un retour à la ligne si l’espace est limité */
+    justify-content: space-between; /* Ajustez selon votre besoin */
+    align-items: center;
+    gap: 15px;
+}
+
+.dt-length {
     align-items: center;
     gap: 10px;
     margin-bottom: 10px;
     max-width: 100%;
 }
 
-.dataTables_length label {
-    display: flex;
+.dt-length label {
     align-items: center;
     font-size: 14px;
     font-weight: 500;
 }
 
-.dataTables_length select {
+.dt-length select {
     margin-left: 5px;
-    width: auto;
+    width: 150px;
     min-width: 80px;
     padding: 5px;
     border-radius: 5px;
     border: 1px solid #ccc;
 }
 
-/* Boutons d'exportation */
-.dt-buttons {
-    display: flex;
+/* Bouton de commande */
+
+.dt-button {
     justify-content: center;
     align-items: center;
     gap: 10px; /* Moins d’espace entre les boutons */
     flex-wrap: wrap; /* Permet un retour à la ligne si l'espace est limité */
     margin: 0 auto;
     max-width: 100%;
+    width: inherit;
 }
 
-.dt-buttons button {
-    background-color: #007bff;
-    color: white;
+.dt-button button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     border: none;
     padding: 8px 12px;
     border-radius: 5px;
     cursor: pointer;
     font-size: 14px;
     transition: background 0.3s;
-}
-
-.dt-buttons button:hover {
-    background-color: #0056b3;
 }
 
 /* Ajustement du tableau */
@@ -60,9 +64,21 @@
     text-align: left;
 }
 
-/* Pagination en bas */
-.dataTables_paginate {
-    display: flex;
+/* Boutons de pagination */
+.dt-paging {
+    display: flex !important;
+    flex-wrap: nowrap !important;
     justify-content: center;
-    margin-top: 15px;
+    align-items: center;
+    gap: 10px;
+}
+
+.dt-paging button {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+}
+nav[aria-label="pagination"] a{
+    background-color: inherit !important;
 }
