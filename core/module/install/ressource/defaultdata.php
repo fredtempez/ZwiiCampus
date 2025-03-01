@@ -974,8 +974,8 @@ class init extends common
 	public static $siteContent = [
 		'accueil' => [
 			'content' => '<h2>Bienvenue sur cette nouvelle installation de Zwii Campus.</h2>
-			<p>Zwii Campus est un outil auteur destin&eacute; &agrave; mettre en ligne des espaces d\'enseignement pour des apprenants.</p>
-			<p>Les espaces d\'enseignement se pr&eacute;sentent comme des mini site Web. Le contenu des espaces est librement personnalisable, dans la plupart des cas on utilisera un menu lat&eacute;ral et les pages disposeront de boutons de navigation.</p>
+			<p>ZwiiCampus est un outil auteur destin&eacute; &agrave; mettre en ligne des espaces d\'enseignement pour des apprenants.</p>
+			<p>Les espaces d\'enseignement se pr&eacute;sentent comme des mini sites Web. Le contenu des espaces est librement personnalisable.</p>
 			<p>Chaque espace dispose de modalit&eacute;s d\'ouverture :&nbsp;ouvert, ferm&eacute; et ouvert entre deux dates.</p>
 			<p>Les modalit&eacute;s d\'acc&egrave;s sont vari&eacute;es:</p>
 			<ul>
