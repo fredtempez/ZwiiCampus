@@ -538,13 +538,17 @@ class layout extends common
                     break;
                 case self::ROLE_EDITOR:
                     if (
-                        $this->getData(['enrolment', self::$siteContent]) && ($this->getUser('id') === $this->getData(['course', self::$siteContent, 'author']))
-                        // Permission d'accéder aux espaces dans lesquels le membre est inscrit
+                        // L'éditeur est l'auteur
+                        $this->getUser('id') === $this->getData(['course', self::$siteContent, 'author'])
+                        ||
+                        // L'éditeur peut gérer tous les espaces 
+                        $this->getUser('permission', 'course', 'tutor') === true
                         ||
                         (
+                        // Permission d'accéder aux espaces dans lesquels le membre est inscrit
                             $this->getData(['enrolment', self::$siteContent])
-                            // && $this->getUser('permission', __CLASS__, 'tutor') === true
-                            && array_key_exists($this->getUser('id'), $this->getData(['enrolment', self::$siteContent])))
+                            && array_key_exists($this->getUser('id'), $this->getData(['enrolment', self::$siteContent]))
+                        )
                     ) {
                         $href = helper::baseUrl() . 'course/users/' . self::$siteContent;
                     }
