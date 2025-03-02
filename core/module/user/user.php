@@ -164,9 +164,9 @@ class user extends common
 					$userMail,
 					'Compte créé sur ' . $this->getData(['config', 'title']),
 					'Bonjour <strong>' . $userFirstname . ' ' . $userLastname . '</strong>,<br><br>' .
-						'Un administrateur vous a créé un compte sur le site ' . $this->getData(['config', 'title']) . '. Vous trouverez ci-dessous les détails de votre compte.<br><br>' .
-						'<strong>Identifiant du compte :</strong> ' . $this->getInput('userAddId') . '<br>' .
-						'<small>Nous ne conservons pas les mots de passe, en conséquence nous vous conseillons de conserver ce message tant que vous ne vous êtes pas connecté. Vous pourrez modifier votre mot de passe après votre première connexion.</small>',
+					'Un administrateur vous a créé un compte sur le site ' . $this->getData(['config', 'title']) . '. Vous trouverez ci-dessous les détails de votre compte.<br><br>' .
+					'<strong>Identifiant du compte :</strong> ' . $this->getInput('userAddId') . '<br>' .
+					'<small>Nous ne conservons pas les mots de passe, en conséquence nous vous conseillons de conserver ce message tant que vous ne vous êtes pas connecté. Vous pourrez modifier votre mot de passe après votre première connexion.</small>',
 					null,
 					$this->getData(['config', 'smtp', 'from'])
 				);
@@ -423,7 +423,7 @@ class user extends common
 				$this->getData(['user', $this->getUrl(2)]) === null
 				// Droit d'édition
 				and (
-					// Impossible de s'auto-éditer
+						// Impossible de s'auto-éditer
 					($this->getUser('id') === $this->getUrl(2)
 						and $this->getUser('role') <= self::ROLE_VISITOR
 					)
@@ -619,9 +619,9 @@ class user extends common
 					$this->getData(['user', $userId, 'mail']),
 					'Réinitialisation de votre mot de passe',
 					'Bonjour <strong>' . $this->getData(['user', $userId, 'firstname']) . ' ' . $this->getData(['user', $userId, 'lastname']) . '</strong>,<br><br>' .
-						'Vous avez demandé à changer le mot de passe lié à votre compte. Vous trouverez ci-dessous un lien vous permettant de modifier celui-ci.<br><br>' .
-						'<a href="' . helper::baseUrl() . 'user/reset/' . $userId . '/' . $uniqId . '" target="_blank">' . helper::baseUrl() . 'user/reset/' . $userId . '/' . $uniqId . '</a><br><br>' .
-						'<small>Si nous n\'avez pas demandé à réinitialiser votre mot de passe, veuillez ignorer ce mail.</small>',
+					'Vous avez demandé à changer le mot de passe lié à votre compte. Vous trouverez ci-dessous un lien vous permettant de modifier celui-ci.<br><br>' .
+					'<a href="' . helper::baseUrl() . 'user/reset/' . $userId . '/' . $uniqId . '" target="_blank">' . helper::baseUrl() . 'user/reset/' . $userId . '/' . $uniqId . '</a><br><br>' .
+					'<small>Si nous n\'avez pas demandé à réinitialiser votre mot de passe, veuillez ignorer ce mail.</small>',
 					null,
 					$this->getData(['config', 'smtp', 'from'])
 				);
@@ -722,18 +722,18 @@ class user extends common
 					$this->getData(['user', $userId, 'mail']),
 					// Rôle et Profil
 					helper::translate(self::$roles[(int) $this->getData(['user', $userId, 'role'])])
-						. '/' .
-						(empty($this->getData(['profil', $this->getData(['user', $userId, 'role']), $this->getData(['user', $userId, 'profil']), 'name']))
-							? helper::translate(self::$roles[(int) $this->getData(['user', $userId, 'role'])])
-							: $this->getData(['profil', $this->getData(['user', $userId, 'role']), $this->getData(['user', $userId, 'profil']), 'name'])),
+					. '/' .
+					(empty($this->getData(['profil', $this->getData(['user', $userId, 'role']), $this->getData(['user', $userId, 'profil']), 'name']))
+						? helper::translate(self::$roles[(int) $this->getData(['user', $userId, 'role'])])
+						: $this->getData(['profil', $this->getData(['user', $userId, 'role']), $this->getData(['user', $userId, 'profil']), 'name'])),
 					// Groupe
 					$group,
 					// Tags
 					$this->getData(['user', $userId, 'tags']),
 					// Dernière connexion
 					is_null($this->getData(['user', $userId, 'accessTimer']))
-						? 'Jamais'
-						: $this->getData(['user', $userId, 'accessTimer']),
+					? 'Jamais'
+					: $this->getData(['user', $userId, 'accessTimer']),
 					// Bouton Edit
 					template::ico('pencil', [
 						'id' => 'userEdit' . $userId,
@@ -868,23 +868,25 @@ class user extends common
 
 			// Effacer les données du numéro de profil ancien
 			$role = $this->getInput('profilEditGroup', helper::FILTER_STRING_SHORT, true);
+
 			// Les profils 1 sont désactivés dans le formulaire
 			$profil = empty($this->getInput('profilEditProfil')) ? '1' : $this->getInput('profilEditProfil');
 			$oldProfil = $this->getInput('profilEditOldProfil', helper::FILTER_STRING_SHORT);
-			// Gère le chemin
+
+			// Accès au gestionnaire de fichier
 			$fileManager = $this->getInput('profilEditFileManager', helper::FILTER_BOOLEAN);
-			// Sécurité supplémentaire
+
+			// Sécurité supplémentaire pour interdire les fichiers
 			if (
 				$role < self::ROLE_MEMBER
 			) {
 				$fileManager = false;
 			}
-			if (
-				$profil !== $oldProfil &&
-				$this->deleteData(['profil', $role, $oldProfil])
-			) {
-				$this->deleteData(['profil', $role, $oldProfil]);
-			}
+
+			// Initialise les chemins
+			$coursePath = $this->getInput('profilEditCoursePath') === '' ? 'none' : $this->getInput('profilEditCoursePath');
+			$homePath = $this->getInput('profilEditHomePath') === '' ? 'none' : $this->getInput('profilEditHomePath');
+
 			// Données du formulaire
 			$data = [
 				'name' => $this->getInput('profilEditName', helper::FILTER_STRING_SHORT, true),
@@ -911,8 +913,8 @@ class user extends common
 					'rename' => $this->getInput('profilEditFolderRename', helper::FILTER_BOOLEAN),
 					'copycut' => $this->getInput('profilEditFolderCopycut', helper::FILTER_BOOLEAN),
 					'chmod' => $this->getInput('profilEditFolderChmod', helper::FILTER_BOOLEAN),
-					'coursePath' => $this->getInput('profilEditCoursePath'), // Supprime le point pour préserver le chemin
-					'homePath' => $this->getInput('profilEditHomePath'), // Supprime le point pour préserver le chemin
+					'coursePath' => $coursePath,
+					'homePath' => $homePath,
 				],
 				'page' => [
 					'add' => $this->getInput('profilEditPageAdd', helper::FILTER_BOOLEAN),
@@ -983,13 +985,20 @@ class user extends common
 				}
 			}
 
-			//Sauvegarder le données
+			//Sauvegarder les données
 			$this->setData([
 				'profil',
 				$role,
 				$profil,
 				$data
 			]);
+			
+			// Effacer le profil avec l'ancien nom
+			if (
+				$profil !== $oldProfil
+			) {
+				$this->deleteData(['profil', $role, $oldProfil]);
+			}
 
 			// Valeurs en sortie
 			$this->addOutput([
@@ -1085,6 +1094,10 @@ class user extends common
 
 			if ($profil < self::MAX_PROFILS) {
 				$profil = (string) ($profil + 1);
+
+				$coursePath = $this->getInput('profilAddCoursePath') === '' ? 'none' : $this->getInput('profilEditCoursePath');
+				$homePath = $this->getInput('profilAddtHomePath') === '' ? 'none' : $this->getInput('profilEditHomePath');
+	
 				// Données du formulaire
 				$data = [
 					'name' => $this->getInput('profilAddName', helper::FILTER_STRING_SHORT, true),
@@ -1111,8 +1124,8 @@ class user extends common
 						'rename' => $this->getInput('profilAddFolderRename', helper::FILTER_BOOLEAN),
 						'copycut' => $this->getInput('profilAddFolderCopycut', helper::FILTER_BOOLEAN),
 						'chmod' => $this->getInput('profilAddFolderChmod', helper::FILTER_BOOLEAN),
-						'coursePath' => $this->getInput('profilAddCoursePath'), // Supprime le point pour préserver le chemin
-						'homePath' => $this->getInput('profilAddHomePath'), // Supprime le point pour préserver le chemin
+						'coursePath' => $coursePath,
+						'homePath' => $homePath,
 					],
 					'page' => [
 						'add' => $this->getInput('profilAddPageAdd', helper::FILTER_BOOLEAN),
@@ -1209,12 +1222,12 @@ class user extends common
 
 		// Exclure les espaces des cours
 		/*
-																											  foreach (array_keys($this->getData(['course'])) as $courseId) {
-																												  self::$sharePath = array_filter(self::$sharePath, function ($key) use ($courseId) {
-																													  return strpos($key, $courseId) === false;
-																												  });
-																											  }
-																											  */
+																														  foreach (array_keys($this->getData(['course'])) as $courseId) {
+																															  self::$sharePath = array_filter(self::$sharePath, function ($key) use ($courseId) {
+																																  return strpos($key, $courseId) === false;
+																															  });
+																														  }
+																														  */
 
 		self::$sharePath = array_flip(self::$sharePath);
 		self::$sharePath = array_merge(['none' => 'Aucun Accès'], self::$sharePath);
@@ -1407,7 +1420,7 @@ class user extends common
 								$this->getData(['user', $userId, 'mail']),
 								'Validation de la connexion à votre compte',
 								'<p>Clé de validation à saisir dans le formulaire de connexion :</p>' .
-									'<h1><center>' . $keyByMail . '</center></h1>',
+								'<h1><center>' . $keyByMail . '</center></h1>',
 								null,
 								$this->getData(['config', 'smtp', 'from'])
 							);
@@ -1617,9 +1630,9 @@ class user extends common
 		) {
 			$this->saveLog(
 				' Erreur de réinitialisation de mot de passe ' . $this->getUrl(2) .
-					' Compte : ' . $this->getData(['user', $this->getUrl(2)]) .
-					' Temps : ' . ($this->getData(['user', $this->getUrl(2), 'forgot']) + 86400 < time()) .
-					' Clé : ' . ($this->getUrl(3) !== md5(json_encode($this->getData(['user', $this->getUrl(2), 'forgot']))))
+				' Compte : ' . $this->getData(['user', $this->getUrl(2)]) .
+				' Temps : ' . ($this->getData(['user', $this->getUrl(2), 'forgot']) + 86400 < time()) .
+				' Clé : ' . ($this->getUrl(3) !== md5(json_encode($this->getData(['user', $this->getUrl(2), 'forgot']))))
 			);
 			// Message d'erreur en cas de problème de réinitialisation de mot de passe
 			$message = $this->getData(['user', $this->getUrl(2)]) === null
@@ -1748,8 +1761,8 @@ class user extends common
 								$item['prenom'],
 								self::$roles[$item['role']],
 								empty($this->getData(['profil', $this->getData(['user', $userId, 'role']), $this->getData(['user', $userId, 'profil']), 'name']))
-									? helper::translate(self::$roles[(int) $this->getData(['user', $userId, 'role'])])
-									: $this->getData(['profil', $this->getData(['user', $userId, 'role']), $this->getData(['user', $userId, 'profil']), 'name']),
+								? helper::translate(self::$roles[(int) $this->getData(['user', $userId, 'role'])])
+								: $this->getData(['profil', $this->getData(['user', $userId, 'role']), $this->getData(['user', $userId, 'profil']), 'name']),
 								$item['prenom'],
 								helper::filter($item['email'], helper::FILTER_MAIL),
 								$item['tags'],
@@ -1793,9 +1806,9 @@ class user extends common
 									$item['email'],
 									'Compte créé sur ' . $this->getData(['config', 'title']),
 									'Bonjour <strong>' . $item['prenom'] . ' ' . $item['nom'] . '</strong>,<br><br>' .
-										'Un administrateur vous a créé un compte sur le site ' . $this->getData(['config', 'title']) . '. Vous trouverez ci-dessous les détails de votre compte.<br><br>' .
-										'<strong>Identifiant du compte :</strong> ' . $userId . '<br>' .
-										'<small>Un mot de passe provisoire vous été attribué, à la première connexion cliquez sur Mot de passe Oublié.</small>',
+									'Un administrateur vous a créé un compte sur le site ' . $this->getData(['config', 'title']) . '. Vous trouverez ci-dessous les détails de votre compte.<br><br>' .
+									'<strong>Identifiant du compte :</strong> ' . $userId . '<br>' .
+									'<small>Un mot de passe provisoire vous été attribué, à la première connexion cliquez sur Mot de passe Oublié.</small>',
 									null,
 									$this->getData(['config', 'smtp', 'from'])
 								);
@@ -1811,8 +1824,8 @@ class user extends common
 								$item['prenom'],
 								self::$roles[$item['role']],
 								empty($this->getData(['profil', $this->getData(['user', $userId, 'role']), $this->getData(['user', $userId, 'profil']), 'name']))
-									? helper::translate(self::$roles[(int) $this->getData(['user', $userId, 'role'])])
-									: $this->getData(['profil', $this->getData(['user', $userId, 'role']), $this->getData(['user', $userId, 'profil']), 'name']),
+								? helper::translate(self::$roles[(int) $this->getData(['user', $userId, 'role'])])
+								: $this->getData(['profil', $this->getData(['user', $userId, 'role']), $this->getData(['user', $userId, 'profil']), 'name']),
 								$item['prenom'],
 								$item['email'],
 								$item['tags'],
