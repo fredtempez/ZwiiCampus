@@ -1317,6 +1317,24 @@ class init extends common
 					<p>Toutes les tables, tout comme pour les espaces, bénéficient d'une fonctionnalité d'export au format <strong>CSV</strong>, <strong>PDF</strong>, ou permettent une <strong>copie dans le presse-papier</strong>.</p>
 					"
 				]
+			],
+			"modules" => [
+				"<p>&nbsp;<br />Les modules enrichissent les fonctionnalit&eacute;s des pages. Autonomes, ils peuvent &ecirc;tre d&eacute;velopp&eacute;s pour r&eacute;pondre &agrave; des besoins sp&eacute;cifiques.</p>
+				<ul>
+					<li>Modules int&eacute;gr&eacute;s &agrave; la version distribu&eacute;e</li>
+					<li>Blog : R&eacute;daction d'articles avec commentaires.</li>
+					<li>News : Publication d'articles sans commentaires.</li>
+					<li>Download : Mise &agrave; disposition de ressources t&eacute;l&eacute;chargeables.</li>
+					<li>Form : Cr&eacute;ation de formulaires avec messagerie int&eacute;gr&eacute;e.</li>
+					<li>Share : Partage de fichiers et ressources.</li>
+					<li>Gallery : Affichage d'une ou plusieurs galeries d'images.</li>
+					<li>Slide : Pr&eacute;sentation d'images d&eacute;filantes.</li>
+					<li>Redirection : Lien vers un site externe.</li>
+					<li>Search : Moteur de recherche textuel int&eacute;gr&eacute;.</li>
+					<li>Sondage : Collecte d'avis et de retours d'exp&eacute;rience.</li>
+					<li>Subscribe (auto-inscription) : Formulaire d'inscription pour les apprenants.</li>
+					<li>Workshop (atelier) : Liste les espaces d'une cat&eacute;gorie donn&eacute;e.</li>
+				</ul>"
 			]
 		]
 	];
