@@ -1206,7 +1206,7 @@ class course extends common
         // le participant est inscrit dans le contenu ET le contenu est ouvert ou un admin  ou le prof du contenu sont connectés
         //
         elseif (
-            $this->courseIsUserEnroled($courseId)
+            $this->courseIsUserEnroled($courseId, $userId)
             && $this->courseIsAvailable($courseId)
             // L'accès à l'espace est limité aux membres du groupe de l'espace
             && $this->userGroupIntersectCourseGroup($courseId, $userId)
@@ -1239,13 +1239,15 @@ class course extends common
         }
         // Message du groupe qui ne correspond pas à celui de l'espace
         elseif ($this->userGroupIntersectCourseGroup($courseId, $userId) === false) {
+            var_dump($this->userGroupIntersectCourseGroup($courseId, $userId));
+            die();
             $message = helper::translate('Votre groupe n\'a pas accès à cet espace');
             $state = false;
         }
         // le contenu est ouvert, le participant n'est pas inscrit, l'accès au contenu est anonyme
         elseif (
             $this->courseIsAvailable($courseId) &&
-            $this->courseIsUserEnroled($courseId) === false
+            $this->courseIsUserEnroled($courseId, $userId) === false
         ) {
             // Gérer les modalités d'inscription
             switch ($this->getData(['course', $courseId, 'enrolment'])) {
@@ -1671,7 +1673,7 @@ class course extends common
         self::$swapMessage['enrolmentMessage'] = '';
         self::$swapMessage['enrolmentKey'] = '';
         // le participant est-il inscrit ?
-        if ($this->courseIsUserEnroled($courseId) === false) {
+        if ($this->courseIsUserEnroled($courseId, $userId) === false) {
             switch ($this->getData(['course', $courseId, 'enrolment'])) {
                 case self::COURSE_ENROLMENT_SELF:
                     if ($userId == '') {
@@ -2241,6 +2243,8 @@ class course extends common
                     // Oui si l'utilisateur appartient à un groupe du cours
                     array_intersect($userGroups, $courseGroups) !== []
                 );
+            case self::ROLE_VISITOR:
+                return true;
             default:
                 return false;
         }
@@ -2252,17 +2256,17 @@ class course extends common
      * @param string $userId identifiant de l'utilisateur
      * @param string $courseId identifiant du contenu sollicité
      */
-    private function courseIsUserEnroled($courseId)
+    private function courseIsUserEnroled($courseId, $userId)
     {
-        $userId = $this->getUser('id');
         // Rôle du participant
-        $role = $userId ? $this->getData(['user', $userId, 'role']) : null;
+        $role = $userId ? $this->getData(['user', $userId, 'role']) : self::ROLE_VISITOR;
         switch ($role) {
             case self::ROLE_ADMIN:
                 $r = true;
                 break;
             case self::ROLE_EDITOR:
             case self::ROLE_MEMBER:
+
                 $r = false;
                 if (
                     is_null($this->getData(['enrolment', $courseId])) === false
@@ -2272,7 +2276,6 @@ class course extends common
                 break;
             // Visiteur non connecté
             case self::ROLE_VISITOR:
-            case null:
                 $r = $this->getData(['course', $courseId, 'enrolment']) === self::COURSE_ENROLMENT_GUEST;
                 break;
             default:
