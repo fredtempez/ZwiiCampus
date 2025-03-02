@@ -124,6 +124,7 @@ class course extends common
                         $users = template::button('categoryUser' . $this->getUrl(2), [
                             'href' => helper::baseUrl() . 'course/users/' . $courseId,
                             'value' => template::ico('address-book'),
+                            'help' => 'Participations'
                         ]);
                     }
                     self::$courses[] = [
@@ -134,7 +135,7 @@ class course extends common
                         template::button('categoryUser' . $courseId, [
                             'href' => helper::baseUrl() . 'course/manage/' . $courseId,
                             'value' => template::ico('sliders'),
-                            'help' => 'Gérer'
+                            'help' => 'Gérer cet espace'
                         ])
                     ];
                 }
