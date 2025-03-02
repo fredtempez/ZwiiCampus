@@ -67,7 +67,7 @@ $( document ).ready(function() {
 	/**
 	 * Sélection des onglets
 	 */
-	var pageLayout = "<?php echo $this->getData(['user', $this->getUser('id'), 'view', 'page']);?>";
+	window.pageLayout = "<?php echo $this->getData(['user', $this->getUser('id'), 'view', 'page']);?>";
 	// Non défini, valeur par défaut
 	if (pageLayout == "") {
 		 pageLayout = "content";
@@ -287,6 +287,7 @@ $( document ).ready(function() {
      * Transmet le bouton de l'onglet sélectionné avant la soumission
      */
 		$('#pageEditForm').on('submit', function () {
+			console.log("Valeur de pageLayout avant soumission :", pageLayout);
 			$('#containerSelected').val(pageLayout);
 		});
 
