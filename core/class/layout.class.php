@@ -1140,10 +1140,14 @@ class layout extends common
                 self::$siteContent === 'home'
                 && $this->getUser('role') >= self::ROLE_ADMIN
             ) {
+                /*
+                 * Neutralisé jusqu'à la traduction
+                 *
                 $rightItems .= '<li>' . template::ico('flag', [
                     'help' => 'Langues',
                     'href' => helper::baseUrl() . 'language'
                 ]) . '</li>';
+                */
                 $rightItems .= '<li>' . template::ico('users', [
                     'help' => 'Groupes',
                     'href' => helper::baseUrl() . 'group'
