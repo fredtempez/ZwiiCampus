@@ -90,7 +90,7 @@ class group extends common
 						'value' => template::ico('pencil'),
 						'margin' => 'right',
 						'help' => 'Éditer',
-						'fontSize' => '1.2em',
+						'fontSize' => '1em',
 					])
 					. template::ico('trash', [
 						'id' => 'groupDelete' . $groupId,
@@ -98,7 +98,7 @@ class group extends common
 						'href' => helper::baseUrl() . 'group/delete/' . $groupId,
 						'margin' => 'left',
 						'help' => 'Supprimer',
-						'fontSize' => '1.2em',
+						'fontSize' => '1em',
 					])
 				];
 			}

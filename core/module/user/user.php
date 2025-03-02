@@ -741,7 +741,7 @@ class user extends common
 						'value' => template::ico('pencil'),
 						'margin' => 'right',
 						'help' => 'Éditer',
-						'fontSize' => '1.2em',
+						'fontSize' => '1em',
 					])
 					// Bouton supprimée concaténé
 					. template::ico('trash', [
@@ -750,7 +750,7 @@ class user extends common
 						'href' => helper::baseUrl() . 'user/delete/' . $userId,
 						'margin' => 'left',
 						'help' => 'Supprimer',
-						'fontSize' => '1.2em',
+						'fontSize' => '1em',
 					])
 
 
