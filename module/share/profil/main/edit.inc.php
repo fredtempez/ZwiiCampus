@@ -1,3 +1,3 @@
-<?php $moduleData['folder'] = [
+<?php $moduleData['share'] = [
 	'config' => $this->getInput('profilEditFolderConfig', helper::FILTER_BOOLEAN)
 ];

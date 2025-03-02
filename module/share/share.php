@@ -12,7 +12,7 @@
  * @link http://zwiicms.fr/
  */
 
-class folder extends common
+class share extends common
 {
 
 	const VERSION = '2.00';
