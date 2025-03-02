@@ -775,6 +775,7 @@ class course extends common
                             ? template::ico('chart-line', ['margin' => 'right']) . number_format($userValue['progress']) . ' %'
                             : template::ico('chart-line', ['margin' => 'right']) . ($viewPages ? min(round(($viewPages * 100) / $sumPages, 1), 100) . ' %' : '0%'),
                         'disable' => empty($userValue['datePageView']),
+                        'help' => 'Participation',
                     ]);
                 } else {
                     $reportButton = template::button('userReport' . $userId, [
