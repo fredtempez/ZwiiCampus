@@ -347,12 +347,15 @@ class core extends common
 				$this->getData(['theme', 'footer', 'fixed']) === true &&
 				$this->getData(['theme', 'footer', 'position']) === 'body'
 			) {
-
 				$marginBottomLarge = ((str_replace('px', '', $this->getData(['theme', 'footer', 'height'])) * 2) + 31) . 'px';
 				$marginBottomSmall = ((str_replace('px', '', $this->getData(['theme', 'footer', 'height'])) * 2) + 93) . 'px';
 			} else {
 				$marginBottomSmall = $margin;
 				$marginBottomLarge = $margin;
+			}
+			// Pied de page fixe 
+			if ($this->getData(['theme', 'footer', 'fixed']) === true) {
+				$css .= 'footer {position: fixed;bottom: 0;left: 0;width: 100%; z-index: 1000;}';
 			}
 			$css .= $this->getData(['admin', 'width']) === '100%'
 				? '@media (min-width: 769px) {#site{margin:0 auto ' . $marginBottomLarge . ' 0 !important;}}@media (max-width: 768px) {#site{margin:0 auto ' . $marginBottomSmall . ' 0 !important;}}#site.light{margin:5% auto !important;} body{margin:0 auto !important;}  #bar{margin:0 auto !important;} body > header{margin:0 auto !important;} body > nav {margin: 0 auto !important;} body > footer {margin:0 auto !important;}'
