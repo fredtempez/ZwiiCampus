@@ -768,7 +768,6 @@ class course extends common
                     0;
 
                 // Construction du tableau
-
                 if ($this->getdata(['course', $courseId, 'report']) === true) {
                     $reportButton = template::button('userReport' . $userId, [
                         'href' => helper::baseUrl() . 'course/userReport/' . $courseId . '/' . $userId,
@@ -781,7 +780,7 @@ class course extends common
                     $reportButton = template::button('userReport' . $userId, [
                         'value' => template::ico('chart-line'),
                         'disable' => true,
-                        'help' => 'Rapport désactivé',
+                        'help' => 'La participation est désactivée',
                     ]);
                 }
                 // Les groupes sous forme de chaine
