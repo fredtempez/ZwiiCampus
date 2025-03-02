@@ -64,7 +64,7 @@ class init extends common
 			]
 		],
 		'core' => [
-			'dataVersion' => 12002,
+			'dataVersion' => 20000,
 			'lastBackup' => 0,
 			'lastClearTmp' => 0,
 			'lastAutoUpdate' => 0,
@@ -193,6 +193,8 @@ class init extends common
 			'width' => '960px'
 		],
 		'blacklist' => [],
+		/*
+		* En attendant les traductions
 		'language' => [
 			'fr_FR' => [
 				'version' => 1066,
@@ -206,6 +208,13 @@ class init extends common
 				'version' => 1066,
 				'date' => 1699354723
 			]
+		],
+		*/
+		'language' => [
+			'fr_FR' => [
+				'version' => 1066,
+				'date' => 1699354723
+			],
 		],
 		'profil' => [
 			'-1' => [
