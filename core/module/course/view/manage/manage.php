@@ -64,7 +64,7 @@
         <div class="col2">
             <?php echo template::button('courseManageExport' . $this->getUrl(2), [
                 'href' => helper::baseUrl() . 'course/export/' . $this->getUrl(2),
-                'value' => 'Exporter HTML',
+                'value' => 'HTML',
                 'ico' => 'upload',
                 'help' => 'Le contenu de l\'espace est exporté dans une page web autonome',
             ]); ?>
