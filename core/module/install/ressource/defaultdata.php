@@ -193,23 +193,6 @@ class init extends common
 			'width' => '960px'
 		],
 		'blacklist' => [],
-		/*
-					* En attendant les traductions
-					'language' => [
-						'fr_FR' => [
-							'version' => 1066,
-							'date' => 1699354723
-						],
-						'es' => [
-							'version' => 1066,
-							'date' => 1699354723
-						],
-						'en_EN' => [
-							'version' => 1066,
-							'date' => 1699354723
-						]
-					],
-					*/
 		'language' => [
 			'fr_FR' => [
 				'version' => 1066,
@@ -1212,7 +1195,7 @@ class init extends common
 	];
 
 	public static $siteContent = [
-		$page = [
+		"page" => [
 			"contact" => [
 				"content" => ["<p>Cette page contient un exemple de formulaire con&ccedil;u &agrave; partir du module de g&eacute;n&eacute;ration de formulaires. Il est configur&eacute; pour envoyer les donn&eacute;es saisies par mail aux administrateurs du site.</p>"]
 			],
