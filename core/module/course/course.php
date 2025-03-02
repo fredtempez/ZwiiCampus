@@ -1165,7 +1165,7 @@ class course extends common
         $_SESSION['ZWII_SITE_CONTENT'] = 'home';
 
         // Efface les inscriptions
-        $success = $this->setData(['enrolment', $courseId, []]);
+        $this->setData(['enrolment', $courseId, []]);
 
         // Efface les rapports
         if (file_exists(self::DATA_DIR . $courseId . '/report.csv')) {
