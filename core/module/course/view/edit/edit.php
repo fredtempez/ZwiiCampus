@@ -81,17 +81,17 @@
                     ]); ?>
                 </div>
                 <div class="col2 periodSetup">
-                    <?php echo template::date('courseOpeningDate', [
+                    <?php var_dump( $this->getdata(['course', $this->getUrl(2), 'openingDate'])) ;echo template::date('courseOpeningDate', [
                         'type' => 'datetime-local',
                         'label' => 'Ouvre le',
-                        'value' => is_null($this->getdata(['course', $this->getUrl(2), 'openingDate'])) ? '' : floor($this->getdata(['course', $this->getUrl(2), 'openingDate']) / 60) * 60
+                        'value' => !is_int($this->getdata(['course', $this->getUrl(2), 'openingDate'])) ? time() : floor($this->getdata(['course', $this->getUrl(2), 'openingDate']) / 60) * 60
                     ]); ?>
                 </div>
                 <div class="col2 periodSetup">
                     <?php echo template::date('courseClosingDate', [
                         'type' => 'datetime-local',
                         'label' => 'Ferme le',
-                        'value' => is_null($this->getdata(['course', $this->getUrl(2), 'closingDate'])) ? '' : floor($this->getdata(['course', $this->getUrl(2), 'closingDate']) / 60) * 60
+                        'value' => !is_int($this->getdata(['course', $this->getUrl(2), 'closingDate'])) ? time() : floor($this->getdata(['course', $this->getUrl(2), 'closingDate']) / 60) * 60
                     ]); ?>
                 </div>
                 <div class="col3 periodSetup">
