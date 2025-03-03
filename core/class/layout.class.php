@@ -1127,7 +1127,7 @@ class layout extends common
             $rightItems = '';
             if (
                 (
-                    $this->getUser('role') === self::ROLE_EDITOR
+                    $this->getUser('role') >= self::ROLE_MEMBER
                     && $this->getUser('permission', 'filemanager') === true
                     && $this->getUser('permission', 'folder', (self::$siteContent === 'home' ? 'homePath' : 'coursePath')) !== 'none'
                 )
