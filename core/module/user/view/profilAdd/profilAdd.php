@@ -65,7 +65,7 @@
                 <?php echo helper::translate('Gestionnaire de fichiers'); ?>
             </h4>
             <div class="row">
-                <div class="col3">
+                <div class="col2">
                     <?php echo template::checkbox('profilAddFileManager', true, 'Autorisé'); ?>
                 </div>
                 <div class="col5">
