@@ -122,6 +122,8 @@ class user extends common
 				$profil = $this->getInput('userAddProfil' . $role, helper::FILTER_INT);
 			}
 
+
+			$groups = [];
 			// Groupes
 			foreach ($this->getData(['group']) as $id => $title) {
 				if ($this->getInput('userAddGroup' . $id, helper::FILTER_BOOLEAN)) {
@@ -502,6 +504,7 @@ class user extends common
 						$profil = $this->getInput('userEditProfil' . $newGroup, helper::FILTER_INT);
 					}
 					// Groupes
+					$groups = [];
 					foreach ($this->getData(['group']) as $id => $title) {
 						if ($this->getInput('userEditGroup' . $id, helper::FILTER_BOOLEAN)) {
 							$groups[] = $id;
