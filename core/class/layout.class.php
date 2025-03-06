@@ -575,6 +575,7 @@ class layout extends common
         ) {
 
             // Affiche l'icône RFM
+            var_dump($this->getUser('permission', 'folder', (self::$siteContent === 'home' ? 'homePath' : 'coursePath')));
             if (
                 $this->getUser('permission', 'filemanager') === true
                 && $this->getUser('permission', 'folder', (self::$siteContent === 'home' ? 'homePath' : 'coursePath')) !== 'none'

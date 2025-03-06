@@ -886,10 +886,6 @@ class user extends common
 				$fileManager = false;
 			}
 
-			// Initialise les chemins
-			$coursePath = $this->getInput('profilEditCoursePath') === '' ? 'none' : $this->getInput('profilEditCoursePath');
-			$homePath = $this->getInput('profilEditHomePath') === '' ? 'none' : $this->getInput('profilEditHomePath');
-
 			// Données du formulaire
 			$data = [
 				'name' => $this->getInput('profilEditName', helper::FILTER_STRING_SHORT, true),
@@ -916,8 +912,8 @@ class user extends common
 					'rename' => $this->getInput('profilEditFolderRename', helper::FILTER_BOOLEAN),
 					'copycut' => $this->getInput('profilEditFolderCopycut', helper::FILTER_BOOLEAN),
 					'chmod' => $this->getInput('profilEditFolderChmod', helper::FILTER_BOOLEAN),
-					'coursePath' => $coursePath,
-					'homePath' => $homePath,
+					'coursePath' => $this->getInput('profilEditCoursePath'),
+					'homePath' => $this->getInput('profilEditHomePath'),
 				],
 				'page' => [
 					'add' => $this->getInput('profilEditPageAdd', helper::FILTER_BOOLEAN),
@@ -1098,9 +1094,6 @@ class user extends common
 			if ($profil < self::MAX_PROFILS) {
 				$profil = (string) ($profil + 1);
 
-				$coursePath = $this->getInput('profilAddCoursePath') === '' ? 'none' : $this->getInput('profilEditCoursePath');
-				$homePath = $this->getInput('profilAddtHomePath') === '' ? 'none' : $this->getInput('profilEditHomePath');
-	
 				// Données du formulaire
 				$data = [
 					'name' => $this->getInput('profilAddName', helper::FILTER_STRING_SHORT, true),
@@ -1127,8 +1120,8 @@ class user extends common
 						'rename' => $this->getInput('profilAddFolderRename', helper::FILTER_BOOLEAN),
 						'copycut' => $this->getInput('profilAddFolderCopycut', helper::FILTER_BOOLEAN),
 						'chmod' => $this->getInput('profilAddFolderChmod', helper::FILTER_BOOLEAN),
-						'coursePath' => $coursePath,
-						'homePath' => $homePath,
+						'coursePath' => $this->getInput('profilAddCoursePath') ,
+						'homePath' => $this->getInput('profilAddtHomePath'),
 					],
 					'page' => [
 						'add' => $this->getInput('profilAddPageAdd', helper::FILTER_BOOLEAN),

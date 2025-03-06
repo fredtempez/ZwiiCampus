@@ -64,7 +64,14 @@ if (!is_null($u) && !is_null($g) && !is_null($userId)) {
 
 			// Détermine la variable  du dossier partagé dans le profil
 			$sharedPathKey = ($courseId === 'home') ? 'homePath' : 'coursePath';
+			// Force le dossier confiné dans home
+			$folder[$sharedPathKey] = ($folder[$sharedPathKey] === '' && $courseId === 'home')
+				? 'home' 
+				: $folder[$sharedPathKey];  
+			// Protège le dossier partagé si absent
 			$sharedPath = isset($folder[$sharedPathKey]) ? $folder[$sharedPathKey] : 'none';
+			var_dump($sharedPath);
+			die();
 			// Interdit un accès non partagé
 			if (
 				$folder[$sharedPathKey] === 'none'
