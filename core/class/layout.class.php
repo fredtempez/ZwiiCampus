@@ -363,9 +363,12 @@ class layout extends common
                 $this->getUser('permission', 'filemanager') === true
                 && $this->getUser('permission', 'folder', (self::$siteContent === 'home' ? 'homePath' : 'coursePath')) !== 'none'
             ) {
-                $folder = '&fldr=/' . (self::$siteContent === 'home' ? '' : self::$siteContent);
                 $items .= '<wbr>' . template::ico('folder', [
-                    'href' => helper::baseUrl(false) . 'core/vendor/filemanager/dialog.php?type=0&akey=' . md5_file(self::DATA_DIR . 'core.json') . '&lang=' . $this->getData(['user', $this->getUser('id'), 'language']) . $folder,
+                    'href' => helper::baseUrl(false) 
+                            . 'core/vendor/filemanager/dialog.php?type=0&akey=' 
+                            . md5_file(self::DATA_DIR . 'core.json') 
+                            . '&lang=' . $this->getData(['user', $this->getUser('id'), 'language']) 
+                            . '&fldr=' . self::$siteContent,
                     'margin' => 'all',
                     'attr' => 'data-lity',
                     'help' => 'Fichiers du site'
@@ -575,16 +578,18 @@ class layout extends common
         ) {
 
             // Affiche l'icône RFM
-            var_dump($this->getUser('permission', 'folder', (self::$siteContent === 'home' ? 'homePath' : 'coursePath')));
             if (
                 $this->getUser('permission', 'filemanager') === true
                 && $this->getUser('permission', 'folder', (self::$siteContent === 'home' ? 'homePath' : 'coursePath')) !== 'none'
             ) {
-                $folder = '&fldr=/' . (self::$siteContent === 'home' ? '' : self::$siteContent);
                 $itemsRight .= '<li>' . template::ico('folder', [
-                    'href' => helper::baseUrl(false) . 'core/vendor/filemanager/dialog.php?type=0&akey=' . md5_file(self::DATA_DIR . 'core.json') . '&lang=' . $this->getData(['user', $this->getUser('id'), 'language']) . $folder,
-                    'attr' => 'data-lity',
-                    'help' => 'Fichiers du site'
+                                'href' => helper::baseUrl(false) 
+                                    . 'core/vendor/filemanager/dialog.php?type=0&akey=' 
+                                    . md5_file(self::DATA_DIR . 'core.json') 
+                                    . '&lang=' . $this->getData(['user', $this->getUser('id'), 'language']) 
+                                    . '&fldr=' . self::$siteContent,
+                                'attr' => 'data-lity',
+                                'help' => 'Fichiers du site'
                 ]) . '</li>';
             }
             // Affiche l'icône d'édition du compte
@@ -1134,10 +1139,13 @@ class layout extends common
                 )
                 || $this->getUser('role') === self::ROLE_ADMIN
             ) {
-                $folder = '&fldr=/' . (self::$siteContent === 'home' ? '' : self::$siteContent);
                 $rightItems .= '<li>' . template::ico('folder', [
                     'help' => 'Fichiers',
-                    'href' => helper::baseUrl(false) . 'core/vendor/filemanager/dialog.php?type=0&akey=' . md5_file(self::DATA_DIR . 'core.json') . '&lang=' . $this->getData(['user', $this->getUser('id'), 'language']) . $folder,
+                    'href' => helper::baseUrl(false) 
+                            . 'core/vendor/filemanager/dialog.php?type=0&akey=' 
+                            . md5_file(self::DATA_DIR . 'core.json') 
+                            . '&lang=' . $this->getData(['user', $this->getUser('id'), 'language']) 
+                            . '&fldr=' . self::$siteContent,
                     'attr' => 'data-lity'
                 ]) . '</li>';
             }
