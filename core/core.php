@@ -31,6 +31,17 @@ class common
 	// Groupe MODERATOR, compatibilité avec les anciens modules :
 	const ROLE_MODERATOR = 2;
 	const ROLE_ADMIN = 3;
+
+	// Compatibilité avec les anciens version de modules
+	const GROUP_BANNED = -1;
+	const GROUP_VISITOR = 0;
+	const GROUP_MEMBER = 1;
+	const GROUP_EDITOR = 2;
+	// Role MODERATOR, compatibilité avec les anciens modules :
+	const GROUP_MODERATOR = 2;
+	const GROUP_ADMIN = 3;
+	// -------------------------------------------------
+
 	const SIGNATURE_ID = 1;
 	const SIGNATURE_PSEUDO = 2;
 	const SIGNATURE_FIRSTLASTNAME = 3;
@@ -213,7 +224,7 @@ class common
 		'core' => null,
 		'course' => null,
 		'font' => null,
-		'group'=> null,
+		'group' => null,
 		'module' => null,
 		'page' => null,
 		'theme' => null,
@@ -231,7 +242,7 @@ class common
 		'course' => '',
 		'core' => '',
 		'font' => '',
-		'group'=> '',
+		'group' => '',
 		'user' => '',
 		'language' => '',
 		'profil' => '',
@@ -1136,209 +1147,209 @@ class common
 	 */
 
 
-	 public function updateSitemap()
-	 {
-		 // Le drapeau prend true quand au moins une page est trouvée
-		 $flag = false;
- 
-		 // Rafraîchit la liste des pages après une modification de pageId notamment 
-		 $this->buildHierarchy();
- 
-		 // Actualise la liste des pages pour TinyMCE
-		 $this->tinyMcePages();
- 
-		 //require_once 'core/vendor/sitemap/SitemapGenerator.php';	
- 
-		 $timezone = $this->getData(['config', 'timezone']);
-		 $outputDir = getcwd();
-		 $sitemap = new \Icamys\SitemapGenerator\SitemapGenerator(helper::baseurl(false), $outputDir);
- 
-		 // will create also compressed (gzipped) sitemap : option buguée
-		 // $sitemap->enableCompression();
- 
-		 // determine how many urls should be put into one file
-		 // according to standard protocol 50000 is maximum value (see http://www.sitemaps.org/protocol.html)
-		 $sitemap->setMaxUrlsPerSitemap(50000);
- 
-		 // sitemap file name
-		 $sitemap->setSitemapFileName('sitemap.xml');
- 
- 
-		 // Set the sitemap index file name
-		 $sitemap->setSitemapIndexFileName('sitemap-index.xml');
- 
-		 $datetime = new DateTime(date('c'));
-		 $datetime->format(DateTime::ATOM); // Updated ISO8601
- 
-		 foreach ($this->getHierarchy() as $parentPageId => $childrenPageIds) {
-			 // Exclure les barres et les pages non publiques et les pages masquées
-			 if (
-				 $this->getData(['page', $parentPageId, 'role']) !== 0 ||
-				 $this->getData(['page', $parentPageId, 'block']) === 'bar'
-			 ) {
-				 continue;
-			 }
-			 // Page désactivée, traiter les sous-pages sans prendre en compte la page parente.
-			 if ($this->getData(['page', $parentPageId, 'disable']) !== true) {
-				 // Cas de la page d'accueil ne pas dupliquer l'URL
-				 $pageId = ($parentPageId !== $this->getData(['locale', 'homePageId'])) ? $parentPageId : '';
-				 $sitemap->addUrl('/' . $pageId, $datetime);
-				 $flag = true;
-			 }
-			 // Articles du blog
-			 if (
-				 $this->getData(['page', $parentPageId, 'moduleId']) === 'blog'
-				 && !empty($this->getData(['module', $parentPageId]))
-				 && $this->getData(['module', $parentPageId, 'posts'])
-			 ) {
-				 foreach ($this->getData(['module', $parentPageId, 'posts']) as $articleId => $article) {
-					 if ($this->getData(['module', $parentPageId, 'posts', $articleId, 'state']) === true) {
-						 $date = $this->getData(['module', $parentPageId, 'posts', $articleId, 'publishedOn']);
-						 $sitemap->addUrl('/' . $parentPageId . '/' . $articleId, DateTime::createFromFormat('U', $date));
-					 }
-				 }
-			 }
-			 // Sous-pages
-			 foreach ($childrenPageIds as $childKey) {
-				 if ($this->getData(['page', $childKey, 'role']) !== 0 || $this->getData(['page', $childKey, 'disable']) === true) {
-					 continue;
-				 }
-				 // Cas de la page d'accueil ne pas dupliquer l'URL
-				 $pageId = ($childKey !== $this->getData(['locale', 'homePageId'])) ? $childKey : '';
-				 $sitemap->addUrl('/' . $childKey, $datetime);
-				 $flag = true;
- 
-				 // La sous-page est un blog
-				 if (
-					 $this->getData(['page', $childKey, 'moduleId']) === 'blog' &&
-					 !empty($this->getData(['module', $childKey]))
-				 ) {
-					 foreach ($this->getData(['module', $childKey, 'posts']) as $articleId => $article) {
-						 if ($this->getData(['module', $childKey, 'posts', $articleId, 'state']) === true) {
-							 $date = $this->getData(['module', $childKey, 'posts', $articleId, 'publishedOn']);
-							 $sitemap->addUrl('/' . $childKey . '/' . $articleId, new DateTime("@{$date}", new DateTimeZone($timezone)));
-						 }
-					 }
-				 }
-			 }
-		 }
- 
-		 if ($flag === false) {
-			 return false;
-		 }
- 
-		 // Flush all stored urls from memory to the disk and close all necessary tags.
-		 $sitemap->flush();
- 
-		 // Move flushed files to their final location. Compress if the option is enabled.
-		 $sitemap->finalize();
- 
-		 // Update robots.txt file in output directory
- 
-		 if ($this->getData(['config', 'seo', 'robots']) === true) {
-			 if (file_exists('robots.txt')) {
-				 unlink('robots.txt');
-			 }
-			 $sitemap->updateRobots();
-		 } else {
-			 $this->secure_file_put_contents('robots.txt', 'User-agent: *' . PHP_EOL . 'Disallow: /');
-		 }
- 
-		 // Submit your sitemaps to Google, Yahoo, Bing and Ask.com
-		 if (empty($this->getData(['config', 'proxyType']) . $this->getData(['config', 'proxyUrl']) . ':' . $this->getData(['config', 'proxyPort']))) {
-			 $sitemap->submitSitemap();
-		 }
- 
-		 return (file_exists('sitemap.xml') && file_exists('robots.txt'));
-	 }
+	public function updateSitemap()
+	{
+		// Le drapeau prend true quand au moins une page est trouvée
+		$flag = false;
 
-/**
- * Crée une miniature à partir d'une image source.
- * Cette fonction prend en charge les formats raster (JPEG, PNG, GIF, WebP, AVIF) et vectoriels (SVG).
- * Pour les images vectorielles (SVG), aucune redimension n'est effectuée : une copie est réalisée.
- * 
- * @param string $src Chemin de l'image source.
- * @param string $dest Chemin de l'image destination (avec le nom du fichier et l'extension).
- * @param int $desired_width Largeur demandée pour la miniature (ignorée pour les SVG).
- * @return bool True si l'opération a réussi, false sinon.
- */
-function makeThumb($src, $dest, $desired_width)
-{
-    // Vérifier l'existence du dossier de destination.
-    $fileInfo = pathinfo($dest);
-    if (!is_dir($fileInfo['dirname'])) {
-        mkdir($fileInfo['dirname'], 0755, true);
-    }
+		// Rafraîchit la liste des pages après une modification de pageId notamment 
+		$this->buildHierarchy();
 
-    $extension = strtolower($fileInfo['extension']);
-    $mime_type = mime_content_type($src);
+		// Actualise la liste des pages pour TinyMCE
+		$this->tinyMcePages();
 
-    // Gestion des fichiers SVG (copie simple sans redimensionnement)
-    if ($extension === 'svg' || $mime_type === 'image/svg+xml') {
-        return copy($src, $dest);
-    }
+		//require_once 'core/vendor/sitemap/SitemapGenerator.php';	
 
-    // Chargement de l'image source selon le type
-    $source_image = '';
-    switch ($extension) {
-        case 'jpeg':
-        case 'jpg':
-            $source_image = imagecreatefromjpeg($src);
-            break;
-        case 'png':
-            $source_image = imagecreatefrompng($src);
-            break;
-        case 'gif':
-            $source_image = imagecreatefromgif($src);
-            break;
-        case 'webp':
-            $source_image = imagecreatefromwebp($src);
-            break;
-        case 'avif':
-            if (function_exists('imagecreatefromavif')) {
-                $source_image = imagecreatefromavif($src);
-            } else {
-                return false; // AVIF non supporté
-            }
-            break;
-        default:
-            return false; // Format non pris en charge
-    }
+		$timezone = $this->getData(['config', 'timezone']);
+		$outputDir = getcwd();
+		$sitemap = new \Icamys\SitemapGenerator\SitemapGenerator(helper::baseurl(false), $outputDir);
 
-    // Image valide (formats raster uniquement)
-    if (is_resource($source_image) || (is_object($source_image) && $source_image instanceof GdImage)) {
-        $width = imagesx($source_image);
-        $height = imagesy($source_image);
+		// will create also compressed (gzipped) sitemap : option buguée
+		// $sitemap->enableCompression();
 
-        // Calcul de la hauteur proportionnelle à la largeur demandée
-        $desired_height = floor($height * ($desired_width / $width));
+		// determine how many urls should be put into one file
+		// according to standard protocol 50000 is maximum value (see http://www.sitemaps.org/protocol.html)
+		$sitemap->setMaxUrlsPerSitemap(50000);
 
-        // Création d'une nouvelle image virtuelle redimensionnée
-        $virtual_image = imagecreatetruecolor($desired_width, $desired_height);
+		// sitemap file name
+		$sitemap->setSitemapFileName('sitemap.xml');
 
-        // Copie de l'image source dans l'image virtuelle avec redimensionnement
-        imagecopyresampled($virtual_image, $source_image, 0, 0, 0, 0, $desired_width, $desired_height, $width, $height);
 
-        // Enregistrement de l'image redimensionnée au format approprié
-        switch ($mime_type) {
-            case 'image/jpeg':
-            case 'image/jpg':
-                return imagejpeg($virtual_image, $dest);
-            case 'image/png':
-                return imagepng($virtual_image, $dest);
-            case 'image/gif':
-                return imagegif($virtual_image, $dest);
-            case 'image/webp':
-                return imagewebp($virtual_image, $dest);
-            case 'image/avif':
-                if (function_exists('imageavif')) {
-                    return imageavif($virtual_image, $dest);
-                }
-        }
-    }
+		// Set the sitemap index file name
+		$sitemap->setSitemapIndexFileName('sitemap-index.xml');
 
-    return false; // En cas d'échec
-}
+		$datetime = new DateTime(date('c'));
+		$datetime->format(DateTime::ATOM); // Updated ISO8601
+
+		foreach ($this->getHierarchy() as $parentPageId => $childrenPageIds) {
+			// Exclure les barres et les pages non publiques et les pages masquées
+			if (
+				$this->getData(['page', $parentPageId, 'role']) !== 0 ||
+				$this->getData(['page', $parentPageId, 'block']) === 'bar'
+			) {
+				continue;
+			}
+			// Page désactivée, traiter les sous-pages sans prendre en compte la page parente.
+			if ($this->getData(['page', $parentPageId, 'disable']) !== true) {
+				// Cas de la page d'accueil ne pas dupliquer l'URL
+				$pageId = ($parentPageId !== $this->getData(['locale', 'homePageId'])) ? $parentPageId : '';
+				$sitemap->addUrl('/' . $pageId, $datetime);
+				$flag = true;
+			}
+			// Articles du blog
+			if (
+				$this->getData(['page', $parentPageId, 'moduleId']) === 'blog'
+				&& !empty($this->getData(['module', $parentPageId]))
+				&& $this->getData(['module', $parentPageId, 'posts'])
+			) {
+				foreach ($this->getData(['module', $parentPageId, 'posts']) as $articleId => $article) {
+					if ($this->getData(['module', $parentPageId, 'posts', $articleId, 'state']) === true) {
+						$date = $this->getData(['module', $parentPageId, 'posts', $articleId, 'publishedOn']);
+						$sitemap->addUrl('/' . $parentPageId . '/' . $articleId, DateTime::createFromFormat('U', $date));
+					}
+				}
+			}
+			// Sous-pages
+			foreach ($childrenPageIds as $childKey) {
+				if ($this->getData(['page', $childKey, 'role']) !== 0 || $this->getData(['page', $childKey, 'disable']) === true) {
+					continue;
+				}
+				// Cas de la page d'accueil ne pas dupliquer l'URL
+				$pageId = ($childKey !== $this->getData(['locale', 'homePageId'])) ? $childKey : '';
+				$sitemap->addUrl('/' . $childKey, $datetime);
+				$flag = true;
+
+				// La sous-page est un blog
+				if (
+					$this->getData(['page', $childKey, 'moduleId']) === 'blog' &&
+					!empty($this->getData(['module', $childKey]))
+				) {
+					foreach ($this->getData(['module', $childKey, 'posts']) as $articleId => $article) {
+						if ($this->getData(['module', $childKey, 'posts', $articleId, 'state']) === true) {
+							$date = $this->getData(['module', $childKey, 'posts', $articleId, 'publishedOn']);
+							$sitemap->addUrl('/' . $childKey . '/' . $articleId, new DateTime("@{$date}", new DateTimeZone($timezone)));
+						}
+					}
+				}
+			}
+		}
+
+		if ($flag === false) {
+			return false;
+		}
+
+		// Flush all stored urls from memory to the disk and close all necessary tags.
+		$sitemap->flush();
+
+		// Move flushed files to their final location. Compress if the option is enabled.
+		$sitemap->finalize();
+
+		// Update robots.txt file in output directory
+
+		if ($this->getData(['config', 'seo', 'robots']) === true) {
+			if (file_exists('robots.txt')) {
+				unlink('robots.txt');
+			}
+			$sitemap->updateRobots();
+		} else {
+			$this->secure_file_put_contents('robots.txt', 'User-agent: *' . PHP_EOL . 'Disallow: /');
+		}
+
+		// Submit your sitemaps to Google, Yahoo, Bing and Ask.com
+		if (empty($this->getData(['config', 'proxyType']) . $this->getData(['config', 'proxyUrl']) . ':' . $this->getData(['config', 'proxyPort']))) {
+			$sitemap->submitSitemap();
+		}
+
+		return (file_exists('sitemap.xml') && file_exists('robots.txt'));
+	}
+
+	/**
+	 * Crée une miniature à partir d'une image source.
+	 * Cette fonction prend en charge les formats raster (JPEG, PNG, GIF, WebP, AVIF) et vectoriels (SVG).
+	 * Pour les images vectorielles (SVG), aucune redimension n'est effectuée : une copie est réalisée.
+	 * 
+	 * @param string $src Chemin de l'image source.
+	 * @param string $dest Chemin de l'image destination (avec le nom du fichier et l'extension).
+	 * @param int $desired_width Largeur demandée pour la miniature (ignorée pour les SVG).
+	 * @return bool True si l'opération a réussi, false sinon.
+	 */
+	function makeThumb($src, $dest, $desired_width)
+	{
+		// Vérifier l'existence du dossier de destination.
+		$fileInfo = pathinfo($dest);
+		if (!is_dir($fileInfo['dirname'])) {
+			mkdir($fileInfo['dirname'], 0755, true);
+		}
+
+		$extension = strtolower($fileInfo['extension']);
+		$mime_type = mime_content_type($src);
+
+		// Gestion des fichiers SVG (copie simple sans redimensionnement)
+		if ($extension === 'svg' || $mime_type === 'image/svg+xml') {
+			return copy($src, $dest);
+		}
+
+		// Chargement de l'image source selon le type
+		$source_image = '';
+		switch ($extension) {
+			case 'jpeg':
+			case 'jpg':
+				$source_image = imagecreatefromjpeg($src);
+				break;
+			case 'png':
+				$source_image = imagecreatefrompng($src);
+				break;
+			case 'gif':
+				$source_image = imagecreatefromgif($src);
+				break;
+			case 'webp':
+				$source_image = imagecreatefromwebp($src);
+				break;
+			case 'avif':
+				if (function_exists('imagecreatefromavif')) {
+					$source_image = imagecreatefromavif($src);
+				} else {
+					return false; // AVIF non supporté
+				}
+				break;
+			default:
+				return false; // Format non pris en charge
+		}
+
+		// Image valide (formats raster uniquement)
+		if (is_resource($source_image) || (is_object($source_image) && $source_image instanceof GdImage)) {
+			$width = imagesx($source_image);
+			$height = imagesy($source_image);
+
+			// Calcul de la hauteur proportionnelle à la largeur demandée
+			$desired_height = floor($height * ($desired_width / $width));
+
+			// Création d'une nouvelle image virtuelle redimensionnée
+			$virtual_image = imagecreatetruecolor($desired_width, $desired_height);
+
+			// Copie de l'image source dans l'image virtuelle avec redimensionnement
+			imagecopyresampled($virtual_image, $source_image, 0, 0, 0, 0, $desired_width, $desired_height, $width, $height);
+
+			// Enregistrement de l'image redimensionnée au format approprié
+			switch ($mime_type) {
+				case 'image/jpeg':
+				case 'image/jpg':
+					return imagejpeg($virtual_image, $dest);
+				case 'image/png':
+					return imagepng($virtual_image, $dest);
+				case 'image/gif':
+					return imagegif($virtual_image, $dest);
+				case 'image/webp':
+					return imagewebp($virtual_image, $dest);
+				case 'image/avif':
+					if (function_exists('imageavif')) {
+						return imageavif($virtual_image, $dest);
+					}
+			}
+		}
+
+		return false; // En cas d'échec
+	}
 
 
 
@@ -1633,7 +1644,7 @@ function makeThumb($src, $dest, $desired_width)
 				foreach ($courses as $courseId => $value) {
 					// Affiche les espaces gérés par l'éditeur, les espaces où il participe et les espaces anonymes
 					if (
-						// le membre est inscrit
+							// le membre est inscrit
 						($this->getData(['enrolment', $courseId]) && array_key_exists($this->getUser('id'), $this->getData(['enrolment', $courseId])))
 						// Il est l'auteur
 						|| $this->getUser('id') === $this->getData(['course', $courseId, 'author'])
