@@ -523,7 +523,7 @@ class theme extends common
 				$this->setData(['theme', 'menu', 'position', 'site'], false);
 			}
 			// Sauvegarde la base manuellement
-			$this->saveDB(module: 'theme');
+			$this->saveDB('theme');
 			// Valeurs en sortie
 			$this->addOutput([
 				'notification' => helper::translate('Modifications enregistrées'),
