@@ -103,8 +103,6 @@ class install extends common
 				$this->isPost()
 			) {
 
-				$success = true;
-
 				// Double vérification pour le mot de passe
 				if ($this->getInput('installPassword', helper::FILTER_STRING_SHORT, true) !== $this->getInput('installConfirmPassword', helper::FILTER_STRING_SHORT, true)) {
 					self::$inputNotices['installConfirmPassword'] = 'Incorrect';
@@ -185,6 +183,10 @@ class install extends common
 				// Nettoyage
 				unlink(self::TEMP_DIR . 'files.tar.gz');
 				unlink(self::TEMP_DIR . 'files.tar');
+
+				// Installer les données du site de test 
+				// Les groupes
+				// Les espaces
 
 				// Créer le dossier des fontes
 				if (!is_dir(self::DATA_DIR . 'font')) {
