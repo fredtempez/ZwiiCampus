@@ -774,7 +774,7 @@ class common
 		$this->setData([$module, $template[$module]]);
 		// Création des pages 
 		if ($module === 'page') {
-			$content = $path === 'home' ? init::$siteContent : init::$courseContent;
+			$content = $path === 'home' ? init::$siteTemplateContent : init::$courseContent;
 			foreach ($content as $key => $value) {
 				$this->setPage($key, $value['content'], $path);
 			}
