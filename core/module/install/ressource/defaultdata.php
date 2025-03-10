@@ -1192,9 +1192,48 @@ class init extends common
 				]
 			]
 		],
+		"course" => [
+			"67c4169fd9427" => [
+				"title" => "La photographie numérique",
+				"author" => "test",
+				"homePageId" => "accueil",
+				"category" => "general",
+				"description" => "Présentation de la photographique numérique et des matériels de prise de vue.\r\nTemps d'apprentissage : 2 heures.",
+				"access" => 0,
+				"openingDate" => 1740917940,
+				"closingDate" => 1740917940,
+				"enrolment" => 0,
+				"enrolmentKey" => "",
+				"limitEnrolment" => false,
+				"limitEnrolmentDate" => 1740904020,
+				"report" => true,
+				"group" => null
+			],
+			"67c4173f32319" => [
+				"title" => "La retouche avec The Gimp",
+				"author" => "test",
+				"homePageId" => "accueil",
+				"category" => "general",
+				"description" => "Les bases de la retouche avec The Gimp.\r\nTemps d'apprentissage : 4 heures.",
+				"access" => 0,
+				"openingDate" => "",
+				"closingDate" => "",
+				"enrolment" => 0,
+				"enrolmentKey" => "",
+				"limitEnrolment" => false,
+				"limitEnrolmentDate" => 1740904200,
+				"report" => true,
+				"group" => null
+			]
+		],
+		'group' => [
+				"67c4164e865bf" => "Groupe A",
+				"67c41654c493f" => "Groupe B"
+		]
 	];
 
-	public static $siteContent = [
+
+	public static $siteTemplateContent = [
 		"page" => [
 			"contact" => [
 				"content" => ["<p>Cette page contient un exemple de formulaire con&ccedil;u &agrave; partir du module de g&eacute;n&eacute;ration de formulaires. Il est configur&eacute; pour envoyer les donn&eacute;es saisies par mail aux administrateurs du site.</p>"]
@@ -1272,8 +1311,14 @@ class init extends common
 					<p>ZwiiCampus propose des modules qui permettent de doper vos contenus.</p>'
 				]
 			],
+			"consultation-des-espaces" => [
+				"content" => "<p>L'enregistrement des actions des participants est r&eacute;serv&eacute; aux espaces n&eacute;cessitant un compte d'acc&egrave;s. Il est stock&eacute; dans un historique, qui peut &ecirc;tre d&eacute;sactiv&eacute; depuis la gestion de l'espace.</p>
+<p>Le suivi des participants s'effectue via l'ic&ocirc;ne <strong >Participations</strong> dans la gestion des espaces.</p>
+<p>Une table exportable affiche la liste des participants, leur derni&egrave;re page consult&eacute;e et leur pourcentage de progression dans le module, bas&eacute; sur le nombre de pages visit&eacute;es.</p>
+<p>En cliquant sur le bouton de progression, un graphique d&eacute;taillant l'historique des consultations des pages s'affiche.</p>"
+			],
 			"les-espaces" => [
-					"content" => ["
+				"content" => ["
 					<h2 style='text-align: center;'>Espaces d'apprentissage</h2>
 					<p>Un <strong>espace</strong> est une zone d'apprentissage que vous pouvez créer en autant d'exemplaires que nécessaire. Ils sont accessibles depuis le sélecteur de la barre d'administration et gérés via <a href='?course' rel='data-lity'>l'icône dédiée</a>. Chaque espace dispose d'un <a href='?theme' rel='data-lity'>thème </a>personnalisable.</p>
 					<h2>Caractéristiques des espaces</h2>
@@ -1319,7 +1364,7 @@ class init extends common
 				]
 			],
 			"modules" => [
-				"<p>&nbsp;<br />Les modules enrichissent les fonctionnalit&eacute;s des pages. Autonomes, ils peuvent &ecirc;tre d&eacute;velopp&eacute;s pour r&eacute;pondre &agrave; des besoins sp&eacute;cifiques.</p>
+				"Les modules enrichissent les fonctionnalit&eacute;s des pages. Autonomes, ils peuvent &ecirc;tre d&eacute;velopp&eacute;s pour r&eacute;pondre &agrave; des besoins sp&eacute;cifiques.</p>
 				<ul>
 					<li>Modules int&eacute;gr&eacute;s &agrave; la version distribu&eacute;e</li>
 					<li>Blog : R&eacute;daction d'articles avec commentaires.</li>
