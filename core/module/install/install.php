@@ -177,7 +177,7 @@ class install extends common
 					$pharData = new PharData(self::TEMP_DIR . 'files.tar.gz');
 					$pharData->decompress();
 					// Installation
-					$pharData->extractTo(__DIR__ . '/../../../', null, true);
+					$pharData->extractTo(__DIR__ . '/../../../site/file/source', null, true);
 				} catch (Exception $e) {
 					$success = $e->getMessage();
 				}
