@@ -511,8 +511,9 @@ class layout extends common
          * Affichage du sélecteur d'espaces
          */
         if (
-            $this->getUser('role') === self::ROLE_MEMBER
-            && $this->getData(['theme', 'menu', 'selectSpace']) === true
+            //$this->getUser('role') === self::ROLE_MEMBER
+            //&& 
+            $this->getData(['theme', 'menu', 'selectSpace']) === true
         ) {
             if ($this->getCoursesByProfil()) {
                 $itemsRight .= '<li><select id="menuSelectCourse" >';
