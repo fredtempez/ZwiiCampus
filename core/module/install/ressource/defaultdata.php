@@ -1203,7 +1203,7 @@ class init extends common
 		'contact' => [
 			'content' => "<p>Cette page contient un exemple de formulaire con&ccedil;u &agrave; partir du module de g&eacute;n&eacute;ration de formulaires. Il est configur&eacute; pour envoyer les donn&eacute;es saisies par mail aux administrateurs du site.</p>"
 		],
-		'mentions-legales' => [ 
+		'mentions-legales' => [
 			'content' => "<h1 style='text-align: center;'>Conditions g&eacute;n&eacute;rales d'utilisation</h1>
 					<h1 style='text-align: center;'>En vigueur au 01/06/2020</h1>
 					<p><strong>Avertissement</strong>Cette page fictive est donn&eacute;e &agrave; titre indicatif elle a &eacute;t&eacute; r&eacute;alis&eacute;e &agrave; l'aide d'un g&eacute;n&eacute;rateur : <a href='https://www.legalplace.fr' target='_blank' rel='noopener'>https://www.legalplace.fr</a></p>
@@ -1259,11 +1259,11 @@ class init extends common
 								<div class="row"><div class="col4 offset8 textAlignCenter"><a href="./?user/login" id="maintenanceLogin" name="maintenanceLogin" class="button"><span class="zwiico-lock zwiico-margin-right"></span>Administration</a></div></div>'
 		],
 		'erreur403' => [
-			'content' => '<h2 style="text-align: center;">Vous n\'êtes pas autorisé à accéder à cette page...</h2><p style="text-align: center;">Personnalisez cette page à votre convenance sans qu\'elle apparaisse dans les menus.</p>']
-		,
+			'content' => '<h2 style="text-align: center;">Vous n\'êtes pas autorisé à accéder à cette page...</h2><p style="text-align: center;">Personnalisez cette page à votre convenance sans qu\'elle apparaisse dans les menus.</p>'
+		],
 		'erreur404' => [
-			'content' => '<h2 style="text-align: center;">Oups ! La page demandée est introuvable...</h2><p style="text-align: center;">Personnalisez cette page à votre convenance sans qu\'elle apparaisse dans les menus.</p>']
-		,
+			'content' => '<h2 style="text-align: center;">Oups ! La page demandée est introuvable...</h2><p style="text-align: center;">Personnalisez cette page à votre convenance sans qu\'elle apparaisse dans les menus.</p>'
+		],
 		'images-numeriques' => [
 			'content' => '<p>Cette page contient un module permettant de lister une cat&eacute;gorie de modules.</p>'
 		],
@@ -1272,7 +1272,7 @@ class init extends common
 					<p>Avant de commencer, quelques explications sont nécessaires. ZwiiCampus permet de mettre en ligne des contenus en les protégeant comme pourrait le faire un système d\'apprentissage distant (LMS).</p>
 					<p>Ces contenus sont stockés dans des <a href="?les-espaces">espaces</a>, comparable à des sites Web.</p>
 					<p>ZwiiCampus propose des modules qui permettent de doper vos contenus.</p>'
-			
+
 		],
 		'consultation-des-espaces' => [
 			'content' => "<p>L'enregistrement des actions des participants est r&eacute;serv&eacute; aux espaces n&eacute;cessitant un compte d'acc&egrave;s. Il est stock&eacute; dans un historique, qui peut &ecirc;tre d&eacute;sactiv&eacute; depuis la gestion de l'espace.</p>
@@ -1303,7 +1303,7 @@ class init extends common
 						<li><strong>Sauvegarde et réinstallation</strong> : Assure la sécurité des données et leur récupération.</li>
 						<li><strong>Clonage</strong> : Permet de dupliquer un espace ou de générer une page web regroupant l'ensemble de ses contenus.</li>
 					</ul><p>📌 L'accueil de <strong>ZwiiCampus</strong> est stocké dans un espace spécifique nommé <strong>'home'</strong>.</p>"
-			
+
 		],
 		'participants' => [
 			'content' => "
@@ -1324,7 +1324,7 @@ class init extends common
 					</ul>
 					<p>Toutes les tables, tout comme pour les espaces, bénéficient d'une fonctionnalité d'export au format <strong>CSV</strong>, <strong>PDF</strong>, ou permettent une <strong>copie dans le presse-papier</strong>.</p>
 					"
-			
+
 		],
 		'modules' => [
 			'content' => "Les modules enrichissent les fonctionnalit&eacute;s des pages. Autonomes, ils peuvent &ecirc;tre d&eacute;velopp&eacute;s pour r&eacute;pondre &agrave; des besoins sp&eacute;cifiques.</p>
@@ -1599,7 +1599,7 @@ class init extends common
 				'backgroundColor' => 'rgba(255, 255, 255, 1)',
 				'radius' => '0px',
 				'shadow' => '0px 0px 0px',
-				'width' => '960px'
+				'width' => '100%'
 			],
 			'block' => [
 				'backgroundColor' => 'rgba(236, 239, 241, 1)',
@@ -1621,8 +1621,7 @@ class init extends common
 				'backgroundColor' => 'rgba(32, 59, 82, 1)'
 			]
 		],
-		'module' => [
-		],
+		'module' => [],
 	];
 
 	// Contenu des pages pour espace
@@ -1643,5 +1642,4 @@ class init extends common
 			'content' => ''
 		]
 	];
-
 }
