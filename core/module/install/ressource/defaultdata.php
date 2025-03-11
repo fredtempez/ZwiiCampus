@@ -1,6 +1,7 @@
 <?php
 class init extends common
 {
+	// Données génériques par ddéfaut
 	public static $defaultData = [
 		'config' => [
 			'autoBackup' => true,
@@ -11,7 +12,7 @@ class init extends common
 			'faviconDark' => 'faviconDark.ico',
 			'maintenance' => false,
 			'cookieConsent' => true,
-			'homePageId' => 'accueil',
+			'homePageId' => 'bienvenue',
 			'page302' => 'none',
 			'page403' => 'none',
 			'page404' => 'none',
@@ -659,357 +660,358 @@ class init extends common
 		]
 	];
 
+	// Données pour home
 	public static $siteTemplate = [
-		"page" => [
-			"contact" => [
-				"typeMenu" => "text",
-				"iconUrl" => "",
-				"disable" => false,
-				"content" => "contact.html",
-				"hideTitle" => false,
-				"breadCrumb" => false,
-				"metaDescription" => "",
-				"metaTitle" => "",
-				"moduleId" => "form",
-				"modulePosition" => "bottom",
-				"parentPageId" => "",
-				"position" => 3,
-				"role" => 0,
-				"profil" => 0,
-				"targetBlank" => false,
-				"title" => "Contact",
-				"shortTitle" => "Contact",
-				"block" => "12",
-				"barLeft" => "",
-				"barRight" => "",
-				"navLeft" => "none",
-				"navRight" => "none",
-				"navTemplate" => "dir",
-				"displayMenu" => "none",
-				"hideMenuSide" => false,
-				"hideMenuHead" => false,
-				"hideMenuChildren" => false,
-				"extraPosition" => false,
-				"css" => "",
-				"js" => ""
+		'page' => [
+			'contact' => [
+				'typeMenu' => 'text',
+				'iconUrl' => '',
+				'disable' => false,
+				'content' => 'contact.html',
+				'hideTitle' => false,
+				'breadCrumb' => false,
+				'metaDescription' => '',
+				'metaTitle' => '',
+				'moduleId' => 'form',
+				'modulePosition' => 'bottom',
+				'parentPageId' => '',
+				'position' => 3,
+				'role' => 0,
+				'profil' => 0,
+				'targetBlank' => false,
+				'title' => 'Contact',
+				'shortTitle' => 'Contact',
+				'block' => '12',
+				'barLeft' => '',
+				'barRight' => '',
+				'navLeft' => 'none',
+				'navRight' => 'none',
+				'navTemplate' => 'dir',
+				'displayMenu' => 'none',
+				'hideMenuSide' => false,
+				'hideMenuHead' => false,
+				'hideMenuChildren' => false,
+				'extraPosition' => false,
+				'css' => '',
+				'js' => ''
 			],
-			"mentions-legales" => [
-				"typeMenu" => "text",
-				"iconUrl" => "",
-				"disable" => false,
-				"content" => "mentions-legales.html",
-				"hideTitle" => true,
-				"breadCrumb" => false,
-				"metaDescription" => "",
-				"metaTitle" => "Mentions Légales",
-				"moduleId" => "",
-				"modulePosition" => "bottom",
-				"parentPageId" => "",
-				"position" => 0,
-				"role" => 0,
-				"profil" => 0,
-				"targetBlank" => false,
-				"title" => "Mentions légales",
-				"shortTitle" => "Mentions légales",
-				"block" => "12",
-				"barLeft" => "",
-				"barRight" => "",
-				"navLeft" => "none",
-				"navRight" => "none",
-				"navTemplate" => "dir",
-				"displayMenu" => "none",
-				"hideMenuSide" => false,
-				"hideMenuHead" => false,
-				"hideMenuChildren" => false,
-				"extraPosition" => false,
-				"css" => "",
-				"js" => ""
+			'mentions-legales' => [
+				'typeMenu' => 'text',
+				'iconUrl' => '',
+				'disable' => false,
+				'content' => 'mentions-legales.html',
+				'hideTitle' => true,
+				'breadCrumb' => false,
+				'metaDescription' => '',
+				'metaTitle' => 'Mentions Légales',
+				'moduleId' => '',
+				'modulePosition' => 'bottom',
+				'parentPageId' => '',
+				'position' => 0,
+				'role' => 0,
+				'profil' => 0,
+				'targetBlank' => false,
+				'title' => 'Mentions légales',
+				'shortTitle' => 'Mentions légales',
+				'block' => '12',
+				'barLeft' => '',
+				'barRight' => '',
+				'navLeft' => 'none',
+				'navRight' => 'none',
+				'navTemplate' => 'dir',
+				'displayMenu' => 'none',
+				'hideMenuSide' => false,
+				'hideMenuHead' => false,
+				'hideMenuChildren' => false,
+				'extraPosition' => false,
+				'css' => '',
+				'js' => ''
 			],
-			"erreur302" => [
-				"typeMenu" => "text",
-				"iconUrl" => "",
-				"disable" => false,
-				"content" => "erreur302.html",
-				"hideTitle" => false,
-				"breadCrumb" => false,
-				"metaDescription" => "",
-				"metaTitle" => "",
-				"moduleId" => "",
-				"modulePosition" => "",
-				"parentPageId" => "",
-				"position" => 0,
-				"role" => 0,
-				"profil" => 0,
-				"targetBlank" => false,
-				"title" => "Maintenance en cours",
-				"shortTitle" => "Maintenance en cours",
-				"block" => "12",
-				"barLeft" => "",
-				"barRight" => "",
-				"navLeft" => "none",
-				"navRight" => "none",
-				"navTemplate" => "dir",
-				"displayMenu" => "none",
-				"hideMenuSide" => true,
-				"hideMenuHead" => true,
-				"hideMenuChildren" => true,
-				"extraPosition" => false,
-				"css" => "",
-				"js" => ""
+			'erreur302' => [
+				'typeMenu' => 'text',
+				'iconUrl' => '',
+				'disable' => false,
+				'content' => 'erreur302.html',
+				'hideTitle' => false,
+				'breadCrumb' => false,
+				'metaDescription' => '',
+				'metaTitle' => '',
+				'moduleId' => '',
+				'modulePosition' => '',
+				'parentPageId' => '',
+				'position' => 0,
+				'role' => 0,
+				'profil' => 0,
+				'targetBlank' => false,
+				'title' => 'Maintenance en cours',
+				'shortTitle' => 'Maintenance en cours',
+				'block' => '12',
+				'barLeft' => '',
+				'barRight' => '',
+				'navLeft' => 'none',
+				'navRight' => 'none',
+				'navTemplate' => 'dir',
+				'displayMenu' => 'none',
+				'hideMenuSide' => true,
+				'hideMenuHead' => true,
+				'hideMenuChildren' => true,
+				'extraPosition' => false,
+				'css' => '',
+				'js' => ''
 			],
-			"erreur403" => [
-				"typeMenu" => "text",
-				"iconUrl" => "",
-				"disable" => false,
-				"content" => "erreur403.html",
-				"hideTitle" => false,
-				"breadCrumb" => false,
-				"metaDescription" => "",
-				"metaTitle" => "",
-				"moduleId" => "",
-				"modulePosition" => "bottom",
-				"parentPageId" => "",
-				"position" => 0,
-				"role" => 0,
-				"profil" => 0,
-				"targetBlank" => false,
-				"title" => "Erreur 403",
-				"shortTitle" => "Erreur 403",
-				"block" => "12",
-				"barLeft" => "",
-				"barRight" => "",
-				"navLeft" => "none",
-				"navRight" => "none",
-				"navTemplate" => "dir",
-				"displayMenu" => "none",
-				"hideMenuSide" => false,
-				"hideMenuChildren" => false,
-				"extraPosition" => false,
-				"css" => "",
-				"js" => ""
+			'erreur403' => [
+				'typeMenu' => 'text',
+				'iconUrl' => '',
+				'disable' => false,
+				'content' => 'erreur403.html',
+				'hideTitle' => false,
+				'breadCrumb' => false,
+				'metaDescription' => '',
+				'metaTitle' => '',
+				'moduleId' => '',
+				'modulePosition' => 'bottom',
+				'parentPageId' => '',
+				'position' => 0,
+				'role' => 0,
+				'profil' => 0,
+				'targetBlank' => false,
+				'title' => 'Erreur 403',
+				'shortTitle' => 'Erreur 403',
+				'block' => '12',
+				'barLeft' => '',
+				'barRight' => '',
+				'navLeft' => 'none',
+				'navRight' => 'none',
+				'navTemplate' => 'dir',
+				'displayMenu' => 'none',
+				'hideMenuSide' => false,
+				'hideMenuChildren' => false,
+				'extraPosition' => false,
+				'css' => '',
+				'js' => ''
 			],
-			"erreur404" => [
-				"typeMenu" => "text",
-				"iconUrl" => "",
-				"disable" => false,
-				"content" => "erreur404.html",
-				"hideTitle" => false,
-				"breadCrumb" => false,
-				"metaDescription" => "",
-				"metaTitle" => "",
-				"moduleId" => "search",
-				"modulePosition" => "bottom",
-				"parentPageId" => "",
-				"position" => 0,
-				"role" => 0,
-				"profil" => 0,
-				"targetBlank" => false,
-				"title" => "Erreur 404",
-				"shortTitle" => "Erreur 404",
-				"block" => "12",
-				"barLeft" => "",
-				"barRight" => "",
-				"navLeft" => "none",
-				"navRight" => "none",
-				"navTemplate" => "dir",
-				"displayMenu" => "none",
-				"hideMenuSide" => false,
-				"hideMenuChildren" => false,
-				"extraPosition" => false,
-				"css" => "",
-				"js" => ""
+			'erreur404' => [
+				'typeMenu' => 'text',
+				'iconUrl' => '',
+				'disable' => false,
+				'content' => 'erreur404.html',
+				'hideTitle' => false,
+				'breadCrumb' => false,
+				'metaDescription' => '',
+				'metaTitle' => '',
+				'moduleId' => 'search',
+				'modulePosition' => 'bottom',
+				'parentPageId' => '',
+				'position' => 0,
+				'role' => 0,
+				'profil' => 0,
+				'targetBlank' => false,
+				'title' => 'Erreur 404',
+				'shortTitle' => 'Erreur 404',
+				'block' => '12',
+				'barLeft' => '',
+				'barRight' => '',
+				'navLeft' => 'none',
+				'navRight' => 'none',
+				'navTemplate' => 'dir',
+				'displayMenu' => 'none',
+				'hideMenuSide' => false,
+				'hideMenuChildren' => false,
+				'extraPosition' => false,
+				'css' => '',
+				'js' => ''
 			],
-			"images-numeriques" => [
-				"typeMenu" => "text",
-				"iconUrl" => "",
-				"disable" => false,
-				"content" => "images-numeriques.html",
-				"hideTitle" => false,
-				"breadCrumb" => false,
-				"metaDescription" => "",
-				"metaTitle" => "",
-				"moduleId" => "workshop",
-				"modulePosition" => "bottom",
-				"parentPageId" => "",
-				"position" => 2,
-				"role" => 0,
-				"profil" => 0,
-				"targetBlank" => false,
-				"title" => "Images numériques",
-				"shortTitle" => "Images numériques",
-				"block" => "12",
-				"barLeft" => "",
-				"barRight" => "",
-				"navLeft" => "none",
-				"navRight" => "none",
-				"navTemplate" => "dir",
-				"displayMenu" => "none",
-				"hideMenuSide" => false,
-				"hideMenuHead" => false,
-				"hideMenuChildren" => false,
-				"extraPosition" => false,
-				"css" => "",
-				"js" => ""
+			'images-numeriques' => [
+				'typeMenu' => 'text',
+				'iconUrl' => '',
+				'disable' => false,
+				'content' => 'images-numeriques.html',
+				'hideTitle' => false,
+				'breadCrumb' => false,
+				'metaDescription' => '',
+				'metaTitle' => '',
+				'moduleId' => 'workshop',
+				'modulePosition' => 'bottom',
+				'parentPageId' => '',
+				'position' => 2,
+				'role' => 0,
+				'profil' => 0,
+				'targetBlank' => false,
+				'title' => 'Images numériques',
+				'shortTitle' => 'Images numériques',
+				'block' => '12',
+				'barLeft' => '',
+				'barRight' => '',
+				'navLeft' => 'none',
+				'navRight' => 'none',
+				'navTemplate' => 'dir',
+				'displayMenu' => 'none',
+				'hideMenuSide' => false,
+				'hideMenuHead' => false,
+				'hideMenuChildren' => false,
+				'extraPosition' => false,
+				'css' => '',
+				'js' => ''
 			],
-			"bienvenue" => [
-				"typeMenu" => "text",
-				"iconUrl" => "",
-				"disable" => false,
-				"content" => "bienvenue.html",
-				"hideTitle" => false,
-				"breadCrumb" => false,
-				"metaDescription" => "",
-				"metaTitle" => "",
-				"moduleId" => "",
-				"modulePosition" => "bottom",
-				"parentPageId" => "",
-				"position" => 1,
-				"role" => 0,
-				"profil" => 0,
-				"targetBlank" => false,
-				"title" => "Bienvenue",
-				"shortTitle" => "Bienvenue",
-				"block" => "12",
-				"barLeft" => "",
-				"barRight" => "",
-				"navLeft" => "none",
-				"navRight" => "none",
-				"navTemplate" => "dir",
-				"displayMenu" => "none",
-				"hideMenuSide" => false,
-				"hideMenuHead" => false,
-				"hideMenuChildren" => false,
-				"extraPosition" => false,
-				"css" => "",
-				"js" => ""
+			'bienvenue' => [
+				'typeMenu' => 'text',
+				'iconUrl' => '',
+				'disable' => false,
+				'content' => 'bienvenue.html',
+				'hideTitle' => false,
+				'breadCrumb' => false,
+				'metaDescription' => '',
+				'metaTitle' => '',
+				'moduleId' => '',
+				'modulePosition' => 'bottom',
+				'parentPageId' => '',
+				'position' => 1,
+				'role' => 0,
+				'profil' => 0,
+				'targetBlank' => false,
+				'title' => 'Bienvenue',
+				'shortTitle' => 'Bienvenue',
+				'block' => '12',
+				'barLeft' => '',
+				'barRight' => '',
+				'navLeft' => 'none',
+				'navRight' => 'none',
+				'navTemplate' => 'dir',
+				'displayMenu' => 'none',
+				'hideMenuSide' => false,
+				'hideMenuHead' => false,
+				'hideMenuChildren' => false,
+				'extraPosition' => false,
+				'css' => '',
+				'js' => ''
 			],
-			"les-espaces" => [
-				"typeMenu" => "text",
-				"iconUrl" => "",
-				"disable" => false,
-				"content" => "les-espaces.html",
-				"hideTitle" => false,
-				"breadCrumb" => false,
-				"metaDescription" => "",
-				"metaTitle" => "",
-				"moduleId" => "",
-				"modulePosition" => "bottom",
-				"parentPageId" => "bienvenue",
-				"position" => 1,
-				"role" => 0,
-				"profil" => 0,
-				"targetBlank" => false,
-				"title" => "Les espaces",
-				"shortTitle" => "Les espaces",
-				"block" => "12",
-				"barLeft" => "",
-				"barRight" => "",
-				"navLeft" => "none",
-				"navRight" => "none",
-				"navTemplate" => "dir",
-				"displayMenu" => "none",
-				"hideMenuSide" => false,
-				"hideMenuHead" => false,
-				"hideMenuChildren" => false,
-				"extraPosition" => false,
-				"css" => "",
-				"js" => ""
+			'les-espaces' => [
+				'typeMenu' => 'text',
+				'iconUrl' => '',
+				'disable' => false,
+				'content' => 'les-espaces.html',
+				'hideTitle' => false,
+				'breadCrumb' => false,
+				'metaDescription' => '',
+				'metaTitle' => '',
+				'moduleId' => '',
+				'modulePosition' => 'bottom',
+				'parentPageId' => 'bienvenue',
+				'position' => 1,
+				'role' => 0,
+				'profil' => 0,
+				'targetBlank' => false,
+				'title' => 'Les espaces',
+				'shortTitle' => 'Les espaces',
+				'block' => '12',
+				'barLeft' => '',
+				'barRight' => '',
+				'navLeft' => 'none',
+				'navRight' => 'none',
+				'navTemplate' => 'dir',
+				'displayMenu' => 'none',
+				'hideMenuSide' => false,
+				'hideMenuHead' => false,
+				'hideMenuChildren' => false,
+				'extraPosition' => false,
+				'css' => '',
+				'js' => ''
 			],
-			"participants" => [
-				"typeMenu" => "text",
-				"iconUrl" => "",
-				"disable" => false,
-				"content" => "participants.html",
-				"hideTitle" => false,
-				"breadCrumb" => false,
-				"metaDescription" => "",
-				"metaTitle" => "",
-				"moduleId" => "",
-				"modulePosition" => "bottom",
-				"parentPageId" => "bienvenue",
-				"position" => 3,
-				"role" => 0,
-				"profil" => 0,
-				"targetBlank" => false,
-				"title" => "Participants",
-				"shortTitle" => "Participants",
-				"block" => "12",
-				"barLeft" => "",
-				"barRight" => "",
-				"navLeft" => "none",
-				"navRight" => "none",
-				"navTemplate" => "dir",
-				"displayMenu" => "none",
-				"hideMenuSide" => false,
-				"hideMenuHead" => false,
-				"hideMenuChildren" => false,
-				"extraPosition" => false,
-				"css" => "",
-				"js" => ""
+			'participants' => [
+				'typeMenu' => 'text',
+				'iconUrl' => '',
+				'disable' => false,
+				'content' => 'participants.html',
+				'hideTitle' => false,
+				'breadCrumb' => false,
+				'metaDescription' => '',
+				'metaTitle' => '',
+				'moduleId' => '',
+				'modulePosition' => 'bottom',
+				'parentPageId' => 'bienvenue',
+				'position' => 3,
+				'role' => 0,
+				'profil' => 0,
+				'targetBlank' => false,
+				'title' => 'Participants',
+				'shortTitle' => 'Participants',
+				'block' => '12',
+				'barLeft' => '',
+				'barRight' => '',
+				'navLeft' => 'none',
+				'navRight' => 'none',
+				'navTemplate' => 'dir',
+				'displayMenu' => 'none',
+				'hideMenuSide' => false,
+				'hideMenuHead' => false,
+				'hideMenuChildren' => false,
+				'extraPosition' => false,
+				'css' => '',
+				'js' => ''
 			],
-			"consultation-des-espaces" => [
-				"typeMenu" => "text",
-				"iconUrl" => "",
-				"disable" => false,
-				"content" => "consultation-des-espaces.html",
-				"hideTitle" => false,
-				"breadCrumb" => false,
-				"metaDescription" => "",
-				"metaTitle" => "",
-				"moduleId" => "",
-				"modulePosition" => "bottom",
-				"parentPageId" => "bienvenue",
-				"position" => 2,
-				"role" => 0,
-				"profil" => 0,
-				"targetBlank" => false,
-				"title" => "Consultation des espaces",
-				"shortTitle" => "Consultation des espaces",
-				"block" => "12",
-				"barLeft" => "",
-				"barRight" => "",
-				"navLeft" => "none",
-				"navRight" => "none",
-				"navTemplate" => "dir",
-				"displayMenu" => "none",
-				"hideMenuSide" => false,
-				"hideMenuHead" => false,
-				"hideMenuChildren" => false,
-				"extraPosition" => false,
-				"css" => "",
-				"js" => ""
+			'consultation-des-espaces' => [
+				'typeMenu' => 'text',
+				'iconUrl' => '',
+				'disable' => false,
+				'content' => 'consultation-des-espaces.html',
+				'hideTitle' => false,
+				'breadCrumb' => false,
+				'metaDescription' => '',
+				'metaTitle' => '',
+				'moduleId' => '',
+				'modulePosition' => 'bottom',
+				'parentPageId' => 'bienvenue',
+				'position' => 2,
+				'role' => 0,
+				'profil' => 0,
+				'targetBlank' => false,
+				'title' => 'Consultation des espaces',
+				'shortTitle' => 'Consultation des espaces',
+				'block' => '12',
+				'barLeft' => '',
+				'barRight' => '',
+				'navLeft' => 'none',
+				'navRight' => 'none',
+				'navTemplate' => 'dir',
+				'displayMenu' => 'none',
+				'hideMenuSide' => false,
+				'hideMenuHead' => false,
+				'hideMenuChildren' => false,
+				'extraPosition' => false,
+				'css' => '',
+				'js' => ''
 			],
-			"modules" => [
-				"typeMenu" => "text",
-				"iconUrl" => "",
-				"disable" => false,
-				"content" => "modules.html",
-				"hideTitle" => false,
-				"breadCrumb" => false,
-				"metaDescription" => "",
-				"metaTitle" => "",
-				"moduleId" => "",
-				"modulePosition" => "bottom",
-				"parentPageId" => "bienvenue",
-				"position" => 4,
-				"role" => 0,
-				"profil" => 0,
-				"targetBlank" => false,
-				"title" => "Modules",
-				"shortTitle" => "Modules",
-				"block" => "12",
-				"barLeft" => "",
-				"barRight" => "",
-				"navLeft" => "none",
-				"navRight" => "none",
-				"navTemplate" => "dir",
-				"displayMenu" => "none",
-				"hideMenuSide" => false,
-				"hideMenuHead" => false,
-				"hideMenuChildren" => false,
-				"extraPosition" => false,
-				"css" => "",
-				"js" => ""
+			'modules' => [
+				'typeMenu' => 'text',
+				'iconUrl' => '',
+				'disable' => false,
+				'content' => 'modules.html',
+				'hideTitle' => false,
+				'breadCrumb' => false,
+				'metaDescription' => '',
+				'metaTitle' => '',
+				'moduleId' => '',
+				'modulePosition' => 'bottom',
+				'parentPageId' => 'bienvenue',
+				'position' => 4,
+				'role' => 0,
+				'profil' => 0,
+				'targetBlank' => false,
+				'title' => 'Modules',
+				'shortTitle' => 'Modules',
+				'block' => '12',
+				'barLeft' => '',
+				'barRight' => '',
+				'navLeft' => 'none',
+				'navRight' => 'none',
+				'navTemplate' => 'dir',
+				'displayMenu' => 'none',
+				'hideMenuSide' => false,
+				'hideMenuHead' => false,
+				'hideMenuChildren' => false,
+				'extraPosition' => false,
+				'css' => '',
+				'js' => ''
 			]
 		],
 		'theme' => [
@@ -1192,54 +1194,17 @@ class init extends common
 				]
 			]
 		],
-		"course" => [
-			"67c4169fd9427" => [
-				"title" => "La photographie numérique",
-				"author" => "test",
-				"homePageId" => "accueil",
-				"category" => "general",
-				"description" => "Présentation de la photographique numérique et des matériels de prise de vue.\r\nTemps d'apprentissage : 2 heures.",
-				"access" => 0,
-				"openingDate" => 1740917940,
-				"closingDate" => 1740917940,
-				"enrolment" => 0,
-				"enrolmentKey" => "",
-				"limitEnrolment" => false,
-				"limitEnrolmentDate" => 1740904020,
-				"report" => true,
-				"group" => null
-			],
-			"67c4173f32319" => [
-				"title" => "La retouche avec The Gimp",
-				"author" => "test",
-				"homePageId" => "accueil",
-				"category" => "general",
-				"description" => "Les bases de la retouche avec The Gimp.\r\nTemps d'apprentissage : 4 heures.",
-				"access" => 0,
-				"openingDate" => "",
-				"closingDate" => "",
-				"enrolment" => 0,
-				"enrolmentKey" => "",
-				"limitEnrolment" => false,
-				"limitEnrolmentDate" => 1740904200,
-				"report" => true,
-				"group" => null
-			]
-		],
-		'group' => [
-				"67c4164e865bf" => "Groupe A",
-				"67c41654c493f" => "Groupe B"
-		]
+		'course' => [],
+		'group' => []
 	];
 
-
+	// Contenu des pages pour home
 	public static $siteTemplateContent = [
-		"page" => [
-			"contact" => [
-				"content" => ["<p>Cette page contient un exemple de formulaire con&ccedil;u &agrave; partir du module de g&eacute;n&eacute;ration de formulaires. Il est configur&eacute; pour envoyer les donn&eacute;es saisies par mail aux administrateurs du site.</p>"]
-			],
-			"mentions-legales" => [
-				"content" => ["<h1 style='text-align: center;'>Conditions g&eacute;n&eacute;rales d'utilisation</h1>
+		'contact' => [
+			'content' => "<p>Cette page contient un exemple de formulaire con&ccedil;u &agrave; partir du module de g&eacute;n&eacute;ration de formulaires. Il est configur&eacute; pour envoyer les donn&eacute;es saisies par mail aux administrateurs du site.</p>"
+		],
+		'mentions-legales' => [ 
+			'content' => "<h1 style='text-align: center;'>Conditions g&eacute;n&eacute;rales d'utilisation</h1>
 					<h1 style='text-align: center;'>En vigueur au 01/06/2020</h1>
 					<p><strong>Avertissement</strong>Cette page fictive est donn&eacute;e &agrave; titre indicatif elle a &eacute;t&eacute; r&eacute;alis&eacute;e &agrave; l'aide d'un g&eacute;n&eacute;rateur : <a href='https://www.legalplace.fr' target='_blank' rel='noopener'>https://www.legalplace.fr</a></p>
 					<p justify=''>Les pr&eacute;sentes conditions g&eacute;n&eacute;rales d'utilisation (dites &laquo; CGU &raquo;) ont pour objet l'encadrement juridique des modalit&eacute;s de mise &agrave; disposition du site et des services par et de d&eacute;finir les conditions d&rsquo;acc&egrave;s et d&rsquo;utilisation des services par &laquo; l'Utilisateur &raquo;.</p>
@@ -1288,37 +1253,35 @@ class init extends common
 					<h2>ARTICLE 8&nbsp;: Droit applicable et juridiction comp&eacute;tente</h2>
 					<p justify=''>La l&eacute;gislation fran&ccedil;aise s'applique au pr&eacute;sent contrat. En cas d'absence de r&eacute;solution amiable d'un litige n&eacute; entre les parties, les tribunaux fran&ccedil;aais seront seuls comp&eacute;tents pour en conna&icirc;tre.</p>
 					<p justify=''>Pour toute question relative &agrave; l&rsquo;application des pr&eacute;sentes CGU, vous pouvez joindre l&rsquo;&eacute;diteur aux coordonn&eacute;es inscrites &agrave; l&rsquo;ARTICLE 1.</p>"
-				]
-			],
-			"erreur302" => [
-				"content" => ['<p>Notre site est actuellement en maintenance. Nous sommes désolés pour la gêne occasionnée et faisons notre possible pour être rapidement de retour.</p>
+		],
+		'erreur302' => [
+			'content' => '<p>Notre site est actuellement en maintenance. Nous sommes désolés pour la gêne occasionnée et faisons notre possible pour être rapidement de retour.</p>
 								<div class="row"><div class="col4 offset8 textAlignCenter"><a href="./?user/login" id="maintenanceLogin" name="maintenanceLogin" class="button"><span class="zwiico-lock zwiico-margin-right"></span>Administration</a></div></div>'
-				]
-			],
-			"erreur403" => [
-				"content" => ['<h2 style="text-align: center;">Vous n\'êtes pas autorisé à accéder à cette page...</h2><p style="text-align: center;">Personnalisez cette page à votre convenance sans qu\'elle apparaisse dans les menus.</p>']
-			],
-			"erreur404" => [
-				"content" => ['<h2 style="text-align: center;">Oups ! La page demandée est introuvable...</h2><p style="text-align: center;">Personnalisez cette page à votre convenance sans qu\'elle apparaisse dans les menus.</p>']
-			],
-			"images-numeriques" => [
-				"content" => ['<p>Cette page contient un module permettant de lister une cat&eacute;gorie de modules.</p>']
-			],
-			"bienvenue" => [
-				"content" => ['<p>L\'installation s\'est déroulée correctement, ZwiiCampus est prêt à être utilisé.</p>
+		],
+		'erreur403' => [
+			'content' => '<h2 style="text-align: center;">Vous n\'êtes pas autorisé à accéder à cette page...</h2><p style="text-align: center;">Personnalisez cette page à votre convenance sans qu\'elle apparaisse dans les menus.</p>']
+		,
+		'erreur404' => [
+			'content' => '<h2 style="text-align: center;">Oups ! La page demandée est introuvable...</h2><p style="text-align: center;">Personnalisez cette page à votre convenance sans qu\'elle apparaisse dans les menus.</p>']
+		,
+		'images-numeriques' => [
+			'content' => '<p>Cette page contient un module permettant de lister une cat&eacute;gorie de modules.</p>'
+		],
+		'bienvenue' => [
+			'content' => '<p>L\'installation s\'est déroulée correctement, ZwiiCampus est prêt à être utilisé.</p>
 					<p>Avant de commencer, quelques explications sont nécessaires. ZwiiCampus permet de mettre en ligne des contenus en les protégeant comme pourrait le faire un système d\'apprentissage distant (LMS).</p>
 					<p>Ces contenus sont stockés dans des <a href="?les-espaces">espaces</a>, comparable à des sites Web.</p>
 					<p>ZwiiCampus propose des modules qui permettent de doper vos contenus.</p>'
-				]
-			],
-			"consultation-des-espaces" => [
-				"content" => "<p>L'enregistrement des actions des participants est r&eacute;serv&eacute; aux espaces n&eacute;cessitant un compte d'acc&egrave;s. Il est stock&eacute; dans un historique, qui peut &ecirc;tre d&eacute;sactiv&eacute; depuis la gestion de l'espace.</p>
+			
+		],
+		'consultation-des-espaces' => [
+			'content' => "<p>L'enregistrement des actions des participants est r&eacute;serv&eacute; aux espaces n&eacute;cessitant un compte d'acc&egrave;s. Il est stock&eacute; dans un historique, qui peut &ecirc;tre d&eacute;sactiv&eacute; depuis la gestion de l'espace.</p>
 <p>Le suivi des participants s'effectue via l'ic&ocirc;ne <strong >Participations</strong> dans la gestion des espaces.</p>
 <p>Une table exportable affiche la liste des participants, leur derni&egrave;re page consult&eacute;e et leur pourcentage de progression dans le module, bas&eacute; sur le nombre de pages visit&eacute;es.</p>
 <p>En cliquant sur le bouton de progression, un graphique d&eacute;taillant l'historique des consultations des pages s'affiche.</p>"
-			],
-			"les-espaces" => [
-				"content" => ["
+		],
+		'les-espaces' => [
+			'content' => "
 					<h2 style='text-align: center;'>Espaces d'apprentissage</h2>
 					<p>Un <strong>espace</strong> est une zone d'apprentissage que vous pouvez créer en autant d'exemplaires que nécessaire. Ils sont accessibles depuis le sélecteur de la barre d'administration et gérés via <a href='?course' rel='data-lity'>l'icône dédiée</a>. Chaque espace dispose d'un <a href='?theme' rel='data-lity'>thème </a>personnalisable.</p>
 					<h2>Caractéristiques des espaces</h2>
@@ -1340,10 +1303,10 @@ class init extends common
 						<li><strong>Sauvegarde et réinstallation</strong> : Assure la sécurité des données et leur récupération.</li>
 						<li><strong>Clonage</strong> : Permet de dupliquer un espace ou de générer une page web regroupant l'ensemble de ses contenus.</li>
 					</ul><p>📌 L'accueil de <strong>ZwiiCampus</strong> est stocké dans un espace spécifique nommé <strong>'home'</strong>.</p>"
-				]
-			],
-			"participants" => [
-				"content" => ["
+			
+		],
+		'participants' => [
+			'content' => "
 					<p>Les participants sont gérés depuis la fenêtre de gestion des utilisateurs.</p>
 					<h2>Rôles et profils</h2>
 					<p>Quatre rôles de base sont disponibles :</p>
@@ -1361,10 +1324,10 @@ class init extends common
 					</ul>
 					<p>Toutes les tables, tout comme pour les espaces, bénéficient d'une fonctionnalité d'export au format <strong>CSV</strong>, <strong>PDF</strong>, ou permettent une <strong>copie dans le presse-papier</strong>.</p>
 					"
-				]
-			],
-			"modules" => [
-				"Les modules enrichissent les fonctionnalit&eacute;s des pages. Autonomes, ils peuvent &ecirc;tre d&eacute;velopp&eacute;s pour r&eacute;pondre &agrave; des besoins sp&eacute;cifiques.</p>
+			
+		],
+		'modules' => [
+			'content' => "Les modules enrichissent les fonctionnalit&eacute;s des pages. Autonomes, ils peuvent &ecirc;tre d&eacute;velopp&eacute;s pour r&eacute;pondre &agrave; des besoins sp&eacute;cifiques.</p>
 				<ul>
 					<li>Modules int&eacute;gr&eacute;s &agrave; la version distribu&eacute;e</li>
 					<li>Blog : R&eacute;daction d'articles avec commentaires.</li>
@@ -1380,10 +1343,10 @@ class init extends common
 					<li>Subscribe (auto-inscription) : Formulaire d'inscription pour les apprenants.</li>
 					<li>Workshop (atelier) : Liste les espaces d'une cat&eacute;gorie donn&eacute;e.</li>
 				</ul>"
-			]
 		]
 	];
 
+	// Données pour espace
 	public static $courseDefault = [
 		'page' => [
 			'accueil' => [
@@ -1651,13 +1614,13 @@ class init extends common
 			],
 			'button' => [
 				'backgroundColor' => 'rgba(32, 59, 82, 1)'
-			],
-			'version' => 0
+			]
 		],
 		'module' => [
 		],
 	];
 
+	// Contenu des pages pour espace
 	public static $courseContent = [
 		'accueil' => [
 			'content' => '<h2>Bienvenue sur votre nouveau contenu !</h2>'
