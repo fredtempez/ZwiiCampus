@@ -1556,7 +1556,7 @@ class init extends common
 				'imagePosition' => '',
 				'imageRepeat' => '',
 				'margin' => false,
-				'position' => 'site',
+				'position' => 'hide',
 				'textAlign' => 'center',
 				'textColor' => 'rgba(255, 255, 255, 1)',
 				'textHide' => false,

@@ -627,8 +627,9 @@ nav #menuSelectCourse {
     font-size: 1em;
     background-color: rgba(255, 255, 255, 1);
     line-height: 45px;
-    padding: 5px 10px;
-    margin: 0px 10px;
+    padding: 5px 5px;
+    margin: 10px 5px;
+    text-align-last: center;
 }
 
 
