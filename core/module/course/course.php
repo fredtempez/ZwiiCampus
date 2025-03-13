@@ -124,7 +124,7 @@ class course extends common
                         $users = template::button('categoryUser' . $this->getUrl(2), [
                             'href' => helper::baseUrl() . 'course/users/' . $courseId,
                             'value' => template::ico('address-book'),
-                            'help' => 'Participations'
+                            'help' => 'Télémétrie'
                         ]);
                     }
                     self::$courses[] = [
@@ -775,13 +775,13 @@ class course extends common
                             ? template::ico('chart-line', ['margin' => 'right']) . number_format($userValue['progress']) . ' %'
                             : template::ico('chart-line', ['margin' => 'right']) . ($viewPages ? min(round(($viewPages * 100) / $sumPages, 1), 100) . ' %' : '0%'),
                         'disable' => empty($userValue['datePageView']),
-                        'help' => 'Participation',
+                        'help' => 'Participation à l\'espace',
                     ]);
                 } else {
                     $reportButton = template::button('userReport' . $userId, [
                         'value' => template::ico('chart-line'),
                         'disable' => true,
-                        'help' => 'La participation est désactivée',
+                        'help' => 'La télémétrie est désactivée',
                     ]);
                 }
                 // Les groupes sous forme de chaine
@@ -1398,7 +1398,7 @@ class course extends common
 
         // Valeurs en sortie
         $this->addOutput([
-            'title' => sprintf(helper::translate('Rapport des consultations : %s'), $this->getData(['course', $courseId, 'title'])) .
+            'title' => sprintf(helper::translate('Télémétrie : %s'), $this->getData(['course', $courseId, 'title'])) .
                 sprintf(helper::translate('%s Participant : %s %s'), '<br />', $this->getData(['user', $userId, 'firstname']), $this->getData(['user', $userId, 'lastname'])),
             'view' => 'userReport',
             'vendor' => [

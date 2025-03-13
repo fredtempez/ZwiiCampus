@@ -51,7 +51,7 @@
             </div>
             <div class="row">
                 <div class="col4">
-                    <?php echo template::checkbox('courseAddEnrolmentReport', true, 'Statistique des consultations', [
+                    <?php echo template::checkbox('courseAddEnrolmentReport', true, 'Télémétrie', [
                         'checked' => true,
                         'help' => 'Enregistre une trace des consultations. Ne s\'applique pas à l\'inscription anonyme',
                     ]); ?>
