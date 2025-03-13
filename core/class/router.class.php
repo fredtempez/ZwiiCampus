@@ -440,7 +440,7 @@ class core extends common
 		/*
 		 * Récupère les statistiques de l'utilisateur non admin
 		 * en dehors de home 
-		 * et si la connextion est nécessaire et que le membre est connecté 
+		 * et si la connexion est nécessaire et que le membre est connecté 
 		 * stocke la progression dans la base des inscriptions
 		 * */
 		if (

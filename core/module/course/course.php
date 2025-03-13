@@ -1239,8 +1239,7 @@ class course extends common
         }
         // Message du groupe qui ne correspond pas à celui de l'espace
         elseif ($this->userGroupIntersectCourseGroup($courseId, $userId) === false) {
-            var_dump($this->userGroupIntersectCourseGroup($courseId, $userId));
-            die();
+
             $message = helper::translate('Votre groupe n\'a pas accès à cet espace');
             $state = false;
         }
