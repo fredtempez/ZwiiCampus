@@ -514,10 +514,11 @@ class core extends common
 		if ($this->getData(['page', $this->getUrl(0)]) !== null) {
 			if (
 				$this->getData(['page', $this->getUrl(0), 'role']) === common::ROLE_VISITOR
-				or ($this->isConnected() === true
-					// and $this->getUser('role') >= $this->getData(['page', $this->getUrl(0), 'role'])
-					// Modification qui tient compte du profil de la page
-					and ($this->getUser('role') * 10 + $this->getUser('profil')) >= ($this->getData(['page', $this->getUrl(0), 'role']) * 10 + $this->getData(['page', $this->getUrl(0), 'profil']))
+				|| ($this->isConnected() === true
+					// Test pour vérifier que la paged'accueil est bien définie
+					// Afin d'éviter un bouclage en cas d'incohérence dans les données
+					&& is_string($this->getData(['locale', 'homePageId']))
+					&& ($this->getUser('role') * 10 + $this->getUser('profil')) >= ($this->getData(['page', $this->getUrl(0), 'role']) * 10 + $this->getData(['page', $this->getUrl(0), 'profil']))
 				)
 			) {
 				$access = true;

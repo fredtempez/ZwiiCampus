@@ -12,14 +12,11 @@
  * @license CC Attribution-NonCommercial-NoDerivatives 4.0 International
  * @link http://zwiicms.fr/
  */
-
-
 class install extends common
 {
-
 	public static $actions = [
 		'index' => self::ROLE_VISITOR,
-		"postinstall" => self::ROLE_VISITOR,
+		'postinstall' => self::ROLE_VISITOR,
 		'steps' => self::ROLE_ADMIN,
 		'update' => self::ROLE_ADMIN
 	];
@@ -29,7 +26,6 @@ class install extends common
 		'tcp://' => 'TCP',
 		'http://' => 'HTTP'
 	];
-
 
 	public static $newVersion;
 
@@ -53,15 +49,11 @@ class install extends common
 
 		// Soumission du formulaire
 		if (
-			//$this->getUser('permission', __CLASS__, __FUNCTION__) === true &&
+			// $this->getUser('permission', __CLASS__, __FUNCTION__) === true &&
 			$this->isPost()
 		) {
-
 			$lang = $this->getInput('installLanguage');
-			// Pour la suite  de l'installation
-			// setcookie('ZWII_UI', $lang, time() + 3600, helper::baseUrl(false, false), '', false, false);
-
-			$_SESSION['ZWII_UI'] = $this->getInput('installLanguage');
+			$this->setData(['config', 'defaultLanguageUI', $lang]);
 
 			// Valeurs en sortie
 			$this->addOutput([
@@ -99,14 +91,12 @@ class install extends common
 		else {
 			// Soumission du formulaire
 			if (
-				//$this->getUser('permission', __CLASS__, __FUNCTION__) !== true &&
+				// $this->getUser('permission', __CLASS__, __FUNCTION__) !== true &&
 				$this->isPost()
 			) {
-
 				// Double vérification pour le mot de passe
 				if ($this->getInput('installPassword', helper::FILTER_STRING_SHORT, true) !== $this->getInput('installConfirmPassword', helper::FILTER_STRING_SHORT, true)) {
 					self::$inputNotices['installConfirmPassword'] = 'Incorrect';
-					$success = false;
 				}
 				// Utilisateur
 				$userFirstname = $this->getInput('installFirstname', helper::FILTER_STRING_SHORT, true);
@@ -115,7 +105,7 @@ class install extends common
 				$userId = $this->getInput('installId', helper::FILTER_ID, true);
 
 				// Validation de la langue transmise
-				self::$i18nUI = $_SESSION['ZWII_UI'];
+				self::$i18nUI = $this->getData(['config', 'defaultLanguageUI']);
 				self::$i18nUI = array_key_exists(self::$i18nUI, self::$languages) ? self::$i18nUI : 'fr_FR';
 				// Stockage de la langue par défaut afin d'afficher le site dans cette langue lors de l'affichage de la bannière de connexion.
 				$this->setData(['config', 'defaultLanguageUI', self::$i18nUI], false);
@@ -149,10 +139,10 @@ class install extends common
 				$this->sendMail(
 					$userMail,
 					'Installation de votre site',
-					'Bonjour' . ' <strong>' . $userFirstname . ' ' . $userLastname . '</strong>,<br><br>' .
-					'Voici les détails de votre installation.<br><br>' .
-					'<strong>URL du site :</strong> <a href="' . helper::baseUrl(false) . '" target="_blank">' . helper::baseUrl(false) . '</a><br>' .
-					'<strong>Identifiant du compte :</strong> ' . $this->getInput('installId') . '<br>',
+					'Bonjour' . ' <strong>' . $userFirstname . ' ' . $userLastname . '</strong>,<br><br>'
+						. 'Voici les détails de votre installation.<br><br>'
+						. '<strong>URL du site :</strong> <a href="' . helper::baseUrl(false) . '" target="_blank">' . helper::baseUrl(false) . '</a><br>'
+						. '<strong>Identifiant du compte :</strong> ' . $this->getInput('installId') . '<br>',
 					null,
 					'no-reply@localhost'
 				);
@@ -184,7 +174,7 @@ class install extends common
 				unlink(self::TEMP_DIR . 'files.tar.gz');
 				unlink(self::TEMP_DIR . 'files.tar');
 
-				// Installer les données du site de test 
+				// Installer les données du site de test
 				// Les groupes
 				// Les espaces
 
@@ -215,9 +205,13 @@ class install extends common
 					'notification' => helper::translate('Installation terminée'),
 					'state' => true
 				]);
+
+				// Force la sauvegarde
+				$this->saveDB('config');
 			}
-			// Force la sauvegarde
-			$this->saveDB('config');
+
+			// Langue par défaut définie précédemment
+			self::$i18nUI = $this->getData(['config', 'defaultLanguageUI']);
 
 			// Affichage du formulaire
 			// Valeurs en sortie
@@ -242,196 +236,214 @@ class install extends common
 			$this->addOutput([
 				'access' => false
 			]);
-		} else {
-			switch ($this->getInput('step', helper::FILTER_INT)) {
-				// Préparation
-				case 1:
+			return;
+		}
+
+		// Installation par étapes
+		switch ($this->getInput('step', helper::FILTER_INT)) {
+			// Préparation
+			case 1:
+				$success = true;
+				$message = '';
+				// RAZ la mise à jour auto
+				$this->setData(['core', 'updateAvailable', false]);
+				// Backup du dossier Data
+				helper::autoBackup(self::BACKUP_DIR, ['backup', 'tmp', 'file']);
+
+				/**
+				 * Le mode maintenance n'était pas activé
+				 *  Son état est sauvegardé pour être restauré après la mise à jour
+				 */
+				if ($this->getData(['config', 'maintenance']) === true) {
+					// Mode permanent pour éviter la désactivation
+					touch(self::DATA_DIR . '.maintenance');
+				}
+				// Activer le mode maintenance et laisser les fichiers se fermer
+				$this->setData(['config', 'maintenance', true]);
+				usleep(500000);  // 500 milliseconds
+
+				// Sauvegarde htaccess
+				if ($this->getData(['config', 'autoUpdateHtaccess'])) {
+					$success = copy('.htaccess', '.htaccess' . '.bak');
+					$message = $success ? '' : 'Erreur de copie du fichier htaccess';
+				}
+				// Nettoyage des fichiers d'installation précédents
+				if ($success && file_exists(self::TEMP_DIR . 'update.tar.gz')) {
+					$success = unlink(self::TEMP_DIR . 'update.tar.gz');
+					$message = $success ? '' : 'Impossible d&#39;effacer la mise à jour précédente';
+				}
+				if ($success && file_exists(self::TEMP_DIR . 'update.tar')) {
+					$success = unlink(self::TEMP_DIR . 'update.tar');
+					$message = $success ? '' : 'Impossible d&#39;effacer la mise &#224; jour pr&#233;c&#233;dente';
+				}
+
+				// Check la réécriture d'URL avant d'écraser les fichiers
+				// Création du fichier de marqueur et l'effacer si présent
+				if (helper::checkRewrite()) {
+					touch(self::DATA_DIR . '.rewrite');
+				} elseif (file_exists(self::DATA_DIR . '.rewrite')) {
+					unlink(self::DATA_DIR . '.rewrite');
+				}
+				// Sauvegarde le message dans le journal
+				if (!empty($message)) {
+					$this->saveLog($message);
+				}
+				// Valeurs en sortie
+				$this->addOutput([
+					'display' => self::DISPLAY_JSON,
+					'content' => [
+						'success' => $success,
+						'data' => json_encode($message, JSON_UNESCAPED_UNICODE)
+					]
+				]);
+				break;
+			// Téléchargement
+			case 2:
+				$success = true;
+				$message = '';
+				$this->secure_file_put_contents(self::TEMP_DIR . 'update.tar.gz', helper::getUrlContents(common::ZWII_UPDATE_URL . common::ZWII_UPDATE_CHANNEL . '/update.tar.gz'));
+				$md5origin = helper::getUrlContents(common::ZWII_UPDATE_URL . common::ZWII_UPDATE_CHANNEL . '/update.md5');
+				$md5origin = explode(' ', $md5origin);
+				$md5target = md5_file(self::TEMP_DIR . 'update.tar.gz');
+				// Vérifier si les checksums correspondent
+				if ($md5origin[0] === $md5target) {
 					$success = true;
 					$message = '';
-					// RAZ la mise à jour auto
-					$this->setData(['core', 'updateAvailable', false]);
-					// Backup du dossier Data
-					helper::autoBackup(self::BACKUP_DIR, ['backup', 'tmp', 'file']);
-					// Sauvegarde htaccess
-					if ($this->getData(['config', 'autoUpdateHtaccess'])) {
-						$success = copy('.htaccess', '.htaccess' . '.bak');
-						$message = $success ? '' : 'Erreur de copie du fichier htaccess';
-					}
-					// Nettoyage des fichiers d'installation précédents
-					if ($success && file_exists(self::TEMP_DIR . 'update.tar.gz')) {
-						$success = unlink(self::TEMP_DIR . 'update.tar.gz');
-						$message = $success ? '' : 'Impossible d\'effacer la mise à jour précédente';
-					}
-					if ($success && file_exists(self::TEMP_DIR . 'update.tar')) {
-						$success = unlink(self::TEMP_DIR . 'update.tar');
-						$message = $success ? '' : 'Impossible d\'effacer la mise à jour précédente';
-					}
-					// Sauvegarde le message dans le journal
-					if (!empty($message)) {
-						$this->saveLog($message);
-					}
-					// Valeurs en sortie
-					$this->addOutput([
-						'display' => self::DISPLAY_JSON,
-						'content' => [
-							'success' => $success,
-							'data' => $success ? null : json_encode($message, JSON_UNESCAPED_UNICODE)
-						]
-					]);
-					break;
-				// Téléchargement
-				case 2:
-					$success = true;
-					$message = '';
-					file_put_contents(self::TEMP_DIR . 'update.tar.gz', helper::getUrlContents(common::ZWII_UPDATE_URL . common::ZWII_UPDATE_CHANNEL . '/update.tar.gz'));
-					$md5origin = helper::getUrlContents(common::ZWII_UPDATE_URL . common::ZWII_UPDATE_CHANNEL . '/update.md5');
-					$md5origin = explode(' ', $md5origin);
-					$md5target = md5_file(self::TEMP_DIR . 'update.tar.gz');
-					// Vérifier si les checksums correspondent
-					if ($md5origin[0] === $md5target) {
-						$success = true;
-						$message = "";
-					} else {
-						$success = false;
-						$message = 'Erreur de téléchargement ou de somme de contrôle';
-						if (file_exists(self::TEMP_DIR . 'update.tar.gz')) {
-							unlink(self::TEMP_DIR . 'update.tar.gz');
-							http_response_code(500);
-						}
-					}
-					// Sauvegarde le message dans le journal
-					if (!empty($message)) {
-						$this->saveLog($message);
-					}
-					// Valeurs en sortie
-					$this->addOutput([
-						'display' => self::DISPLAY_JSON,
-						'content' => [
-							'success' => $success,
-							'data' => json_encode($message, JSON_UNESCAPED_UNICODE)
-						]
-					]);
-					break;
-				// Installation
-				case 3:
-					$success = true;
-					$message = '';
-
-					// Check la réécriture d'URL avant d'écraser les fichiers
-					if (helper::checkRewrite()) {
-						touch(self::DATA_DIR . '.rewrite');
-					}
-
-					// Décompression et installation
-					try {
-						// Décompression dans le dossier de fichier temporaires
-						$pharData = new PharData(self::TEMP_DIR . 'update.tar.gz');
-						$pharData->decompress();
-						// Installation
-						$pharData->extractTo(__DIR__ . '/../../../', null, true);
-					} catch (Exception $e) {
-						$message = $e->getMessage();
-						$success = false;
-						http_response_code(500);
-					}
-
-					// Nettoyage du dossier
+				} else {
+					$success = false;
+					$message = 'Erreur de téléchargement ou de somme de contrôle';
 					if (file_exists(self::TEMP_DIR . 'update.tar.gz')) {
 						unlink(self::TEMP_DIR . 'update.tar.gz');
+						http_response_code(500);
 					}
-					if (file_exists(self::TEMP_DIR . 'update.tar')) {
-						unlink(self::TEMP_DIR . 'update.tar');
-					}
-					// Sauvegarde le message dans le journal
-					if (!empty($message)) {
-						$this->saveLog($message);
-					}
-					// Valeurs en sortie
-					$this->addOutput([
-						'display' => self::DISPLAY_JSON,
-						'content' => [
-							'success' => $success,
-							'data' => json_encode($message, JSON_UNESCAPED_UNICODE)
-						]
-					]);
-					break;
-				// Configuration
-				case 4:
-					$success = true;
-					$message = '';
+				}
+				// Sauvegarde le message dans le journal
+				if (!empty($message)) {
+					$this->saveLog($message);
+				}
+				// Valeurs en sortie
+				$this->addOutput([
+					'display' => self::DISPLAY_JSON,
+					'content' => [
+						'success' => $success,
+						'data' => json_encode($message, JSON_UNESCAPED_UNICODE)
+					]
+				]);
+				break;
+			// Installation
+			case 3:
+				$success = true;
+				$message = '';
 
-					/**
-					 * Restaure le fichier htaccess
-					 */
-					// Recopie htaccess
+				// Décompression et installation
+				try {
+					// Décompression dans le dossier de fichier temporaires
+					$pharData = new PharData(self::TEMP_DIR . 'update.tar.gz');
+					$pharData->decompress();
+					// Installation
+					$pharData->extractTo(__DIR__ . '/../../../', null, true);
+				} catch (Exception $e) {
+					$message = $e->getMessage();
+					$success = false;
+					http_response_code(500);
+				}
+
+				// Nettoyage du dossier
+				if (file_exists(self::TEMP_DIR . 'update.tar.gz')) {
+					unlink(self::TEMP_DIR . 'update.tar.gz');
+				}
+				if (file_exists(self::TEMP_DIR . 'update.tar')) {
+					unlink(self::TEMP_DIR . 'update.tar');
+				}
+				// Sauvegarde le message dans le journal
+				if (!empty($message)) {
+					$this->saveLog($message);
+				}
+				// Valeurs en sortie
+				$this->addOutput([
+					'display' => self::DISPLAY_JSON,
+					'content' => [
+						'success' => $success,
+						'data' => json_encode($message, JSON_UNESCAPED_UNICODE)
+					]
+				]);
+				break;
+			// Configuration
+			case 4:
+				$success = true;
+				$message = '';
+
+				// Restaure le mode maintenance si permanent
+				$this->setData(['config', 'maintenance', file_exists(self::DATA_DIR . '.maintenance')]);
+				// Dans tous les cas supprimer le drapeau de maintenance
+				if (file_exists(self::DATA_DIR . '.maintenance')) {
+					unlink(self::DATA_DIR . '.maintenance');
+				}
+
+				/** Restaure le fichier htaccess */
+				// Recopie htaccess
+				if (
+					$this->getData(['config', 'autoUpdateHtaccess']) === true
+				) {
+					// L'écraser avec le backup
+					$success = copy('.htaccess.bak', '.htaccess');
+					if ($success === false) {
+						$message = helper::translate("La copie de sauvegarde du fichier htaccess n'a pas été restaurée !");
+						http_response_code(500);
+					}
+					// Effacer le backup
+					unlink('.htaccess.bak');
+				} else {
+					/** Restaure la réécriture d'URL */
+					if (file_exists(self::DATA_DIR . '.rewrite')) {  // Ajout des lignes dans le .htaccess
+						$fileContent = file_get_contents('.htaccess');
+						$rewriteData = PHP_EOL
+							. '# URL rewriting' . PHP_EOL
+							. '<IfModule mod_rewrite.c>' . PHP_EOL
+							. "\tRewriteEngine on" . PHP_EOL
+							. "\tRewriteBase " . helper::baseUrl(false, false) . PHP_EOL
+							. "\tRewriteCond %{REQUEST_FILENAME} !-f" . PHP_EOL
+							. "\tRewriteCond %{REQUEST_FILENAME} !-d" . PHP_EOL
+							. "\tRewriteRule ^(.*)\$ index.php?\$1 [L]" . PHP_EOL
+							. '</IfModule>' . PHP_EOL
+							. '# URL rewriting' . PHP_EOL;
+						$fileContent = str_replace('# URL rewriting', $rewriteData, $fileContent);
+						$success = $this->secure_file_put_contents(
+							'.htaccess',
+							$fileContent
+						);
+						unlink(self::DATA_DIR . '.rewrite');
+					}
+				}
+
+				/** Met à jour les dictionnaires des langues depuis les nouveaux modèles installés */
+				require_once ('core/module/install/ressource/defaultdata.php');
+				$installedLanguages = $this->getData(['language']);
+				$defaultLanguages = init::$defaultData['language'];
+				foreach ($installedLanguages as $key => $value) {
 					if (
-						$this->getData(['config', 'autoUpdateHtaccess']) === true
+						isset($defaultLanguages[$key]['date']) &&
+						$defaultLanguages[$key]['date'] > $value['date'] &&
+						isset($defaultLanguages[$key]['version']) &&
+						$defaultLanguages[$key]['version'] >= $value['version']
 					) {
-						// L'écraser avec le backup
-						$success = copy('.htaccess.bak', '.htaccess');
-						if ($success === false) {
-							$message = helper::translate('La copie de sauvegarde du fichier htaccess n\'a pas été restaurée !');
-							http_response_code(500);
-						}
-						// Effacer le backup
-						unlink('.htaccess.bak');
-					} else {
-						/**
-						 * Restaure la réécriture d'URL
-						 */
-						if (file_exists(self::DATA_DIR . '.rewrite')) { // Ajout des lignes dans le .htaccess
-							$fileContent = file_get_contents('.htaccess');
-							$rewriteData = PHP_EOL .
-								'# URL rewriting' . PHP_EOL .
-								'<IfModule mod_rewrite.c>' . PHP_EOL .
-								"\tRewriteEngine on" . PHP_EOL .
-								"\tRewriteBase " . helper::baseUrl(false, false) . PHP_EOL .
-								"\tRewriteCond %{REQUEST_FILENAME} !-f" . PHP_EOL .
-								"\tRewriteCond %{REQUEST_FILENAME} !-d" . PHP_EOL .
-								"\tRewriteRule ^(.*)$ index.php?$1 [L]" . PHP_EOL .
-								'</IfModule>' . PHP_EOL .
-								'# URL rewriting' . PHP_EOL;
-							$fileContent = str_replace('# URL rewriting', $rewriteData, $fileContent);
-							$success = $this->secure_file_put_contents(
-								'.htaccess',
-								$fileContent
-							);
-							unlink(self::DATA_DIR . '.rewrite');
-						}
+						copy('core/module/install/ressource/i18n/' . $key . '.json', self::I18N_DIR . $key . '.json');
+						$this->setData(['language', $key, $defaultLanguages[$key]]);
 					}
+				}
+				// Sauvegarde le message dans le journal
+				if (!empty($message)) {
+					$this->saveLog($message);
+				}
 
-					/**
-					 * Met à jour les dictionnaires des langues depuis les nouveaux modèles installés
-					 */
-					require_once('core/module/install/ressource/defaultdata.php');
-					$installedLanguages = $this->getData(['language']);
-					$defaultLanguages = init::$defaultData['language'];
-					foreach ($installedLanguages as $key => $value) {
-
-						if (
-							isset($defaultLanguages[$key]['date']) &&
-							$defaultLanguages[$key]['date'] > $value['date'] &&
-							isset($defaultLanguages[$key]['version']) &&
-							$defaultLanguages[$key]['version'] >= $value['version']
-
-						) {
-							copy('core/module/install/ressource/i18n/' . $key . '.json', self::I18N_DIR . $key . '.json');
-							$this->setData(['language', $key, $defaultLanguages[$key]]);
-						}
-					}
-					// Sauvegarde le message dans le journal
-					if (!empty($message)) {
-						$this->saveLog($message);
-					}
-					// Valeurs en sortie
-					$this->addOutput([
-						'display' => self::DISPLAY_JSON,
-						'content' => [
-							'success' => $success,
-							'data' => json_encode($message, JSON_UNESCAPED_UNICODE)
-						]
-					]);
-			}
+				// Valeurs en sortie
+				$this->addOutput([
+					'display' => self::DISPLAY_JSON,
+					'content' => [
+						'success' => $success,
+						'data' => json_encode($message, JSON_UNESCAPED_UNICODE)
+					]
+				]);
 		}
 	}
 
@@ -457,7 +469,6 @@ class install extends common
 				self::$updateButtonText = helper::translate('Mise à jour');
 			}
 
-
 			// Valeurs en sortie
 			$this->addOutput([
 				'display' => self::DISPLAY_LAYOUT_LIGHT,
@@ -466,5 +477,4 @@ class install extends common
 			]);
 		}
 	}
-
 }
