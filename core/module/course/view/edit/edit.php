@@ -104,7 +104,7 @@
                     <?php echo template::date('courseEditEnrolmentLimitDate', [
                         'type' => 'datetime-local',
                         'label' => 'Jusqu\'au',
-                        'value' => is_null($this->getdata(['course', $this->getUrl(2), 'limitEnrolmentDate'])) ? '' : floor($this->getdata(['course', $this->getUrl(2), 'limitEnrolmentDate']) / 60) * 60
+                        'value' => is_int($this->getdata(['course', $this->getUrl(2), 'limitEnrolmentDate'])) ? floor($this->getdata(['course', $this->getUrl(2), 'limitEnrolmentDate']) / 60) * 60 : 0
                     ]); ?>
                 </div>
             </div>

@@ -1,7 +1,5 @@
 /**
- * This file is part of Zwii.
- *
- * For full copyright and license information, please see the LICENSE
+ * * For full copyright and license information, please see the LICENSE
  * file that was distributed with this source code.
  *
  * @author Rémi Jean <remi.jean@outlook.com>
@@ -11,7 +9,6 @@
  * @license CC Attribution-NonCommercial-NoDerivatives 4.0 International
  * @link http://zwiicms.fr/
  */
-
 
 
 $(document).ready(function () {
@@ -68,6 +65,27 @@ $(document).ready(function () {
 		}
 	}
 
+	// Fonction pour valider l'ordre des dates d'ouverture et de fermeture
+	function validateDateOrder() {
+		let openingDate = new Date($('#courseOpeningDate').val());
+		let closingDate = new Date($('#courseClosingDate').val());
+
+		// Vérifie si les dates sont valides
+		if (isNaN(openingDate.getTime()) || isNaN(closingDate.getTime())) {
+			return; // Ne fait rien si une des dates est vide ou invalide
+		}
+
+		// Vérifie que la date d'ouverture est avant la date de fermeture
+		if (openingDate >= closingDate) {
+			alert("La date d'ouverture doit être antérieure à la date de fermeture.");
+			$('#courseClosingDate').val(''); // Réinitialise la date de fermeture
+		}
+
+		// Si la date limite d'inscription existe, la revérifier
+		if ($('#courseEditEnrolmentLimit').is(':checked') && $('#courseEditEnrolmentLimitDate').val()) {
+			validateEnrolmentLimitDate();
+		}
+	}
 
 	// Initialisation
 	togglePeriodSetup();
@@ -85,5 +103,8 @@ $(document).ready(function () {
 
 	// Affichage du champ clé
 	$('#courseEditEnrolment').on('change', toggleEnrolmentKey);
+
+	// Validation de l'ordre des dates
+	$('#courseOpeningDate, #courseClosingDate').on('change', validateDateOrder);
 
 });
