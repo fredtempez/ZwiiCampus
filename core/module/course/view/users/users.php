@@ -10,6 +10,7 @@
         <?php echo template::button('userDeleteAll', [
             'href' => helper::baseUrl() . 'course/usersReportExport/' . $this->getUrl(2),
             'value' => template::ico('download'),
+            'disabled' => empty($this->getData(['enrolment', $this->getUrl(2)])),
             'help' => 'Exporter rapports',
         ]) ?>
     </div>
