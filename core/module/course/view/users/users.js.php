@@ -21,9 +21,12 @@ $(document).ready((function () {
             $(location).attr("href", _this.attr("href"))
         }))
     }));
+    // Transmettre la langue au script Datatables.net
+    var lang = getCookie('ZWII_UI');
+    var languageUrl = 'core/vendor/datatables/' + lang + '.json';
     $('#dataTables').DataTable({
         language: {
-            url: "core/vendor/datatables/french.json"
+            url: languageUrl
         },
         order: [[0, 'desc']],
         locale: 'fr',
@@ -39,7 +42,7 @@ $(document).ready((function () {
                 extend: 'copy',
                 text: '<i class="zwiico-docs"></i>',
                 titleAttr: 'Copier dans le presse papier',
-            }, 
+            },
             {
                 extend: 'print',
                 text: '<i class="zwiico-print"></i>',
@@ -51,7 +54,7 @@ $(document).ready((function () {
         "columnDefs": [
             {
                 targets: 4,
-                type: 'datetime', 
+                type: 'datetime',
                 searchable: false,
                 render: function (data, type, row) {
                     if (type === 'display') {

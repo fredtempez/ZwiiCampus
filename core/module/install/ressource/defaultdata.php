@@ -28,7 +28,7 @@ class init extends common
 				'titleLabel' => 'Cookies essentiels',
 				'linkLegalLabel' => 'Consulter  les mentions légales',
 				'cookiesFooterText' => 'Cookies',
-				'buttonValidLabel' => 'J\'ai compris'
+				'buttonValidLabel' => "J'ai compris"
 			],
 			'social' => [
 				'facebookId' => '',
@@ -86,32 +86,32 @@ class init extends common
 				],
 				'dancing-script' => [
 					'name' => 'Dancing Script',
-					'font-family' => '\'Dancing Script\', sans-serif',
+					'font-family' => "'Dancing Script', sans-serif",
 					'resource' => 'https://fonts.cdnfonts.com/css/dancing-script'
 				],
 				'droid-sans-2' => [
 					'name' => 'Droid Sans',
-					'font-family' => '\'Droid Sans\', sans-serif',
+					'font-family' => "'Droid Sans', sans-serif",
 					'resource' => 'https://fonts.cdnfonts.com/css/droid-sans-2'
 				],
 				'droid-serif-2' => [
 					'name' => 'Droid Serif',
-					'font-family' => '\'Droid Serif\', serif',
+					'font-family' => "'Droid Serif', serif",
 					'resource' => 'https://fonts.cdnfonts.com/css/droid-serif-2'
 				],
 				'indie-flower' => [
 					'name' => 'Indie Flower',
-					'font-family' => '\'Indie Flower\', sans-serif',
+					'font-family' => "'Indie Flower', sans-serif",
 					'resource' => 'https://fonts.cdnfonts.com/css/indie-flower'
 				],
 				'liberation-sans' => [
 					'name' => 'Liberation Sans',
-					'font-family' => '\'Liberation Sans\', sans-serif',
+					'font-family' => "'Liberation Sans', sans-serif",
 					'resource' => 'https://fonts.cdnfonts.com/css/liberation-sans'
 				],
 				'liberation-serif' => [
 					'name' => 'Liberation Serif',
-					'font-family' => '\'Liberation Serif\', serif',
+					'font-family' => "'Liberation Serif', serif",
 					'resource' => 'https://fonts.cdnfonts.com/css/liberation-serif'
 				],
 				'lobster-2' => [
@@ -131,12 +131,12 @@ class init extends common
 				],
 				'old-standard-tt-3' => [
 					'name' => 'Old Standard TT',
-					'font-family' => '\'Old Standard TT\', serif',
+					'font-family' => "'Old Standard TT', serif",
 					'resource' => 'https://fonts.cdnfonts.com/css/old-standard-tt-3'
 				],
 				'open-sans' => [
 					'name' => 'Open Sans',
-					'font-family' => '\'Open Sans\', sans-serif',
+					'font-family' => "'Open Sans', sans-serif",
 					'resource' => 'https://fonts.cdnfonts.com/css/open-sans'
 				],
 				'oswald-4' => [
@@ -146,12 +146,12 @@ class init extends common
 				],
 				'pt-mono' => [
 					'name' => 'PT Mono',
-					'font-family' => '\'PT Mono\', monospace',
+					'font-family' => "'PT Mono', monospace",
 					'resource' => 'https://fonts.cdnfonts.com/css/pt-mono'
 				],
 				'pt-serif' => [
 					'name' => 'PR Serif',
-					'font-family' => '\'PT Serif\', serif',
+					'font-family' => "'PT Serif', serif",
 					'resource' => 'https://fonts.cdnfonts.com/css/pt-serif'
 				],
 				'rancho' => [
@@ -196,9 +196,17 @@ class init extends common
 		'blacklist' => [],
 		'language' => [
 			'fr_FR' => [
-				'version' => 1066,
-				'date' => 1699354723
+				'version' => 20000,
+				'date' => 1707913200
 			],
+			'es' => [
+				'version' => 20000,
+				'date' => 1707913200
+			],
+			'en_EN' => [
+				'version' => 20000,
+				'date' => 1707913200
+			]
 		],
 		'profil' => [
 			'-1' => [
@@ -484,7 +492,6 @@ class init extends common
 						'delete' => false,
 						'deleteAll' => false,
 						'export2csv' => false,
-
 					],
 					'gallery' => [
 						'config' => false,
@@ -515,7 +522,7 @@ class init extends common
 					'name' => 'Rédacteur',
 					'readonly' => false,
 					'permanent' => false,
-					'comment' => 'Tous les droits d\'édition des espaces',
+					'comment' => "Tous les droits d'édition des espaces",
 					'filemanager' => true,
 					'file' => [
 						'download' => true,
@@ -617,46 +624,46 @@ class init extends common
 			]
 		],
 		'course' => [
-			"67c4169fd9427" => [
-				"title" => "La photographie numérique",
-				"author" => "test",
-				"homePageId" => "accueil",
-				"category" => "general",
-				"description" => "Présentation de la photographie numérique et des matériels de prise de vue.\r\nTemps d'apprentissage : 2 heures.",
-				"access" => 0,
-				"openingDate" => 1740917973,
-				"closingDate" => 1740917973,
-				"enrolment" => 0,
-				"enrolmentKey" => "",
-				"limitEnrolment" => false,
-				"limitEnrolmentDate" => 1740904020,
-				"report" => true,
-				"group" => null
+			'67c4169fd9427' => [
+				'title' => 'La photographie numérique',
+				'author' => 'test',
+				'homePageId' => 'accueil',
+				'category' => 'general',
+				'description' => "Présentation de la photographie numérique et des matériels de prise de vue.\r\nTemps d'apprentissage : 2 heures.",
+				'access' => 0,
+				'openingDate' => 1740917973,
+				'closingDate' => 1740917973,
+				'enrolment' => 0,
+				'enrolmentKey' => '',
+				'limitEnrolment' => false,
+				'limitEnrolmentDate' => 1740904020,
+				'report' => true,
+				'group' => null
 			],
-			"67c4173f32319" => [
-				"title" => "La retouche avec The Gimp",
-				"author" => "test",
-				"homePageId" => "accueil",
-				"category" => "general",
-				"description" => "Les bases de la retouche avec The Gimp.\r\nTemps d'apprentissage : 4 heures.",
-				"access" => 0,
-				"openingDate" => "",
-				"closingDate" => "",
-				"enrolment" => 0,
-				"enrolmentKey" => "",
-				"limitEnrolment" => false,
-				"limitEnrolmentDate" => 1740904200,
-				"report" => true,
-				"group" => null
+			'67c4173f32319' => [
+				'title' => 'La retouche avec The Gimp',
+				'author' => 'test',
+				'homePageId' => 'accueil',
+				'category' => 'general',
+				'description' => "Les bases de la retouche avec The Gimp.\r\nTemps d'apprentissage : 4 heures.",
+				'access' => 0,
+				'openingDate' => '',
+				'closingDate' => '',
+				'enrolment' => 0,
+				'enrolmentKey' => '',
+				'limitEnrolment' => false,
+				'limitEnrolmentDate' => 1740904200,
+				'report' => true,
+				'group' => null
 			]
 		],
 		'enrolment' => [],
 		'category' => [
 			'general' => 'Générale'
 		],
-		"group" => [
-			"67c4164e865bf" => "Groupe A",
-			"67c41654c493f" => "Groupe B"
+		'group' => [
+			'67c4164e865bf' => 'Groupe A',
+			'67c41654c493f' => 'Groupe B'
 		]
 	];
 
@@ -1015,182 +1022,182 @@ class init extends common
 			]
 		],
 		'theme' => [
-			"body" => [
-				"backgroundColor" => "rgba(255, 255, 255, 1)",
-				"image" => "",
-				"imageAttachment" => "scroll",
-				"imagePosition" => "top center",
-				"imageRepeat" => "no-repeat",
-				"imageSize" => "auto",
-				"toTopbackgroundColor" => "rgba(33, 34, 35, .8)",
-				"toTopColor" => "rgba(255, 255, 255, 1)"
+			'body' => [
+				'backgroundColor' => 'rgba(255, 255, 255, 1)',
+				'image' => '',
+				'imageAttachment' => 'scroll',
+				'imagePosition' => 'top center',
+				'imageRepeat' => 'no-repeat',
+				'imageSize' => 'auto',
+				'toTopbackgroundColor' => 'rgba(33, 34, 35, .8)',
+				'toTopColor' => 'rgba(255, 255, 255, 1)'
 			],
-			"footer" => [
-				"backgroundColor" => "rgba(255, 255, 255, 1)",
-				"copyrightAlign" => "right",
-				"height" => "5px",
-				"loginLink" => "1",
-				"margin" => true,
-				"position" => "body",
-				"fixed" => true,
-				"socialsAlign" => "center",
-				"text" => "<p>ZwiiCampus - L'outil d'apprentissage</p>",
-				"textAlign" => "left",
-				"textColor" => "rgba(33, 34, 35, 1)",
-				"copyrightPosition" => "center",
-				"textPosition" => "hide",
-				"socialsPosition" => "hide",
-				"textTransform" => "none",
-				"font" => "georgia",
-				"fontSize" => ".8em",
-				"fontWeight" => "normal",
-				"displayVersion" => true,
-				"displaySiteMap" => true,
-				"displayCopyright" => true,
-				"displayCookie" => false,
-				"displayLegal" => false,
-				"displaySearch" => false,
-				"memberBar" => true,
-				"template" => "1"
+			'footer' => [
+				'backgroundColor' => 'rgba(255, 255, 255, 1)',
+				'copyrightAlign' => 'right',
+				'height' => '5px',
+				'loginLink' => '1',
+				'margin' => true,
+				'position' => 'body',
+				'fixed' => true,
+				'socialsAlign' => 'center',
+				'text' => "<p>ZwiiCampus - L'outil d'apprentissage</p>",
+				'textAlign' => 'left',
+				'textColor' => 'rgba(33, 34, 35, 1)',
+				'copyrightPosition' => 'center',
+				'textPosition' => 'hide',
+				'socialsPosition' => 'hide',
+				'textTransform' => 'none',
+				'font' => 'georgia',
+				'fontSize' => '.8em',
+				'fontWeight' => 'normal',
+				'displayVersion' => true,
+				'displaySiteMap' => true,
+				'displayCopyright' => true,
+				'displayCookie' => false,
+				'displayLegal' => false,
+				'displaySearch' => false,
+				'memberBar' => true,
+				'template' => '1'
 			],
-			"header" => [
-				"backgroundColor" => "rgba(5, 174, 180, 1)",
-				"font" => "arial",
-				"fontSize" => "2em",
-				"fontWeight" => "normal",
-				"height" => "150px",
-				"wide" => "container",
-				"image" => "",
-				"imagePosition" => "center center",
-				"imageRepeat" => "no-repeat",
-				"margin" => false,
-				"position" => "site",
-				"textAlign" => "center",
-				"textColor" => "rgba(255, 255, 255, 1)",
-				"textHide" => false,
-				"textTransform" => "none",
-				"linkHomePage" => true,
-				"imageContainer" => "auto auto",
-				"tinyHidden" => true,
-				"feature" => "wallpaper",
-				"featureContent" => "<p>Banni&egrave;re vide</p>",
-				"featureFiles" => []
+			'header' => [
+				'backgroundColor' => 'rgba(5, 174, 180, 1)',
+				'font' => 'arial',
+				'fontSize' => '2em',
+				'fontWeight' => 'normal',
+				'height' => '150px',
+				'wide' => 'container',
+				'image' => '',
+				'imagePosition' => 'center center',
+				'imageRepeat' => 'no-repeat',
+				'margin' => false,
+				'position' => 'site',
+				'textAlign' => 'center',
+				'textColor' => 'rgba(255, 255, 255, 1)',
+				'textHide' => false,
+				'textTransform' => 'none',
+				'linkHomePage' => true,
+				'imageContainer' => 'auto auto',
+				'tinyHidden' => true,
+				'feature' => 'wallpaper',
+				'featureContent' => '<p>Banni&egrave;re vide</p>',
+				'featureFiles' => []
 			],
-			"menu" => [
-				"backgroundColor" => "rgba(5, 174, 180, 1)",
-				"backgroundColorSub" => "rgba(4, 158, 163, 1)",
-				"font" => "arial",
-				"fontSize" => "1em",
-				"fontWeight" => "normal",
-				"height" => "15px 10px",
-				"wide" => "container",
-				"loginLink" => false,
-				"margin" => false,
-				"position" => "site",
-				"textAlign" => "left",
-				"textColor" => "rgba(255, 255, 255, 1)",
-				"textTransform" => "none",
-				"fixed" => false,
-				"activeColorAuto" => true,
-				"activeColor" => "rgba(255, 255, 255, 1)",
-				"activeTextColor" => "rgba(255, 255, 255, 1)",
-				"radius" => "0px",
-				"burgerTitle" => false,
-				"memberBar" => true,
-				"selectSpace" => true,
-				"hidePages" => false,
-				"userReport" => false,
-				"burgerLogo" => "",
-				"burgerContent" => "title"
+			'menu' => [
+				'backgroundColor' => 'rgba(5, 174, 180, 1)',
+				'backgroundColorSub' => 'rgba(4, 158, 163, 1)',
+				'font' => 'arial',
+				'fontSize' => '1em',
+				'fontWeight' => 'normal',
+				'height' => '15px 10px',
+				'wide' => 'container',
+				'loginLink' => false,
+				'margin' => false,
+				'position' => 'site',
+				'textAlign' => 'left',
+				'textColor' => 'rgba(255, 255, 255, 1)',
+				'textTransform' => 'none',
+				'fixed' => false,
+				'activeColorAuto' => true,
+				'activeColor' => 'rgba(255, 255, 255, 1)',
+				'activeTextColor' => 'rgba(255, 255, 255, 1)',
+				'radius' => '0px',
+				'burgerTitle' => false,
+				'memberBar' => true,
+				'selectSpace' => true,
+				'hidePages' => false,
+				'userReport' => false,
+				'burgerLogo' => '',
+				'burgerContent' => 'title'
 			],
-			"site" => [
-				"backgroundColor" => "rgba(255, 255, 255, 1)",
-				"radius" => "0px",
-				"shadow" => "0px",
-				"width" => "960px",
-				"margin" => false
+			'site' => [
+				'backgroundColor' => 'rgba(255, 255, 255, 1)',
+				'radius' => '0px',
+				'shadow' => '0px',
+				'width' => '960px',
+				'margin' => false
 			],
-			"block" => [
-				"backgroundColor" => "rgba(236, 239, 241, 1)",
-				"borderColor" => "rgba(236, 239, 241, 1)"
+			'block' => [
+				'backgroundColor' => 'rgba(236, 239, 241, 1)',
+				'borderColor' => 'rgba(236, 239, 241, 1)'
 			],
-			"text" => [
-				"font" => "georgia",
-				"fontSize" => "13px",
-				"textColor" => "rgba(33, 34, 35, 1)",
-				"linkColor" => "rgba(5, 180, 140, 1)"
+			'text' => [
+				'font' => 'georgia',
+				'fontSize' => '13px',
+				'textColor' => 'rgba(33, 34, 35, 1)',
+				'linkColor' => 'rgba(5, 180, 140, 1)'
 			],
-			"title" => [
-				"font" => "arial",
-				"textColor" => "rgba(5, 174, 180, 1)",
-				"fontWeight" => "normal",
-				"textTransform" => "none"
+			'title' => [
+				'font' => 'arial',
+				'textColor' => 'rgba(5, 174, 180, 1)',
+				'fontWeight' => 'normal',
+				'textTransform' => 'none'
 			],
-			"button" => [
-				"backgroundColor" => "rgba(92, 155, 148, 1)"
+			'button' => [
+				'backgroundColor' => 'rgba(92, 155, 148, 1)'
 			],
-			"version" => 0
+			'version' => 0
 		],
 		'module' => [
-			"contact" => [
-				"config" => [
-					"button" => "",
-					"captcha" => true,
-					"role" => 3,
-					"pageId" => "",
-					"subject" => ""
+			'contact' => [
+				'config' => [
+					'button' => '',
+					'captcha' => true,
+					'role' => 3,
+					'pageId' => '',
+					'subject' => ''
 				],
-				"data" => [],
-				"input" => [
-					"0" => [
-						"name" => "Adresse électronique",
-						"position" => 1,
-						"required" => true,
-						"type" => "mail",
-						"values" => ""
+				'data' => [],
+				'input' => [
+					'0' => [
+						'name' => 'Adresse électronique',
+						'position' => 1,
+						'required' => true,
+						'type' => 'mail',
+						'values' => ''
 					],
-					"1" => [
-						"name" => "Sujet",
-						"position" => 2,
-						"required" => true,
-						"type" => "text",
-						"values" => ""
+					'1' => [
+						'name' => 'Sujet',
+						'position' => 2,
+						'required' => true,
+						'type' => 'text',
+						'values' => ''
 					],
-					"2" => [
-						"name" => "Message",
-						"position" => 3,
-						"required" => true,
-						"type" => "textarea",
-						"values" => ""
+					'2' => [
+						'name' => 'Message',
+						'position' => 3,
+						'required' => true,
+						'type' => 'textarea',
+						'values' => ''
 					]
 				]
 			],
-			"images-numeriques" => [
-				"config" => [
-					"category" => "general",
-					"title" => true,
-					"author" => false,
-					"description" => true,
-					"unsuscribe" => false,
-					"access" => true,
-					"openingdate" => false,
-					"closingdate" => false,
-					"enrolment" => true,
-					"caption" => "",
-					"layout" => 6,
-					"template" => true
+			'images-numeriques' => [
+				'config' => [
+					'category' => 'general',
+					'title' => true,
+					'author' => false,
+					'description' => true,
+					'unsuscribe' => false,
+					'access' => true,
+					'openingdate' => false,
+					'closingdate' => false,
+					'enrolment' => true,
+					'caption' => '',
+					'layout' => 6,
+					'template' => true
 				],
-				"caption" => [
-					"accessopen" => "Ouvert",
-					"accessdate" => "P&eacute;riode d&#039;ouverture du %s au %s",
-					"accessclose" => "Ferm&eacute;",
-					"enrolguest" => "Anonyme",
-					"enrolself" => "Membres",
-					"enrolselfkey" => "Membres avec cl&eacute;",
-					"enrolMandatory" => "Inscription par l&#039;enseignant",
-					"url" => "Acc&eacute;der au contenu",
-					"unsuscribe" => "Me d&eacute;sinscrire",
-					"enrolmentLimit" => "Date limite des inscriptions"
+				'caption' => [
+					'accessopen' => 'Ouvert',
+					'accessdate' => 'P&eacute;riode d&#039;ouverture du %s au %s',
+					'accessclose' => 'Ferm&eacute;',
+					'enrolguest' => 'Anonyme',
+					'enrolself' => 'Membres',
+					'enrolselfkey' => 'Membres avec cl&eacute;',
+					'enrolMandatory' => 'Inscription par l&#039;enseignant',
+					'url' => 'Acc&eacute;der au contenu',
+					'unsuscribe' => 'Me d&eacute;sinscrire',
+					'enrolmentLimit' => 'Date limite des inscriptions'
 				]
 			]
 		],
@@ -1201,7 +1208,7 @@ class init extends common
 	// Contenu des pages pour home
 	public static $siteTemplateContent = [
 		'contact' => [
-			'content' => "<p>Cette page contient un exemple de formulaire con&ccedil;u &agrave; partir du module de g&eacute;n&eacute;ration de formulaires. Il est configur&eacute; pour envoyer les donn&eacute;es saisies par mail aux administrateurs du site.</p>"
+			'content' => '<p>Cette page contient un exemple de formulaire con&ccedil;u &agrave; partir du module de g&eacute;n&eacute;ration de formulaires. Il est configur&eacute; pour envoyer les donn&eacute;es saisies par mail aux administrateurs du site.</p>'
 		],
 		'mentions-legales' => [
 			'content' => "<h1 style='text-align: center;'>Conditions g&eacute;n&eacute;rales d'utilisation</h1>
@@ -1268,11 +1275,10 @@ class init extends common
 			'content' => '<p>Cette page contient un module permettant de lister une cat&eacute;gorie de modules.</p>'
 		],
 		'bienvenue' => [
-			'content' => '<p>L\'installation s\'est déroulée correctement, ZwiiCampus est prêt à être utilisé.</p>
-					<p>Avant de commencer, quelques explications sont nécessaires. ZwiiCampus permet de mettre en ligne des contenus en les protégeant comme pourrait le faire un système d\'apprentissage distant (LMS).</p>
-					<p>Ces contenus sont stockés dans des <a href="?les-espaces">espaces</a>, comparable à des sites Web.</p>
-					<p>ZwiiCampus propose des modules qui permettent de doper vos contenus.</p>'
-
+			'content' => "<p>L'installation s'est déroulée correctement, ZwiiCampus est prêt à être utilisé.</p>
+					<p>Avant de commencer, quelques explications sont nécessaires. ZwiiCampus permet de mettre en ligne des contenus en les protégeant comme pourrait le faire un système d'apprentissage distant (LMS).</p>
+					<p>Ces contenus sont stockés dans des <a href=\"?les-espaces\">espaces</a>, comparable à des sites Web.</p>
+					<p>ZwiiCampus propose des modules qui permettent de doper vos contenus.</p>"
 		],
 		'consultation-des-espaces' => [
 			'content' => "<p>L'enregistrement des actions des participants est r&eacute;serv&eacute; aux espaces n&eacute;cessitant un compte d'acc&egrave;s. Il est stock&eacute; dans un historique, qui peut &ecirc;tre d&eacute;sactiv&eacute; depuis la gestion de l'espace.</p>
@@ -1303,7 +1309,6 @@ class init extends common
 						<li><strong>Sauvegarde et réinstallation</strong> : Assure la sécurité des données et leur récupération.</li>
 						<li><strong>Clonage</strong> : Permet de dupliquer un espace ou de générer une page web regroupant l'ensemble de ses contenus.</li>
 					</ul><p>📌 L'accueil de <strong>ZwiiCampus</strong> est stocké dans un espace spécifique nommé <strong>'home'</strong>.</p>"
-
 		],
 		'participants' => [
 			'content' => "
@@ -1324,7 +1329,6 @@ class init extends common
 					</ul>
 					<p>Toutes les tables, tout comme pour les espaces, bénéficient d'une fonctionnalité d'export au format <strong>CSV</strong>, <strong>PDF</strong>, ou permettent une <strong>copie dans le presse-papier</strong>.</p>
 					"
-
 		],
 		'modules' => [
 			'content' => "Les modules enrichissent les fonctionnalit&eacute;s des pages. Autonomes, ils peuvent &ecirc;tre d&eacute;velopp&eacute;s pour r&eacute;pondre &agrave; des besoins sp&eacute;cifiques.</p>
@@ -1504,7 +1508,6 @@ class init extends common
 				'extraPosition' => false,
 				'css' => '',
 				'js' => ''
-
 			],
 		],
 		'theme' => [
@@ -1519,32 +1522,32 @@ class init extends common
 				'toTopColor' => 'rgba(255, 255, 255, 1)'
 			],
 			'footer' => [
-				"backgroundColor" => "rgba(255, 255, 255, 1)",
-				"copyrightAlign" => "right",
-				"height" => "5px",
-				"loginLink" => "1",
-				"margin" => true,
-				"position" => "body",
-				"fixed" => true,
-				"socialsAlign" => "center",
-				"text" => "<p>ZwiiCampus - L'outil d'apprentissage</p>",
-				"textAlign" => "left",
-				"textColor" => "rgba(33, 34, 35, 1)",
-				"copyrightPosition" => "center",
-				"textPosition" => "hide",
-				"socialsPosition" => "hide",
-				"textTransform" => "none",
-				"font" => "georgia",
-				"fontSize" => ".8em",
-				"fontWeight" => "normal",
-				"displayVersion" => true,
-				"displaySiteMap" => true,
-				"displayCopyright" => true,
-				"displayCookie" => false,
-				"displayLegal" => false,
-				"displaySearch" => false,
-				"memberBar" => true,
-				"template" => "1"
+				'backgroundColor' => 'rgba(255, 255, 255, 1)',
+				'copyrightAlign' => 'right',
+				'height' => '5px',
+				'loginLink' => '1',
+				'margin' => true,
+				'position' => 'body',
+				'fixed' => true,
+				'socialsAlign' => 'center',
+				'text' => "<p>ZwiiCampus - L'outil d'apprentissage</p>",
+				'textAlign' => 'left',
+				'textColor' => 'rgba(33, 34, 35, 1)',
+				'copyrightPosition' => 'center',
+				'textPosition' => 'hide',
+				'socialsPosition' => 'hide',
+				'textTransform' => 'none',
+				'font' => 'georgia',
+				'fontSize' => '.8em',
+				'fontWeight' => 'normal',
+				'displayVersion' => true,
+				'displaySiteMap' => true,
+				'displayCopyright' => true,
+				'displayCookie' => false,
+				'displayLegal' => false,
+				'displaySearch' => false,
+				'memberBar' => true,
+				'template' => '1'
 			],
 			'header' => [
 				'backgroundColor' => 'rgba(32, 59, 82, 1)',
@@ -1569,31 +1572,31 @@ class init extends common
 				'width' => 'container'
 			],
 			'menu' => [
-				"backgroundColor" => "rgba(32, 59, 82, 1)",
-				"backgroundColorSub" => "rgba(32, 59, 82, 1)",
-				"font" => "arial",
-				"fontSize" => "1em",
-				"fontWeight" => "normal",
-				"height" => "15px 10px",
-				"wide" => "container",
-				"loginLink" => true,
-				"margin" => false,
-				"position" => "site-second",
-				"textAlign" => "left",
-				"textColor" => "rgba(255, 255, 255, 1)",
-				"textTransform" => "none",
-				"fixed" => false,
-				"activeColorAuto" => true,
-				"activeColor" => "rgba(255, 255, 255, 1)",
-				"activeTextColor" => "rgba(255, 255, 255, 1)",
-				"radius" => "0px",
-				"burgerTitle" => false,
-				"memberBar" => false,
-				"selectSpace" => true,
-				"hidePages" => true,
-				"userReport" => false,
-				"burgerLogo" => "",
-				"burgerContent" => "title"
+				'backgroundColor' => 'rgba(32, 59, 82, 1)',
+				'backgroundColorSub' => 'rgba(32, 59, 82, 1)',
+				'font' => 'arial',
+				'fontSize' => '1em',
+				'fontWeight' => 'normal',
+				'height' => '15px 10px',
+				'wide' => 'container',
+				'loginLink' => true,
+				'margin' => false,
+				'position' => 'site-second',
+				'textAlign' => 'left',
+				'textColor' => 'rgba(255, 255, 255, 1)',
+				'textTransform' => 'none',
+				'fixed' => false,
+				'activeColorAuto' => true,
+				'activeColor' => 'rgba(255, 255, 255, 1)',
+				'activeTextColor' => 'rgba(255, 255, 255, 1)',
+				'radius' => '0px',
+				'burgerTitle' => false,
+				'memberBar' => false,
+				'selectSpace' => true,
+				'hidePages' => true,
+				'userReport' => false,
+				'burgerLogo' => '',
+				'burgerContent' => 'title'
 			],
 			'site' => [
 				'backgroundColor' => 'rgba(255, 255, 255, 1)',

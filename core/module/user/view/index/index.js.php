@@ -25,10 +25,12 @@ $(document).ready((function () {
 
     // Ajout du format de date pour le tri
     DataTable.datetime('DD/MM/YYYY');
-
+    // Transmettre la langue au script Datatables.net
+    var lang = getCookie('ZWII_UI');
+    var languageUrl = 'core/vendor/datatables/' + lang + '.json';
     var table = $('#dataTables').DataTable({
         language: {
-            url: "core/vendor/datatables/french.json"
+            url: languageUrl
         },
         locale: 'fr',
         stateSave: true,

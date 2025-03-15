@@ -17,7 +17,7 @@ class language extends common
 {
 
 	// URL langues de l'UI en ligne
-	const ZWII_UI_URL = 'https://forge.chapril.org/ZwiiCMS-Team/zwiicms-translations/raw/branch/master/v13/';
+	const ZWII_UI_URL = 'https://forge.chapril.org/ZwiiCMS-Team/zwiicampus-translations/raw/branch/master/v2/';
 
 	public static $actions = [
 		'index' => self::ROLE_ADMIN,
@@ -256,7 +256,6 @@ class language extends common
 					$value['version'],
 					helper::dateUTF8('%d/%m/%Y', $value['date'], self::$i18nUI),
 					//self::$i18nUI === $file ? helper::translate('Interface') : '',
-					'',
 					/*
 					template::button('translateContentLanguageUIEdit' . $file, [
 						'href' => helper::baseUrl() . $this->getUrl(0) . '/edit/' . $file,
@@ -265,7 +264,6 @@ class language extends common
 						'disabled' => 'fr_FR' === $file
 					]),
 					*/
-
 					template::button('translateContentLanguageUIDownload' . $file, [
 						'class' =>  isset($storeUI[$file]['version']) && version_compare($installedUI[$file]['version'], $storeUI[$file]['version']) < 0 ? 'buttonGreen' : '',
 						'href' => helper::baseUrl() . $this->getUrl(0) . '/update/' . $file,

@@ -12,9 +12,12 @@
  */
 
 $(document).ready(function () {
+        // Transmettre la langue au script Datatables.net
+        var lang = getCookie('ZWII_UI');
+        var languageUrl = 'core/vendor/datatables/' + lang + '.json';
     $('#dataTables').DataTable({
         language: {
-            url: "core/vendor/datatables/french.json"
+            url: languageUrl
         },
         locale: 'fr',
         stateSave: true,
@@ -29,7 +32,7 @@ $(document).ready(function () {
                 extend: 'copy',
                 text: '<i class="zwiico-docs"></i>',
                 titleAttr: 'Copier dans le presse papier',
-            }, 
+            },
             {
                 extend: 'print',
                 text: '<i class="zwiico-print"></i>',

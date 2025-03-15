@@ -33,17 +33,19 @@ $(document).ready((function () {
         saveCheckboxState();
         $("#usersDeleteForm").submit();
     });
-
+    // Transmettre la langue au script Datatables.net
+    var lang = getCookie('ZWII_UI');
+    var languageUrl = 'core/vendor/datatables/' + lang + '.json';
     var table = new DataTable('#dataTables', {
         language: {
-            url: "core/vendor/datatables/french.json"
+            url: languageUrl
         },
         locale: 'fr',
         stateSave: true,
         info: true,
         lengthMenu: [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "Tout"]],
         dom: '<"top"lBf>rt<"bottom"p>',
-    
+
         buttons: [
             {
                 extend: 'csv',
@@ -61,7 +63,7 @@ $(document).ready((function () {
                 titleAttr: 'Imprimer ou générer un PDF',
             }
         ],
-    
+
         columnDefs: [
             {
                 targets: 0,
@@ -70,7 +72,7 @@ $(document).ready((function () {
             }
         ]
     });
-    
+
 
     // Handle checkbox change event
     $('.checkboxSelect').on('change', function () {
