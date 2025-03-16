@@ -24,12 +24,10 @@ $(document).ready((function () {
         language: {
             url: 'core/vendor/datatables/french.json'
         },
-        locale: 'fr',
         stateSave: true,
         info: true,
         lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "Tout"]],
         dom: '<"top"lBf>rt<"bottom"p>',
-        
         buttons: [
             {
                 extend: 'csv',

@@ -29,7 +29,6 @@ $(document).ready((function () {
             url: languageUrl
         },
         order: [[0, 'desc']],
-        locale: 'fr',
         stateSave: true,
         info: true,
         buttons: [

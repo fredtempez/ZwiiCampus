@@ -19,7 +19,6 @@ $(document).ready(function () {
         language: {
             url: languageUrl
         },
-        locale: 'fr',
         stateSave: true,
         info: true,
         buttons: [

@@ -40,7 +40,6 @@ $(document).ready((function () {
         language: {
             url: languageUrl
         },
-        locale: 'fr',
         stateSave: true,
         info: true,
         lengthMenu: [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "Tout"]],

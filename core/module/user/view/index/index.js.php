@@ -23,8 +23,6 @@ $(document).ready((function () {
         $("#userFilterUserForm").submit();
     });
 
-    // Ajout du format de date pour le tri
-    DataTable.datetime('DD/MM/YYYY');
     // Transmettre la langue au script Datatables.net
     var lang = getCookie('ZWII_UI');
     var languageUrl = 'core/vendor/datatables/' + lang + '.json';
@@ -32,12 +30,10 @@ $(document).ready((function () {
         language: {
             url: languageUrl
         },
-        locale: 'fr',
         stateSave: true,
         info: true,
         lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "Tout"]],
         dom: '<"top"lBf>rt<"bottom"p>',
-
         buttons: [
             {
                 extend: 'csv',
@@ -55,7 +51,6 @@ $(document).ready((function () {
                 titleAttr: 'Imprimer ou générer un PDF',
             }
         ],
-
         columnDefs: [
             {
                 targets: 5,
