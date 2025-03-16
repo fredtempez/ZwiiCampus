@@ -53,7 +53,7 @@ $(document).ready((function () {
         "lengthMenu": [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "Tout"]],
         "columnDefs": [
             {
-                targets: 5,
+                targets: 4,
                 type: 'datetime',
                 searchable: false,
                 render: function (data, type, row) {
