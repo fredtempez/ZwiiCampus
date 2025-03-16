@@ -735,7 +735,7 @@ class user extends common
 					$this->getData(['user', $userId, 'tags']),
 					// Dernière connexion
 					is_null($this->getData(['user', $userId, 'accessTimer']))
-					? 'Jamais'
+					? ''
 					: $this->getData(['user', $userId, 'accessTimer']),
 					// Bouton Edit
 					template::ico('pencil', [

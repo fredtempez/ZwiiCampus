@@ -22,7 +22,12 @@ $(document).ready((function () {
     $("#userFilterGroup, #userFilterFirstName, #userFilterLastName").change(function () {
         $("#userFilterUserForm").submit();
     });
-
+    $.fn.dataTable.ext.type.order['timestamp-custom-pre'] = function (data) {
+        if (data === '' || data === 'Jamais') {
+            return Number.MAX_SAFE_INTEGER; // "Jamais" est trié en dernier en DESC, en premier en ASC
+        }
+        return parseInt(data, 10) || 0; // Convertir le timestamp pour le tri
+    };
     // Transmettre la langue au script Datatables.net
     var lang = getCookie('ZWII_UI');
     var languageUrl = 'core/vendor/datatables/' + lang + '.json';
@@ -54,16 +59,15 @@ $(document).ready((function () {
         columnDefs: [
             {
                 targets: 5,
-                type: 'datetime',
+                type: 'timestamp-custom', // Utilisation du tri personnalisé
                 render: function (data, type, row) {
                     if (type === 'display') {
-                        if (typeof data === 'number' || !isNaN(data)) {
-                            return moment(Number(data) * 1000).format('DD/MM/YYYY HH:mm');
-                        } else {
-                            return data;
+                        if (data === '') {
+                            return 'Jamais'; // Afficher "Jamais" au lieu de 1970
                         }
+                        return moment(Number(data) * 1000).format('DD/MM/YYYY HH:mm');
                     }
-                    return moment(Number(data) * 1000).toISOString();
+                    return data === '' ? Number.MAX_SAFE_INTEGER : Number(data); // Pour que le tri fonctionne
                 }
             },
             {
