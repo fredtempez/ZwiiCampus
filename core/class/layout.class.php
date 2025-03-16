@@ -1166,6 +1166,17 @@ class layout extends common
                     'help' => 'Participants',
                     'href' => helper::baseUrl() . 'user'
                 ]) . '</li>';
+                if ($this->getData(['core', 'updateModuleAvailable'])) {
+                    $rightItems .= '<li>' . template::ico('puzzle colorRed', [
+                        'help' => 'Modules',
+                        'href' => helper::baseUrl() . 'plugin'
+                    ]) . '</li>';
+                } else {
+                    $rightItems .= '<li>' . template::ico('puzzle', [
+                        'help' => 'Modules',
+                        'href' => helper::baseUrl() . 'plugin'
+                    ]) . '</li>';
+                }
                 $rightItems .= '<li>' . template::ico('cog-alt', [
                     'help' => 'Configuration',
                     'href' => helper::baseUrl() . 'config'
@@ -1216,17 +1227,6 @@ class layout extends common
                 if ($this->getData(['core', 'updateAvailable'])) {
                     $rightItems .= '<li><a href="' . helper::baseUrl() . 'install/update" data-tippy-content="Mettre à jour Zwii ' . common::ZWII_VERSION . ' vers ' . helper::getOnlineVersion(common::ZWII_UPDATE_CHANNEL) . '">' . template::ico('update colorRed') . '</a></li>';
                 }
-            }
-            if ($this->getData(['core', 'updateModuleAvailable'])) {
-                $rightItems .= '<li>' . template::ico('puzzle colorRed', [
-                    'help' => 'Modules',
-                    'href' => helper::baseUrl() . 'plugin'
-                ]) . '</li>';
-            } else {
-                $rightItems .= '<li>' . template::ico('puzzle', [
-                    'help' => 'Modules',
-                    'href' => helper::baseUrl() . 'plugin'
-                ]) . '</li>';
             }
             // Boutons depuis le rôle éditeur
             if (
