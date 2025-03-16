@@ -240,8 +240,7 @@ class suscribe extends common
 			$email_to_check = $this->getInput('registrationAddMail', helper::FILTER_MAIL, true);
 			// Le domaine saisi est invalide si un filtre existe
 			if (
-				$this->getData(['module', $this->getUrl(0), 'config', 'filter']) !== '' &&
-				$email_to_check !== ''
+				$this->getData(['module', $this->getUrl(0), 'config', 'filter']) !== ''
 			) {
 
 				// Récupérer la liste des domaines valides depuis la configuration et supprimer les espaces autour
