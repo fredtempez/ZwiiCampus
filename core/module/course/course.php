@@ -2265,12 +2265,17 @@ class course extends common
                 break;
             case self::ROLE_EDITOR:
             case self::ROLE_MEMBER:
-
                 $r = false;
+                // Inscription dans l'espace
                 if (
+                    // L'espace est ouvert
                     is_null($this->getData(['enrolment', $courseId])) === false
                 ) {
-                    $r = in_array($userId, array_keys($this->getData(['enrolment', $courseId])));
+                    // Le participant est inscrit
+                    $r = in_array($userId, array_keys($this->getData(['enrolment', $courseId])))
+                    // Ou le participant est enseignant
+                    || $this->getData(['course', $courseId, 'author']) === $userId;
+
                 }
                 break;
             // Visiteur non connecté
