@@ -18,7 +18,7 @@ class gallery extends common
 {
 
 
-	const VERSION = '4.3';
+	const VERSION = '4.4';
 	const REALNAME = 'Galerie';
 	const DATADIRECTORY = self::DATA_DIR . 'gallery/';
 
@@ -381,7 +381,7 @@ class gallery extends common
 				}
 				// Met en forme le tableau
 				self::$galleries[] = [
-					$gallery['config']['position'] + 1,
+					$gallery['config']['position']++,
 					$gallery['config']['name'],
 					$gallery['config']['directory'],
 					template::button('galleryConfigEdit' . $galleryId, [
@@ -396,11 +396,8 @@ class gallery extends common
 						'help' => 'Supprimer cette galerie'
 					])
 				];
-				// Tableau des id des galleries pour le drag and drop
-				self::$galleriesId[] = $galleryId;
 			}
 		}
-
 		// Valeurs en sortie
 		$this->addOutput([
 			'title' => helper::translate('Configuration des galeries'),
