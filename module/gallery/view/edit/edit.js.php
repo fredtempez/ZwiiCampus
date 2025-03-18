@@ -11,9 +11,6 @@
  * @link http://zwiicms.fr/
  */
 
-
-
-
 $(document).ready(function () {
 
 	/**
@@ -23,7 +20,7 @@ $(document).ready(function () {
 		onDrop: function (table, row) {
 			$("#galleryEditFormResponse").val($.tableDnD.serialize());
 			sortPictures();
-			//location.reload();
+			location.reload();
 		},
 		serializeRegexp: ""
 	});
