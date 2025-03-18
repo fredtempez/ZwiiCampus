@@ -13,21 +13,48 @@
 
 
 
-/**
- * Tri dynamique de la galerie
- */
 
-$( document ).ready(function() {
+$(document).ready(function () {
 
+	/**
+	 * Tri dynamique de la galerie
+	 */
 	$("#galleryTable").tableDnD({
-		onDrop: function(table, row) {
+		onDrop: function (table, row) {
 			$("#galleryEditFormResponse").val($.tableDnD.serialize());
 			sortPictures();
+			location.reload();
 		},
-		serializeRegexp:  ""
+		serializeRegexp: ""
 	});
 
-if ($("#galleryEditSort").val() !==  "SORT_HAND") {
+	/**
+ 	* Tri dynamique des images
+ 	*/
+
+	function sortPictures() {
+		var url = "<?php echo helper::baseUrl(true,true) . $this->getUrl(0); ?>/sortPictures";
+		var d1 = $("#galleryEditFormResponse").val();
+		var d2 = $("#galleryEditFormGalleryName").val();
+		console.log(d1);
+		console.log(d2);
+		console.log(url);
+		$.ajax({
+			type: "POST",
+			url: url,
+			data: {
+				response: d1,
+				gallery: d2
+			},/*
+			error: function (xhr, ajaxOptions, thrownError) {
+				alert(xhr.status);
+				alert(thrownError);
+		  }
+		  */
+		});
+	}
+
+	if ($("#galleryEditSort").val() !== "SORT_HAND") {
 		$("#galleryTable tr").addClass("nodrag nodrop");
 		$(".zwiico-sort").hide();
 		$("#galleryTable").tableDnDUpdate();
@@ -37,49 +64,26 @@ if ($("#galleryEditSort").val() !==  "SORT_HAND") {
 		$("#galleryTable").tableDnDUpdate();
 	}
 
-});
 
-$("#galleryEditSort").change(function() {
-	if ($("#galleryEditSort").val() !==  "SORT_HAND") {
-		$("#galleryTable tr").addClass("nodrag nodrop");
-		$(".zwiico-sort").hide();
-		$("#galleryTable").tableDnDUpdate();
-	} else {
-		$("#galleryTable tr").removeClass("nodrag nodrop");
-		$(".zwiico-sort").show();
-		$("#galleryTable").tableDnDUpdate();
-	}
-});
-
-/**
- * Tri dynamique des images
- */
-
-function sortPictures() {
-	var url = "<?php echo helper::baseUrl(true,true) . $this->getUrl(0); ?>/sortPictures";
-	var d1 = $("#galleryEditFormResponse").val();
-	var d2 = $("#galleryEditFormGalleryName").val();
-	$.ajax({
-		type: "POST",
-		url: url ,
-		data: {
-			response : d1,
-			gallery: d2
-		},/*
-		error: function (xhr, ajaxOptions, thrownError) {
-        	alert(xhr.status);
-        	alert(thrownError);
-      }
-	  */
+	$("#galleryEditSort").change(function () {
+		if ($("#galleryEditSort").val() !== "SORT_HAND") {
+			$("#galleryTable tr").addClass("nodrag nodrop");
+			$(".zwiico-sort").hide();
+			$("#galleryTable").tableDnDUpdate();
+		} else {
+			$("#galleryTable tr").removeClass("nodrag nodrop");
+			$(".zwiico-sort").show();
+			$("#galleryTable").tableDnDUpdate();
+		}
 	});
-}
 
+	/**
+	 * Checkbox unique
+	 */
 
-/**
- * Checkbox unique
- */
+	$('.homePicture').click(function () {
+		$('.homePicture').prop('checked', false);
+		$(this).prop('checked', true);
+	});
 
- $('.homePicture').click(function(){
-	$('.homePicture').prop('checked', false);
-	$(this).prop('checked', true);
 });
