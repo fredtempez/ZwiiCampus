@@ -325,11 +325,13 @@ class gallery extends common
 	 */
 	public function sortPictures()
 	{
-		die();
 		if (isset($_POST['response'])) {
 			$galleryName = $_POST['gallery'];
 			$data = explode('&', $_POST['response']);
-			$data = str_replace('galleryTable%5B%5D=', '', $data);
+			    // Appliquer str_replace à chaque élément du tableau
+				$data = array_map(function($item) {
+					return str_replace('galleryTable%5B%5D=', '', $item);
+				}, $data);
 			// Sauvegarder
 			$this->setData([
 				'module',
