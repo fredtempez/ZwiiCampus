@@ -160,6 +160,7 @@ class gallery extends common
 
 	public static $formOptionSelect = '';
 
+
 	/**
 	 * Mise à jour du module
 	 * Appelée par les fonctions index et config
@@ -295,8 +296,10 @@ class gallery extends common
 			$data = str_replace('galleryTable%5B%5D=', '', $data);
 			for ($i = 0; $i < count($data); $i++) {
 				$this->setData([
-					'module', $this->getUrl(0),
-					'content', $data[$i],
+					'module',
+					$this->getUrl(0),
+					'content',
+					$data[$i],
 					[
 						'config' => [
 							'name' => $this->getData(['module', $this->getUrl(0), 'content', $data[$i], 'config', 'name']),
@@ -328,7 +331,8 @@ class gallery extends common
 			$data = str_replace('galleryTable%5B%5D=', '', $data);
 			// Sauvegarder
 			$this->setData([
-				'module', $this->getUrl(0),
+				'module',
+				$this->getUrl(0),
 				'content',
 				$galleryName,
 				[
@@ -381,7 +385,7 @@ class gallery extends common
 				}
 				// Met en forme le tableau
 				self::$galleries[] = [
-					$gallery['config']['position']++,
+					//$gallery['config']['position']++,
 					$gallery['config']['name'],
 					$gallery['config']['directory'],
 					template::button('galleryConfigEdit' . $galleryId, [
@@ -396,6 +400,8 @@ class gallery extends common
 						'help' => 'Supprimer cette galerie'
 					])
 				];
+				// Tableau des id des galleries pour le drag and drop
+				self::$galleriesId[] = $galleryId;
 			}
 		}
 		// Valeurs en sortie
@@ -446,7 +452,8 @@ class gallery extends common
 				// Le dossier de la galerie est vide
 				if ($i > 0) {
 					$this->setData([
-						'module', $this->getUrl(0),
+						'module',
+						$this->getUrl(0),
 						'content',
 						$galleryId,
 						[
@@ -484,7 +491,6 @@ class gallery extends common
 					'view' => 'add'
 				]);
 			}
-
 		} else {
 			// Valeurs en sortie
 			$this->addOutput([
@@ -549,7 +555,6 @@ class gallery extends common
 				$homePicture = $file;
 				$file = str_replace('.', '', $file);
 				$legends[$file] = helper::filter($legend, helper::FILTER_STRING_SHORT);
-
 			}
 			// Photo de la page de garde de l'album définie dans form
 			if (is_array($this->getInput('homePicture', null))) {
@@ -558,8 +563,10 @@ class gallery extends common
 			}
 			// Sauvegarder
 			$this->setData([
-				'module', $this->getUrl(0),
-				'content', $this->getUrl(2),
+				'module',
+				$this->getUrl(0),
+				'content',
+				$this->getUrl(2),
 				[
 					'config' => [
 						'homePicture' => $homePicture,
@@ -730,7 +737,6 @@ class gallery extends common
 							self::$thumbs[$directory . '/' . $fileInfos->getFilename()] = file_exists(str_replace('source', 'thumb', $directory) . '/' . self::THUMBS_SEPARATOR . strtolower($fileInfos->getFilename()))
 								? str_replace('source', 'thumb', $directory) . '/' . self::THUMBS_SEPARATOR . strtolower($fileInfos->getFilename())
 								: str_replace('source', 'thumb', $directory) . '/' . strtolower($fileInfos->getFilename());
-
 						}
 					}
 					// Tri des images par ordre alphabétique
@@ -761,8 +767,8 @@ class gallery extends common
 						'title' => $this->getData(['module', $this->getUrl(0), 'content', $gallery, 'config', 'name']),
 						'view' => 'gallery',
 						'style' => file_exists($this->getData(['module', $this->getUrl(0), 'theme', 'style']))
-						? $this->getData(['module', $this->getUrl(0), 'theme', 'style'])
-						: '',
+							? $this->getData(['module', $this->getUrl(0), 'theme', 'style'])
+							: '',
 						'showPageContent' => $this->getData(['module', $this->getUrl(0), 'content', $gallery, 'config', 'showPageContent']),
 					]);
 				}
@@ -774,7 +780,6 @@ class gallery extends common
 					]);
 				}
 			}
-
 		}
 		// Liste des galeries
 		else {
@@ -821,7 +826,7 @@ class gallery extends common
 									: str_replace('source', 'thumb', $fileInfos->getPath()) . '/' . strtolower($fileInfos->getFilename());
 							}
 						}
-						continue(1);
+						continue (1);
 					}
 				}
 			}
@@ -831,8 +836,8 @@ class gallery extends common
 				'showPageContent' => true,
 				'view' => 'index',
 				'style' => file_exists($this->getData(['module', $this->getUrl(0), 'theme', 'style']))
-				? $this->getData(['module', $this->getUrl(0), 'theme', 'style'])
-				: ''
+					? $this->getData(['module', $this->getUrl(0), 'theme', 'style'])
+					: ''
 			]);
 		}
 	}
@@ -852,7 +857,8 @@ class gallery extends common
 				mkdir(self::DATADIRECTORY . $this->getUrl(0), 0755, true);
 			}
 			$this->setData([
-				'module', $this->getUrl(0),
+				'module',
+				$this->getUrl(0),
 				'theme',
 				[
 					'thumbAlign' => $this->getinput('galleryThemeThumbAlign', helper::FILTER_STRING_SHORT),
@@ -926,7 +932,8 @@ class gallery extends common
 
 				// Sauver la configuration de la galerie
 				$this->setData([
-					'module', $this->getUrl(0),
+					'module',
+					$this->getUrl(0),
 					'config',
 					[
 						'showUniqueGallery' => $this->getinput('galleriesOptionShowUniqueGallery', helper::FILTER_BOOLEAN),
@@ -979,7 +986,8 @@ class gallery extends common
 				// Sauvegarder
 				if ($this->getInput('galleryEditName')) {
 					$this->setData([
-						'module', $this->getUrl(0),
+						'module',
+						$this->getUrl(0),
 						'content',
 						$galleryId,
 						[
@@ -1021,7 +1029,6 @@ class gallery extends common
 			]);
 		}
 	}
-
 }
 
 class galleriesHelper extends helper
