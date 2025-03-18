@@ -1,3 +1,5 @@
+# Version 2.10
+- Initialisation du pseudo.
 # Version 2.9
 - Précision des libellés d'erreur.
 # Version 2.8

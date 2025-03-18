@@ -15,7 +15,7 @@
 class suscribe extends common
 {
 
-	const VERSION = '2.9';
+	const VERSION = '2.10';
 	const REALNAME = 'Auto Inscription';
 	const DELETE = true;
 	const UPDATE = '0.0';
@@ -146,6 +146,7 @@ class suscribe extends common
 						'mail' => $this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'mail']),
 						'password' => $this->getData(['module', $this->getUrl(0), 'users', $this->getUrl(2), 'password']),
 						'tags' => $this->getInput('registrationUserLabel', helper::FILTER_STRING_SHORT),
+						'pseudo' => $this->getUrl(2),
 					]
 				]);
 				// Notifier le user 
