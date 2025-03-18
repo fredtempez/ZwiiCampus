@@ -23,7 +23,7 @@ $(document).ready(function () {
 		onDrop: function (table, row) {
 			$("#galleryEditFormResponse").val($.tableDnD.serialize());
 			sortPictures();
-			location.reload();
+			//location.reload();
 		},
 		serializeRegexp: ""
 	});
@@ -42,6 +42,14 @@ $(document).ready(function () {
 			data: {
 				response: d1,
 				gallery: d2
+			},
+			success: function(data) {
+				console.log(data); // Vérifiez le contenu de la réponse
+				if (data) {
+					// Traitement si la réponse n'est pas vide
+				} else {
+					console.log("La réponse est vide.");
+				}
 			},
 			error: function (xhr, ajaxOptions, thrownError) {
 				alert(xhr.status);

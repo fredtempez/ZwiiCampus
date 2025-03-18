@@ -324,7 +324,7 @@ class gallery extends common
 	 *
 	 */
 	public function sortPictures()
-	{
+	{   
 		if (isset($_POST['response'])) {
 			$galleryName = $_POST['gallery'];
 			$data = explode('&', $_POST['response']);
@@ -332,8 +332,9 @@ class gallery extends common
 				$data = array_map(function($item) {
 					return str_replace('galleryTable%5B%5D=', '', $item);
 				}, $data);
+			$data=array_flip($data) ;
 			// Sauvegarder
-			$this->setData([
+			$r = $this->setData([
 				'module',
 				$this->getUrl(0),
 				'content',
@@ -349,9 +350,11 @@ class gallery extends common
 
 					],
 					'legend' => $this->getData(['module', $this->getUrl(0), 'content', $galleryName, 'legend']),
-					'position' => array_flip($data)
+					'position' => $data
 				]
 			]);
+			var_dump($data);
+			die();
 		}
 	}
 
