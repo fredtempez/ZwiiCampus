@@ -651,14 +651,27 @@ class gallery extends common
 				// Tri des images
 				switch ($this->getData(['module', $this->getUrl(0), 'content', $this->getUrl(2), 'config', 'sort'])) {
 					case self::SORT_HAND:
-						// Récupération des positions
-						$positions = $this->getData(['module', $this->getUrl(0), 'content', $this->getUrl(2), 'position']);
+						// Récupération du tableau des positions
+						$positions = $this->getData([
+							'module',
+							$this->getUrl(0),
+							'content',
+							$this->getUrl(2),
+							'position'
+						]);
 
-						// Tri du tableau self::$pictures en fonction des positions
+						// Tri de self::$pictures selon les positions
 						uasort(self::$pictures, function ($a, $b) use ($positions) {
-							$keyA = array_key_exists($a[1], $positions) ? $positions[$a[1]] : PHP_INT_MAX;
-							$keyB = array_key_exists($b[1], $positions) ? $positions[$b[1]] : PHP_INT_MAX;
-							return $keyA <=> $keyB;
+							// Les clés sont obtenues par str_replace('.', '', filename)
+							$keyA = str_replace('.', '', $a[1]);
+							$keyB = str_replace('.', '', $b[1]);
+
+							// Vérification de l'existence des clés dans le tableau positions
+							$posA = isset($positions[$keyA]) ? $positions[$keyA] : PHP_INT_MAX;
+							$posB = isset($positions[$keyB]) ? $positions[$keyB] : PHP_INT_MAX;
+
+							// Comparaison des positions
+							return $posA <=> $posB;
 						});
 						break;
 					case self::SORT_ASC:
