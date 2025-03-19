@@ -59,15 +59,18 @@ $(document).ready((function () {
         columnDefs: [
             {
                 targets: 5,
-                type: 'timestamp-custom', // Utilisation du tri personnalisé
+                type: 'timestamp-custom',
                 render: function (data, type, row) {
                     if (type === 'display') {
-                        if (data === '') {
-                            return 'Jamais'; // Afficher "Jamais" au lieu de 1970
+                        if (!data || isNaN(parseInt(data))) {
+                            return 'Jamais';
                         }
-                        return moment(Number(data) * 1000).format('DD/MM/YYYY HH:mm');
+                        // Conversion explicite en entier
+                        var timestamp = parseInt(data, 10) * 1000;
+                        return moment(timestamp).format('DD/MM/YYYY HH:mm');
                     }
-                    return data === '' ? Number.MAX_SAFE_INTEGER : Number(data); // Pour que le tri fonctionne
+                    // Pour le tri, retourner un nombre valide ou MAX_SAFE_INTEGER
+                    return (!data || isNaN(parseInt(data))) ? Number.MAX_SAFE_INTEGER : parseInt(data, 10);
                 }
             },
             {
