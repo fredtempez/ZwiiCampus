@@ -227,7 +227,7 @@ class config extends common
 		} else {
 
 			// Sauvegarde la tabulation 
-			$this->savetabState($this->getInput('containerSelected'));
+			$this->saveTabState('social');
 
 			// Mettre à jour le site map
 			$successSitemap = $this->updateSitemap();
@@ -254,7 +254,7 @@ class config extends common
 		) {
 
 			// Sauvegarde la tabulation 
-			$this->savetabState($this->getInput('containerSelected'));
+			$this->saveTabState('setup');
 
 			// Creation du ZIP
 			$filter = $this->getInput('configBackupOption', helper::FILTER_BOOLEAN) === true ? ['backup', 'tmp'] : ['backup', 'tmp', 'file'];
@@ -288,7 +288,7 @@ class config extends common
 	{
 
 		// Sauvegarde la tabulation 
-		$this->savetabState($this->getInput('containerSelected'));
+		$this->saveTabState('social');
 
 		// fonction désactivée pour un site local
 		if (strpos(helper::baseUrl(false), 'localhost') > 0 or strpos(helper::baseUrl(false), '127.0.0.1') > 0) {
@@ -353,7 +353,7 @@ class config extends common
 		) {
 
 			// Sauvegarde la tabulation 
-			$this->savetabState($this->getInput('containerSelected'));
+			$this->saveTabState('setup');
 
 			$success = false;
 
@@ -552,7 +552,7 @@ class config extends common
 
 
 			// Sauvegarde la tabulation 
-			$this->savetabState($this->getInput('containerSelected'));
+			$this->saveTabState($this->getInput('containerSelected'));
 
 			// Efface les fichiers de backup lorsque l'option est désactivée
 			if ($this->getInput('configFileBackup', helper::FILTER_BOOLEAN) === false) {
@@ -729,7 +729,7 @@ class config extends common
 		) {
 
 			// Sauvegarde la tabulation 
-			$this->savetabState($this->getInput('containerSelected'));
+			$this->saveTabState('setup');
 
 			// Ecrire les fichiers de script
 			if ($this->geturl(2) === 'head') {
@@ -776,7 +776,7 @@ class config extends common
 		} else {
 
 			// Sauvegarde la tabulation 
-			$this->savetabState($this->getInput('containerSelected'));
+			$this->saveTabState('setup');
 
 			if (file_exists(self::DATA_DIR . 'journal.log')) {
 				unlink(self::DATA_DIR . 'journal.log');
@@ -820,7 +820,7 @@ class config extends common
 		} else {
 
 			// Sauvegarde la tabulation 
-			$this->savetabState($this->getInput('containerSelected'));
+			$this->saveTabState('connect');
 
 			$fileName = self::DATA_DIR . 'journal.log';
 			if (file_exists($fileName)) {
@@ -861,7 +861,7 @@ class config extends common
 		} else {
 
 			// Sauvegarde la tabulation 
-			$this->savetabState($this->getInput('containerSelected'));
+			$this->saveTabState('connect');
 
 			ob_start();
 			$fileName = self::TEMP_DIR . 'blacklist.log';
@@ -913,7 +913,7 @@ class config extends common
 			]);
 		} else {
 			// Sauvegarde la tabulation 
-			$this->savetabState($this->getInput('containerSelected'));
+			$this->saveTabState('connect');
 
 			if (file_exists(self::DATA_DIR . 'blacklist.json')) {
 				$this->setData(['blacklist', []]);
@@ -951,7 +951,7 @@ class config extends common
 			]);
 		} else {
 			// Sauvegarde la tabulation 
-			$this->savetabState($this->getInput('containerSelected'));
+			$this->saveTabState('setup');
 
 			$success = $this->copyDir(self::BACKUP_DIR, self::FILE_DIR . 'source/backup');
 
@@ -980,7 +980,7 @@ class config extends common
 			]);
 		} else {
 			// Sauvegarde la tabulation 
-			$this->savetabState($this->getInput('containerSelected'));
+			$this->saveTabState('setup');
 
 			$path = realpath(self::BACKUP_DIR);
 			$success = $fail = 0;
@@ -996,7 +996,7 @@ class config extends common
 			$this->addOutput([
 				'title' => helper::translate('Configuration'),
 				'view' => 'index',
-				'notification' => $success . helper::translate('Fichiers effacés') . ' - ' . helper::translate('Échecs') . ': ' . $fail,
+				'notification' => $success . helper::translate('Fichiers effacés ') . ' - ' . helper::translate('Échecs ') . ': ' . $fail,
 				'state' => true
 			]);
 		}
@@ -1046,7 +1046,10 @@ class config extends common
 		]);
 	}
 
-	private function savetabState($input)
+	/**
+	 * Méthode pour sauvegarder l'état de l'onglet dans les paramètres de l'utilisateur.
+	 */
+	private function saveTabState($input)
 	{
 		$this->setData([
 			'user',
