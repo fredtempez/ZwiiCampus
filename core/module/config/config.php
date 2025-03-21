@@ -13,10 +13,8 @@
  * @license CC Attribution-NonCommercial-NoDerivatives 4.0 International
  * @link http://zwiicms.fr/
  */
-
 class config extends common
 {
-
 	public static $actions = [
 		'backup' => self::ROLE_ADMIN,
 		'copyBackups' => self::ROLE_ADMIN,
@@ -149,22 +147,26 @@ class config extends common
 		'Pacific/Fiji' => '(GMT+12:00) Fiji',
 		'Asia/Kamchatka' => '(GMT+12:00) Kamchatka'
 	];
+
 	// Type de proxy
 	public static $proxyType = [
 		'tcp://' => 'TCP',
 		'http://' => 'HTTP'
 	];
+
 	// Authentification SMTP
 	public static $SMTPauth = [
 		true => 'Oui',
 		false => 'Non'
 	];
+
 	// Encryptation SMTP
 	public static $SMTPEnc = [
 		'' => 'Aucune',
 		'tls' => 'START TLS',
 		'ssl' => 'SSL/TLS'
 	];
+
 	// Sécurité de la  connexion - tentative max avant blocage
 	public static $connectAttempt = [
 		999 => 'Sécurité désactivée',
@@ -172,6 +174,7 @@ class config extends common
 		5 => '5 tentatives',
 		10 => '10 tentatives'
 	];
+
 	// Sécurité de la connexion - durée du blocage
 	public static $connectTimeout = [
 		0 => 'Sécurité désactivée',
@@ -179,6 +182,7 @@ class config extends common
 		600 => '10 minutes',
 		900 => '15 minutes'
 	];
+
 	// Anonymisation des IP du journal
 	public static $anonIP = [
 		4 => 'Non tronquée',
@@ -186,10 +190,12 @@ class config extends common
 		2 => 'Niveau 2 (192.168.x.x)',
 		1 => 'Niveau 3 (192.x.x.x)',
 	];
+
 	public static $captchaTypes = [
 		'num' => 'Chiffres',
 		'alpha' => 'Lettres'
 	];
+
 	public static $updateDelay = [
 		86400 => '1',
 		172800 => '2',
@@ -203,10 +209,13 @@ class config extends common
 
 	// Variable pour construire la liste des pages du site
 	public static $onlineVersion = '';
+
 	public static $updateButtonText = 'Réinstaller';
 
 	public static $imageOpenGraph = [];
+
 	public static $pagesList = [];
+
 	public static $orphansList = [];
 
 	/**
@@ -225,8 +234,7 @@ class config extends common
 				'access' => false
 			]);
 		} else {
-
-			// Sauvegarde la tabulation 
+			// Sauvegarde la tabulation
 			$this->saveTabState('social');
 
 			// Mettre à jour le site map
@@ -235,12 +243,11 @@ class config extends common
 			// Valeurs en sortie
 			$this->addOutput([
 				'redirect' => helper::baseUrl() . 'config',
-				'notification' => $successSitemap ? helper::translate('La carte du site a été mise à jour') : helper::translate('Echec de l\'écriture, vérifiez les permissions'),
+				'notification' => $successSitemap ? helper::translate('La carte du site a été mise à jour') : helper::translate("Echec de l'écriture, vérifiez les permissions"),
 				'state' => $successSitemap
 			]);
 		}
 	}
-
 
 	/**
 	 * Sauvegarde des données
@@ -252,8 +259,7 @@ class config extends common
 			$this->getUser('permission', __CLASS__, __FUNCTION__) === true &&
 			$this->isPost()
 		) {
-
-			// Sauvegarde la tabulation 
+			// Sauvegarde la tabulation
 			$this->saveTabState('setup');
 
 			// Creation du ZIP
@@ -286,8 +292,7 @@ class config extends common
 	 */
 	public function configMetaImage()
 	{
-
-		// Sauvegarde la tabulation 
+		// Sauvegarde la tabulation
 		$this->saveTabState('social');
 
 		// fonction désactivée pour un site local
@@ -330,8 +335,8 @@ class config extends common
 		}
 
 		$notification = empty($token)
-			? 'La clé de l\'API ne peut pas être vide'
-			: ($success === false ? 'Service en ligne inaccessible' : 'Capture d\'écran générée avec succès');
+			? "La clé de l'API ne peut pas être vide"
+			: ($success === false ? 'Service en ligne inaccessible' : "Capture d'écran générée avec succès");
 
 		// Valeurs en sortie
 		$this->addOutput([
@@ -351,14 +356,12 @@ class config extends common
 			$this->getUser('permission', __CLASS__, __FUNCTION__) === true &&
 			$this->isPost()
 		) {
-
-			// Sauvegarde la tabulation 
+			// Sauvegarde la tabulation
 			$this->saveTabState('setup');
 
 			$success = false;
 
 			if ($this->getInput('configRestoreImportFile', null, true)) {
-
 				$fileZip = $this->getInput('configRestoreImportFile');
 				$file_parts = pathinfo($fileZip);
 				// Validité du nom du fichier sélectionné
@@ -438,13 +441,11 @@ class config extends common
 		]);
 	}
 
-
 	/**
 	 * Configuration
 	 */
 	public function index()
 	{
-
 		// Action interdite hors de l'espace accueil
 		if (
 			self::$siteContent !== 'home'
@@ -460,7 +461,6 @@ class config extends common
 			$this->getUser('permission', __CLASS__, __FUNCTION__) === true &&
 			$this->isPost()
 		) {
-
 			// Basculement en mise à jour auto,  remise à 0 du compteur
 			if (
 				$this->getData(['config', 'autoUpdate']) === false &&
@@ -546,12 +546,11 @@ class config extends common
 						'redirectLogin' => $this->getInput('connectRedirectLogin', helper::FILTER_BOOLEAN),
 						'mailAuth' => $this->getInput('connectAuthMail', helper::FILTER_BOOLEAN),
 					],
-					"defaultLanguageUI" => $this->getData(['config', 'defaultLanguageUI']),
+					'defaultLanguageUI' => $this->getData(['config', 'defaultLanguageUI']),
 				]
 			]);
 
-
-			// Sauvegarde la tabulation 
+			// Sauvegarde la tabulation
 			$this->saveTabState($this->getInput('containerSelected'));
 
 			// Efface les fichiers de backup lorsque l'option est désactivée
@@ -572,21 +571,21 @@ class config extends common
 				// Active la réécriture d'URL
 				$rewrite = $this->getInput('configRewrite', helper::FILTER_BOOLEAN);
 				if (
-					$rewrite
-					and helper::checkRewrite() === false
+					$rewrite and
+					helper::checkRewrite() === false
 				) {
 					// Ajout des lignes dans le .htaccess
 					$fileContent = file_get_contents('.htaccess');
 					$rewriteData =
-						'# URL rewriting' . PHP_EOL .
-						'<IfModule mod_rewrite.c>' . PHP_EOL .
-						"\tRewriteEngine on" . PHP_EOL .
-						"\tRewriteBase " . helper::baseUrl(false, false) . PHP_EOL .
-						"\tRewriteCond %{REQUEST_FILENAME} !-f" . PHP_EOL .
-						"\tRewriteCond %{REQUEST_FILENAME} !-d" . PHP_EOL .
-						"\tRewriteRule ^(.*)$ index.php?$1 [L]" . PHP_EOL .
-						'</IfModule>' . PHP_EOL .
-						'# URL rewriting';
+						'# URL rewriting' . PHP_EOL
+						. '<IfModule mod_rewrite.c>' . PHP_EOL
+						. "\tRewriteEngine on" . PHP_EOL
+						. "\tRewriteBase " . helper::baseUrl(false, false) . PHP_EOL
+						. "\tRewriteCond %{REQUEST_FILENAME} !-f" . PHP_EOL
+						. "\tRewriteCond %{REQUEST_FILENAME} !-d" . PHP_EOL
+						. "\tRewriteRule ^(.*)\$ index.php?\$1 [L]" . PHP_EOL
+						. '</IfModule>' . PHP_EOL
+						. '# URL rewriting';
 					$fileContent = str_replace('# URL rewriting', $rewriteData, $fileContent);
 					file_put_contents(
 						'.htaccess',
@@ -597,8 +596,8 @@ class config extends common
 				}
 				// Désactive la réécriture d'URL
 				elseif (
-					$rewrite === false
-					and helper::checkRewrite()
+					$rewrite === false and
+					helper::checkRewrite()
 				) {
 					// Suppression des lignes dans le .htaccess
 					$fileContent = file_get_contents('.htaccess');
@@ -625,9 +624,9 @@ class config extends common
 
 		// Activation du bouton de mise à jour
 		if (
-			helper::checkNewVersion(common::ZWII_UPDATE_CHANNEL)
-			&& $this->getData(['core', 'updateAvailable']) === false
-			&& $this->getData(['config', 'autoUpdate'])
+			helper::checkNewVersion(common::ZWII_UPDATE_CHANNEL) &&
+			$this->getData(['core', 'updateAvailable']) === false &&
+			$this->getData(['config', 'autoUpdate'])
 		) {
 			$this->setData(['core', 'updateAvailable', true]);
 			// Valeurs en sortie
@@ -640,7 +639,6 @@ class config extends common
 		if (helper::checkNewVersion(common::ZWII_UPDATE_CHANNEL)) {
 			self::$updateButtonText = helper::translate('Mise à jour');
 		}
-
 
 		// Sélecteur de délais, compléter avec la traduction en jours
 		foreach (self::$updateDelay as $key => $value) {
@@ -657,8 +655,8 @@ class config extends common
 		self::$imageOpenGraph['height'] = '';
 		self::$imageOpenGraph['ratio'] = 0;
 		if (
-			$this->getData(['config', 'seo', 'openGraphImage'])
-			&& file_exists($imagePath)
+			$this->getData(['config', 'seo', 'openGraphImage']) &&
+			file_exists($imagePath)
 		) {
 			// Infos sur l'image Open Graph
 			$typeMime = exif_imagetype($imagePath);
@@ -719,7 +717,6 @@ class config extends common
 		]);
 	}
 
-
 	public function script()
 	{
 		// Soumission du formulaire
@@ -727,8 +724,7 @@ class config extends common
 			$this->getUser('permission', __CLASS__, __FUNCTION__) === true &&
 			$this->isPost()
 		) {
-
-			// Sauvegarde la tabulation 
+			// Sauvegarde la tabulation
 			$this->saveTabState('setup');
 
 			// Ecrire les fichiers de script
@@ -758,11 +754,9 @@ class config extends common
 		]);
 	}
 
-
 	/**
 	 * Vider le fichier de log
 	 */
-
 	public function logReset()
 	{
 		// Action interdite
@@ -774,8 +768,7 @@ class config extends common
 				'access' => false
 			]);
 		} else {
-
-			// Sauvegarde la tabulation 
+			// Sauvegarde la tabulation
 			$this->saveTabState('setup');
 
 			if (file_exists(self::DATA_DIR . 'journal.log')) {
@@ -802,8 +795,6 @@ class config extends common
 		}
 	}
 
-
-
 	/**
 	 * Télécharger le fichier de log
 	 */
@@ -818,8 +809,7 @@ class config extends common
 				'access' => false
 			]);
 		} else {
-
-			// Sauvegarde la tabulation 
+			// Sauvegarde la tabulation
 			$this->saveTabState('connect');
 
 			$fileName = self::DATA_DIR . 'journal.log';
@@ -859,13 +849,12 @@ class config extends common
 				'access' => false
 			]);
 		} else {
-
-			// Sauvegarde la tabulation 
+			// Sauvegarde la tabulation
 			$this->saveTabState('connect');
 
 			ob_start();
 			$fileName = self::TEMP_DIR . 'blacklist.log';
-			$d = 'Date dernière tentative;Heure dernière tentative;Id;Adresse IP;Nombre d\'échecs' . PHP_EOL;
+			$d = "Date dernière tentative;Heure dernière tentative;Id;Adresse IP;Nombre d'échecs" . PHP_EOL;
 			file_put_contents($fileName, $d);
 			if (file_exists($fileName)) {
 				$d = $this->getData(['blacklist']);
@@ -900,7 +889,6 @@ class config extends common
 	/**
 	 * Réinitialiser les ip blacklistées
 	 */
-
 	public function blacklistReset()
 	{
 		// Action interdite
@@ -912,7 +900,7 @@ class config extends common
 				'access' => false
 			]);
 		} else {
-			// Sauvegarde la tabulation 
+			// Sauvegarde la tabulation
 			$this->saveTabState('connect');
 
 			if (file_exists(self::DATA_DIR . 'blacklist.json')) {
@@ -950,7 +938,7 @@ class config extends common
 				'access' => false
 			]);
 		} else {
-			// Sauvegarde la tabulation 
+			// Sauvegarde la tabulation
 			$this->saveTabState('setup');
 
 			$success = $this->copyDir(self::BACKUP_DIR, self::FILE_DIR . 'source/backup');
@@ -979,14 +967,13 @@ class config extends common
 				'access' => false
 			]);
 		} else {
-			// Sauvegarde la tabulation 
+			// Sauvegarde la tabulation
 			$this->saveTabState('setup');
 
 			$path = realpath(self::BACKUP_DIR);
 			$success = $fail = 0;
 			foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path)) as $filename) {
 				if (strpos($filename, '.zip')) {
-
 					$r = unlink($filename);
 					$success = $r === true ? $success + 1 : $success;
 					$fail = $r === false ? $fail + 1 : $fail;
@@ -1027,15 +1014,15 @@ class config extends common
 		$sent = $this->sendMail(
 			$this->getUser('mail'),
 			helper::translate('Test de la messagerie du site'),
-			'<strong>' . $this->getUser('firstname') . ' ' . $this->getUser('lastname') . '</strong>,<br><br>' .
-				'<h4>' . helper::translate('Il semblerait que votre messagerie fonctionne correctement !') . '</h4>',
+			'<strong>' . $this->getUser('firstname') . ' ' . $this->getUser('lastname') . '</strong>,<br><br>'
+				. '<h4>' . helper::translate('Il semblerait que votre messagerie fonctionne correctement !') . '</h4>',
 			null,
 			'no-reply@localhost'
 		);
 		if ($sent !== true) {
 			// Désactivation de l'authentification par email
 			$this->setData(['config', 'connect', 'mailAuth', 0]);
-			// Journalisation 
+			// Journalisation
 			$this->saveLog($sent);
 		}
 		// Valeurs en sortie
