@@ -225,6 +225,10 @@ class config extends common
 				'access' => false
 			]);
 		} else {
+
+			// Sauvegarde la tabulation 
+			$this->savetabState($this->getInput('containerSelected'));
+
 			// Mettre à jour le site map
 			$successSitemap = $this->updateSitemap();
 
@@ -235,7 +239,6 @@ class config extends common
 				'state' => $successSitemap
 			]);
 		}
-
 	}
 
 
@@ -249,6 +252,10 @@ class config extends common
 			$this->getUser('permission', __CLASS__, __FUNCTION__) === true &&
 			$this->isPost()
 		) {
+
+			// Sauvegarde la tabulation 
+			$this->savetabState($this->getInput('containerSelected'));
+
 			// Creation du ZIP
 			$filter = $this->getInput('configBackupOption', helper::FILTER_BOOLEAN) === true ? ['backup', 'tmp'] : ['backup', 'tmp', 'file'];
 			$fileName = helper::autoBackup(self::TEMP_DIR, $filter);
@@ -279,6 +286,10 @@ class config extends common
 	 */
 	public function configMetaImage()
 	{
+
+		// Sauvegarde la tabulation 
+		$this->savetabState($this->getInput('containerSelected'));
+
 		// fonction désactivée pour un site local
 		if (strpos(helper::baseUrl(false), 'localhost') > 0 or strpos(helper::baseUrl(false), '127.0.0.1') > 0) {
 			$site = 'https://zwiicms.fr/';
@@ -340,6 +351,9 @@ class config extends common
 			$this->getUser('permission', __CLASS__, __FUNCTION__) === true &&
 			$this->isPost()
 		) {
+
+			// Sauvegarde la tabulation 
+			$this->savetabState($this->getInput('containerSelected'));
 
 			$success = false;
 
@@ -536,17 +550,9 @@ class config extends common
 				]
 			]);
 
-			
-			// Sauvegarde la position des onglets de la vue de l'utilisateur courant
-			$this->setData([
-				'user',
-				$this->getUser('id'),
-				'view',
-				[
-					'config' => $this->getInput('containerSelected'),
-					'page' => $this->getData(['user', $this->getUser('id'), 'view', 'page']),
-				]
-			]);
+
+			// Sauvegarde la tabulation 
+			$this->savetabState($this->getInput('containerSelected'));
 
 			// Efface les fichiers de backup lorsque l'option est désactivée
 			if ($this->getInput('configFileBackup', helper::FILTER_BOOLEAN) === false) {
@@ -628,7 +634,6 @@ class config extends common
 			$this->addOutput([
 				'redirect' => helper::baseUrl() . 'config',
 			]);
-
 		}
 
 		// Variable de version
@@ -722,6 +727,10 @@ class config extends common
 			$this->getUser('permission', __CLASS__, __FUNCTION__) === true &&
 			$this->isPost()
 		) {
+
+			// Sauvegarde la tabulation 
+			$this->savetabState($this->getInput('containerSelected'));
+
 			// Ecrire les fichiers de script
 			if ($this->geturl(2) === 'head') {
 				file_put_contents(self::DATA_DIR . 'head.inc.html', $this->getInput('configScriptHead', null));
@@ -765,6 +774,10 @@ class config extends common
 				'access' => false
 			]);
 		} else {
+
+			// Sauvegarde la tabulation 
+			$this->savetabState($this->getInput('containerSelected'));
+
 			if (file_exists(self::DATA_DIR . 'journal.log')) {
 				unlink(self::DATA_DIR . 'journal.log');
 				// Créer les en-têtes des journaux
@@ -805,6 +818,10 @@ class config extends common
 				'access' => false
 			]);
 		} else {
+
+			// Sauvegarde la tabulation 
+			$this->savetabState($this->getInput('containerSelected'));
+
 			$fileName = self::DATA_DIR . 'journal.log';
 			if (file_exists($fileName)) {
 				ob_start();
@@ -842,6 +859,10 @@ class config extends common
 				'access' => false
 			]);
 		} else {
+
+			// Sauvegarde la tabulation 
+			$this->savetabState($this->getInput('containerSelected'));
+
 			ob_start();
 			$fileName = self::TEMP_DIR . 'blacklist.log';
 			$d = 'Date dernière tentative;Heure dernière tentative;Id;Adresse IP;Nombre d\'échecs' . PHP_EOL;
@@ -891,6 +912,9 @@ class config extends common
 				'access' => false
 			]);
 		} else {
+			// Sauvegarde la tabulation 
+			$this->savetabState($this->getInput('containerSelected'));
+
 			if (file_exists(self::DATA_DIR . 'blacklist.json')) {
 				$this->setData(['blacklist', []]);
 				// Valeurs en sortie
@@ -926,6 +950,8 @@ class config extends common
 				'access' => false
 			]);
 		} else {
+			// Sauvegarde la tabulation 
+			$this->savetabState($this->getInput('containerSelected'));
 
 			$success = $this->copyDir(self::BACKUP_DIR, self::FILE_DIR . 'source/backup');
 
@@ -953,6 +979,9 @@ class config extends common
 				'access' => false
 			]);
 		} else {
+			// Sauvegarde la tabulation 
+			$this->savetabState($this->getInput('containerSelected'));
+
 			$path = realpath(self::BACKUP_DIR);
 			$success = $fail = 0;
 			foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path)) as $filename) {
@@ -977,7 +1006,8 @@ class config extends common
 	 * Fonction pour vérifier la présence du module de réécriture
 	 * @return bool
 	 */
-	public function isModRewriteEnabled() {
+	public function isModRewriteEnabled()
+	{
 		// Check if Apache and mod_rewrite is loaded
 		if (function_exists('apache_get_modules')) {
 			$modules = apache_get_modules();
@@ -992,27 +1022,40 @@ class config extends common
 	 * Envoi un message de test
 	 * @return void
 	 */
-	 public function testmail()
-	 {
-		 $sent = $this->sendMail(
-			 $this->getUser('mail'),
-			 helper::translate('Test de la messagerie du site'),
-			 '<strong>' . $this->getUser('firstname') . ' ' . $this->getUser('lastname') . '</strong>,<br><br>' .
-			 '<h4>' . helper::translate('Il semblerait que votre messagerie fonctionne correctement !') . '</h4>',
-			 null,
-			 'no-reply@localhost'
-		 );
-		 if ($sent !== true) {
-			 // Désactivation de l'authentification par email
-			 $this->setData(['config', 'connect', 'mailAuth', 0]);
-			 // Journalisation 
-			 $this->saveLog($sent);
-		 }
-		 // Valeurs en sortie
-		 $this->addOutput([
-			 'redirect' => helper::baseUrl() . 'config/' . $this->getUrl(2),
-			 'state' => $sent === true ? true : false,
-			 'notification' => $sent === true ? helper::translate('Message de test envoyé avec succès') : helper::translate('Message non envoyé')
-		 ]);
-	 }
+	public function testmail()
+	{
+		$sent = $this->sendMail(
+			$this->getUser('mail'),
+			helper::translate('Test de la messagerie du site'),
+			'<strong>' . $this->getUser('firstname') . ' ' . $this->getUser('lastname') . '</strong>,<br><br>' .
+				'<h4>' . helper::translate('Il semblerait que votre messagerie fonctionne correctement !') . '</h4>',
+			null,
+			'no-reply@localhost'
+		);
+		if ($sent !== true) {
+			// Désactivation de l'authentification par email
+			$this->setData(['config', 'connect', 'mailAuth', 0]);
+			// Journalisation 
+			$this->saveLog($sent);
+		}
+		// Valeurs en sortie
+		$this->addOutput([
+			'redirect' => helper::baseUrl() . 'config/' . $this->getUrl(2),
+			'state' => $sent === true ? true : false,
+			'notification' => $sent === true ? helper::translate('Message de test envoyé avec succès') : helper::translate('Message non envoyé')
+		]);
+	}
+
+	private function savetabState($input)
+	{
+		$this->setData([
+			'user',
+			$this->getUser('id'),
+			'view',
+			[
+				'config' => $input,
+				'page' => $this->getData(['user', $this->getUser('id'), 'view', 'page']),
+			]
+		]);
+	}
 }
