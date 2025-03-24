@@ -256,6 +256,12 @@ class init extends common
 						'restore' => false,
 						'reset' => false,
 					],
+					'group' => [
+						'add' => false,
+						'delete' => false,
+						'import' => false,
+						'edit' => false,
+					],
 					'folder' => [
 						'create' => false,
 						'delete' => false,
@@ -352,6 +358,12 @@ class init extends common
 						'backup' => false,
 						'restore' => false,
 						'reset' => false,
+					],
+					'group' => [
+						'add' => false,
+						'delete' => false,
+						'import' => false,
+						'edit' => false,
 					],
 					'folder' => [
 						'create' => false,
@@ -454,6 +466,12 @@ class init extends common
 						'backup' => false,
 						'restore' => false,
 						'reset' => false,
+					],
+					'group' => [
+						'add' => false,
+						'delete' => false,
+						'import' => false,
+						'edit' => false,
 					],
 					'folder' => [
 						'create' => false,

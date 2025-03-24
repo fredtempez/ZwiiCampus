@@ -27,7 +27,7 @@
                             ]); ?>
                         </div>
                         <div class="col12">
-                            <?php echo template::select('profilAddGroup', user::$roleProfils, [
+                            <?php echo template::select('profilAddRole', user::$roleProfils, [
                                 'label' => 'Rôle associé',
                                 'selected' => $this->getUrl(2)
                             ]); ?>
@@ -212,6 +212,27 @@
                     <div class="col3">
                         <?php echo template::checkbox('profilAddCourseReset', true, 'Réinitialiser un espace'); ?>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col12">
+            <div class="block">
+                <h4>
+                    <?php echo helper::translate('Groupes de participants'); ?>
+                </h4>
+                <div class="col3">
+                        <?php echo template::checkbox('profilAddGroupAdd', true, 'Ajouter'); ?>
+                </div>
+                <div class="col3">
+                    <?php echo template::checkbox('profilAddGroupEdit', true, 'Éditer'); ?>
+                </div>
+                <div class="col3">
+                    <?php echo template::checkbox('profilAddGroupDelete', true, 'Effacer'); ?>
+                </div>
+                <div class="col2">
+                    <?php echo template::checkbox('profilAddGroupImport', true, 'Importer'); ?>
                 </div>
             </div>
         </div>

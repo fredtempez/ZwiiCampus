@@ -31,7 +31,7 @@
                                 <div class="col6">
                                     <?php echo template::select('profilEditProfil', user::$profils, [
                                         'label' => 'Hiérarchie',
-                                        'help' => 'Rang 9 > rang 1. Le profil de rang 1 n\'est pas modifiable.',
+                                        'help' => "Rang 9 > rang 1. Le profil de rang 1 n'est pas modifiable.",
                                         'selected' => $this->getUrl(3),
                                         'disabled' => $this->getUrl(3) === '1',
                                     ]); ?>
@@ -39,12 +39,12 @@
                             </div>
                         </div>
                         <div class="col12">
-                            <?php echo template::text('profilEditDisplayGroup', [
+                            <?php echo template::text('profilEditDisplayRole', [
                                 'label' => 'Rôle associé',
                                 'value' => helper::translate(self::$roles[$this->getUrl(2)]),
                                 'disabled' => true
                             ]); ?>
-                            <?php echo template::hidden('profilEditGroup', [
+                            <?php echo template::hidden('profilEditRole', [
                                 'value' => $this->getUrl(2),
                             ]); ?>
                             <?php echo template::hidden('profilEditOldProfil', [
@@ -67,7 +67,7 @@
     <div class="col12">
         <div class="block">
             <h4>
-                <?php echo helper::translate('Compte de l\'utilisateur'); ?>
+                <?php echo helper::translate("Compte de l'utilisateur"); ?>
             </h4>
             <div class="row">
                 <div class="col3">
@@ -96,6 +96,7 @@
                     <?php echo template::select('profilEditCoursePath', user::$sharePath, [
                         'label' => 'Dossier depuis un espace',
                         'class' => 'filemanager',
+
                         /*
                          * 'none' interdit l'accès au gestionnaire de fichier
                          * Ce n'est pas un chemin donc on n'ajoute pas le .
@@ -105,7 +106,7 @@
                 </div>
                 <div class="col5">
                     <?php echo template::select('profilEditHomePath', user::$sharePath, [
-                        'label' => 'Dossier depuis l\'accueil',
+                        'label' => "Dossier depuis l'accueil",
                         'class' => 'filemanager',
                         // 'none' interdit l'accès au gestionnaire de fichier au niveau de l'accueil
                         'selected' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'folder', 'homePath'])
@@ -253,7 +254,6 @@
                         ]); ?>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col3">
                         <?php echo template::checkbox('profilEditCourseEdit', true, 'Éditer un espace', [
@@ -286,12 +286,12 @@
                 <div id="courseContainer">
                     <div class="row">
                         <div class="col3">
-                            <?php echo template::checkbox('profilEditCourseUserHistory', true, 'Voir historique d\'un participant', [
+                            <?php echo template::checkbox('profilEditCourseUserHistory', true, "Voir historique d'un participant", [
                                 'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'course', 'userHistory']),
                             ]); ?>
                         </div>
                         <div class="col3">
-                            <?php echo template::checkbox('profilEditCourseuserReportExport', true, 'Exporter historique d\'un participant', [
+                            <?php echo template::checkbox('profilEditCourseuserReportExport', true, "Exporter historique d'un participant", [
                                 'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'course', 'userReportExport']),
                             ]); ?>
                         </div>
@@ -318,6 +318,35 @@
                             ]); ?>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col12">
+            <div class="block">
+                <h4>
+                    <?php echo helper::translate('Groupes de participants'); ?>
+                </h4>
+                <div class="col3">
+                        <?php echo template::checkbox('profilEditGroupAdd', true, 'Ajouter', [
+                            'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'group', 'add'])
+                        ]); ?>
+                </div>
+                <div class="col3">
+                    <?php echo template::checkbox('profilEditGroupEdit', true, 'Éditer', [
+                        'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'group', 'edit'])
+                    ]); ?>
+                </div>
+                <div class="col3">
+                    <?php echo template::checkbox('profilEditGroupDelete', true, 'Effacer', [
+                        'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'group', 'delete'])
+                    ]); ?>
+                </div>
+                <div class="col2">
+                    <?php echo template::checkbox('profilEditGroupImport', true, 'Importer', [
+                        'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'group', 'import'])
+                    ]); ?>
                 </div>
             </div>
         </div>
@@ -373,7 +402,7 @@
     <div class="containerModule">
         <?php foreach (user::$listModules as $moduleId): ?>
             <?php if (file_exists('module/' . $moduleId . '/profil/view/edit.inc.php')) {
-                include('module/' . $moduleId . '/profil/view/edit.inc.php');
+                include ('module/' . $moduleId . '/profil/view/edit.inc.php');
             } ?>
         <?php endforeach; ?>
     </div>
