@@ -173,7 +173,7 @@ class course extends common
             $this->isPost()
         ) {
             // Id du nouveau cours
-            $courseId = uniqid();
+            $courseId = $this->resourceId('course');
 
             // Groupes
             $groups = [];
