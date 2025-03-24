@@ -19,10 +19,12 @@ $(document).ready((function () {
             $(location).attr("href", _this.attr("href"))
         }))
     }));
-
-    var table = new DataTable('#dataTables', {
+    // Transmettre la langue au script Datatables.net
+    var lang = getCookie('ZWII_UI');
+    var languageUrl = 'core/vendor/datatables/' + lang + '.json';
+    $('#dataTables').DataTable({
         language: {
-            url: 'core/vendor/datatables/french.json'
+            url: languageUrl
         },
         stateSave: true,
         info: true,

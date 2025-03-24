@@ -12,9 +12,9 @@
  */
 
 $(document).ready(function () {
-        // Transmettre la langue au script Datatables.net
-        var lang = getCookie('ZWII_UI');
-        var languageUrl = 'core/vendor/datatables/' + lang + '.json';
+    // Transmettre la langue au script Datatables.net
+    var lang = getCookie('ZWII_UI');
+    var languageUrl = 'core/vendor/datatables/' + lang + '.json';
     $('#dataTables').DataTable({
         language: {
             url: languageUrl
