@@ -12,12 +12,8 @@
  * @license CC Attribution-NonCommercial-NoDerivatives 4.0 International
  * @link http://zwiicms.fr/
  */
-
-
-
 class common
 {
-
 	const DISPLAY_RAW = 0;
 	const DISPLAY_JSON = 1;
 	const DISPLAY_RSS = 2;
@@ -31,7 +27,6 @@ class common
 	// Groupe MODERATOR, compatibilité avec les anciens modules :
 	const ROLE_MODERATOR = 2;
 	const ROLE_ADMIN = 3;
-
 	// Compatibilité avec les anciens version de modules
 	const GROUP_BANNED = -1;
 	const GROUP_VISITOR = 0;
@@ -41,7 +36,6 @@ class common
 	const GROUP_MODERATOR = 2;
 	const GROUP_ADMIN = 3;
 	// -------------------------------------------------
-
 	const SIGNATURE_ID = 1;
 	const SIGNATURE_PSEUDO = 2;
 	const SIGNATURE_FIRSTLASTNAME = 3;
@@ -53,41 +47,36 @@ class common
 	const TEMP_DIR = 'site/tmp/';
 	const I18N_DIR = 'site/i18n/';
 	const MODULE_DIR = 'module/';
-
 	// Miniatures de la galerie
 	const THUMBS_SEPARATOR = 'mini_';
 	const THUMBS_WIDTH = 640;
-
 	// Contrôle d'édition temps maxi en secondes avant déconnexion 30 minutes
 	const ACCESS_TIMER = 1800;
-
 	// Numéro de version
-	const ZWII_VERSION = '2.1.00';
-
+	const ZWII_VERSION = '2.2.00';
 	// URL autoupdate
 	const ZWII_UPDATE_URL = 'https://forge.chapril.org/ZwiiCMS-Team/campus-update/raw/branch/master/';
 	const ZWII_UPDATE_CHANNEL = 'v2';
-
 	// Valeurs possibles multiple de 10, 10 autorise 9 profils, 100 autorise 99 profils
 	const MAX_PROFILS = 10;
-
+	// Constante pour la longueur des id
+	const ID_LENGTH = 6;
 	// Constantes pourles contenus
-
 	// Modalités d'ouverture
 	const COURSE_ACCESS_OPEN = 0;
 	const COURSE_ACCESS_DATE = 1;
 	const COURSE_ACCESS_CLOSE = 2;
 	// Modalités d'inscription
 	const COURSE_ENROLMENT_GUEST = 0;
-	const COURSE_ENROLMENT_SELF = 1; // Ouvert à tous les membres
-	const COURSE_ENROLMENT_SELF_KEY = 2; // Ouvert à tous les membres disposant de la clé
+	const COURSE_ENROLMENT_SELF = 1;  // Ouvert à tous les membres
+	const COURSE_ENROLMENT_SELF_KEY = 2;  // Ouvert à tous les membres disposant de la clé
 	const COURSE_ENROLMENT_MANDATORY = 3;
-
 	// Taille et rotation des journaux
 	const LOG_MAXSIZE = 4 * 1024 * 1024;
 	const LOG_MAXARCHIVE = 5;
 
 	public static $actions = [];
+
 	public static $coreModuleIds = [
 		'config',
 		'course',
@@ -101,6 +90,7 @@ class common
 		'theme',
 		'user'
 	];
+
 	public static $concurrentAccess = [
 		'config',
 		'edit',
@@ -110,20 +100,25 @@ class common
 		'theme',
 		'user',
 	];
+
 	private $data = [];
+
 	private $hierarchy = [
 		'all' => [],
 		'visible' => [],
 		'bar' => []
 	];
+
 	private $input = [
 		'_COOKIE' => [],
 		'_POST' => []
 	];
+
 	public static $inputBefore = [];
 	public static $inputNotices = [];
 	public static $importNotices = [];
 	public static $coreNotices = [];
+
 	public $output = [
 		'access' => true,
 		'content' => '',
@@ -154,12 +149,13 @@ class common
 			// 'codemirror', // Désactivé par défaut
 			'tippy',
 			'zwiico',
-			//'imagemap',
+			// 'imagemap',
 			'simplelightbox',
-			//'datatables', désactivé par défaut
+			// 'datatables', désactivé par défaut
 		],
 		'view' => ''
 	];
+
 	public static $roles = [
 		self::ROLE_BANNED => 'Banni',
 		self::ROLE_VISITOR => 'Visiteur',
@@ -167,17 +163,20 @@ class common
 		self::ROLE_EDITOR => 'Formateur',
 		self::ROLE_ADMIN => 'Administrateur'
 	];
+
 	public static $roleEdits = [
 		self::ROLE_BANNED => 'Banni',
 		self::ROLE_MEMBER => 'Étudiant',
 		self::ROLE_EDITOR => 'Formateur',
 		self::ROLE_ADMIN => 'Administrateur'
 	];
+
 	public static $roleNews = [
 		self::ROLE_MEMBER => 'Étudiant',
 		self::ROLE_EDITOR => 'Formateur',
 		self::ROLE_ADMIN => 'Administrateur'
 	];
+
 	public static $rolePublics = [
 		self::ROLE_VISITOR => 'Visiteur',
 		self::ROLE_MEMBER => 'Étudiant',
@@ -185,12 +184,11 @@ class common
 		self::ROLE_ADMIN => 'Administrateur'
 	];
 
-	//Langues de l'UI
+	// Langues de l'UI
 	// Langue de l'interface, tableau des dialogues
 	public static $dialog;
 	// Langue de l'interface sélectionnée
 	public static $i18nUI = 'fr_FR';
-
 	// Espace, contenu sélectionné
 	public static $siteContent = 'home';
 	// Progression d'un participant
@@ -207,7 +205,6 @@ class common
 		'tr_TR' => 'Türkçe',
 		// source: http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
 	];
-
 
 	// Zone de temps
 	public static $timezone;
@@ -264,17 +261,17 @@ class common
 		],
 		'arial-black' => [
 			'name' => 'Arial Black',
-			'font-family' => '\'Arial Black\', Gadget, sans-serif',
+			'font-family' => "'Arial Black', Gadget, sans-serif",
 			'resource' => 'websafe'
 		],
 		'courrier' => [
 			'name' => 'Courier',
-			'font-family' => 'Courier, \'Liberation Mono\', monospace',
+			'font-family' => "Courier, 'Liberation Mono', monospace",
 			'resource' => 'websafe'
 		],
 		'courrier-new' => [
 			'name' => 'Courier New',
-			'font-family' => '\'Courier New\', Courier, monospace',
+			'font-family' => "'Courier New', Courier, monospace",
 			'resource' => 'websafe'
 		],
 		'garamond' => [
@@ -294,7 +291,7 @@ class common
 		],
 		'lucida' => [
 			'name' => 'Lucida',
-			'font-family' => '\'Lucida Sans Unicode\', \'Lucida Grande\', sans-serif',
+			'font-family' => "'Lucida Sans Unicode', 'Lucida Grande', sans-serif",
 			'resource' => 'websafe'
 		],
 		'tahoma' => [
@@ -304,12 +301,12 @@ class common
 		],
 		'times-new-roman' => [
 			'name' => 'Times New Roman',
-			'font-family' => '\'Times New Roman\', \'Liberation Serif\', serif',
+			'font-family' => "'Times New Roman', 'Liberation Serif', serif",
 			'resource' => 'websafe'
 		],
 		'trebuchet' => [
 			'name' => 'Trebuchet',
-			'font-family' => '\'Trebuchet MS\', Arial, Helvetica, sans-serif',
+			'font-family' => "'Trebuchet MS', Arial, Helvetica, sans-serif",
 			'resource' => 'websafe'
 		],
 		'verdana' => [
@@ -340,7 +337,6 @@ class common
 	 */
 	public function __construct()
 	{
-
 		// Construct cache
 		if (isset($GLOBALS['common_construct'])) {
 			$this->input['_POST'] = $GLOBALS['common_construct']['input']['_POST'];
@@ -393,7 +389,6 @@ class common
 		// Cache
 		$GLOBALS['common_construct']['dataFiles'] = $this->dataFiles;
 
-
 		// Installation fraîche, initialisation de la configuration inexistante
 		// Nécessaire pour le constructeur
 		if ($this->user === []) {
@@ -445,10 +440,10 @@ class common
 			'domain' => '',
 			'secure' => false,
 			'httponly' => false,
-			'samesite' => 'Lax' // Vous pouvez aussi utiliser 'Strict' ou 'None'
+			'samesite' => 'Lax'  // Vous pouvez aussi utiliser 'Strict' ou 'None'
 		]);
 		// Stocker l'courseId pour le thème de TinyMCE
-		//setcookie('ZWII_SITE_CONTENT', self::$siteContent, time() + 3600, '', '', false, false);
+		// setcookie('ZWII_SITE_CONTENT', self::$siteContent, time() + 3600, '', '', false, false);
 		setlocale(LC_ALL, self::$i18nUI);
 		// Cache
 		$GLOBALS['common_construct']['i18nUI'] = self::$i18nUI;
@@ -482,8 +477,8 @@ class common
 		if ($this->getData(['page', $this->getUrl(0), 'moduleId'])) {
 			$moduleId = $this->getData(['page', $this->getUrl(0), 'moduleId']);
 			if (
-				is_dir(self::MODULE_DIR . $moduleId . '/i18n')
-				&& file_exists(self::MODULE_DIR . $moduleId . '/i18n/' . self::$i18nUI . '.json')
+				is_dir(self::MODULE_DIR . $moduleId . '/i18n') &&
+				file_exists(self::MODULE_DIR . $moduleId . '/i18n/' . self::$i18nUI . '.json')
 			) {
 				$d = json_decode(file_get_contents(self::MODULE_DIR . $moduleId . '/i18n/' . self::$i18nUI . '.json'), true);
 				self::$dialog = array_merge(self::$dialog, $d);
@@ -512,9 +507,8 @@ class common
 			);
 			stream_context_set_default($context);
 		}
-
 		// Mise à jour des données core
-		include('core/include/update.inc.php');
+		include ('core/include/update.inc.php');
 	}
 
 	/**
@@ -583,8 +577,8 @@ class common
 	{
 		// Pas d'enregistrement lorsqu'une notice est présente ou tableau transmis vide
 		if (
-			!empty(self::$inputNotices)
-			or empty($keys)
+			!empty(self::$inputNotices) or
+			empty($keys)
 		) {
 			return false;
 		}
@@ -611,7 +605,6 @@ class common
 		}
 		return $success;
 	}
-
 
 	/**
 	 * Accède aux données
@@ -641,11 +634,10 @@ class common
 	 */
 	public function getPage($page, $course)
 	{
-
 		// Le nom de la ressource et le fichier de contenu sont définis :
 		if (
-			$this->getData(['page', $page, 'content']) !== ''
-			&& file_exists(self::DATA_DIR . $course . '/content/' . $this->getData(['page', $page, 'content']))
+			$this->getData(['page', $page, 'content']) !== '' &&
+			file_exists(self::DATA_DIR . $course . '/content/' . $this->getData(['page', $page, 'content']))
 		) {
 			return file_get_contents(self::DATA_DIR . $course . '/content/' . $this->getData(['page', $page, 'content']));
 		} else {
@@ -661,11 +653,8 @@ class common
 	 */
 	public function setPage($page, $value, $path)
 	{
-
 		return $this->secure_file_put_contents(self::DATA_DIR . $path . '/content/' . $page . '.html', $value);
 	}
-
-
 
 	/**
 	 * Effacer les données de la page
@@ -677,7 +666,6 @@ class common
 		return unlink(self::DATA_DIR . $course . '/content/' . $this->getData(['page', $page, 'content']));
 	}
 
-
 	/**
 	 * Écrit les données dans un fichier avec plusieurs tentatives d'écriture et verrouillage
 	 *
@@ -688,7 +676,6 @@ class common
 	 */
 	function secure_file_put_contents($filename, $data, $flags = 0)
 	{
-
 		// Initialise le compteur de tentatives
 		$attempts = 0;
 
@@ -732,7 +719,6 @@ class common
 		$this->dataFiles[$module] = new \Prowebcraft\JsonDb($config);
 	}
 
-
 	/**
 	 * Cette fonction est liée à saveData
 	 * @param mixed $module
@@ -744,19 +730,16 @@ class common
 		$db->save();
 	}
 
-
 	/**
 	 * Initialisation des données sur un contenu ou la page d'accueil
 	 * @param string $course : id du module à générer
 	 * @param string $path : le dossier à créer
 	 * Données valides : page ou module
 	 */
-
 	public function initData($module, $path)
 	{
-
 		// Tableau avec les données vierges
-		require_once('core/module/install/ressource/defaultdata.php');
+		require_once ('core/module/install/ressource/defaultdata.php');
 
 		// L'arborescence
 		if (!file_exists(self::DATA_DIR . $path)) {
@@ -772,7 +755,7 @@ class common
 		$template = $path === 'home' ? init::$siteTemplate : init::$courseDefault;
 		// Création de page ou de module
 		$this->setData([$module, $template[$module]]);
-		// Création des pages 
+		// Création des pages
 		if ($module === 'page') {
 			$content = $path === 'home' ? init::$siteTemplateContent : init::$courseContent;
 			foreach ($content as $key => $value) {
@@ -782,6 +765,7 @@ class common
 
 		common::$coreNotices[] = $module;
 	}
+
 	/**
 	 * Initialisation des données
 	 * @param string $module : if du module à générer
@@ -790,12 +774,11 @@ class common
 	public function saveConfig($module)
 	{
 		// Tableau avec les données vierges
-		require_once('core/module/install/ressource/defaultdata.php');
+		require_once ('core/module/install/ressource/defaultdata.php');
 		// Installation des données des autres modules cad theme profil font config, admin et core
 		$this->setData([$module, init::$defaultData[$module]]);
 		common::$coreNotices[] = $module;
 	}
-
 
 	/**
 	 * Accède à la liste des pages parents et de leurs enfants
@@ -825,25 +808,20 @@ class common
 	/**
 	 * Fonction pour construire le tableau des pages
 	 */
-
 	public function buildHierarchy()
 	{
-
 		$pages = helper::arrayColumn($this->getData(['page']), 'position', 'SORT_ASC');
 		// Parents
 		foreach ($pages as $pageId => $pagePosition) {
 			if (
 				// Page parent
-				$this->getData(['page', $pageId, 'parentPageId']) === ""
+				$this->getData(['page', $pageId, 'parentPageId']) === '' and
 				// Ignore les pages dont l'utilisateur n'a pas accès
-				and ($this->getData(['page', $pageId, 'role']) === self::ROLE_VISITOR
-					or ($this->getUser('authKey') === $this->getInput('ZWII_AUTH_KEY')
-						//and $this->getUser('role') >= $this->getData(['page', $pageId, 'role'])
+				($this->getData(['page', $pageId, 'role']) === self::ROLE_VISITOR or
+					($this->getUser('authKey') === $this->getInput('ZWII_AUTH_KEY') and
+						// and $this->getUser('role') >= $this->getData(['page', $pageId, 'role'])
 						// Modification qui tient compte du profil de la page
-						and ($this->getUser('role') * self::MAX_PROFILS + $this->getUser('profil')) >= ($this->getData(['page', $pageId, 'role']) * self::MAX_PROFILS + $this->getData(['page', $pageId, 'profil']))
-
-					)
-				)
+						($this->getUser('role') * self::MAX_PROFILS + $this->getUser('profil')) >= ($this->getData(['page', $pageId, 'role']) * self::MAX_PROFILS + $this->getData(['page', $pageId, 'profil']))))
 			) {
 				if ($pagePosition !== 0) {
 					$this->hierarchy['visible'][$pageId] = [];
@@ -856,24 +834,19 @@ class common
 		}
 		// Enfants
 		foreach ($pages as $pageId => $pagePosition) {
-
 			if (
 				// Page parent
-				$parentId = $this->getData(['page', $pageId, 'parentPageId'])
-				// Ignore les pages dont l'utilisateur n'a pas accès
-				and (
+				$parentId = $this->getData(['page', $pageId, 'parentPageId']) and
+					// Ignore les pages dont l'utilisateur n'a pas accès
 					(
-						$this->getData(['page', $pageId, 'role']) === self::ROLE_VISITOR
-						and
-						$this->getData(['page', $parentId, 'role']) === self::ROLE_VISITOR
+						(
+							$this->getData(['page', $pageId, 'role']) === self::ROLE_VISITOR and
+							$this->getData(['page', $parentId, 'role']) === self::ROLE_VISITOR
+						) or (
+							$this->getUser('authKey') === $this->getInput('ZWII_AUTH_KEY') and
+							$this->getUser('role') * self::MAX_PROFILS + $this->getUser('profil')
+						) >= ($this->getData(['page', $pageId, 'role']) * self::MAX_PROFILS + $this->getData(['page', $pageId, 'profil']))
 					)
-					or (
-						$this->getUser('authKey') === $this->getInput('ZWII_AUTH_KEY')
-						and
-						$this->getUser('role') * self::MAX_PROFILS + $this->getUser('profil')) >= ($this->getData(['page', $pageId, 'role']) * self::MAX_PROFILS + $this->getData(['page', $pageId, 'profil'])
-
-					)
-				)
 			) {
 				if ($pagePosition !== 0) {
 					$this->hierarchy['visible'][$parentId][] = $pageId;
@@ -888,7 +861,6 @@ class common
 
 	/**
 	 * Génère un fichier json avec la liste des pages
-	 *
 	 */
 	private function tinyMcePages()
 	{
@@ -976,8 +948,8 @@ class common
 				// Check de l'existence
 				// Également utile pour les checkbox qui ne retournent rien lorsqu'elles ne sont pas cochées
 				if (
-					array_key_exists($firstKey, $values)
-					and array_key_exists($secondKey, $values[$firstKey])
+					array_key_exists($firstKey, $values) and
+					array_key_exists($secondKey, $values[$firstKey])
 				) {
 					// Retourne la valeur filtrée
 					if ($filter) {
@@ -1065,23 +1037,23 @@ class common
 		// Administrateur, toutes les permissions
 		if ($this->getUser('role') === self::ROLE_ADMIN) {
 			return true;
-		} elseif ($this->getUser('role') <= self::ROLE_VISITOR) { // Groupe sans autorisation
+		} elseif ($this->getUser('role') <= self::ROLE_VISITOR) {  // Groupe sans autorisation
 			return false;
 		} elseif (
 			// Groupe avec profil, consultation des autorisations sur deux clés
-			$key1
-			&& $key2
-			&& $this->user
-			&& $this->getData(['profil', $this->user['role'], $this->user['profil'], $key1])
-			&& array_key_exists($key2, $this->getData(['profil', $this->user['role'], $this->user['profil'], $key1]))
+			$key1 &&
+			$key2 &&
+			$this->user &&
+			$this->getData(['profil', $this->user['role'], $this->user['profil'], $key1]) &&
+			array_key_exists($key2, $this->getData(['profil', $this->user['role'], $this->user['profil'], $key1]))
 		) {
 			return $this->getData(['profil', $this->user['role'], $this->user['profil'], $key1, $key2]);
 			// Groupe avec profil, consultation des autorisations sur une seule clé
 		} elseif (
-			$key1
-			&& $this->user
-			&& $this->getData(['profil', $this->user['role'], $this->user['profil']])
-			&& array_key_exists($key1, $this->getData(['profil', $this->user['role'], $this->user['profil']]))
+			$key1 &&
+			$this->user &&
+			$this->getData(['profil', $this->user['role'], $this->user['profil']]) &&
+			array_key_exists($key1, $this->getData(['profil', $this->user['role'], $this->user['profil']]))
 		) {
 			return $this->getData(['profil', $this->user['role'], $this->user['profil'], $key1]);
 		} else {
@@ -1102,9 +1074,9 @@ class common
 	public function isConnected()
 	{
 		return (
-			!empty($this->getUser('authKey'))
-			&&
-			$this->getUser('authKey') === $this->getInput('ZWII_AUTH_KEY'));
+			!empty($this->getUser('authKey')) &&
+			$this->getUser('authKey') === $this->getInput('ZWII_AUTH_KEY')
+		);
 	}
 
 	/**
@@ -1115,7 +1087,6 @@ class common
 	{
 		return ($this->checkCSRF() and $this->input['_POST'] !== []);
 	}
-
 
 	/**
 	 * Retourne une chemin localisé pour l'enregistrement des données
@@ -1137,7 +1108,6 @@ class common
 		return ($folder);
 	}
 
-
 	/**
 	 * Génère un fichier un fichier sitemap.xml
 	 * https://github.com/icamys/php-sitemap-generator
@@ -1145,20 +1115,18 @@ class common
 	 * Sinon contient id de la page à créer
 	 * @param string Valeurs possibles
 	 */
-
-
 	public function updateSitemap()
 	{
 		// Le drapeau prend true quand au moins une page est trouvée
 		$flag = false;
 
-		// Rafraîchit la liste des pages après une modification de pageId notamment 
+		// Rafraîchit la liste des pages après une modification de pageId notamment
 		$this->buildHierarchy();
 
 		// Actualise la liste des pages pour TinyMCE
 		$this->tinyMcePages();
 
-		//require_once 'core/vendor/sitemap/SitemapGenerator.php';	
+		// require_once 'core/vendor/sitemap/SitemapGenerator.php';
 
 		$timezone = $this->getData(['config', 'timezone']);
 		$outputDir = getcwd();
@@ -1174,12 +1142,11 @@ class common
 		// sitemap file name
 		$sitemap->setSitemapFileName('sitemap.xml');
 
-
 		// Set the sitemap index file name
 		$sitemap->setSitemapIndexFileName('sitemap-index.xml');
 
 		$datetime = new DateTime(date('c'));
-		$datetime->format(DateTime::ATOM); // Updated ISO8601
+		$datetime->format(DateTime::ATOM);  // Updated ISO8601
 
 		foreach ($this->getHierarchy() as $parentPageId => $childrenPageIds) {
 			// Exclure les barres et les pages non publiques et les pages masquées
@@ -1198,9 +1165,9 @@ class common
 			}
 			// Articles du blog
 			if (
-				$this->getData(['page', $parentPageId, 'moduleId']) === 'blog'
-				&& !empty($this->getData(['module', $parentPageId]))
-				&& $this->getData(['module', $parentPageId, 'posts'])
+				$this->getData(['page', $parentPageId, 'moduleId']) === 'blog' &&
+				!empty($this->getData(['module', $parentPageId])) &&
+				$this->getData(['module', $parentPageId, 'posts'])
 			) {
 				foreach ($this->getData(['module', $parentPageId, 'posts']) as $articleId => $article) {
 					if ($this->getData(['module', $parentPageId, 'posts', $articleId, 'state']) === true) {
@@ -1265,13 +1232,11 @@ class common
 		return (file_exists('sitemap.xml') && file_exists('robots.txt'));
 	}
 
-
-
 	/**
 	 * Crée une miniature à partir d'une image source.
 	 * Cette fonction prend en charge les formats raster (JPEG, PNG, GIF, WebP, AVIF) et vectoriels (SVG).
 	 * Pour les images vectorielles (SVG), aucune redimension n'est effectuée : une copie est réalisée.
-	 * 
+	 *
 	 * @param string $src Chemin de l'image source.
 	 * @param string $dest Chemin de l'image destination (avec le nom du fichier et l'extension).
 	 * @param int $desired_width Largeur demandée pour la miniature (ignorée pour les SVG).
@@ -1313,11 +1278,11 @@ class common
 				if (function_exists('imagecreatefromavif')) {
 					$source_image = imagecreatefromavif($src);
 				} else {
-					return false; // AVIF non supporté
+					return false;  // AVIF non supporté
 				}
 				break;
 			default:
-				return false; // Format non pris en charge
+				return false;  // Format non pris en charge
 		}
 
 		// Image valide (formats raster uniquement)
@@ -1352,10 +1317,8 @@ class common
 			}
 		}
 
-		return false; // En cas d'échec
+		return false;  // En cas d'échec
 	}
-
-
 
 	/**
 	 * Envoi un mail
@@ -1377,7 +1340,7 @@ class common
 		try {
 			// Paramètres SMTP perso
 			if ($this->getdata(['config', 'smtp', 'enable'])) {
-				//$mail->SMTPDebug = PHPMailer\PHPMailer\SMTP::DEBUG_CLIENT;
+				// $mail->SMTPDebug = PHPMailer\PHPMailer\SMTP::DEBUG_CLIENT;
 				$mail->isSMTP();
 				$mail->SMTPAutoTLS = false;
 				$mail->SMTPSecure = false;
@@ -1436,8 +1399,6 @@ class common
 		}
 	}
 
-
-
 	/**
 	 * Effacer un dossier non vide.
 	 * @param string URL du dossier à supprimer
@@ -1452,7 +1413,6 @@ class common
 		}
 		return (rmdir($path));
 	}
-
 
 	/*
 	 * Copie récursive de dossiers
@@ -1472,10 +1432,9 @@ class common
 
 		// Boucler dans le dossier source en l'absence d'échec de lecture écriture
 		while (
-			$success
-			and $file = readdir($dir)
+			$success and
+			$file = readdir($dir)
 		) {
-
 			if (($file != '.') && ($file != '..')) {
 				if (is_dir($src . '/' . $file)) {
 					// Appel récursif des sous-dossiers
@@ -1489,7 +1448,6 @@ class common
 		}
 		return $success;
 	}
-
 
 	/**
 	 * Fonction de parcours des données de module
@@ -1523,7 +1481,7 @@ class common
 	{
 		$zip = new ZipArchive();
 		$zip->open($fileName, ZipArchive::CREATE | ZipArchive::OVERWRITE);
-		//$directory = 'site/';
+		// $directory = 'site/';
 		$files = new RecursiveIteratorIterator(
 			new RecursiveCallbackFilterIterator(
 				new RecursiveDirectoryIterator(
@@ -1555,7 +1513,6 @@ class common
 			case 'home':
 				return ($this->getData(['config', 'homePageId']));
 			default:
-
 				return ($this->getData(['course', self::$siteContent, 'homePageId']));
 		}
 	}
@@ -1574,8 +1531,8 @@ class common
 		}
 
 		// Création de l'entrée de journal
-		$dataLog = helper::dateUTF8('%Y%m%d', time(), self::$i18nUI) . ';' .
-			helper::dateUTF8('%H:%M', time(), self::$i18nUI) . ';';
+		$dataLog = helper::dateUTF8('%Y%m%d', time(), self::$i18nUI) . ';'
+			. helper::dateUTF8('%H:%M', time(), self::$i18nUI) . ';';
 		$dataLog .= helper::getIp($this->getData(['config', 'connect', 'anonymousIp'])) . ';';
 		$dataLog .= empty($this->getUser('id')) ? 'visitor;' : $this->getUser('id') . ';';
 		$dataLog .= $message ? $this->getUrl() . ';' . $message : $this->getUrl();
@@ -1601,7 +1558,7 @@ class common
 
 			if (file_exists($oldFile)) {
 				if ($i == self::LOG_MAXARCHIVE - 1) {
-					unlink($oldFile); // Supprimer le plus ancien
+					unlink($oldFile);  // Supprimer le plus ancien
 				} else {
 					rename($oldFile, $newFile);
 				}
@@ -1633,7 +1590,6 @@ class common
 	 * @param string $serStatus teacher ou student ou admin
 	 * @return array
 	 * CETTE FONCTION EST UTILISEE PAR LAYOUT
-	 *
 	 */
 	public function getCoursesByProfil()
 	{
@@ -1648,12 +1604,12 @@ class common
 				foreach ($courses as $courseId => $value) {
 					// Affiche les espaces gérés par l'éditeur, les espaces où il participe et les espaces anonymes
 					if (
-							// le membre est inscrit
-						($this->getData(['enrolment', $courseId]) && array_key_exists($this->getUser('id'), $this->getData(['enrolment', $courseId])))
+						// le membre est inscrit
+						($this->getData(['enrolment', $courseId]) && array_key_exists($this->getUser('id'), $this->getData(['enrolment', $courseId]))) ||
 						// Il est l'auteur
-						|| $this->getUser('id') === $this->getData(['course', $courseId, 'author'])
+						$this->getUser('id') === $this->getData(['course', $courseId, 'author']) ||
 						// Le cours est ouvert
-						|| $this->getData(['course', $courseId, 'enrolment']) === self::COURSE_ENROLMENT_GUEST
+						$this->getData(['course', $courseId, 'enrolment']) === self::COURSE_ENROLMENT_GUEST
 					) {
 						$filter[$courseId] = $courses[$courseId];
 					}
@@ -1661,10 +1617,10 @@ class common
 				return $filter;
 			case self::ROLE_MEMBER:
 				foreach ($courses as $courseId => $value) {
-					// Affiche les espaces du participant et les espaces anonymes 
+					// Affiche les espaces du participant et les espaces anonymes
 					if (
-						($this->getData(['enrolment', $courseId]) && array_key_exists($this->getUser('id'), $this->getData(['enrolment', $courseId])))
-						|| $this->getData(['course', $courseId, 'enrolment']) === self::COURSE_ENROLMENT_GUEST
+						($this->getData(['enrolment', $courseId]) && array_key_exists($this->getUser('id'), $this->getData(['enrolment', $courseId]))) ||
+						$this->getData(['course', $courseId, 'enrolment']) === self::COURSE_ENROLMENT_GUEST
 					) {
 						$filter[$courseId] = $courses[$courseId];
 					}
@@ -1700,5 +1656,42 @@ class common
 			default:
 				return $this->getData(['user', $userId, 'firstname']);
 		}
+	}
+
+	/**
+	 * @param string $resource Database name
+	 * @param string $id set id to check if exist in Database
+	 * @return mixed string $id not set generate a new ID
+	 * 				 bool $id presence in database
+	 */
+	public function resourceId($resource, $id = null)
+	{
+		// Générer un id
+		if (is_null($id)) {
+			do {
+				$id = $this->genererIdAlphanum(self::ID_LENGTH);
+			} while ($this->getData([$resource, $id]));
+			return $id;
+		}
+		// Check un id
+		else {
+			return !is_null($this->getData([$resource, $id]));
+		}
+	}
+
+	/**
+	 * Generates a random alphanumeric ID of specified length.
+	 *
+	 * This function creates a random string containing numbers and letters
+	 * (both uppercase and lowercase) using cryptographically secure random
+	 * number generation.
+	 *
+	 * @param int $length The length of the ID to generate (default: 6)
+	 * @return string The generated alphanumeric ID
+	 */
+	private function genererIdAlphanum($lenght = 6)
+	{
+		$car = '0123456789abcdefghijklmnopqrstuvwxyz';
+		return substr(str_shuffle($car), 0, $lenght);
 	}
 }

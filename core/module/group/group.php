@@ -129,9 +129,11 @@ class group extends common
 				'access' => false
 			]); // Soumission du formulaire
 		} elseif ($this->isPost()) {
-			$groupId = uniqid();
+			// Générer un id unique
+			$groupId = $this->resourceId('group');
 			$groupTitle = $this->getInput('groupAddTitle', helper::FILTER_STRING_SHORT, true);
-			if (in_array($groupTitle, $this->getData(['group'])) === false) {
+			// Contrôle la clé unique
+			if ($this->resourceId('group', $groupId) === false) {
 				$this->setData([
 					'group',
 					$groupId,
@@ -142,13 +144,6 @@ class group extends common
 					'redirect' => helper::baseUrl() . 'group',
 					'notification' => helper::translate('Groupe créé'),
 					'state' => true
-				]);        // Valeurs en sortie
-			} else {
-				// Valeurs en sortie
-				$this->addOutput([
-					'redirect' => helper::baseUrl() . 'group/add',
-					'notification' => helper::translate('Ce nom du groupe existe déjà'),
-					'state' => false
 				]);
 			}
 		}
@@ -171,11 +166,13 @@ class group extends common
 				'access' => false
 			]);
 		} elseif ($this->isPost()) {
+			$groupId = $this->getUrl(2);
 			$groupTitle = $this->getInput('groupEditTitle', helper::FILTER_STRING_SHORT, true);
-			if (in_array($groupTitle, $this->getData(['group'])) === false) {
+			// La clé doit exister pour le groupe soit mis à jour
+			if ($this->resourceId('group', $groupId) === true) {
 				$this->setData([
 					'group',
-					$this->getUrl(2),
+					$groupId,
 					$groupTitle
 				]);
 				// Valeurs en sortie
@@ -183,13 +180,6 @@ class group extends common
 					'redirect' => helper::baseUrl() . 'group',
 					'notification' => helper::translate('Groupe modifié'),
 					'state' => true
-				]);
-			} else {
-				// Valeurs en sortie
-				$this->addOutput([
-					'redirect' => helper::baseUrl() . 'group/edit/' . $this->getUrl(2),
-					'notification' => helper::translate('Ce nom du groupe existe déjà'),
-					'state' => false
 				]);
 			}
 		}
