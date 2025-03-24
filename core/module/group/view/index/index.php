@@ -2,8 +2,8 @@
 	<div class="col1">
 		<?php echo template::button('groupBack', [
 			'class' => 'buttonGrey',
-			'href' => helper::baseUrl(),
-			'value' => template::ico('home')
+			'href' => helper::baseUrl() . 'user',
+			'value' => template::ico('address-book')
 		]); ?>
 	</div>
 	<div class="col1 offset9">

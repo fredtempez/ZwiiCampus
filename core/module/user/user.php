@@ -253,7 +253,7 @@ class user extends common
 	}
 
 	/**
-	 * Désinscription de tous les utilisateurs
+	 * Désinscription de tous les Participants
 	 * Les désinscriptions ne suppriment pas les historiques
 	 */
 	public function usersDelete()
@@ -271,7 +271,7 @@ class user extends common
 			]);
 		}
 
-		// Inscription des utilisateurs cochés
+		// Inscription des Participants cochés
 		if (
 			isset($_POST['usersDeleteSubmit'])
 		) {
@@ -638,7 +638,7 @@ class user extends common
 	}
 
 	/**
-	 * Liste des utilisateurs
+	 * Liste des Participants
 	 */
 	public function index()
 	{
@@ -761,7 +761,7 @@ class user extends common
 
 		// Valeurs en sortie
 		$this->addOutput([
-			'title' => helper::translate('Utilisateurs'),
+			'title' => helper::translate('Participants'),
 			'view' => 'index',
 			'vendor' => [
 				'datatables'
@@ -1665,7 +1665,7 @@ class user extends common
 	}
 
 	/**
-	 * Importation CSV d'utilisateurs
+	 * Importation CSV d'Participants
 	 */
 	public function import()
 	{
@@ -1819,7 +1819,7 @@ class user extends common
 		}
 		// Valeurs en sortie
 		$this->addOutput([
-			'title' => "Importation d'utilisateurs",
+			'title' => "Importation de participants",
 			'view' => 'import',
 			'notification' => $notification,
 			'state' => $success
@@ -1860,7 +1860,7 @@ class user extends common
 			]);
 		}
 
-		// Inscription des utilisateurs cochés
+		// Inscription des Participants cochés
 		if (
 			isset($_POST['usersTagSubmit'])
 		) {

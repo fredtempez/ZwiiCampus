@@ -1158,10 +1158,6 @@ class layout extends common
                     'help' => 'Langues',
                     'href' => helper::baseUrl() . 'language'
                 ]) . '</li>';
-                $rightItems .= '<li>' . template::ico('users', [
-                    'help' => 'Groupes',
-                    'href' => helper::baseUrl() . 'group'
-                ]) . '</li>';
                 $rightItems .= '<li>' . template::ico('address-book', [
                     'help' => 'Participants',
                     'href' => helper::baseUrl() . 'user'

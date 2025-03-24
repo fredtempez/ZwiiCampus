@@ -1,3 +1,5 @@
+
+<?php echo template::formOpen('userFilterUserForm'); ?>
 <div class="row">
 	<div class="col1">
 		<?php echo template::button('userAddBack', [
@@ -6,46 +8,44 @@
 			'value' => template::ico('home')
 		]); ?>
 	</div>
-	<div class="col1 offset6">
+	<div class="col2 offset1">
+		<?php echo template::button('userGroup', [
+			'href' => helper::baseUrl() . 'group',
+			'value' => 'Groupes',
+			'ico' => 'users'
+		]); ?>
+	</div>
+	<div class="col2">
 		<?php echo template::button('userTag', [
 			'href' => helper::baseUrl() . 'user/tag',
-			'value' => template::ico('tags'),
-			'help' => 'Ajouter des étiquettes'
+			'value' => 'Étiquettes',
+			'ico' => 'tags'
 		]); ?>
 	</div>
-	<div class="col1">
+	<div class="col2">
 		<?php echo template::button('userGroup', [
 			'href' => helper::baseUrl() . 'user/profil',
-			'value' => template::ico('lock'),
-			'help' => 'Permissions par profils'
+			'value' =>'Rôle & Profil',
+			'ico' => 'lock'
 		]); ?>
 	</div>
-	<div class="col1">
+	<div class="col2">
 		<?php echo template::button('userDeleteAll', [
 			'class' => 'userDeleteAll buttonRed',
 			'href' => helper::baseUrl() . 'user/usersDelete/' . $this->getUrl(2),
-			'value' => template::ico('user-times'),
-			'help' => 'Désinscrire en masse',
+			'value' => 'Désinscription',
+			'ico' => 'user-times'
 		]) ?>
 	</div>
-	<div class="col1">
+	<div class="col2">
 		<?php echo template::button('userImport', [
 			'href' => helper::baseUrl() . 'user/import',
-			'value' => template::ico('download'),
+			'value' => 'Importation',
+			'ico' => 'download',
 			'class' => 'buttonGreen',
-			'help' => 'Importer en masse'
-		]); ?>
-	</div>
-	<div class="col1">
-		<?php echo template::button('userAdd', [
-			'href' => helper::baseUrl() . 'user/add',
-			'value' => template::ico('user-plus'),
-			'class' => 'buttonGreen',
-			'help' => 'Ajouter un utilisateur'
 		]); ?>
 	</div>
 </div>
-<?php echo template::formOpen('userFilterUserForm'); ?>
 <div class="row">
 	<div class="col3">
 		<?php echo template::select('userFilterGroup', user::$usersRoles, [
@@ -63,6 +63,14 @@
 		<?php echo template::select('userFilterLastName', user::$alphabet, [
 			'label' => 'Nom commence par',
 			'selected' => isset($_POST['userFilterLastName']) ? $_POST['userFilterLastName'] : 'all',
+		]); ?>
+	</div>
+	<div class="col1 offset2">
+		<?php echo template::button('userAdd', [
+			'href' => helper::baseUrl() . 'user/add',
+			'value' => template::ico('user-plus'),
+			'class' => 'buttonGreen',
+			'help' => 'Ajouter un utilisateur'
 		]); ?>
 	</div>
 </div>

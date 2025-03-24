@@ -845,7 +845,7 @@ class course extends common
             ]);
         }
 
-        // Inscription des utilisateurs cochés
+        // Inscription des Participants cochés
         if (
             isset($_POST['courseUsersAddSubmit'])
         ) {
@@ -1000,7 +1000,7 @@ class course extends common
     }
 
     /**
-     * Désinscription de tous les utilisateurs
+     * Désinscription de tous les Participants
      * Les désinscriptions ne suppriment pas les historiques
      */
     public function usersDelete()
@@ -1019,7 +1019,7 @@ class course extends common
             ]);
         }
 
-        // Inscription des utilisateurs cochés
+        // Inscription des Participants cochés
         if (
             isset($_POST['courseUsersDeleteSubmit'])
         ) {
@@ -1141,7 +1141,7 @@ class course extends common
     }
 
     /**
-     * Désincription de tous les utilisateurs hors les éditeurs
+     * Désincription de tous les Participants hors les éditeurs
      * Effacement des historiques
      */
     public function reset()
