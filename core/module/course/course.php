@@ -173,7 +173,7 @@ class course extends common
             $this->isPost()
         ) {
             // Id du nouveau cours
-            $courseId = $this->getInput('courseAddCourseId', null, true);
+            $courseId = $this->getInput('courseAddCourseId', helper::FILTER_ID, true);
             if (
                 // Confirme la disponibilité de la clé
                 $this->resourceId('course', $courseId) === false
@@ -307,7 +307,7 @@ class course extends common
         ) {
 
             // L'id a t-il changé ?
-            $courseId = $this->getInput('courseEditCourseId', null, true);
+            $courseId = $this->getInput('courseEditCourseId', helper::FILTER_ID, true);
             $oldCourseId = $this->getInput('courseEditCourseIdOld', null, true);
             if (
                 // L'id a été modifié
