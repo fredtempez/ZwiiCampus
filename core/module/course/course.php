@@ -113,7 +113,7 @@ class course extends common
                         ? sprintf('%s %s', $this->getData(['user', $this->getData(['course', $courseId, 'author']), 'firstname']), $this->getData(['user', $this->getData(['course', $courseId, 'author']), 'lastname']))
                         : '';
                     $categorieUrl = helper::baseUrl() . 'course/swap/' . $courseId;
-                    $info = sprintf(' <a href="%s">%s</a><br />Auteur : %s<br />Id : %s<br />', $categorieUrl, $this->getData(['course', $courseId, 'title']), $author, $courseId, );
+                    $info = sprintf(' <a href="%s">%s</a><br />Auteur : %s<br />Id : %s<br />', $categorieUrl, $this->getData(['course', $courseId, 'title']), $author, $courseId,);
                     $enrolment = sprintf(
                         'Accès : %s<br />Inscription : %s<br />',
                         self::$courseAccess[$this->getData(['course', $courseId, 'access'])],
@@ -173,79 +173,85 @@ class course extends common
             $this->isPost()
         ) {
             // Id du nouveau cours
-            $courseId = $this->resourceId('course');
-
-            // Groupes
-            $groups = [];
-            if ($this->getData(['group'])) {
-                foreach ($this->getData(['group']) as $id => $title) {
-                    if ($this->getInput('courseAddGroup' . $id, helper::FILTER_BOOLEAN)) {
-                        $groups[] = $id;
+            $courseId = $this->getInput('courseAddCourseId', null, true);
+            if (
+                // Confirme la disponibilité de la clé
+                $this->resourceId('course', $courseId) === false
+            ) {
+                // Groupes
+                $groups = [];
+                if ($this->getData(['group'])) {
+                    foreach ($this->getData(['group']) as $id => $title) {
+                        if ($this->getInput('courseAddGroup' . $id, helper::FILTER_BOOLEAN)) {
+                            $groups[] = $id;
+                        }
                     }
                 }
-            }
-            // Sauvegarder les données
-            $this->setData([
-                'course',
-                $courseId,
-                [
-                    'title' => $this->getInput('courseAddTitle', helper::FILTER_STRING_SHORT, true),
-                    'author' => $this->getInput('courseAddAuthor'),
-                    'homePageId' => 'accueil',
-                    'category' => $this->getInput('courseAddCategorie'),
-                    'description' => $this->getInput('courseAddDescription', helper::FILTER_STRING_SHORT, true),
-                    'access' => $this->getInput('courseAddAccess', helper::FILTER_INT),
-                    'openingDate' => $this->getInput('courseAddOpeningDate', helper::FILTER_DATETIME),
-                    'closingDate' => $this->getInput('courseAddClosingDate', helper::FILTER_DATETIME),
-                    'enrolment' => $this->getInput('courseAddEnrolment', helper::FILTER_INT),
-                    'enrolmentKey' => $this->getInput('courseAddEnrolmentKey'),
-                    'limitEnrolment' => $this->getInput('courseAddEnrolmentLimit', helper::FILTER_BOOLEAN),
-                    'limitEnrolmentDate' => $this->getInput('courseAddEnrolmentLimitDate', helper::FILTER_DATETIME),
-                    'report' => $this->getInput('courseAddEnrolmentReport', helper::FILTER_BOOLEAN),
-                    'group' => $groups,
-                ]
-            ]);
-
-            // Les dossiers de l'espace sont créés en l'absence de notice
-            if (empty(self::$inputNotices)) {
-
-                // Créer la structure de données
-                mkdir(self::DATA_DIR . $courseId);
-
-                $this->initDB('page', $courseId);
-                $this->initDB('module', $courseId);
-                $this->initDB('theme', $courseId);
-                $this->initData('page', $courseId);
-                $this->initData('module', $courseId);
-                $this->initData('theme', $courseId);
-
-                // Pointer RFM sur le dossier de l'espace
-                // self::$siteContent = $courseId;
-                // Ordonne les pages par position
-                $this->buildHierarchy();
-
-                // BDD des inscrits
+                // Sauvegarder les données
                 $this->setData([
-                    'enrolment',
+                    'course',
                     $courseId,
-                    []
+                    [
+                        'title' => $this->getInput('courseAddTitle', helper::FILTER_STRING_SHORT, true),
+                        'author' => $this->getInput('courseAddAuthor'),
+                        'homePageId' => 'accueil',
+                        'category' => $this->getInput('courseAddCategorie'),
+                        'description' => $this->getInput('courseAddDescription', helper::FILTER_STRING_SHORT, true),
+                        'access' => $this->getInput('courseAddAccess', helper::FILTER_INT),
+                        'openingDate' => $this->getInput('courseAddOpeningDate', helper::FILTER_DATETIME),
+                        'closingDate' => $this->getInput('courseAddClosingDate', helper::FILTER_DATETIME),
+                        'enrolment' => $this->getInput('courseAddEnrolment', helper::FILTER_INT),
+                        'enrolmentKey' => $this->getInput('courseAddEnrolmentKey'),
+                        'limitEnrolment' => $this->getInput('courseAddEnrolmentLimit', helper::FILTER_BOOLEAN),
+                        'limitEnrolmentDate' => $this->getInput('courseAddEnrolmentLimitDate', helper::FILTER_DATETIME),
+                        'report' => $this->getInput('courseAddEnrolmentReport', helper::FILTER_BOOLEAN),
+                        'group' => $groups,
+                    ]
                 ]);
 
-                // Dossier du gestionnaire de fichier
-                mkdir(self::FILE_DIR . 'source/' . $courseId);
+                // Les dossiers de l'espace sont créés en l'absence de notice
+                if (empty(self::$inputNotices)) {
 
-                // Copie du thème
-                $sourceId = $this->getInput('courseAddTheme');
-                copy(self::DATA_DIR . $sourceId . '/theme.json', self::DATA_DIR . $courseId . '/theme.json');
-                copy(self::DATA_DIR . $sourceId . '/theme.css', self::DATA_DIR . $courseId . '/theme.css');
+                    // Créer la structure de données
+                    mkdir(self::DATA_DIR . $courseId);
+
+                    $this->initDB('page', $courseId);
+                    $this->initDB('module', $courseId);
+                    $this->initDB('theme', $courseId);
+                    $this->initData('page', $courseId);
+                    $this->initData('module', $courseId);
+                    $this->initData('theme', $courseId);
+
+                    // Pointer RFM sur le dossier de l'espace
+                    // self::$siteContent = $courseId;
+                    // Ordonne les pages par position
+                    $this->buildHierarchy();
+
+                    // BDD des inscrits
+                    $this->setData([
+                        'enrolment',
+                        $courseId,
+                        []
+                    ]);
+
+                    // Dossier du gestionnaire de fichier
+                    mkdir(self::FILE_DIR . 'source/' . $courseId);
+
+                    // Copie du thème
+                    $sourceId = $this->getInput('courseAddTheme');
+                    copy(self::DATA_DIR . $sourceId . '/theme.json', self::DATA_DIR . $courseId . '/theme.json');
+                    copy(self::DATA_DIR . $sourceId . '/theme.css', self::DATA_DIR . $courseId . '/theme.css');
+                }
+
+                // Valeurs en sortie
+                $this->addOutput([
+                    'redirect' => helper::baseUrl() . 'course',
+                    'notification' => helper::translate('Espace créé'),
+                    'state' => true
+                ]);
+            } else {
+                self::$inputNotices['courseAddCourseId'] = helper::translate('Identifiant déjà utilisé');
             }
-
-            // Valeurs en sortie
-            $this->addOutput([
-                'redirect' => helper::baseUrl() . 'course',
-                'notification' => helper::translate('Espace créé'),
-                'state' => true
-            ]);
         }
 
         // Liste des enseignants pour le sélecteur d'auteurs
@@ -297,42 +303,101 @@ class course extends common
 
         // Soumission du formulaire
         if (
-            //$this->getUser('permission', __CLASS__, __FUNCTION__) === true &&
             $this->isPost()
         ) {
-            // Groupes
-            foreach ($this->getData(['group']) as $id => $title) {
-                if ($this->getInput('courseEditGroup' . $id, helper::FILTER_BOOLEAN)) {
-                    $groups[] = $id;
-                }
-            }
-            $this->setData([
-                'course',
-                $courseId,
-                [
-                    'title' => $this->getInput('courseEditTitle', helper::FILTER_STRING_SHORT, true),
-                    'author' => $this->getInput('courseEditAuthor'),
-                    'homePageId' => $this->getInput('courseEditHomePageId'),
-                    'category' => $this->getInput('courseEditCategorie'),
-                    'description' => $this->getInput('courseEditDescription', helper::FILTER_STRING_LONG, true),
-                    'access' => $this->getInput('courseEditAccess', helper::FILTER_INT),
-                    'openingDate' => $this->getInput('courseOpeningDate', helper::FILTER_DATETIME),
-                    'closingDate' => $this->getInput('courseClosingDate', helper::FILTER_DATETIME),
-                    'enrolment' => $this->getInput('courseEditEnrolment', helper::FILTER_INT),
-                    'enrolmentKey' => $this->getInput('courseEditEnrolmentKey'),
-                    'limitEnrolment' => $this->getInput('courseEditEnrolmentLimit', helper::FILTER_BOOLEAN),
-                    'limitEnrolmentDate' => $this->getInput('courseEditEnrolmentLimitDate', helper::FILTER_DATETIME),
-                    'report' => $this->getInput('courseEditEnrolmentReport', helper::FILTER_BOOLEAN),
-                    'group' => $groups,
-                ]
-            ]);
 
-            // Valeurs en sortie
-            $this->addOutput([
-                'redirect' => helper::baseUrl() . 'course/manage/' . $this->getUrl(2),
-                'notification' => helper::translate('Espace modifié'),
-                'state' => true
-            ]);
+            // L'id a t-il changé ?
+            $courseId = $this->getInput('courseEditCourseId', null, true);
+            $oldCourseId = $this->getInput('courseEditCourseIdOld', null, true);
+            if (
+                // L'id a été modifié
+                $courseId !== $oldCourseId &&
+                // Le nouvel ID est disponible                
+                $this->resourceId('course', $courseId) === false
+            ) {
+
+                // Mettre à jour le contenu des pages pour adapter les url
+                $contentPath = self::DATA_DIR . $oldCourseId . '/content/';
+                $htmlFiles = glob($contentPath . '*.html');;
+                foreach ($htmlFiles as $file) {
+                    $html = file_get_contents($file);
+                    $html = str_replace($oldCourseId, $courseId, $html);
+                    // Get filename from path and create new path
+                    $filename = basename($file);
+                    file_put_contents(self::DATA_DIR . $oldCourseId . '/content/' . $filename, $html);
+                }
+
+                /**
+                 * Copie des dossiers 
+                 */
+                // Delete destination directory if it exists
+                if (is_dir(self::DATA_DIR . $courseId)) {
+                    $this->deleteDir(self::DATA_DIR . $courseId);
+                }
+                // Renommer les dossiers data
+                rename(self::DATA_DIR . $oldCourseId, self::DATA_DIR . $courseId);
+
+                // Delete destination directory if it exists
+                if (is_dir(self::FILE_DIR . 'source/' . $courseId)) {
+                    $this->deleteDir(self::FILE_DIR . 'source/' . $courseId);
+                }
+                // Dossier dans RFM si existant
+                if (is_dir(self::FILE_DIR . 'source/' . $oldCourseId)) {
+                    rename(self::FILE_DIR . 'source/' . $oldCourseId, self::FILE_DIR . 'source/' . $courseId);
+                }
+
+                // Met à jour les inscriptions
+                $this->setData(['enrolment', $courseId, $this->getData(['enrolment', $oldCourseId])]);
+
+
+                // Enfin efface l'ancien espace
+                $this->deleteData(['course', $oldCourseId]);
+            } elseif (
+                // L'id a été modifié
+                $courseId !== $oldCourseId &&
+                // Le nouvel ID n'est pas disponible                
+                $this->resourceId('course', $courseId) === true
+            ) {
+                self::$inputNotices['courseEditCourseId'] = helper::translate('Identifiant déjà utilisé');
+                // Remettre la valeur initiale pour le sélecteur de pages
+                $courseId = $oldCourseId;
+            }
+            // Traitement sans notice 
+            if (empty(self::$inputNotices)) {
+                // Groupes
+                foreach ($this->getData(['group']) as $id => $title) {
+                    if ($this->getInput('courseEditGroup' . $id, helper::FILTER_BOOLEAN)) {
+                        $groups[] = $id;
+                    }
+                }
+                $this->setData([
+                    'course',
+                    $courseId,
+                    [
+                        'title' => $this->getInput('courseEditTitle', helper::FILTER_STRING_SHORT, true),
+                        'author' => $this->getInput('courseEditAuthor'),
+                        'homePageId' => $this->getInput('courseEditHomePageId'),
+                        'category' => $this->getInput('courseEditCategorie'),
+                        'description' => $this->getInput('courseEditDescription', helper::FILTER_STRING_LONG, true),
+                        'access' => $this->getInput('courseEditAccess', helper::FILTER_INT),
+                        'openingDate' => $this->getInput('courseOpeningDate', helper::FILTER_DATETIME),
+                        'closingDate' => $this->getInput('courseClosingDate', helper::FILTER_DATETIME),
+                        'enrolment' => $this->getInput('courseEditEnrolment', helper::FILTER_INT),
+                        'enrolmentKey' => $this->getInput('courseEditEnrolmentKey'),
+                        'limitEnrolment' => $this->getInput('courseEditEnrolmentLimit', helper::FILTER_BOOLEAN),
+                        'limitEnrolmentDate' => $this->getInput('courseEditEnrolmentLimitDate', helper::FILTER_DATETIME),
+                        'report' => $this->getInput('courseEditEnrolmentReport', helper::FILTER_BOOLEAN),
+                        'group' => $groups,
+                    ]
+                ]);
+
+                // Valeurs en sortie
+                $this->addOutput([
+                    'redirect' => helper::baseUrl() . 'course/manage/' . $courseId,
+                    'notification' => helper::translate('Espace modifié'),
+                    'state' => true
+                ]);
+            }
         }
 
         // Liste des enseignants pour le sélecteur d'auteurs
@@ -357,7 +422,6 @@ class course extends common
 
         // Données pour le formulaire
         self::$pagesList = $this->getData(['page']);
-
         // Exclure les barres et les pages désactivées
         foreach (self::$pagesList as $pageId => $page) {
             if (
@@ -793,12 +857,12 @@ class course extends common
                     $group,
                     $this->getData(['user', $userId, 'tags']),
                     array_key_exists('lastPageView', $userValue) && isset($pages['page'][$userValue['lastPageView']]['title'])
-                    ? $pages['page'][$userValue['lastPageView']]['title']
-                    : helper::translate('Aucune'),
+                        ? $pages['page'][$userValue['lastPageView']]['title']
+                        : helper::translate('Aucune'),
                     array_key_exists('lastPageView', $userValue)
-                    // ? helper::dateUTF8('%d/%m/%Y', $userValue['datePageView'])
-                    ? $userValue['datePageView']
-                    : helper::translate('Jamais'),
+                        // ? helper::dateUTF8('%d/%m/%Y', $userValue['datePageView'])
+                        ? $userValue['datePageView']
+                        : helper::translate('Jamais'),
                     $reportButton,
                     template::button('userDelete' . $userId, [
                         'class' => 'userDelete buttonRed',
@@ -1483,8 +1547,8 @@ class course extends common
                     $this->getData(['user', $userId, 'lastname']),
                     $this->getData(['user', $userId, 'mail']),
                     isset($pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])])
-                    ? $pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])]
-                    : $this->getData(['enrolment', $courseId, $userId, 'lastPageView']) . ' (supprimée)',
+                        ? $pages[$this->getData(['enrolment', $courseId, $userId, 'lastPageView'])]
+                        : $this->getData(['enrolment', $courseId, $userId, 'lastPageView']) . ' (supprimée)',
                     helper::dateUTF8('%d/%d/%Y', $this->getData(['enrolment', $courseId, $userId, 'datePageView'])),
                     helper::dateUTF8('%H:%M', $this->getData(['enrolment', $courseId, $userId, 'datePageView'])),
                     /** La lecture de la progression s'effectue selon la nouvelle méthode (progression dans la base des enrolements)
@@ -1492,8 +1556,8 @@ class course extends common
                      *  TRANSITOIRE A SUPPRIMER EN FIN D'ANNEE
                      **/
                     array_key_exists('progress', $userValue)
-                    ? $userValue['progress']
-                    : ($viewPages ? min(round(($viewPages * 100) / $sumPages, 1), 100) . ' %' : '0%'),
+                        ? $userValue['progress']
+                        : ($viewPages ? min(round(($viewPages * 100) / $sumPages, 1), 100) . ' %' : '0%'),
                     //number_format(min(round(($viewPages * 100) / $sumPages, 1) / 100, 1), 2, ','),
                 ];
 
@@ -1995,8 +2059,7 @@ class course extends common
                     if (file_exists(self::TEMP_DIR . $tempFolder . '/course.json')) {
                         $courseData = json_decode(file_get_contents(self::TEMP_DIR . $tempFolder . '/course.json'), true);
                         // Lire l'id du cours
-                        $courseIds = array_keys($courseData);
-                        ;
+                        $courseIds = array_keys($courseData);;
                         $courseId = $courseIds[0];
                         $success = true;
                     } else {
@@ -2087,7 +2150,7 @@ class course extends common
                     $this->getUser('permission', __CLASS__, $function)
                     && $this->getUser('role') === self::$actions[$function]
                     &&
-                        // Permission d'accéder aux espaces dans lesquels le membre auteur
+                    // Permission d'accéder aux espaces dans lesquels le membre auteur
                     (
                         $this->getData(['enrolment', $courseId]) && ($this->getUser('id') === $this->getData(['course', $courseId, 'author']))
                     )
@@ -2273,9 +2336,8 @@ class course extends common
                 ) {
                     // Le participant est inscrit
                     $r = in_array($userId, array_keys($this->getData(['enrolment', $courseId])))
-                    // Ou le participant est enseignant
-                    || $this->getData(['course', $courseId, 'author']) === $userId;
-
+                        // Ou le participant est enseignant
+                        || $this->getData(['course', $courseId, 'author']) === $userId;
                 }
                 break;
             // Visiteur non connecté

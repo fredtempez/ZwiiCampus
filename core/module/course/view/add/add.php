@@ -18,12 +18,17 @@
                 <?php echo helper::translate('Paramètres'); ?>
             </h4>
             <div class="row">
-                <div class="col12">
+                <div class="col2">
+                    <?php echo template::text('courseAddCourseId', [
+                        'label' => 'Identifiant',
+                        'value' => $this->resourceId('course'),
+                    ]); ?>
+                </div>
+                <div class="col10">
                     <?php echo template::text('courseAddTitle', [
                         'label' => 'Titre',
                     ]); ?>
                 </div>
-
             </div>
             <div class="row">
                 <div class="col12">

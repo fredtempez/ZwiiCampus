@@ -18,13 +18,21 @@
                 <?php echo helper::translate('Paramètres'); ?>
             </h4>
             <div class="row">
-                <div class="col12">
+                <div class="col2">
+                    <?php echo template::text('courseEditCourseId', [
+                        'label' => 'Identifiant',
+                        'value' => $this->getUrl(2),
+                    ]); ?>
+                    <?php echo template::hidden('courseEditCourseIdOld', [
+                        'value' => $this->getUrl(2),
+                    ]);?>
+                </div>
+                <div class="col10">
                     <?php echo template::text('courseEditTitle', [
                         'label' => 'Titre',
                         'value' => $this->getdata(['course', $this->getUrl(2), 'title'])
                     ]); ?>
                 </div>
-
             </div>
             <div class="row">
                 <div class="col12">

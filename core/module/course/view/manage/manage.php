@@ -78,14 +78,20 @@
                 <?php echo helper::translate('Paramètres'); ?>
             </h4>
             <div class="row">
-                <div class="col12">
+                <div class="col2">
+                    <?php echo template::text('courseManageCourseId', [
+                        'label' => 'Identifiant',
+                        'value' => $this->getUrl(2),
+                        'readonly' => true,
+                    ]); ?>
+                </div>
+                <div class="col10">
                     <?php echo template::text('courseManageShortTitle', [
                         'label' => 'Titre',
                         'value' => $this->getdata(['course', $this->getUrl(2), 'title']),
                         'readonly' => true,
                     ]); ?>
                 </div>
-
             </div>
             <div class="row">
                 <div class="col12">

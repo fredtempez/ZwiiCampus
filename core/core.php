@@ -1662,7 +1662,7 @@ class common
 	 * @param string $resource Database name
 	 * @param string $id set id to check if exist in Database
 	 * @return mixed string $id not set generate a new ID
-	 * 				 bool $id presence in database
+	 * 				 bool $id presence in database. true id exists, false doesn't exist
 	 */
 	public function resourceId($resource, $id = null)
 	{
