@@ -36,7 +36,7 @@
     </div>
 </div>
 <?php if (course::$courses): ?>
-    <?php echo template::table([4, 3, 3, 1, 1], course::$courses, ['Titre court', 'Description', 'Inscription', '', '',], ['id' => 'dataTables']); ?>
+    <?php echo template::table([4, 4, 3, 1], course::$courses, ['Titre court', 'Description', 'Inscription', ''], ['id' => 'dataTables']); ?>
 <?php else: ?>
     <?php echo template::speech('Aucun espace'); ?>
 <?php endif; ?>

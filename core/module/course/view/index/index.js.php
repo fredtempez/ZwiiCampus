@@ -42,17 +42,7 @@ $(document).ready(function () {
         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Tout"]],
         "columnDefs": [
             {
-                target: 2,
-                orderable: false,
-                searchable: false
-            },
-            {
                 target: 3,
-                orderable: false,
-                searchable: false
-            },
-            {
-                target: 4,
                 orderable: false,
                 searchable: false
             }

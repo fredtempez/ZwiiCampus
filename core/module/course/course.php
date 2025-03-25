@@ -12,26 +12,24 @@
  * @license CC Attribution-NonCommercial-NoDerivatives 4.0 International
  * @link http://zwiicms.fr/
  */
-
 class course extends common
 {
-
     public static $actions = [
         'swap' => self::ROLE_VISITOR,
         'suscribe' => self::ROLE_VISITOR,
         'unsuscribe' => self::ROLE_MEMBER,
-        'index' => self::ROLE_EDITOR, // Fait
-        'edit' => self::ROLE_EDITOR, // Fait
-        'manage' => self::ROLE_EDITOR, // Fait
-        'users' => self::ROLE_EDITOR, // fait
-        'usersAdd' => self::ROLE_EDITOR, //Fait
-        'usersDelete' => self::ROLE_EDITOR, //Fait
-        'usersReportExport' => self::ROLE_EDITOR, //fait
-        'userDelete' => self::ROLE_EDITOR, //Fait
-        'userReport' => self::ROLE_MEMBER, //Fait
-        'userReportExport' => self::ROLE_EDITOR, //Fait
-        'backup' => self::ROLE_EDITOR, // Fait
-        'restore' => self::ROLE_EDITOR, //Fait
+        'index' => self::ROLE_EDITOR,  // Fait
+        'edit' => self::ROLE_EDITOR,  // Fait
+        'manage' => self::ROLE_EDITOR,  // Fait
+        'users' => self::ROLE_EDITOR,  // fait
+        'usersAdd' => self::ROLE_EDITOR,  // Fait
+        'usersDelete' => self::ROLE_EDITOR,  // Fait
+        'usersReportExport' => self::ROLE_EDITOR,  // fait
+        'userDelete' => self::ROLE_EDITOR,  // Fait
+        'userReport' => self::ROLE_MEMBER,  // Fait
+        'userReportExport' => self::ROLE_EDITOR,  // Fait
+        'backup' => self::ROLE_EDITOR,  // Fait
+        'restore' => self::ROLE_EDITOR,  // Fait
         'reset' => self::ROLE_EDITOR,
         'clone' => self::ROLE_ADMIN,
         'add' => self::ROLE_ADMIN,
@@ -45,7 +43,7 @@ class course extends common
 
     public static $courseAccess = [
         self::COURSE_ACCESS_OPEN => 'Ouvert',
-        self::COURSE_ACCESS_DATE => 'Période d\'ouverture',
+        self::COURSE_ACCESS_DATE => "Période d'ouverture",
         self::COURSE_ACCESS_CLOSE => 'Fermé',
     ];
 
@@ -62,7 +60,6 @@ class course extends common
 
     public static $courseUsers = [];
 
-
     public static $alphabet = [];
 
     public static $courseGroups = [
@@ -74,7 +71,6 @@ class course extends common
     public static $swapMessage = [];
 
     public static $pagesList = ['accueil' => 'Accueil'];
-
 
     public static $userReport = [];
 
@@ -95,8 +91,8 @@ class course extends common
         self::$siteContent = 'home';
 
         if (
-            $this->getUser('id')
-            && $this->getUser('role')
+            $this->getUser('id') &&
+            $this->getUser('role')
         ) {
             foreach ($this->getData(['course']) as $courseId => $courseValue) {
                 /**
@@ -108,12 +104,17 @@ class course extends common
                 if (
                     $this->permissionControl(__FUNCTION__, $courseId)
                 ) {
-
                     $author = $this->getData(['course', $courseId, 'author'])
                         ? sprintf('%s %s', $this->getData(['user', $this->getData(['course', $courseId, 'author']), 'firstname']), $this->getData(['user', $this->getData(['course', $courseId, 'author']), 'lastname']))
                         : '';
                     $categorieUrl = helper::baseUrl() . 'course/swap/' . $courseId;
-                    $info = sprintf(' <a href="%s">%s</a><br />Auteur : %s<br />Id : %s<br />', $categorieUrl, $this->getData(['course', $courseId, 'title']), $author, $courseId,);
+                    $info = sprintf(
+                        ' <a href="%s">%s</a><br />Auteur : %s<br />Id : %s<br />',
+                        $categorieUrl,
+                        $this->getData(['course', $courseId, 'title']),
+                        $author,
+                        $courseId,
+                    );
                     $enrolment = sprintf(
                         'Accès : %s<br />Inscription : %s<br />',
                         self::$courseAccess[$this->getData(['course', $courseId, 'access'])],
@@ -121,21 +122,26 @@ class course extends common
                     );
                     $users = '';
                     if ($this->getUser('permission', 'course', 'users') === true) {
-                        $users = template::button('categoryUser' . $this->getUrl(2), [
+                        $users = template::ico('address-book', [
                             'href' => helper::baseUrl() . 'course/users/' . $courseId,
-                            'value' => template::ico('address-book'),
-                            'help' => 'Télémétrie'
+                            'help' => 'Télémétrie',
+                            'margin' => 'all',
+                            'help' => 'Participants',
+                            'fontSize' => '1.5em',
                         ]);
                     }
                     self::$courses[] = [
                         $info,
                         $this->getData(['course', $courseId, 'description']),
                         $enrolment,
-                        $users,
-                        template::button('categoryUser' . $courseId, [
+                        $users .
+                        template::ico('sliders', [
                             'href' => helper::baseUrl() . 'course/manage/' . $courseId,
-                            'value' => template::ico('sliders'),
-                            'help' => 'Gérer cet espace'
+                            'help' => 'Gérer cet espace',
+                            'value' => template::ico('pencil'),
+                            'margin' => 'all',
+                            'help' => 'Gérer',
+                            'fontSize' => '1.5em',
                         ])
                     ];
                 }
@@ -144,7 +150,7 @@ class course extends common
 
         // Valeurs en sortie
         $this->addOutput([
-            'title' => helper::translate('Gestionnaire d\'espaces'),
+            'title' => helper::translate("Gestionnaire d'espaces"),
             'view' => 'index',
             'vendor' => [
                 'datatables'
@@ -157,7 +163,6 @@ class course extends common
      */
     public function add()
     {
-
         // Accès limité aux admins
         if (
             $this->getUser('role') !== self::ROLE_ADMIN
@@ -211,7 +216,6 @@ class course extends common
 
                 // Les dossiers de l'espace sont créés en l'absence de notice
                 if (empty(self::$inputNotices)) {
-
                     // Créer la structure de données
                     mkdir(self::DATA_DIR . $courseId);
 
@@ -287,7 +291,6 @@ class course extends common
      */
     public function edit()
     {
-
         // Espace sélectionné
         $courseId = $this->getUrl(2);
 
@@ -305,17 +308,15 @@ class course extends common
         if (
             $this->isPost()
         ) {
-
             // L'id a t-il changé ?
             $courseId = $this->getInput('courseEditCourseId', helper::FILTER_ID, true);
             $oldCourseId = $this->getInput('courseEditCourseIdOld', null, true);
             if (
                 // L'id a été modifié
                 $courseId !== $oldCourseId &&
-                // Le nouvel ID est disponible                
+                // Le nouvel ID est disponible
                 $this->resourceId('course', $courseId) === false
             ) {
-
                 // Mettre à jour le contenu des pages pour adapter les url
                 $contentPath = self::DATA_DIR . $oldCourseId . '/content/';
                 $htmlFiles = glob($contentPath . '*.html');;
@@ -327,9 +328,7 @@ class course extends common
                     file_put_contents(self::DATA_DIR . $oldCourseId . '/content/' . $filename, $html);
                 }
 
-                /**
-                 * Copie des dossiers 
-                 */
+                /** Copie des dossiers */
                 // Delete destination directory if it exists
                 if (is_dir(self::DATA_DIR . $courseId)) {
                     $this->deleteDir(self::DATA_DIR . $courseId);
@@ -349,20 +348,19 @@ class course extends common
                 // Met à jour les inscriptions
                 $this->setData(['enrolment', $courseId, $this->getData(['enrolment', $oldCourseId])]);
 
-
                 // Enfin efface l'ancien espace
                 $this->deleteData(['course', $oldCourseId]);
             } elseif (
                 // L'id a été modifié
                 $courseId !== $oldCourseId &&
-                // Le nouvel ID n'est pas disponible                
+                // Le nouvel ID n'est pas disponible
                 $this->resourceId('course', $courseId) === true
             ) {
                 self::$inputNotices['courseEditCourseId'] = helper::translate('Identifiant déjà utilisé');
                 // Remettre la valeur initiale pour le sélecteur de pages
                 $courseId = $oldCourseId;
             }
-            // Traitement sans notice 
+            // Traitement sans notice
             if (empty(self::$inputNotices)) {
                 // Groupes
                 foreach ($this->getData(['group']) as $id => $title) {
@@ -435,15 +433,15 @@ class course extends common
         // listes des groupes
         foreach ($this->getData(['group']) as $id => $title) {
             self::$userGroups[] = template::checkbox('courseEditGroup' . $id, $id, $title, [
-                'checked' => is_null($this->getData(['course', $courseId, 'group'])) === false ?
-                    in_array($id, $this->getData(['course', $courseId, 'group']))
+                'checked' => is_null($this->getData(['course', $courseId, 'group'])) === false
+                    ? in_array($id, $this->getData(['course', $courseId, 'group']))
                     : '',
             ]);
         }
 
         // Valeurs en sortie
         $this->addOutput([
-            'title' => sprintf('%s %s (%s)', helper::translate('Editer l\'espace'), $this->getData(['course', $courseId, 'title']), $this->getUrl(2)),
+            'title' => sprintf('%s %s (%s)', helper::translate("Editer l'espace"), $this->getData(['course', $courseId, 'title']), $this->getUrl(2)),
             'view' => 'edit'
         ]);
     }
@@ -453,7 +451,6 @@ class course extends common
      */
     public function manage()
     {
-
         // Espace sélectionné
         $courseId = $this->getUrl(2);
 
@@ -503,8 +500,8 @@ class course extends common
         // listes des groupes
         foreach ($this->getData(['group']) as $id => $title) {
             self::$userGroups[] = template::checkbox('courseManageGroup' . $id, $id, $title, [
-                'checked' => is_null($this->getData(['course', $courseId, 'group'])) === false ?
-                    in_array($id, $this->getData(['course', $courseId, 'group']))
+                'checked' => is_null($this->getData(['course', $courseId, 'group'])) === false
+                    ? in_array($id, $this->getData(['course', $courseId, 'group']))
                     : '',
                 'disabled' => true,
             ]);
@@ -512,7 +509,7 @@ class course extends common
 
         // Valeurs en sortie
         $this->addOutput([
-            'title' => sprintf('%s %s (%s)', helper::translate('Gérer l\'espace'), $this->getData(['course', $courseId, 'title']), $this->getUrl(2)),
+            'title' => sprintf('%s %s (%s)', helper::translate("Gérer l'espace"), $this->getData(['course', $courseId, 'title']), $this->getUrl(2)),
             'view' => 'manage'
         ]);
     }
@@ -522,7 +519,6 @@ class course extends common
      */
     public function clone()
     {
-
         // Cours à dupliquer
         $courseId = $this->getUrl(2);
 
@@ -561,9 +557,9 @@ class course extends common
 
         if (
             // Accès limité aux admins
-            $this->getUser('permission', __CLASS__, __FUNCTION__) !== true
+            $this->getUser('permission', __CLASS__, __FUNCTION__) !== true ||
             // Le contenu n'existe pas
-            || $this->getData(['course', $courseId]) === null
+            $this->getData(['course', $courseId]) === null
         ) {
             // Valeurs en sortie
             $this->addOutput([
@@ -598,7 +594,6 @@ class course extends common
      */
     public function category()
     {
-
         if (
             // Accès limité aux admins
             $this->getUser('permission', __CLASS__, __FUNCTION__) !== true
@@ -637,7 +632,6 @@ class course extends common
 
     public function categoryAdd()
     {
-
         if (
             // Accès limité aux admins
             $this->getUser('permission', __CLASS__, __FUNCTION__) !== true
@@ -645,7 +639,7 @@ class course extends common
             // Valeurs en sortie
             $this->addOutput([
                 'access' => false
-            ]); // Soumission du formulaire
+            ]);  // Soumission du formulaire
         } elseif ($this->isPost()) {
             $categoryId = $this->getInput('categoryAddTitle', helper::FILTER_ID, true);
             $this->setData([
@@ -658,8 +652,7 @@ class course extends common
                 'redirect' => helper::baseUrl() . 'course/category',
                 'notification' => helper::translate('Catégorie créée'),
                 'state' => true
-            ]);        // Valeurs en sortie
-
+            ]);  // Valeurs en sortie
         }
         $this->addOutput([
             'title' => helper::translate('Ajouter une catégorie'),
@@ -676,7 +669,7 @@ class course extends common
             // Valeurs en sortie
             $this->addOutput([
                 'access' => false
-            ]); // Soumission du formulaire
+            ]);  // Soumission du formulaire
         } elseif (
             $this->isPost()
         ) {
@@ -703,7 +696,6 @@ class course extends common
 
     public function categoryDelete()
     {
-
         if (
             // Accès limité aux admins
             $this->getUser('permission', __CLASS__, __FUNCTION__) !== true
@@ -735,7 +727,6 @@ class course extends common
 
     public function users()
     {
-
         $courseId = $this->getUrl(2);
 
         // Accès limité au propriétaire, admin ou éditeurs isncrits
@@ -755,15 +746,15 @@ class course extends common
         $courseGroups = $this->getData(['profil']);
         foreach ($courseGroups as $roleId => $roleValue) {
             switch ($roleId) {
-                case "-1":
-                case "0":
+                case '-1':
+                case '0':
                     break;
-                case "3":
+                case '3':
                     self::$courseGroups['30'] = 'Administrateur';
                     $profils['30'] = 0;
                     break;
-                case "1":
-                case "2":
+                case '1':
+                case '2':
                     foreach ($roleValue as $profilId => $profilValue) {
                         if ($profilId) {
                             self::$courseGroups[$roleId . $profilId] = sprintf(helper::translate('Rôle %s - Profil %s'), self::$rolePublics[$roleId], $profilValue['name']);
@@ -794,7 +785,6 @@ class course extends common
             // Tri du tableau par défaut par $userId
             ksort($users);
             foreach ($users as $userId => $userValue) {
-
                 // Compte les rôles valides
                 if (isset($profils[$this->getData(['user', $userId, 'role']) . $this->getData(['user', $userId, 'profil'])])) {
                     $profils[$this->getData(['user', $userId, 'role']) . $this->getData(['user', $userId, 'profil'])]++;
@@ -808,41 +798,43 @@ class course extends common
                     $firstName = $this->getData(['user', $userId, 'firstname']);
                     $lastName = $this->getData(['user', $userId, 'lastname']);
                     if (
-                        $this->getInput('courseFilterGroup', helper::FILTER_INT) > 0
-                        && $this->getInput('courseFilterGroup', helper::FILTER_STRING_SHORT) !== $role . $profil
+                        $this->getInput('courseFilterGroup', helper::FILTER_INT) > 0 &&
+                        $this->getInput('courseFilterGroup', helper::FILTER_STRING_SHORT) !== $role . $profil
                     )
                         continue;
                     // Première lettre du prénom
                     if (
-                        $this->getInput('courseFilterFirstName', helper::FILTER_STRING_SHORT) !== 'all'
-                        && $this->getInput('courseFilterFirstName', helper::FILTER_STRING_SHORT) !== strtoupper(substr($firstName, 0, 1))
+                        $this->getInput('courseFilterFirstName', helper::FILTER_STRING_SHORT) !== 'all' &&
+                        $this->getInput('courseFilterFirstName', helper::FILTER_STRING_SHORT) !== strtoupper(substr($firstName, 0, 1))
                     )
                         continue;
                     // Première lettre du nom
                     if (
-                        $this->getInput('courseFilterLastName', helper::FILTER_STRING_SHORT) !== 'all'
-                        && $this->getInput('courseFilterLastName', helper::FILTER_STRING_SHORT) !== strtoupper(substr($lastName, 0, 1))
+                        $this->getInput('courseFilterLastName', helper::FILTER_STRING_SHORT) !== 'all' &&
+                        $this->getInput('courseFilterLastName', helper::FILTER_STRING_SHORT) !== strtoupper(substr($lastName, 0, 1))
                     )
                         continue;
                 }
 
                 // Progression
-                $viewPages = array_key_exists($userId, $reports) ?
-                    count($reports[$userId]) :
-                    0;
+                $viewPages = array_key_exists($userId, $reports)
+                    ? count($reports[$userId])
+                    : 0;
 
                 // Construction du tableau
                 if ($this->getdata(['course', $courseId, 'report']) === true) {
                     $reportButton = template::button('userReport' . $userId, [
+                        'id' =>'userReport' . $userId,
                         'href' => helper::baseUrl() . 'course/userReport/' . $courseId . '/' . $userId,
                         'value' => (array_key_exists('progress', $userValue) && is_int($userValue['progress']))
                             ? template::ico('chart-line', ['margin' => 'right']) . number_format($userValue['progress']) . ' %'
                             : template::ico('chart-line', ['margin' => 'right']) . ($viewPages ? min(round(($viewPages * 100) / $sumPages, 1), 100) . ' %' : '0%'),
                         'disable' => empty($userValue['datePageView']),
-                        'help' => 'Participation à l\'espace',
+                        'help' => "Participation à l'espace",
                     ]);
                 } else {
-                    $reportButton = template::button('userReport' . $userId, [
+                    $reportButton = template::ico('chart-line', [
+                        'id' =>'userReport'. $userId,
                         'value' => template::ico('chart-line'),
                         'disable' => true,
                         'help' => 'La télémétrie est désactivée',
@@ -853,9 +845,9 @@ class course extends common
                 $group = is_null($group) === false ? implode('', array_map(fn($valeur) => sprintf('<span class="groupTitleLabel">%s</span>', $this->getData(['group', htmlspecialchars($valeur)])), $group)) : '';
                 $name = $this->getData(['user', $userId])
                     ? sprintf('%s %s', $this->getData(['user', $userId, 'lastname']), $this->getData(['user', $userId, 'firstname']))
-                    : sprintf(helper::translate('Compte désinscrit %'), $userId);
+                    : sprintf(helper::translate('Compte désinscrit %s'), $userId);
                 self::$courseUsers[] = [
-                    //$userId,
+                    // $userId,
                     $name,
                     $group,
                     $this->getData(['user', $userId, 'tags']),
@@ -867,11 +859,18 @@ class course extends common
                         ? $userValue['datePageView']
                         : helper::translate('Jamais'),
                     $reportButton,
-                    template::button('userDelete' . $userId, [
-                        'class' => 'userDelete buttonRed',
+                    template::ico('chart-line', [
+                        'id' =>'userReport'. $userId,
+                        'help' => 'La télémétrie est désactivée',
+                        'fontSize' => '1.5em',
+                        'margin' => 'all',
+                    ]) .
+                    template::ico('user-times', [
+                        'class' => 'userDelete icoTextRed',
                         'href' => helper::baseUrl() . 'course/userDelete/' . $courseId . '/' . $userId,
-                        'value' => template::ico('user-times'),
-                        'help' => 'Désinscrire'
+                        'help' => 'Désinscrire',
+                        'fontSize' => '1.5em',
+                        'margin' => 'all',  
                     ])
                 ];
             }
@@ -898,7 +897,6 @@ class course extends common
 
     public function usersAdd()
     {
-
         // Contenu sélectionné
         $courseId = $this->getUrl(2);
 
@@ -919,8 +917,8 @@ class course extends common
             foreach ($_POST as $keyPost => $valuePost) {
                 // Exclure les variables post qui ne sont pas des userId et ne traiter que les non inscrits
                 if (
-                    $this->getData(['user', $keyPost]) !== null
-                    && $this->getData(['enrolment', $courseId, $keyPost]) === null
+                    $this->getData(['user', $keyPost]) !== null &&
+                    $this->getData(['enrolment', $courseId, $keyPost]) === null
                 ) {
                     $this->setData(['enrolment', $courseId, $keyPost, 'history', array()], false);
                 }
@@ -933,15 +931,15 @@ class course extends common
         $courseGroups = $this->getData(['profil']);
         foreach ($courseGroups as $roleId => $roleValue) {
             switch ($roleId) {
-                case "-1":
-                case "0":
+                case '-1':
+                case '0':
                     break;
-                case "3":
+                case '3':
                     self::$courseGroups['30'] = 'Administrateur';
                     $profils['30'] = 0;
                     break;
-                case "1":
-                case "2":
+                case '1':
+                case '2':
                     foreach ($roleValue as $profilId => $profilValue) {
                         if ($profilId) {
                             self::$courseGroups[$roleId . $profilId] = sprintf(helper::translate('Rôle %s - Profil %s'), self::$rolePublics[$roleId], $profilValue['name']);
@@ -969,7 +967,6 @@ class course extends common
         ksort($users);
 
         foreach ($users as $userId => $userValue) {
-
             // Compte les rôles
             if (isset($profils[$this->getData(['user', $userId, 'role']) . $this->getData(['user', $userId, 'profil'])])) {
                 $profils[$this->getData(['user', $userId, 'role']) . $this->getData(['user', $userId, 'profil'])]++;
@@ -977,31 +974,30 @@ class course extends common
 
             // Filtres
             if (
-                isset($_POST['courseFilterGroup'])
-                || isset($_POST['courseFilterFirstName'])
-                || isset($_POST['courseFilterLastName'])
+                isset($_POST['courseFilterGroup']) ||
+                isset($_POST['courseFilterFirstName']) ||
+                isset($_POST['courseFilterLastName'])
             ) {
-
                 // Groupe et profils
                 $role = (string) $this->getData(['user', $userId, 'role']);
                 $profil = (string) $this->getData(['user', $userId, 'profil']);
                 $firstName = $this->getData(['user', $userId, 'firstname']);
                 $lastName = $this->getData(['user', $userId, 'lastname']);
                 if (
-                    $this->getInput('courseFilterGroup', helper::FILTER_INT) > 0
-                    && $this->getInput('courseFilterGroup', helper::FILTER_STRING_SHORT) !== $role . $profil
+                    $this->getInput('courseFilterGroup', helper::FILTER_INT) > 0 &&
+                    $this->getInput('courseFilterGroup', helper::FILTER_STRING_SHORT) !== $role . $profil
                 )
                     continue;
                 // Première lettre du prénom
                 if (
-                    $this->getInput('courseFilterFirstName', helper::FILTER_STRING_SHORT) !== 'all'
-                    && $this->getInput('courseFilterFirstName', helper::FILTER_STRING_SHORT) !== strtoupper(substr($firstName, 0, 1))
+                    $this->getInput('courseFilterFirstName', helper::FILTER_STRING_SHORT) !== 'all' &&
+                    $this->getInput('courseFilterFirstName', helper::FILTER_STRING_SHORT) !== strtoupper(substr($firstName, 0, 1))
                 )
                     continue;
                 // Première lettre du nom
                 if (
-                    $this->getInput('courseFilterLastName', helper::FILTER_STRING_SHORT) !== 'all'
-                    && $this->getInput('courseFilterLastName', helper::FILTER_STRING_SHORT) !== strtoupper(substr($lastName, 0, 1))
+                    $this->getInput('courseFilterLastName', helper::FILTER_STRING_SHORT) !== 'all' &&
+                    $this->getInput('courseFilterLastName', helper::FILTER_STRING_SHORT) !== strtoupper(substr($lastName, 0, 1))
                 )
                     continue;
             }
@@ -1012,7 +1008,7 @@ class course extends common
             // Construction du tableau
             self::$courseUsers[] = [
                 template::checkbox($userId, true, '', ['class' => 'checkboxSelect']),
-                //$userId,
+                // $userId,
                 $this->getData(['user', $userId, 'firstname']),
                 $this->getData(['user', $userId, 'lastname']),
                 $group,
@@ -1072,7 +1068,6 @@ class course extends common
      */
     public function usersDelete()
     {
-
         // Contenu sélectionné
         $courseId = $this->getUrl(2);
 
@@ -1093,8 +1088,8 @@ class course extends common
             foreach ($_POST as $keyPost => $valuePost) {
                 // Exclure les variables post qui ne sont pas des userId et ne traiter que les non inscrits
                 if (
-                    $this->getData(['user', $keyPost]) !== null
-                    && $this->getData(['enrolment', $courseId, $keyPost]) !== null
+                    $this->getData(['user', $keyPost]) !== null &&
+                    $this->getData(['enrolment', $courseId, $keyPost]) !== null
                 ) {
                     $this->deleteData(['enrolment', $courseId, $keyPost]);
                 }
@@ -1105,15 +1100,15 @@ class course extends common
         $courseGroups = $this->getData(['profil']);
         foreach ($courseGroups as $roleId => $roleValue) {
             switch ($roleId) {
-                case "-1":
-                case "0":
+                case '-1':
+                case '0':
                     break;
-                case "3":
+                case '3':
                     self::$courseGroups['30'] = 'Administrateur';
                     $profils['30'] = 0;
                     break;
-                case "1":
-                case "2":
+                case '1':
+                case '2':
                     foreach ($roleValue as $profilId => $profilValue) {
                         if ($profilId) {
                             self::$courseGroups[$roleId . $profilId] = sprintf(helper::translate('Rôle %s - Profil %s'), self::$rolePublics[$roleId], $profilValue['name']);
@@ -1136,7 +1131,6 @@ class course extends common
             // Tri du tableau par défaut par $userId
             ksort($users);
             foreach ($users as $userId => $userValue) {
-
                 // Compte les rôles
                 if (isset($profils[$this->getData(['user', $userId, 'role']) . $this->getData(['user', $userId, 'profil'])])) {
                     $profils[$this->getData(['user', $userId, 'role']) . $this->getData(['user', $userId, 'profil'])]++;
@@ -1144,31 +1138,30 @@ class course extends common
 
                 // Filtres
                 if (
-                    isset($_POST['courseFilterGroup'])
-                    || isset($_POST['courseFilterFirstName'])
-                    || isset($_POST['courseFilterLastName'])
+                    isset($_POST['courseFilterGroup']) ||
+                    isset($_POST['courseFilterFirstName']) ||
+                    isset($_POST['courseFilterLastName'])
                 ) {
-
                     // Groupe et profils
                     $role = (string) $this->getData(['user', $userId, 'role']);
                     $profil = (string) $this->getData(['user', $userId, 'profil']);
                     $firstName = $this->getData(['user', $userId, 'firstname']);
                     $lastName = $this->getData(['user', $userId, 'lastname']);
                     if (
-                        $this->getInput('courseFilterGroup', helper::FILTER_INT) > 0
-                        && $this->getInput('courseFilterGroup', helper::FILTER_STRING_SHORT) !== $role . $profil
+                        $this->getInput('courseFilterGroup', helper::FILTER_INT) > 0 &&
+                        $this->getInput('courseFilterGroup', helper::FILTER_STRING_SHORT) !== $role . $profil
                     )
                         continue;
                     // Première lettre du prénom
                     if (
-                        $this->getInput('courseFilterFirstName', helper::FILTER_STRING_SHORT) !== 'all'
-                        && $this->getInput('courseFilterFirstName', helper::FILTER_STRING_SHORT) !== strtoupper(substr($firstName, 0, 1))
+                        $this->getInput('courseFilterFirstName', helper::FILTER_STRING_SHORT) !== 'all' &&
+                        $this->getInput('courseFilterFirstName', helper::FILTER_STRING_SHORT) !== strtoupper(substr($firstName, 0, 1))
                     )
                         continue;
                     // Première lettre du nom
                     if (
-                        $this->getInput('courseFilterLastName', helper::FILTER_STRING_SHORT) !== 'all'
-                        && $this->getInput('courseFilterLastName', helper::FILTER_STRING_SHORT) !== strtoupper(substr($lastName, 0, 1))
+                        $this->getInput('courseFilterLastName', helper::FILTER_STRING_SHORT) !== 'all' &&
+                        $this->getInput('courseFilterLastName', helper::FILTER_STRING_SHORT) !== strtoupper(substr($lastName, 0, 1))
                     )
                         continue;
                 }
@@ -1179,7 +1172,7 @@ class course extends common
                 // Construction du tableau
                 self::$courseUsers[] = [
                     template::checkbox($userId, true, '', ['class' => 'checkboxSelect']),
-                    //$userId,
+                    // $userId,
                     $this->getData(['user', $userId, 'firstname']),
                     $this->getData(['user', $userId, 'lastname']),
                     $group,
@@ -1213,7 +1206,6 @@ class course extends common
      */
     public function reset()
     {
-
         // Contenu sélectionné
         $courseId = $this->getUrl(2);
 
@@ -1226,7 +1218,6 @@ class course extends common
                 'access' => false
             ]);
         }
-
 
         // Active l'accueil
         $_SESSION['ZWII_SITE_CONTENT'] = 'home';
@@ -1273,15 +1264,14 @@ class course extends common
         // le participant est inscrit dans le contenu ET le contenu est ouvert ou un admin  ou le prof du contenu sont connectés
         //
         elseif (
-            $this->courseIsUserEnroled($courseId, $userId)
-            && $this->courseIsAvailable($courseId)
+            $this->courseIsUserEnroled($courseId, $userId) &&
+            $this->courseIsAvailable($courseId) &&
             // L'accès à l'espace est limité aux membres du groupe de l'espace
-            && $this->userGroupIntersectCourseGroup($courseId, $userId)
+            $this->userGroupIntersectCourseGroup($courseId, $userId)
         ) {
             // Récupérer la dernière page visitée par cet utilisateur si elle existe
-            $redirect = ($this->getData(['enrolment', $courseId, $userId, 'lastPageView']) !== null
-                && array_key_exists($this->getData(['enrolment', $courseId, $userId, 'lastPageView']), $pages)
-            )
+            $redirect = ($this->getData(['enrolment', $courseId, $userId, 'lastPageView']) !== null &&
+                    array_key_exists($this->getData(['enrolment', $courseId, $userId, 'lastPageView']), $pages))
                 ? helper::baseUrl() . $this->getData(['enrolment', $courseId, $userId, 'lastPageView'])
                 : helper::baseUrl();
 
@@ -1289,7 +1279,7 @@ class course extends common
                 $to = helper::dateUTF8('%d %B %Y', $this->getData(['course', $courseId, 'closingDate']), self::$i18nUI) . helper::translate(' à ') . helper::dateUTF8('%H:%M', $this->getData(['course', $courseId, 'closingDate']), self::$i18nUI);
                 $message .= sprintf(helper::translate('Ce contenu ferme le %s'), $to);
             } else {
-                $message .= sprintf(helper::translate('Bienvenue dans l\'espace  %s'), $this->getData(['course', $courseId, 'title']));
+                $message .= sprintf(helper::translate("Bienvenue dans l'espace  %s"), $this->getData(['course', $courseId, 'title']));
             }
             $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
         }
@@ -1306,8 +1296,7 @@ class course extends common
         }
         // Message du groupe qui ne correspond pas à celui de l'espace
         elseif ($this->userGroupIntersectCourseGroup($courseId, $userId) === false) {
-
-            $message = helper::translate('Votre groupe n\'a pas accès à cet espace');
+            $message = helper::translate("Votre groupe n'a pas accès à cet espace");
             $state = false;
         }
         // le contenu est ouvert, le participant n'est pas inscrit, l'accès au contenu est anonyme
@@ -1325,26 +1314,26 @@ class course extends common
                     break;
                 // Auto avec ou sans clé
                 case self::COURSE_ENROLMENT_SELF:
-                    //le participant doit disposer d'un compte
+                    // le participant doit disposer d'un compte
                     if ($this->getUser('id')) {
                         $redirect = helper::baseUrl() . 'course/suscribe/' . $courseId;
                     } else {
-                        $message = helper::translate('Vous devez disposer d\'un compte pour accéder à cet espace');
+                        $message = helper::translate("Vous devez disposer d'un compte pour accéder à cet espace");
                         $state = false;
                     }
                     break;
                 case self::COURSE_ENROLMENT_SELF_KEY:
-                    //le participant doit disposer d'un compte
+                    // le participant doit disposer d'un compte
                     if ($this->getUser('id')) {
                         $redirect = helper::baseUrl() . 'course/suscribe/' . $courseId;
                     } else {
-                        $message = helper::translate('Vous devez disposer d\'un compte et d\'une clé pour accéder à cet espace');
+                        $message = helper::translate("Vous devez disposer d'un compte et d'une clé pour accéder à cet espace");
                         $state = false;
                     }
                     break;
                 // Par le prof
                 case self::COURSE_ENROLMENT_MANDATORY:
-                    $message = helper::translate('L\'enseignant doit vous inscrire');
+                    $message = helper::translate("L'enseignant doit vous inscrire");
                     $state = false;
                     break;
                 default:
@@ -1364,16 +1353,15 @@ class course extends common
      */
     public function userReport()
     {
-
         // Espace sélectionné
         $courseId = $this->getUrl(2);
 
         // Accès limité au propriétaire ou éditeurs inscrits ou admin
         if (
             // Droits consentis
-            $this->permissionControl(__FUNCTION__, $courseId) === false
+            $this->permissionControl(__FUNCTION__, $courseId) === false and
             // Le compte du membre doit etre celui de l'url
-            and $this->getUser('id') !== $this->getUrl(3)
+            $this->getUser('id') !== $this->getUrl(3)
         ) {
             // Valeurs en sortie
             $this->addOutput([
@@ -1419,7 +1407,7 @@ class course extends common
                     self::$userReport[] = [
                         html_entity_decode($pages[$pageId]['title']),
                         $time,
-                        ($diff < 1800) ? sprintf("%d' %d''", floor($diff / 60), $diff % 60) : "Non significatif",
+                        ($diff < 1800) ? sprintf("%d' %d''", floor($diff / 60), $diff % 60) : 'Non significatif',
                     ];
                     if ($diff < 1800) {
                         self::$userGraph[] = [
@@ -1460,22 +1448,19 @@ class course extends common
             self::$userStat['time'] = $d_days . ' jours, ' . $d_hours . ' heures, ' . $d_minutes . ' minutes ';
         }
 
-
-
         // Valeurs en sortie
         $this->addOutput([
-            'title' => sprintf(helper::translate('Télémétrie : %s'), $this->getData(['course', $courseId, 'title'])) .
-                sprintf(helper::translate('%s Participant : %s %s'), '<br />', $this->getData(['user', $userId, 'firstname']), $this->getData(['user', $userId, 'lastname'])),
+            'title' => sprintf(helper::translate('Télémétrie : %s'), $this->getData(['course', $courseId, 'title']))
+                . sprintf(helper::translate('%s Participant : %s %s'), '<br />', $this->getData(['user', $userId, 'firstname']), $this->getData(['user', $userId, 'lastname'])),
             'view' => 'userReport',
             'vendor' => [
-                "plotly"
+                'plotly'
             ]
         ]);
     }
 
     public function usersReportExport()
     {
-
         $courseId = $this->getUrl(2);
 
         // Accès limité au propriétaire ou éditeurs inscrits ou admin
@@ -1523,12 +1508,11 @@ class course extends common
             $filename = self::FILE_DIR . 'source/' . $courseId . '/export/' . '/synthèse' . helper::dateUTF8('%Y%m%d', time()) . '.csv';
 
             foreach ($users as $userId => $userValue) {
-
                 // Date et heure de la dernière page vue
                 // Compatibilité anciennes versions
                 if (
-                    $this->getData(['enrolment', $courseId, $userId, 'lastPageView']) === null
-                    or $this->getData(['enrolment', $courseId, $userId, 'datePageView']) === null
+                    $this->getData(['enrolment', $courseId, $userId, 'lastPageView']) === null or
+                    $this->getData(['enrolment', $courseId, $userId, 'datePageView']) === null
                 ) {
                     if (!empty($userValue['history'])) {
                         $maxTime = max($userValue['history']);
@@ -1539,9 +1523,9 @@ class course extends common
                 }
 
                 // Progression
-                $viewPages = array_key_exists($userId, $reports) ?
-                    count($reports[$userId]) :
-                    0;
+                $viewPages = array_key_exists($userId, $reports)
+                    ? count($reports[$userId])
+                    : 0;
 
                 // Construction du tableau
                 self::$courseUsers[] = [
@@ -1554,14 +1538,16 @@ class course extends common
                         : $this->getData(['enrolment', $courseId, $userId, 'lastPageView']) . ' (supprimée)',
                     helper::dateUTF8('%d/%d/%Y', $this->getData(['enrolment', $courseId, $userId, 'datePageView'])),
                     helper::dateUTF8('%H:%M', $this->getData(['enrolment', $courseId, $userId, 'datePageView'])),
-                    /** La lecture de la progression s'effectue selon la nouvelle méthode (progression dans la base des enrolements)
-                     *  Soit avec l'ancienne méthode qui consiste à recalculer la progression.  
+
+                    /**
+                     * La lecture de la progression s'effectue selon la nouvelle méthode (progression dans la base des enrolements)
+                     *  Soit avec l'ancienne méthode qui consiste à recalculer la progression.
                      *  TRANSITOIRE A SUPPRIMER EN FIN D'ANNEE
-                     **/
+                     */
                     array_key_exists('progress', $userValue)
                         ? $userValue['progress']
                         : ($viewPages ? min(round(($viewPages * 100) / $sumPages, 1), 100) . ' %' : '0%'),
-                    //number_format(min(round(($viewPages * 100) / $sumPages, 1) / 100, 1), 2, ','),
+                    // number_format(min(round(($viewPages * 100) / $sumPages, 1) / 100, 1), 2, ','),
                 ];
 
                 // Synthèse des historiques
@@ -1591,7 +1577,6 @@ class course extends common
 
     public function userReportExport()
     {
-
         $courseId = $this->getUrl(2);
         $userId = $this->getUrl(3);
 
@@ -1639,7 +1624,7 @@ class course extends common
                     $pageId,
                     html_entity_decode($pages[$pageId]['title']),
                     $time,
-                    ($diff < 1800) ? sprintf("%d' %d''", floor($diff / 60), $diff % 60) : "Non significatif",
+                    ($diff < 1800) ? sprintf("%d' %d''", floor($diff / 60), $diff % 60) : 'Non significatif',
                 ];
                 $lastView = $time;
                 $floorTime = isset($floorTime) && $floorTime < $time ? $floorTime : $time;
@@ -1735,7 +1720,7 @@ class course extends common
         // Etat du cours
         self::$courseAvailable = $this->courseIsAvailable($this->getUrl(2));
         // Message d'inscription
-        self::$swapMessage['submitLabel'] = helper::translate('M\'inscrire');
+        self::$swapMessage['submitLabel'] = helper::translate("M'inscrire");
         self::$swapMessage['enrolmentMessage'] = '';
         self::$swapMessage['enrolmentKey'] = '';
         // le participant est-il inscrit ?
@@ -1753,7 +1738,7 @@ class course extends common
                         self::$swapMessage['submitLabel'] = helper::translate('Connexion');
                     } else {
                         self::$swapMessage['enrolmentKey'] = template::text('courseSwapEnrolmentKey', [
-                            'label' => helper::translate('Clé d\'inscription'),
+                            'label' => helper::translate("Clé d'inscription"),
                         ]);
                     }
                     break;
@@ -1763,7 +1748,7 @@ class course extends common
             }
             // Valeurs en sortie
             $this->addOutput([
-                'title' => sprintf(helper::translate('Accéder à l\'espace %s'), $this->getData(['course', $this->getUrl(2), 'title'])),
+                'title' => sprintf(helper::translate("Accéder à l'espace %s"), $this->getData(['course', $this->getUrl(2), 'title'])),
                 'view' => 'suscribe',
                 'display' => self::DISPLAY_LAYOUT_LIGHT,
             ]);
@@ -1772,7 +1757,7 @@ class course extends common
 
     /**
      * Désinscription d'un participant
-     * La désinscription ne supprime pas les historiques, 
+     * La désinscription ne supprime pas les historiques,
      */
     public function unsuscribe()
     {
@@ -1780,8 +1765,8 @@ class course extends common
         $courseId = $this->getUrl(2) ? $this->getUrl(2) : self::$siteContent;
         // home n'est pas un contenu dans lequel on peut se désincrire
         if (
-            $courseId !== 'home'
-            && array_key_exists($courseId, $this->getData(['course']))
+            $courseId !== 'home' &&
+            array_key_exists($courseId, $this->getData(['course']))
         ) {
             $userId = $this->getUser('id');
             $this->deleteData(['enrolment', $courseId, $userId]);
@@ -1798,10 +1783,8 @@ class course extends common
     /**
      * Sauvegarde d'un cours sans option
      */
-
     public function backup()
     {
-
         // Espace sélectionné
         $courseId = $this->getUrl(2);
 
@@ -1814,7 +1797,6 @@ class course extends common
                 'access' => false
             ]);
         } else {
-
             // Participants avec historiques
             $enrolment = $this->getData(['enrolment', $courseId]);
             // Générer un fichier dans le dossier de l'espace
@@ -1829,7 +1811,6 @@ class course extends common
             $category = $this->getData(['category', $this->getData(['course', $courseId, 'category'])]);
             // Générer un fichier dans le dossier de l'espace
             $this->secure_file_put_contents(self::DATA_DIR . $courseId . '/category.json', json_encode([$this->getData(['course', $courseId, 'category']) => $category], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
-
 
             // Génère une archive ZIP
             $this->makeZip(self::TEMP_DIR . $courseId . '-' . date('Y-m-d-H-i-s', time()) . '.zip', self::DATA_DIR . $courseId);
@@ -1862,7 +1843,6 @@ class course extends common
     // Générer un fichier externe contenant le contenu des pages
     public function export()
     {
-
         // Espace sélectionné
         $courseId = $this->getUrl(2);
 
@@ -1910,10 +1890,10 @@ class course extends common
                     $pageContent = $this->getPage($pageId, $courseId);
 
                     // Extraction des URLs des ressources (images, vidéos, fichiers, etc.)
-                    preg_match_all('/<img[^>]+src=["\'](.*?)["\']/i', $pageContent, $imgMatches); // Images
-                    preg_match_all('/<a[^>]+href=["\'](.*?)["\']/i', $pageContent, $linkMatches); // Liens
-                    preg_match_all('/<video[^>]+src=["\'](.*?)["\']/i', $pageContent, $videoMatches); // Vidéos directes
-                    preg_match_all('/<source[^>]+src=["\'](.*?)["\']/i', $pageContent, $sourceMatches); // Vidéos dans balises <source>
+                    preg_match_all('/<img[^>]+src=["\'](.*?)["\']/i', $pageContent, $imgMatches);  // Images
+                    preg_match_all('/<a[^>]+href=["\'](.*?)["\']/i', $pageContent, $linkMatches);  // Liens
+                    preg_match_all('/<video[^>]+src=["\'](.*?)["\']/i', $pageContent, $videoMatches);  // Vidéos directes
+                    preg_match_all('/<source[^>]+src=["\'](.*?)["\']/i', $pageContent, $sourceMatches);  // Vidéos dans balises <source>
 
                     // Traitement des images
                     $this->processResources($pageContent, '/<img[^>]+src=["\'](.*?)["\']/i', $resources);
@@ -1953,7 +1933,7 @@ class course extends common
             foreach ($resources as $resourceUrl) {
                 $resourcePath = parse_url($resourceUrl, PHP_URL_PATH);
                 $resourceFile = basename($resourcePath);
-                if (file_exists($resourcePath)) { // Utilisation du chemin correct
+                if (file_exists($resourcePath)) {  // Utilisation du chemin correct
                     copy($resourcePath, $path . 'export/' . $resourceFile);
                 }
             }
@@ -1983,10 +1963,9 @@ class course extends common
             ]);
         }
 
-
         // Valeurs en sortie
         $this->addOutput([
-            'title' => sprintf('%s %s (%s)', helper::translate('Export des pages de l\'espace'), $this->getData(['course', $courseId, 'title']), $this->getUrl(2)),
+            'title' => sprintf('%s %s (%s)', helper::translate("Export des pages de l'espace"), $this->getData(['course', $courseId, 'title']), $this->getUrl(2)),
             'view' => 'export'
         ]);
     }
@@ -2011,10 +1990,8 @@ class course extends common
     /**
      * Récupération d'un espace sans option
      */
-
     public function restore()
     {
-
         // Espace sélectionné
         $courseId = $this->getUrl(2);
 
@@ -2032,7 +2009,6 @@ class course extends common
         if (
             $this->isPost()
         ) {
-
             // Récupérer le dossier du profil
             $userPath = $this->getData(['profil', $this->getuser('role'), $this->getuser('profil'), 'folder', 'path']);
             $userPath = $userPath === '' ? self::$siteContent : $userPath;
@@ -2070,7 +2046,6 @@ class course extends common
                         $notification = helper::translate('Archive invalide');
                     }
                     if ($success && $courseId) {
-
                         // récupérer les inscriptions disponibles
                         $enrolmentData = array();
                         if (file_exists(self::TEMP_DIR . $tempFolder . '/enrolment.json')) {
@@ -2080,9 +2055,9 @@ class course extends common
                         // Créer le dossier absent
                         if (!is_dir(self::DATA_DIR . $courseId)) {
                             mkdir(self::DATA_DIR . $courseId);
-                            $notification = sprintf(helper::translate('Importation terminée : l\'espace %s a été créé'), $courseId);
+                            $notification = sprintf(helper::translate("Importation terminée : l'espace %s a été créé"), $courseId);
                         } else {
-                            $notification = sprintf(helper::translate('Importation terminée : l\'espace %s a été actualisé'), $courseId);
+                            $notification = sprintf(helper::translate("Importation terminée : l'espace %s a été actualisé"), $courseId);
                         }
 
                         // traiter l'archive
@@ -2104,14 +2079,14 @@ class course extends common
                         $this->setData(['enrolment', $enrolmentData]);
 
                         // traitement d'erreur en cas de problème de désachivage
-                        $notification = $success ? $notification : helper::translate('Erreur lors de l\'extraction, vérifiez les permissions');
+                        $notification = $success ? $notification : helper::translate("Erreur lors de l'extraction, vérifiez les permissions");
                     }
                     // Supprimer le dossier temporaire même si le thème est invalide
                     $this->deleteDir(self::TEMP_DIR . $tempFolder);
                 } else {
                     // erreur à l'ouverture
                     $success = false;
-                    $notification = helper::translate('Impossible d\'ouvrir l\'archive');
+                    $notification = helper::translate("Impossible d'ouvrir l'archive");
                 }
                 // Valeurs en sortie
                 $this->addOutput([
@@ -2135,8 +2110,6 @@ class course extends common
         ]);
     }
 
-
-
     /**
      * Retourne false quand l'utilisateur ne dispose pas des droits d'accès à la fonction
      * Règles d'accès à un espace :
@@ -2150,26 +2123,22 @@ class course extends common
                 return true;
             case self::ROLE_EDITOR:
                 return (
-                    $this->getUser('permission', __CLASS__, $function)
-                    && $this->getUser('role') === self::$actions[$function]
-                    &&
+                    $this->getUser('permission', __CLASS__, $function) &&
+                    $this->getUser('role') === self::$actions[$function] &&
                     // Permission d'accéder aux espaces dans lesquels le membre auteur
                     (
                         $this->getData(['enrolment', $courseId]) && ($this->getUser('id') === $this->getData(['course', $courseId, 'author']))
-                    )
-                    ||
+                    ) ||
                     (  // Permission d'accéder aux espaces dans lesquels le membre est inscrit
-                        $this->getData(['enrolment', $courseId])
-                        && $this->getUser('permission', __CLASS__, 'tutor') === true
-                        && array_key_exists($this->getUser('id'), $this->getData(['enrolment', $courseId]))
+                        $this->getData(['enrolment', $courseId]) &&
+                        $this->getUser('permission', __CLASS__, 'tutor') === true &&
+                        array_key_exists($this->getUser('id'), $this->getData(['enrolment', $courseId]))
                     )
                 );
             default:
                 return false;
         }
     }
-
-
 
     /**
      * Autorise l'accès à un contenu
@@ -2206,24 +2175,22 @@ class course extends common
         }
     }
 
-
     /**
      * Méthode externe pour calculer la progression dans les espaces et la stocker dans enrolment
-     * 
+     *
      * @param mixed $courseId
      * @param mixed $userId
      * @return float Ratio de pages vues en décimales de pourcentages
      */
     private function getUserProgress($courseId, $userId): float
     {
-
         // Obtient les statistiques de l'ensemble de la cohorte
         $reports = $this->getReport($courseId, $userId);
 
         // Nombre de pages dans l'espace vues par cet utilisateur
-        $viewPages = array_key_exists($userId, $reports) ?
-            count($reports[$userId]) :
-            0;
+        $viewPages = array_key_exists($userId, $reports)
+            ? count($reports[$userId])
+            : 0;
         // Nombre de pages totales
         $sumPages = $this->countPages($this->getData(['page']));
 
@@ -2236,7 +2203,6 @@ class course extends common
     }
 
     /**
-     *
      * @param mixed $courseId id de l'espace
      * @param mixed $userId id de l'utilisateur
      * @return float nombre de pages vues
@@ -2253,8 +2219,7 @@ class course extends common
     }
 
     /**
-     * 
-     * Compte les pages d'un espace 
+     * Compte les pages d'un espace
      * @param mixed $array Tableau des pages de l'espace
      * @return int Nombre de pages
      */
@@ -2282,7 +2247,6 @@ class course extends common
             ]
         ]);
     }
-
 
     /**
      * Méthode pour retourner les données la concordance entre la liste des groupes de l'utilisateur et la liste des groupes du cours
@@ -2338,9 +2302,9 @@ class course extends common
                     is_null($this->getData(['enrolment', $courseId])) === false
                 ) {
                     // Le participant est inscrit
-                    $r = in_array($userId, array_keys($this->getData(['enrolment', $courseId])))
+                    $r = in_array($userId, array_keys($this->getData(['enrolment', $courseId]))) ||
                         // Ou le participant est enseignant
-                        || $this->getData(['course', $courseId, 'author']) === $userId;
+                        $this->getData(['course', $courseId, 'author']) === $userId;
                 }
                 break;
             // Visiteur non connecté
@@ -2358,23 +2322,22 @@ class course extends common
      */
     private function getReport($courseId, $userId = null)
     {
-
         $data = [];
         if (file_exists(self::DATA_DIR . $courseId . '/report.csv')) {
             // Remplacez 'chemin/vers/votre/fichier.csv' par le chemin réel de votre fichier CSV
-            $file = fopen(self::DATA_DIR . $courseId . '/report.csv', "r");
+            $file = fopen(self::DATA_DIR . $courseId . '/report.csv', 'r');
 
             $data = array();
 
             // Lire ligne par ligne
-            while (($line = fgetcsv($file, 1000, ";")) !== false) {
+            while (($line = fgetcsv($file, 1000, ';')) !== false) {
                 $name = $line[0];
                 $pageId = $line[1];
                 $timestamp = $line[2];
                 // Filtre userId
                 if (
-                    is_null($userId) === false
-                    && $name !== $userId
+                    is_null($userId) === false &&
+                    $name !== $userId
                 ) {
                     continue;
                 }

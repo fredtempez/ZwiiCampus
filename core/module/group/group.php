@@ -85,7 +85,6 @@ class group extends common
 					$suscribers === 0 ? '<a href="' . helper::baseUrl() . 'group/usersAdd/' . $groupId . '">' . $message . '</a>'
 					: '<a href="' . helper::baseUrl() . 'group/users/' . $groupId . '">' . $message . '</a>',
 					template::ico('pencil', [
-						'id' => 'groupEdit' . $groupId,
 						'href' => helper::baseUrl() . 'group/edit/' . $groupId,
 						'value' => template::ico('pencil'),
 						'margin' => 'right',
@@ -93,7 +92,6 @@ class group extends common
 						'fontSize' => '1em',
 					])
 					. template::ico('trash', [
-						'id' => 'groupDelete' . $groupId,
 						'class' => 'groupDelete icoTextRed',
 						'href' => helper::baseUrl() . 'group/delete/' . $groupId,
 						'margin' => 'left',
