@@ -17,3 +17,6 @@
 * admin.css
 */
 
+tbody td:nth-child(7) {
+    text-align: right;
+}

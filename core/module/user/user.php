@@ -735,7 +735,7 @@ class user extends common
 						'value' => template::ico('pencil'),
 						'margin' => 'right',
 						'help' => 'Éditer',
-						'fontSize' => '1em',
+						'fontSize' => '1.3em',
 					])
 						// Bouton supprimée concaténé
 						. template::ico('trash', [
@@ -744,7 +744,7 @@ class user extends common
 							'href' => helper::baseUrl() . 'user/delete/' . $userId,
 							'margin' => 'left',
 							'help' => 'Supprimer',
-							'fontSize' => '1em',
+							'fontSize' => '1.3em',
 						])
 				];
 			}
@@ -1819,7 +1819,7 @@ class user extends common
 		}
 		// Valeurs en sortie
 		$this->addOutput([
-			'title' => "Importation de participants",
+			'title' => 'Importation de participants',
 			'view' => 'import',
 			'notification' => $notification,
 			'state' => $success

@@ -127,7 +127,7 @@ class course extends common
                             'help' => 'Télémétrie',
                             'margin' => 'all',
                             'help' => 'Participants',
-                            'fontSize' => '1.5em',
+                            'fontSize' => '1.3em',
                         ]);
                     }
                     self::$courses[] = [
@@ -141,7 +141,7 @@ class course extends common
                             'value' => template::ico('pencil'),
                             'margin' => 'all',
                             'help' => 'Gérer',
-                            'fontSize' => '1.5em',
+                            'fontSize' => '1.3em',
                         ])
                     ];
                 }
@@ -862,14 +862,14 @@ class course extends common
                     template::ico('chart-line', [
                         'id' =>'userReport'. $userId,
                         'help' => 'La télémétrie est désactivée',
-                        'fontSize' => '1.5em',
+                        'fontSize' => '1.3em',
                         'margin' => 'all',
                     ]) .
                     template::ico('user-times', [
                         'class' => 'userDelete icoTextRed',
                         'href' => helper::baseUrl() . 'course/userDelete/' . $courseId . '/' . $userId,
                         'help' => 'Désinscrire',
-                        'fontSize' => '1.5em',
+                        'fontSize' => '1.3em',
                         'margin' => 'all',  
                     ])
                 ];
