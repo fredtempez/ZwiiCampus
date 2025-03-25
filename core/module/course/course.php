@@ -851,9 +851,12 @@ class course extends common
                 // Les groupes sous forme de chaine
                 $group = $this->getData(['user', $userId, 'group']);
                 $group = is_null($group) === false ? implode('', array_map(fn($valeur) => sprintf('<span class="groupTitleLabel">%s</span>', $this->getData(['group', htmlspecialchars($valeur)])), $group)) : '';
+                $name = $this->getData(['user', $userId])
+                    ? sprintf('%s %s', $this->getData(['user', $userId, 'lastname']), $this->getData(['user', $userId, 'firstname']))
+                    : sprintf(helper::translate('Compte désinscrit %'), $userId);
                 self::$courseUsers[] = [
                     //$userId,
-                    sprintf('%s %s', $this->getData(['user', $userId, 'lastname']), $this->getData(['user', $userId, 'firstname'])),
+                    $name,
                     $group,
                     $this->getData(['user', $userId, 'tags']),
                     array_key_exists('lastPageView', $userValue) && isset($pages['page'][$userValue['lastPageView']]['title'])
