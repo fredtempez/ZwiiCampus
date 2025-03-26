@@ -15,7 +15,7 @@
 				<?php echo helper::translate('Langues installées'); ?>
 			</h4>
 			<?php if (language::$languagesUiInstalled): ?>
-				<?php echo template::table([4, 3, 3, 1, 1], language::$languagesUiInstalled, ['Langues', 'Version', 'Date', '', '']); ?>
+				<?php echo template::table([4, 4, 3, 1], language::$languagesUiInstalled, ['Langues', 'Version', 'Date', '']); ?>
 			<?php endif; ?>
 		</div>
 	</div>
@@ -27,7 +27,7 @@
 			<h4>
 				<?php echo helper::translate('Catalogue'); ?>
 			</h4>
-				<?php echo template::table([2, 1, 2, 6, 1], language::$languagesStore, ['Langues', 'Version', 'Date', '', '']); ?>
+				<?php echo template::table([4, 4, 3, 1], language::$languagesStore, ['Langues', 'Version', 'Date', '']); ?>
 		</div>
 	</div>
 </div>

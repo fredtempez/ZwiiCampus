@@ -204,17 +204,21 @@ class language extends common
 					self::$languagesInstalled[] = [
 						template::flag($key, '20 %') . '&nbsp;' . $value . ' (' . $key . ')',
 						$messageLocale,
-						template::button('translateContentLanguageLocaleEdit' . $key, [
+						template::ico('pencil', [
+							'id' => 'translateContentLanguageLocaleEdit' . $key,
 							'class' => file_exists(self::DATA_DIR . $key . '/locale.json') ? '' : ' disabled',
 							'href' => helper::baseUrl() . $this->getUrl(0) . '/locale/' . $key,
-							'value' => template::ico('pencil'),
-							'help' => 'Éditer'
-						]),
-						template::button('translateContentLanguageLocaleDelete' . $key, [
+							'help' => 'Éditer',
+							'margin' => 'all',
+							'fontSize' => '1.5em',
+						]) .
+						template::ico('trash', [
+							'translateContentLanguageLocaleDelete' . $key,
 							'class' => 'translateDelete buttonRed' . ($messageLocale ? ' disabled' : ''),
 							'href' => helper::baseUrl() . $this->getUrl(0) . '/delete/locale/' . $key,
-							'value' => template::ico('trash'),
 							'help' => 'Supprimer',
+							'margin' => 'all',
+							'fontSize' => '1.5em',
 						])
 					];
 				}
@@ -264,17 +268,22 @@ class language extends common
 						'disabled' => 'fr_FR' === $file
 					]),
 					*/
-					template::button('translateContentLanguageUIDownload' . $file, [
+					template::ico('update', [
+						'id' => 'translateContentLanguageUIDownload' . $file,
 						'class' =>  isset($storeUI[$file]['version']) && version_compare($installedUI[$file]['version'], $storeUI[$file]['version']) < 0 ? 'buttonGreen' : '',
 						'href' => helper::baseUrl() . $this->getUrl(0) . '/update/' . $file,
-						'value' => template::ico('update'),
 						'help' => 'Mise à jour',
-					]),
-					template::button('translateContentLanguageUIDelete' . $file, [
-						'class' => 'translateDelete buttonRed' . (in_array($file, $usersUI) ? ' disabled' : ''),
+						'margin' => 'all',
+						'fontSize' => '1.5em',
+					]) .
+					template::ico('trash', [
+						'id' => 'translateContentLanguageUIDelete'. $file,
+						'class' => 'translateDelete icoTextRed' . (in_array($file, $usersUI) ? ' disabled' : ''),
 						'href' => helper::baseUrl() . $this->getUrl(0) . '/delete/ui/' . $file,
 						'value' => template::ico('trash'),
 						'help' => 'Supprimer',
+						'margin' => 'all',
+						'fontSize' => '1.5em',
 					]),
 				];
 			}
@@ -289,12 +298,13 @@ class language extends common
 						template::flag($file, '20 %') . '&nbsp;' . self::$languages[$file],
 						$value['version'],
 						helper::dateUTF8('%d/%m/%Y', $value['date'], self::$i18nUI),
-						'',
-						template::button('translateContentLanguageUIDownload' . $file, [
-							'class' => 'buttonGreen',
+						template::ico('shopping-basket', [
+							'id' => 'translateContentLanguageUIDownload'. $file,
+							'class' => 'icoTextGreen',
 							'href' => helper::baseUrl() . $this->getUrl(0) . '/update/' . $file,
-							'value' => template::ico('shopping-basket'),
 							'help' => 'Installer',
+							'margin' => 'all',
+							'fontSize' => '1.5em',
 						])
 					];
 				}
@@ -326,13 +336,12 @@ class language extends common
 			$lang = $this->getInput('translateAddContent');
 
 			// Constructeur pour cette langue
-			$this->jsonDB($lang);
+			//$this->jsonDB($lang);
 
 			// Création du contenu
 			$this->initData('page', $lang);
 			$this->initData('module', $lang);
 			$this->initData('locale', $lang);
-
 
 			// Valeurs en sortie
 			$this->addOutput([

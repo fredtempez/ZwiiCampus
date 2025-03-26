@@ -52,3 +52,7 @@
 .activeButton {
     background-color: #00BFFF;
 }
+
+tbody td:nth-child(4) {
+    text-align: right;
+}

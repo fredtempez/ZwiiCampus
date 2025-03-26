@@ -16,3 +16,6 @@
 /** NE PAS EFFACER
 * admin.css
 */
+tbody td:nth-child(6) {
+    text-align: right;
+}
