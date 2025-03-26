@@ -135,14 +135,14 @@ class course extends common
                         $this->getData(['course', $courseId, 'description']),
                         $enrolment,
                         $users .
-                        template::ico('sliders', [
-                            'href' => helper::baseUrl() . 'course/manage/' . $courseId,
-                            'help' => 'Gérer cet espace',
-                            'value' => template::ico('pencil'),
-                            'margin' => 'all',
-                            'help' => 'Gérer',
-                            'fontSize' => '1.3em',
-                        ])
+                            template::ico('sliders', [
+                                'href' => helper::baseUrl() . 'course/manage/' . $courseId,
+                                'help' => 'Gérer cet espace',
+                                'value' => template::ico('pencil'),
+                                'margin' => 'all',
+                                'help' => 'Gérer',
+                                'fontSize' => '1.3em',
+                            ])
                     ];
                 }
             }
@@ -816,36 +816,32 @@ class course extends common
                         continue;
                 }
 
-                // Progression
-                $viewPages = array_key_exists($userId, $reports)
-                    ? count($reports[$userId])
-                    : 0;
+                /**
+                 * CONSTRUCTION DU TABLEAU
+                 */
 
-                // Construction du tableau
-                if ($this->getdata(['course', $courseId, 'report']) === true) {
-                    $reportButton = template::button('userReport' . $userId, [
-                        'id' =>'userReport' . $userId,
-                        'href' => helper::baseUrl() . 'course/userReport/' . $courseId . '/' . $userId,
-                        'value' => (array_key_exists('progress', $userValue) && is_int($userValue['progress']))
-                            ? template::ico('chart-line', ['margin' => 'right']) . number_format($userValue['progress']) . ' %'
-                            : template::ico('chart-line', ['margin' => 'right']) . ($viewPages ? min(round(($viewPages * 100) / $sumPages, 1), 100) . ' %' : '0%'),
-                        'disable' => empty($userValue['datePageView']),
-                        'help' => "Participation à l'espace",
-                    ]);
-                } else {
-                    $reportButton = template::ico('chart-line', [
-                        'id' =>'userReport'. $userId,
-                        'value' => template::ico('chart-line'),
-                        'disable' => true,
-                        'help' => 'La télémétrie est désactivée',
-                    ]);
-                }
+                // Calcul de la progression
+                $report = '-';
+                IF ($this->getdata(['course', $courseId, 'report'])) {
+                    // Progression selon ancienne méthode (valeurs non stockées)
+                    $viewPages = array_key_exists($userId, $reports)
+                        ? count($reports[$userId])
+                        : 0;
+
+                    // Progression selon nouvelle méthode (valeurs stockées)
+                    $report =(array_key_exists('progress', $userValue) && $userValue['progress'])
+                        ? number_format($userValue['progress'], 1, ',') . ' %'
+                        : ($viewPages ? number_format(min(round(($viewPages * 100) / $sumPages, 1), 100), 1, ',') . ' %' : '0%');
+                }   
+
                 // Les groupes sous forme de chaine
                 $group = $this->getData(['user', $userId, 'group']);
                 $group = is_null($group) === false ? implode('', array_map(fn($valeur) => sprintf('<span class="groupTitleLabel">%s</span>', $this->getData(['group', htmlspecialchars($valeur)])), $group)) : '';
                 $name = $this->getData(['user', $userId])
                     ? sprintf('%s %s', $this->getData(['user', $userId, 'lastname']), $this->getData(['user', $userId, 'firstname']))
                     : sprintf(helper::translate('Compte désinscrit %s'), $userId);
+
+                // Constuit le tableau
                 self::$courseUsers[] = [
                     // $userId,
                     $name,
@@ -858,19 +854,20 @@ class course extends common
                         // ? helper::dateUTF8('%d/%m/%Y', $userValue['datePageView'])
                         ? $userValue['datePageView']
                         : helper::translate('Jamais'),
-                    $reportButton,
+                    $report,
                     template::ico('chart-line', [
-                        'id' =>'userReport'. $userId,
-                        'help' => 'La télémétrie est désactivée',
+                        'id' => 'userReport' . $userId,
                         'fontSize' => '1.3em',
                         'margin' => 'all',
-                    ]) .
-                    template::ico('user-times', [
+                        'help' =>  $this->getdata(['course', $courseId, 'report']) ? 'Télémétrie' : 'Télémétrie désactivée',
+                        'href' =>  $this->getdata(['course', $courseId, 'report']) ? helper::baseUrl() . 'course/userReport/' . $courseId . '/' . $userId : ''
+                    ])
+                    . template::ico('user-times', [
                         'class' => 'userDelete icoTextRed',
                         'href' => helper::baseUrl() . 'course/userDelete/' . $courseId . '/' . $userId,
-                        'help' => 'Désinscrire',
                         'fontSize' => '1.3em',
-                        'margin' => 'all',  
+                        'margin' => 'all',
+                        'help' => 'Désinscrire',
                     ])
                 ];
             }
@@ -1271,7 +1268,7 @@ class course extends common
         ) {
             // Récupérer la dernière page visitée par cet utilisateur si elle existe
             $redirect = ($this->getData(['enrolment', $courseId, $userId, 'lastPageView']) !== null &&
-                    array_key_exists($this->getData(['enrolment', $courseId, $userId, 'lastPageView']), $pages))
+                array_key_exists($this->getData(['enrolment', $courseId, $userId, 'lastPageView']), $pages))
                 ? helper::baseUrl() . $this->getData(['enrolment', $courseId, $userId, 'lastPageView'])
                 : helper::baseUrl();
 
