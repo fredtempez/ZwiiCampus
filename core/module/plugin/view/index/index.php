@@ -37,7 +37,7 @@
 				<h4>
 					<?php echo helper::translate('Sauvegarde'); ?>
 				</h4>
-				<?php echo template::table([2, 2, 1, 5, 1, 1], plugin::$modulesInstalled, ['Module', 'Identifiant', 'Version', '', '', '']); ?>
+				<?php echo template::table([4, 4, 3, 1], plugin::$modulesInstalled, ['Module', 'Identifiant', 'Version',  '']); ?>
 			</div>
 		</div>
 	</div>
@@ -51,7 +51,7 @@
 				<h4>
 					<?php echo helper::translate('Modules orphelins'); ?>
 				</h4>
-				<?php echo template::table([2, 2, 1, 6, 1], plugin::$modulesOrphan, ['Module', 'Identifiant', 'Version', '', '']); ?>
+				<?php echo template::table([4, 4, 3, 1], plugin::$modulesOrphan, ['Module', 'Identifiant', 'Version', '']); ?>
 			</div>
 		</div>
 	</div>

@@ -366,14 +366,12 @@ class plugin extends common
 				$help = 'Télécharger le module dans le gestionnaire de fichiers';
 				// Le module est installé
 				if (array_key_exists($key, $infoModules) === true) {
-					$class = 'buttonGreen';
-					$ico = template::ico('update');
+					$class = 'icoTextGreen';
 					$help = 'Mettre à jour le module orphelin';
 				}
 				// Le module est installé et utilisé
 				if (in_array($key, $inPages) === true) {
-					$class = 'buttonRed';
-					$ico = template::ico('update');
+					$class = 'icoTextRed';
 					$help = 'Mettre à jour le module attaché, une sauvegarde des données de module est recommandée !';
 				}
 				self::$storeList[] = [
@@ -382,11 +380,13 @@ class plugin extends common
 					$store[$key]['version'],
 					helper::dateUTF8('%d %B %Y', $store[$key]['versionDate'], self::$i18nUI),
 					implode(' - ', $pageInfos),
-					template::button('moduleExport' . $key, [
+					template::ico('update', [
+						'id' => 'moduleExport'. $key,
 						'class' => $class,
 						'href' => helper::baseUrl() . $this->getUrl(0) . '/uploadItem/' . $key,
-						'value' => $ico,
-						'help' => $help
+						'help' => $help,
+						'margin' => 'all',
+						'fontSize' => '1.5em',
 					])
 				];
 			}
@@ -489,13 +489,14 @@ class plugin extends common
 					$infoModules[$key]['realName'],
 					$key,
 					$infoModules[$key]['version'],
-					'',
 					$infoModules[$key]['delete'] === true
-					? template::button('moduleDelete' . $key, [
-						'class' => 'moduleDelete buttonRed',
+					? template::ico('trash', [
+						'id' => 'moduleDelete' . $key,
+						'class' => 'moduleDelete icoTextRed',
 						'href' => helper::baseUrl() . $this->getUrl(0) . '/delete/' . $key,
-						'value' => template::ico('trash'),
-						'help' => 'Supprimer le module'
+						'help' => 'Supprimer le module',
+						'margin' => 'all',
+						'fontSize' => '1.5em',
 					])
 					: '',
 
@@ -512,16 +513,19 @@ class plugin extends common
 					$infoModules[$key]['realName'],
 					$key,
 					$infoModules[$key]['version'],
-					'',
-					template::button('moduleSave' . $key, [
+					template::ico('download-cloud', [
+						'id' =>'moduleDownload'. $key,
 						'href' => helper::baseUrl() . $this->getUrl(0) . '/save/filemanager/' . $key,
-						'value' => template::ico('download-cloud'),
-						'help' => 'Sauvegarder le module dans le gestionnaire de fichiers'
-					]),
-					template::button('moduleDownload' . $key, [
+						'help' => 'Sauvegarder le module dans le gestionnaire de fichiers',
+						'margin' => 'all',
+						'fontSize' => '1.5em',
+					]) .
+					template::ico('download', [
+						'id' => 'moduleDownload' . $key,
 						'href' => helper::baseUrl() . $this->getUrl(0) . '/save/download/' . $key,
-						'value' => template::ico('download'),
-						'help' => 'Sauvegarder et télécharger le module'
+						'help' => 'Sauvegarder et télécharger le module',
+						'margin' => 'all',
+						'fontSize' => '1.5em',
 					])
 
 				];
