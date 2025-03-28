@@ -20,8 +20,9 @@
             <div class="row">
                 <div class="col2">
                     <?php echo template::text('courseEditCourseId', [
-                        'label' => 'Identifiant',
+                        'label' => 'Identifiant ⚠️',
                         'value' => $this->getUrl(2),
+                        'help' => 'Activez le mode maintenance avant tout changement de l\'identifiant. Les espaces restés ouverts pourraient créer des incohérences dans les espaces.' 
                     ]); ?>
                     <?php echo template::hidden('courseEditCourseIdOld', [
                         'value' => $this->getUrl(2),
