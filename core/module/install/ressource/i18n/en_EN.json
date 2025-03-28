@@ -280,6 +280,7 @@
     "Icône haut de page, couleur arrière-plan": "Top page icon, background color",
     "Identifiant": "Identifier",
     "Identifiant ⚠️": "Identifier ⚠️",
+    "Activez le mode maintenance avant tout changement de l'identifiant. Les espaces restés ouverts pourraient créer des incohérences dans les espaces": "Activate maintenance mode before making any changes to the identifier. Open spaces could create inconsistencies in the spaces.",
     "Identité": "Identity",
     "Identité de la fonte": "Identity of the font",
     "Identité du site": "Site identity",

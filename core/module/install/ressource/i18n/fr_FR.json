@@ -280,6 +280,7 @@
     "Icône haut de page, couleur arrière-plan": "",
     "Identifiant": "",
     "Identifiant ⚠️": "",
+    "Activez le mode maintenance avant tout changement de l'identifiant. Les espaces restés ouverts pourraient créer des incohérences dans les espaces": "",
     "Identité": "",
     "Identité de la fonte": "",
     "Identité du site": "",
@@ -779,5 +780,6 @@
     "Ouverture": "",
     "Clé": "",
     "Espace dupliqué": "",
-    "Alignement avec le contenu": ""
+    "Alignement avec le contenu": "",
+    "https://forge.chapril.org/ZwiiCMS-Team/zwiicampus-translations.git": ""
 }
