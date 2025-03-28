@@ -209,16 +209,16 @@ class language extends common
 							'class' => file_exists(self::DATA_DIR . $key . '/locale.json') ? '' : ' disabled',
 							'href' => helper::baseUrl() . $this->getUrl(0) . '/locale/' . $key,
 							'help' => 'Éditer',
-							'margin' => 'all',
-							'fontSize' => '1.5em',
+							'margin' => 'right',
+							'fontSize' => '1.3em',
 						]) .
 						template::ico('trash', [
 							'translateContentLanguageLocaleDelete' . $key,
 							'class' => 'translateDelete buttonRed' . ($messageLocale ? ' disabled' : ''),
 							'href' => helper::baseUrl() . $this->getUrl(0) . '/delete/locale/' . $key,
 							'help' => 'Supprimer',
-							'margin' => 'all',
-							'fontSize' => '1.5em',
+							'margin' => 'right',
+							'fontSize' => '1.3em',
 						])
 					];
 				}
@@ -274,16 +274,15 @@ class language extends common
 						'href' => helper::baseUrl() . $this->getUrl(0) . '/update/' . $file,
 						'help' => 'Mise à jour',
 						'margin' => 'all',
-						'fontSize' => '1.5em',
+						'fontSize' => '1.3em',
 					]) .
 					template::ico('trash', [
 						'id' => 'translateContentLanguageUIDelete'. $file,
 						'class' => 'translateDelete icoTextRed' . (in_array($file, $usersUI) ? ' disabled' : ''),
 						'href' => helper::baseUrl() . $this->getUrl(0) . '/delete/ui/' . $file,
-						'value' => template::ico('trash'),
 						'help' => 'Supprimer',
 						'margin' => 'all',
-						'fontSize' => '1.5em',
+						'fontSize' => '1.3em',
 					]),
 				];
 			}
