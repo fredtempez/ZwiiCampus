@@ -303,7 +303,7 @@ class language extends common
 							'href' => helper::baseUrl() . $this->getUrl(0) . '/update/' . $file,
 							'help' => 'Installer',
 							'margin' => 'all',
-							'fontSize' => '1.5em',
+							'fontSize' => '1.3em',
 						])
 					];
 				}

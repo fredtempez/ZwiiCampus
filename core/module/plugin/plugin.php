@@ -386,7 +386,7 @@ class plugin extends common
 						'href' => helper::baseUrl() . $this->getUrl(0) . '/uploadItem/' . $key,
 						'help' => $help,
 						'margin' => 'all',
-						'fontSize' => '1.5em',
+						'fontSize' => '1.3em',
 					])
 				];
 			}
@@ -496,7 +496,7 @@ class plugin extends common
 						'href' => helper::baseUrl() . $this->getUrl(0) . '/delete/' . $key,
 						'help' => 'Supprimer le module',
 						'margin' => 'all',
-						'fontSize' => '1.5em',
+						'fontSize' => '1.3em',
 					])
 					: '',
 
@@ -518,14 +518,14 @@ class plugin extends common
 						'href' => helper::baseUrl() . $this->getUrl(0) . '/save/filemanager/' . $key,
 						'help' => 'Sauvegarder le module dans le gestionnaire de fichiers',
 						'margin' => 'all',
-						'fontSize' => '1.5em',
+						'fontSize' => '1.3em',
 					]) .
 					template::ico('download', [
 						'id' => 'moduleDownload' . $key,
 						'href' => helper::baseUrl() . $this->getUrl(0) . '/save/download/' . $key,
 						'help' => 'Sauvegarder et télécharger le module',
 						'margin' => 'all',
-						'fontSize' => '1.5em',
+						'fontSize' => '1.3em',
 					])
 
 				];
