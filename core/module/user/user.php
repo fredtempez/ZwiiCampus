@@ -929,7 +929,8 @@ class user extends common
 						$this->getInput('profilEditCourseUsersDelete', helper::FILTER_BOOLEAN) ||
 						$this->getInput('profilEditCourseEdit', helper::FILTER_BOOLEAN) ||
 						$this->getInput('profilEditCourseBackup', helper::FILTER_BOOLEAN) ||
-						$this->getInput('profilEditCourseRestore', helper::FILTER_BOOLEAN),
+						$this->getInput('profilEditCourseRestore', helper::FILTER_BOOLEAN) ||
+						$this->getInput('profilEditCourseTutor', helper::FILTER_BOOLEAN),
 					'manage' => $this->getInput('profilEditCourseUsers', helper::FILTER_BOOLEAN) ||
 						$this->getInput('profilEditCourseUserHistory', helper::FILTER_BOOLEAN) ||
 						$this->getInput('profilEditCourseUserExport', helper::FILTER_BOOLEAN) ||
@@ -941,7 +942,8 @@ class user extends common
 						$this->getInput('profilEditCourseEdit', helper::FILTER_BOOLEAN) ||
 						$this->getInput('profilEditCourseBackup', helper::FILTER_BOOLEAN) ||
 						$this->getInput('profilEditCourseRestore', helper::FILTER_BOOLEAN) ||
-						$this->getInput('profilEditCourseReset', helper::FILTER_BOOLEAN),
+						$this->getInput('profilEditCourseReset', helper::FILTER_BOOLEAN) ||
+						$this->getInput('profilEditCourseTutor', helper::FILTER_BOOLEAN),
 					// Droits spécifiques
 					'users' => $this->getInput('profilEditCourseUsers', helper::FILTER_BOOLEAN),
 					'userHistory' => $this->getInput('profilEditCourseUserHistory', helper::FILTER_BOOLEAN),

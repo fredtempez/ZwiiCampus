@@ -53,7 +53,7 @@ class common
 	// Contrôle d'édition temps maxi en secondes avant déconnexion 30 minutes
 	const ACCESS_TIMER = 1800;
 	// Numéro de version
-	const ZWII_VERSION = '2.2.00';
+	const ZWII_VERSION = '2.2.01';
 	// URL autoupdate
 	const ZWII_UPDATE_URL = 'https://forge.chapril.org/ZwiiCMS-Team/campus-update/raw/branch/master/';
 	const ZWII_UPDATE_CHANNEL = 'v2';
@@ -1609,7 +1609,9 @@ class common
 						// Il est l'auteur
 						$this->getUser('id') === $this->getData(['course', $courseId, 'author']) ||
 						// Le cours est ouvert
-						$this->getData(['course', $courseId, 'enrolment']) === self::COURSE_ENROLMENT_GUEST
+						$this->getData(['course', $courseId, 'enrolment']) === self::COURSE_ENROLMENT_GUEST ||
+						// Ou qu'il dispose des droits de tutorat sur tous les modules
+						$this->getUser('permission', __CLASS__, 'tutor') === true
 					) {
 						$filter[$courseId] = $courses[$courseId];
 					}

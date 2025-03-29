@@ -249,8 +249,9 @@
                 </h4>
                 <div class="row">
                     <div class="col6">
-                        <?php echo template::checkbox('profilEditCourseTutor', true, 'Gère les espaces comme auteur et participant', [
-                            'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'course', 'tutor'])
+                        <?php echo template::checkbox('profilEditCourseTutor', true, 'Tuteur de tous les espaces', [
+                            'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'course', 'tutor']),
+                            'help' => 'Est autorisé à gérer tous les espaces, y compris ceux des autres auteurs',
                         ]); ?>
                     </div>
                 </div>
