@@ -64,8 +64,17 @@ $(document).ready(function () {
         $(".courseContainer").slideUp();
         $('.courseContainer input[type="checkbox"]').prop('checked', false);
     }
+    
+    // Initialize courseContainer visibility based on users permission
+    if (!$('#profilEditCourseUsers').prop('checked')) {
+        $('#courseContainer').hide();
+    } else {
+        $('#courseContainer').show();
+    }
+
 
     // EVENEMENTS
+    // --------------------------------------------------------------------------------------
 
     // À chaque inversion de l'état du checkbox avec l'id "profilEditFileManager", désactive ou active tous les éléments de la classe "filemanager" en fonction de l'état
     $("#profilEditFileManager").change(function () {
@@ -136,7 +145,6 @@ $(document).ready(function () {
         if ($(this).is(':checked')) {
             // Activer les autres checkboxes
             $('#profilEditCourseUserHistory, #profilEditCourseuserReportExport, #profilEditCourseUserDelete, #profilEditCourseUsersAdd, #profilEditCourseUsersDelete, #profilEditCourseReset').prop('disabled', false);
-            
         } else {
             // Désactiver les autres checkboxes
             $('#profilEditCourseUserHistory, #profilEditCourseuserReportExport, #profilEditCourseUserDelete, #profilEditCourseUsersAdd, #profilEditCourseUsersDelete, #profilEditCourseReset').prop('checked', false).prop('disabled', true);
@@ -146,5 +154,13 @@ $(document).ready(function () {
         }
     });
 
+    // Active ou désactive  #courseContainer si est cochée ou non
+    $('#profilEditCourseUsers').change(function () {
+        if ($(this).is(':checked')) {
+            $('#courseContainer').slideDown();
+        } else {
+            $('#courseContainer').slideUp();
+        }
+    });
 
 });

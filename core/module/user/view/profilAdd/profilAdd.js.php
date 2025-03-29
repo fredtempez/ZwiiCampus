@@ -113,5 +113,13 @@ $(document).ready(function () {
         }
     });
 
+    // Active ou désactive  #courseContainer si est cochée ou non
+    $('#profilAddCourseUsers').change(function () {
+        if ($(this).is(':checked')) {
+            $('#courseContainer').slideDown();
+        } else {
+            $('#courseContainer').slideUp();
+        }
+    });
 
 });

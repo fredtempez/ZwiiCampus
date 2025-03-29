@@ -243,6 +243,8 @@ class init extends common
 					],
 					'course' => [
 						'tutor' => false,
+						'add' => false,
+						'delete' => false,
 						'index' => false,
 						'manage' => false,
 						'users' => false,
@@ -346,6 +348,8 @@ class init extends common
 					],
 					'course' => [
 						'tutor' => false,
+						'add' => false,
+						'delete' => false,
 						'index' => false,
 						'manage' => false,
 						'users' => false,
@@ -454,6 +458,8 @@ class init extends common
 					],
 					'course' => [
 						'tutor' => true,
+						'add' => false,
+						'delete' => false,
 						'index' => true,
 						'manage' => true,
 						'users' => true,
@@ -557,6 +563,8 @@ class init extends common
 					],
 					'course' => [
 						'tutor' => false,
+						'add' => false,
+						'delete' => false,
 						'index' => true,
 						'manage' => true,
 						'users' => true,
