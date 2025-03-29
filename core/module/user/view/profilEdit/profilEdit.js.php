@@ -160,7 +160,8 @@ $(document).ready(function () {
             $('#courseContainer').slideDown();
         } else {
             $('#courseContainer').slideUp();
+            // Reset all checkboxes within courseContainer
+            $('#courseContainer input[type="checkbox"]').prop('checked', false);
         }
     });
-
 });

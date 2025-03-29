@@ -113,12 +113,14 @@ $(document).ready(function () {
         }
     });
 
-    // Active ou désactive  #courseContainer si est cochée ou non
+    // Active ou désactive #courseContainer si est cochée ou non
     $('#profilAddCourseUsers').change(function () {
         if ($(this).is(':checked')) {
             $('#courseContainer').slideDown();
         } else {
             $('#courseContainer').slideUp();
+            // Reset all checkboxes within courseContainer
+            $('#courseContainer input[type="checkbox"]').prop('checked', false);
         }
     });
 
