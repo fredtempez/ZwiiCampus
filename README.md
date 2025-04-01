@@ -1,7 +1,5 @@
 # ZwiiCampus 2.3.00
 
-## ZwiiCampus est désormais hébergé chez Github https://github.com/fredtempez/ZwiiCampus
-
 ZwiiCampus (Learning Management System) est logiciel auteur destiné à mettre en ligne des tutoriels. Il dispose de plusieurs modalités d'ouverture et d'accès des contenus. Basé sur la version 13 du CMS Zwii, la structure logicielle est solide, le framework de Zwii est éprouvé.
 
 Ce logiciel s'installe en ligne ou localement depuis un serveur Web. 
