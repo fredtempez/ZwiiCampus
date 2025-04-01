@@ -101,7 +101,6 @@ class course extends common
                  * admin : tous les espaces
                  * editor : gère son espace son espace dans lequel il est inscrit
                  */
- 
                 if (
                     $this->permissionControl(__FUNCTION__, $courseId)
                 ) {
@@ -1261,6 +1260,8 @@ class course extends common
             $courseId === 'home'
         ) {
             $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
+            // Sauvegarde l'id de l'espace pour RFM
+            $this->setData(['user', $userId, 'view', ['course' => $courseId]]);
         }
         // le participant est inscrit dans le contenu ET le contenu est ouvert ou un admin  ou le prof du contenu sont connectés
         //
@@ -1283,6 +1284,8 @@ class course extends common
                 $message .= sprintf(helper::translate("Bienvenue dans l'espace  %s"), $this->getData(['course', $courseId, 'title']));
             }
             $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
+            // Sauvegarde l'id de l'espace pour RFM
+            $this->setData(['user', $userId, 'view', ['course' => $courseId]]);
         }
         // Le contenu est fermé
         elseif ($this->courseIsAvailable($courseId) === false) {
@@ -1310,6 +1313,8 @@ class course extends common
                 // Anonyme
                 case self::COURSE_ENROLMENT_GUEST:
                     $_SESSION['ZWII_SITE_CONTENT'] = $courseId;
+                    // Sauvegarde l'id de l'espace pour RFM
+                    $this->setData(['user', $userId, 'view', ['course' => $courseId]]);
                     // Accès direct à la page
                     $redirect = helper::baseUrl() . $pageId;
                     break;
