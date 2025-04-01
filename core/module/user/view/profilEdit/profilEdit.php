@@ -249,17 +249,31 @@
                 </h4>
                 <div class="row">
                     <div class="col6">
-                        <?php echo template::checkbox('profilEditCourseTutor', true, 'Gère les espaces comme auteur et participant', [
-                            'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'course', 'tutor'])
+                        <?php echo template::checkbox('profilEditCourseTutor', true, 'Tuteur de tous les espaces', [
+                            'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'course', 'tutor']),
+                            'help' => 'Est autorisé à gérer tous les espaces, y compris ceux des autres auteurs',
                         ]); ?>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col3">
+                        <?php echo template::checkbox('profilEditCourseAdd', true, 'Ajuter un espace', [
+                            'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'course', 'add']),
+                        ]); ?>
+                    </div>
+                    <div class="col3">
+                        <?php echo template::checkbox('profilEditCourseDelete', true, 'Supprimer un espace', [
+                            'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'course', 'delete']),
+                        ]); ?>
+                    </div>
+                    <div class="col3">
                         <?php echo template::checkbox('profilEditCourseEdit', true, 'Éditer un espace', [
                             'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'course', 'edit']),
                         ]); ?>
                     </div>
+
+                </div>
+                <div class="row">
                     <div class="col3">
                         <?php echo template::checkbox('profilEditCourseBackup', true, 'Sauvegarder un espace', [
                             'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'course', 'backup']),
@@ -270,16 +284,21 @@
                             'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'course', 'restore']),
                         ]); ?>
                     </div>
+                    <div class="col3">
+                        <?php echo template::checkbox('profilEditCourseExport', true, 'Exporter un espace en html', [
+                            'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'course', 'export']),
+                        ]); ?>
+                    </div>
+                    <div class="col3">
+                            <?php echo template::checkbox('profilEditCourseReset', true, 'Réinitialiser un espace', [
+                                'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'course', 'reset']),
+                            ]); ?>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col3">
                         <?php echo template::checkbox('profilEditCourseUsers', true, 'Gérer les participants', [
                             'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'course', 'users']),
-                        ]); ?>
-                    </div>
-                    <div class="col3">
-                        <?php echo template::checkbox('profilEditCourseExport', true, 'Exporter un espace en html', [
-                            'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'course', 'export']),
                         ]); ?>
                     </div>
                 </div>
@@ -295,13 +314,13 @@
                                 'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'course', 'userReportExport']),
                             ]); ?>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col3">
                             <?php echo template::checkbox('profilEditCourseUserDelete', true, 'Désinscrire un participant', [
                                 'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'course', 'userDelete']),
                             ]); ?>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col3">
                             <?php echo template::checkbox('profilEditCourseUsersAdd', true, 'Inscrire en masse', [
                                 'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'course', 'usersAdd']),
@@ -310,11 +329,6 @@
                         <div class="col3">
                             <?php echo template::checkbox('profilEditCourseUsersDelete', true, 'Désinscrire en masse', [
                                 'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'course', 'usersDelete']),
-                            ]); ?>
-                        </div>
-                        <div class="col3">
-                            <?php echo template::checkbox('profilEditCourseReset', true, 'Réinitialiser un espace', [
-                                'checked' => $this->getData(['profil', $this->getUrl(2), $this->getUrl(3), 'course', 'reset']),
                             ]); ?>
                         </div>
                     </div>

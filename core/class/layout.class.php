@@ -1,7 +1,6 @@
 <?php
 class layout extends common
 {
-
     private $core;
 
     public function __construct(core $core)
@@ -65,11 +64,11 @@ class layout extends common
         $blockleft = '';
         $blockright = '';
         switch (sizeof($blocks)) {
-            case 1: // une colonne
+            case 1:  // une colonne
                 $content = 'col' . $blocks[0];
                 break;
-            case 2: // 2 blocs
-                if ($blocks[0] < $blocks[1]) { // détermine la position de la colonne
+            case 2:  // 2 blocs
+                if ($blocks[0] < $blocks[1]) {  // détermine la position de la colonne
                     $blockleft = 'col' . $blocks[0];
                     $content = 'col' . $blocks[1];
                 } else {
@@ -77,7 +76,7 @@ class layout extends common
                     $blockright = 'col' . $blocks[1];
                 }
                 break;
-            case 3: // 3 blocs
+            case 3:  // 3 blocs
                 $blockleft = 'col' . $blocks[0];
                 $content = 'col' . $blocks[1];
                 $blockright = 'col' . $blocks[2];
@@ -87,27 +86,25 @@ class layout extends common
         if (
             (sizeof($blocks) === 1 ||
                 in_array($this->getUrl(1), $pattern))
-        ) { // Pleine page en mode configuration
+        ) {  // Pleine page en mode configuration
             if (
-                ($this->getData(['page', $this->getUrl(0), 'navLeft']) === 'top'
-                    || $this->getData(['page', $this->getUrl(0), 'navRight']) === 'top')
-                && in_array($this->getUrl(1), $pattern) === false
+                ($this->getData(['page', $this->getUrl(0), 'navLeft']) === 'top' ||
+                    $this->getData(['page', $this->getUrl(0), 'navRight']) === 'top') &&
+                in_array($this->getUrl(1), $pattern) === false
             ) {
                 $this->showNavButtons('top');
             }
             $this->showContent();
             if (
-                ($this->getData(['page', $this->getUrl(0), 'navLeft']) === 'bottom'
-                    || $this->getData(['page', $this->getUrl(0), 'navRight']) === 'bottom')
-                && in_array($this->getUrl(1), $pattern) === false
+                ($this->getData(['page', $this->getUrl(0), 'navLeft']) === 'bottom' ||
+                    $this->getData(['page', $this->getUrl(0), 'navRight']) === 'bottom') &&
+                in_array($this->getUrl(1), $pattern) === false
             ) {
                 $this->showNavButtons('bottom');
             }
         } else {
             echo '<div class="row siteContainer">';
-            /**
-             * Barre gauche
-             */
+            /** Barre gauche */
             if ($blockleft !== '') {
                 echo '<div class="' . $blockleft . '" id="contentLeft"><aside>';
                 // Détermine si le menu est présent
@@ -125,19 +122,15 @@ class layout extends common
                     echo '</div>';
                     echo substr($contentLeft, $mark + 6, strlen($contentLeft));
                 }
-                echo "</aside></div>";
+                echo '</aside></div>';
             }
-            /**
-             * Contenu de page
-             */
+            /** Contenu de page */
             echo '<div class="' . $content . '" id="contentSite">';
             $this->showNavButtons('top');
             $this->showContent();
             $this->showNavButtons('bottom');
             echo '</div>';
-            /**
-             * Barre droite
-             */
+            /** Barre droite */
             if ($blockright !== '') {
                 echo '<div class="' . $blockright . '" id="contentRight"><aside>';
                 // Détermine si le menu est présent
@@ -168,13 +161,11 @@ class layout extends common
      */
     public function showContent()
     {
-
         if (
-            $this->core->output['title']
-            and ($this->getData(['page', $this->getUrl(0)]) === null
-                or $this->getData(['page', $this->getUrl(0), 'hideTitle']) === false
-                or $this->getUrl(1) === 'config'
-            )
+            $this->core->output['title'] and
+            ($this->getData(['page', $this->getUrl(0)]) === null or
+                $this->getData(['page', $this->getUrl(0), 'hideTitle']) === false or
+                $this->getUrl(1) === 'config')
         ) {
             echo '<h1 id="sectionTitle">' . $this->core->output['title'] . '</h1>';
         }
@@ -190,11 +181,10 @@ class layout extends common
         // Déterminer la position
         $positionFixed = '';
         if (
-            $this->getData(['theme', 'footer', 'position']) === 'site'
+            $this->getData(['theme', 'footer', 'position']) === 'site' or
             // Affiche toujours le pied de page pour l'édition du thème
-            or ($this->getData(['theme', 'footer', 'position']) === 'hide'
-                and $this->getUrl(0) === 'theme'
-            )
+            ($this->getData(['theme', 'footer', 'position']) === 'hide' and
+                $this->getUrl(0) === 'theme')
         ) {
             $position = 'site';
         } else {
@@ -208,34 +198,30 @@ class layout extends common
 
         echo $this->getData(['theme', 'footer', 'position']) === 'hide' ? '<footer class="displayNone">' : '<footer>';
         echo ($position === 'site') ? '<div class="container"><div class="row" id="footersite">' : '<div class="container-large' . $positionFixed . '"><div class="row" id="footerbody">';
-        /**
-         * Calcule la dimension des blocs selon la configuration
-         */
+        /** Calcule la dimension des blocs selon la configuration */
         switch ($this->getData(['theme', 'footer', 'template'])) {
             case '1':
-                $class['left'] = "displayNone";
-                $class['center'] = "col12";
-                $class['right'] = "displayNone";
+                $class['left'] = 'displayNone';
+                $class['center'] = 'col12';
+                $class['right'] = 'displayNone';
                 break;
             case '2':
-                $class['left'] = "col6";
-                $class['center'] = "displayNone";
-                $class['right'] = "col6";
+                $class['left'] = 'col6';
+                $class['center'] = 'displayNone';
+                $class['right'] = 'col6';
                 break;
             case '3':
-                $class['left'] = "col4";
-                $class['center'] = "col4";
-                $class['right'] = "col4";
+                $class['left'] = 'col4';
+                $class['center'] = 'col4';
+                $class['right'] = 'col4';
                 break;
             case '4':
-                $class['left'] = "col12";
-                $class['center'] = "col12";
-                $class['right'] = "col12";
+                $class['left'] = 'col12';
+                $class['center'] = 'col12';
+                $class['right'] = 'col12';
                 break;
         }
-        /**
-         * Affiche les blocs
-         */
+        /** Affiche les blocs */
         echo '<div class="' . $class['left'] . '" id="footer' . $position . 'Left">';
         if ($this->getData(['theme', 'footer', 'textPosition']) === 'left') {
             $this->showFooterText();
@@ -337,15 +323,14 @@ class layout extends common
         $items .= '</span>';
         // Affichage du lien de connexion
         if (
-            ($this->getData(['theme', 'footer', 'loginLink'])
-                and $this->isConnected() === false
-            )
-            or $this->getUrl(0) === 'theme'
+            ($this->getData(['theme', 'footer', 'loginLink']) and
+                $this->isConnected() === false) or
+            $this->getUrl(0) === 'theme'
         ) {
-            $items .= '<span id="footerLoginLink" ' .
-                ($this->getUrl(0) === 'theme' ? 'class="displayNone">' : '>') .
-                '<wbr>&nbsp;|&nbsp;<wbr>' .
-                template::ico('login', [
+            $items .= '<span id="footerLoginLink" '
+                . ($this->getUrl(0) === 'theme' ? 'class="displayNone">' : '>')
+                . '<wbr>&nbsp;|&nbsp;<wbr>'
+                . template::ico('login', [
                     'href' => helper::baseUrl() . 'user/login/' . strip_tags(str_replace('/', '_', $this->getUrl())),
                     'attr' => 'rel="nofollow"',
                     'help' => 'Connexion'
@@ -353,22 +338,23 @@ class layout extends common
         }
         // Affichage de la barre de membre simple
         if (
-            $this->getUser('role') >= self::ROLE_MEMBER && $this->getUser('role') < self::ROLE_ADMIN
-            && $this->getData(['theme', 'footer', 'memberBar']) === true
+            $this->getUser('role') >= self::ROLE_MEMBER &&
+            $this->getUser('role') < self::ROLE_ADMIN &&
+            $this->getData(['theme', 'footer', 'memberBar']) === true
         ) {
             $items .= '<span id="footerDisplayMemberAccount"';
             $items .= $this->getData(['theme', 'footer', 'displaymemberAccount']) === false ? ' class="displayNone">' : '>';
             $items .= '<wbr>&nbsp;|&nbsp;';
             if (
-                $this->getUser('permission', 'filemanager') === true
-                && $this->getUser('permission', 'folder', (self::$siteContent === 'home' ? 'homePath' : 'coursePath')) !== 'none'
+                $this->getUser('permission', 'filemanager') === true &&
+                $this->getUser('permission', 'folder', (self::$siteContent === 'home' ? 'homePath' : 'coursePath')) !== 'none'
             ) {
                 $items .= '<wbr>' . template::ico('folder', [
-                    'href' => helper::baseUrl(false) 
-                            . 'core/vendor/filemanager/dialog.php?type=0&akey=' 
-                            . md5_file(self::DATA_DIR . 'core.json') 
-                            . '&lang=' . $this->getData(['user', $this->getUser('id'), 'language']) 
-                            . '&fldr=' . self::$siteContent,
+                    'href' => helper::baseUrl(false)
+                        . 'core/vendor/filemanager/dialog.php?type=0&akey='
+                        . md5_file(self::DATA_DIR . 'core.json')
+                        . '&lang=' . $this->getData(['user', $this->getUser('id'), 'language'])
+                        . '&fldr=' . self::$siteContent,
                     'margin' => 'all',
                     'attr' => 'data-lity',
                     'help' => 'Fichiers du site'
@@ -394,7 +380,6 @@ class layout extends common
         $items .= '</span></div>';
         echo $items;
     }
-
 
     /**
      * Affiche les réseaux sociaux
@@ -464,8 +449,6 @@ class layout extends common
         }
     }
 
-
-
     /**
      * Affiche le favicon
      */
@@ -492,7 +475,6 @@ class layout extends common
         }
     }
 
-
     /**
      * Affiche le menu
      */
@@ -511,8 +493,8 @@ class layout extends common
          * Affichage du sélecteur d'espaces
          */
         if (
-            //$this->getUser('role') === self::ROLE_MEMBER
-            //&& 
+            // $this->getUser('role') === self::ROLE_MEMBER
+            // &&
             $this->getData(['theme', 'menu', 'selectSpace']) === true
         ) {
             if ($this->getCoursesByProfil()) {
@@ -525,34 +507,27 @@ class layout extends common
             }
         }
 
-        /**
-         * Affiche le bouton d'affichage des rapports individuels de consultation
-         */
-
+        /** Affiche le bouton d'affichage des rapports individuels de consultation */
         if (
-            $this->getData(['theme', 'menu', 'userReport']) === true
-            && self::$siteContent !== 'home'
+            $this->getData(['theme', 'menu', 'userReport']) === true &&
+            self::$siteContent !== 'home' &&
             // Pas de statistiques pour les espaces ouverts
-            && $this->getData(['course', self::$siteContent, 'enrolment']) >= 1
+            $this->getData(['course', self::$siteContent, 'enrolment']) >= 1
         ) {
             $href = '';
+
             switch ($this->getUser('role')) {
                 case self::ROLE_MEMBER:
                     $href = helper::baseUrl() . 'course/userReport/' . self::$siteContent . '/' . $this->getUser('id');
                     break;
                 case self::ROLE_EDITOR:
                     if (
-                        // L'éditeur est l'auteur
-                        $this->getUser('id') === $this->getData(['course', self::$siteContent, 'author'])
-                        ||
-                        // L'éditeur peut gérer tous les espaces 
-                        $this->getUser('permission', 'course', 'tutor') === true
-                        ||
-                        (
-                        // Permission d'accéder aux espaces dans lesquels le membre est inscrit
-                            $this->getData(['enrolment', self::$siteContent])
-                            && array_key_exists($this->getUser('id'), $this->getData(['enrolment', self::$siteContent]))
-                        )
+                        // Permission d'accès aux espaces dans lesquels il est inscrit
+                        $this->getData(['enrolment', $courseId, $this->getUser('id')]) === true ||
+                        // Permission d'accéder à l'espace dans lesquels le membre est auteur
+                        $this->getData(['course', $courseId, 'author']) === $this->getUser('id') ||
+                        // Ou qu'il dispose des droits de tutorat sur tous les modules
+                        $this->getUser('permission', __CLASS__, 'tutor') === true
                     ) {
                         $href = helper::baseUrl() . 'course/users/' . self::$siteContent;
                     }
@@ -574,23 +549,22 @@ class layout extends common
          * Affichage des boutons  gestionnaire de fichiers et mon compte
          */
         if (
-            $this->getUser('role') === self::ROLE_MEMBER
-            && $this->getData(['theme', 'menu', 'memberBar']) === true
+            $this->getUser('role') === self::ROLE_MEMBER &&
+            $this->getData(['theme', 'menu', 'memberBar']) === true
         ) {
-
             // Affiche l'icône RFM
             if (
-                $this->getUser('permission', 'filemanager') === true
-                && $this->getUser('permission', 'folder', (self::$siteContent === 'home' ? 'homePath' : 'coursePath')) !== 'none'
+                $this->getUser('permission', 'filemanager') === true &&
+                $this->getUser('permission', 'folder', (self::$siteContent === 'home' ? 'homePath' : 'coursePath')) !== 'none'
             ) {
                 $itemsRight .= '<li>' . template::ico('folder', [
-                                'href' => helper::baseUrl(false) 
-                                    . 'core/vendor/filemanager/dialog.php?type=0&akey=' 
-                                    . md5_file(self::DATA_DIR . 'core.json') 
-                                    . '&lang=' . $this->getData(['user', $this->getUser('id'), 'language']) 
-                                    . '&fldr=' . self::$siteContent,
-                                'attr' => 'data-lity',
-                                'help' => 'Fichiers du site'
+                    'href' => helper::baseUrl(false)
+                        . 'core/vendor/filemanager/dialog.php?type=0&akey='
+                        . md5_file(self::DATA_DIR . 'core.json')
+                        . '&lang=' . $this->getData(['user', $this->getUser('id'), 'language'])
+                        . '&fldr=' . self::$siteContent,
+                    'attr' => 'data-lity',
+                    'help' => 'Fichiers du site'
                 ]) . '</li>';
             }
             // Affiche l'icône d'édition du compte
@@ -601,8 +575,8 @@ class layout extends common
                     'href' => helper::baseUrl() . 'user/edit/' . $this->getUser('id')
                 ]) . '</li>';
             }
-            $itemsRight .= '<li>' .
-                template::ico('logout', [
+            $itemsRight .= '<li>'
+                . template::ico('logout', [
                     'help' => 'Déconnecter',
                     'href' => helper::baseUrl() . 'user/logout',
                     'id' => 'barLogout'
@@ -611,17 +585,16 @@ class layout extends common
 
         // Lien de connexion
         if (
-            ($this->getData(['theme', 'menu', 'loginLink'])
-                and $this->isConnected() === false
-            )
-            or $this->getUrl(0) === 'theme'
+            ($this->getData(['theme', 'menu', 'loginLink']) and
+                $this->isConnected() === false) or
+            $this->getUrl(0) === 'theme'
         ) {
-            $itemsRight .= '<li id="menuLoginLink" ' . ($this->getUrl(0) === 'theme' ? 'class="displayNone"' : '') . '>' .
-                template::ico('login', [
+            $itemsRight .= '<li id="menuLoginLink" ' . ($this->getUrl(0) === 'theme' ? 'class="displayNone"' : '') . '>'
+                . template::ico('login', [
                     'href' => helper::baseUrl() . 'user/login/' . strip_tags(str_replace('/', '_', $this->getUrl())),
-                    'help' => "Connexion"
-                ]) .
-                '</li>';
+                    'help' => 'Connexion'
+                ])
+                . '</li>';
         }
 
         // Retourne les items du menu
@@ -642,9 +615,8 @@ class layout extends common
             // Menu extra ou standard
 
             if (
-                    // Absence de la position extra, la page est toujours affichée à gauche.
-                ($this->getData(['page', $parentPageId, 'extraPosition']) !== NULL || $extra === true)
-                &&
+                // Absence de la position extra, la page est toujours affichée à gauche.
+                ($this->getData(['page', $parentPageId, 'extraPosition']) !== NULL || $extra === true) &&
                 $this->getData(['page', $parentPageId, 'extraPosition']) !== $extra
             ) {
                 continue;
@@ -656,12 +628,10 @@ class layout extends common
             $items .= '<li id="' . $parentPageId . '">';
 
             if (
-                ($this->getData(['page', $parentPageId, 'disable']) === true
-                    and $this->isConnected() === false
-                ) or ($this->getData(['page', $parentPageId, 'disable']) === true
-                    and $this->isConnected() === true
-                    and $this->getUser('role') < self::ROLE_EDITOR
-                )
+                ($this->getData(['page', $parentPageId, 'disable']) === true and
+                        $this->isConnected() === false) or ($this->getData(['page', $parentPageId, 'disable']) === true and
+                    $this->isConnected() === true and
+                    $this->getUser('role') < self::ROLE_EDITOR)
             ) {
                 $pageUrl = ($this->getData(['config', 'homePageId']) === $this->getUrl(0)) ? helper::baseUrl(false) : helper::baseUrl() . $this->getUrl(0);
                 $items .= '<a href="' . $pageUrl . '">';
@@ -678,14 +648,14 @@ class layout extends common
                     $items .= $this->getData(['page', $parentPageId, 'shortTitle']);
                     break;
                 case 'icon':
-                    if ($this->getData(['page', $parentPageId, 'iconUrl']) != "") {
+                    if ($this->getData(['page', $parentPageId, 'iconUrl']) != '') {
                         $items .= '<img alt="' . $this->getData(['page', $parentPageId, 'shortTitle']) . '" src="' . helper::baseUrl(false) . self::FILE_DIR . 'source/' . $this->getData(['page', $parentPageId, 'iconUrl']) . '" />';
                     } else {
                         $items .= $this->getData(['page', $parentPageId, 'shortTitle']);
                     }
                     break;
                 case 'icontitle':
-                    if ($this->getData(['page', $parentPageId, 'iconUrl']) != "") {
+                    if ($this->getData(['page', $parentPageId, 'iconUrl']) != '') {
                         $items .= '<img alt="' . $this->getData(['page', $parentPageId, 'titlshortTitlee']) . '" src="' . helper::baseUrl(false) . self::FILE_DIR . 'source/' . $this->getData(['page', $parentPageId, 'iconUrl']) . '" data-tippy-content="';
                         $items .= $this->getData(['page', $parentPageId, 'shortTitle']) . '"/>';
                     } else {
@@ -701,7 +671,8 @@ class layout extends common
                 $totalChild += 1;
             }
             if (
-                $childrenPageIds && $disableChild !== $totalChild &&
+                $childrenPageIds &&
+                $disableChild !== $totalChild &&
                 $this->getdata(['page', $parentPageId, 'hideMenuChildren']) === false
             ) {
                 $items .= template::ico('down', ['margin' => 'left']);
@@ -722,12 +693,10 @@ class layout extends common
                 // Mise en page du sous-item
                 $items .= '<li id=' . $childKey . '>';
                 if (
-                    ($this->getData(['page', $childKey, 'disable']) === true
-                        and $this->isConnected() === false
-                    ) or ($this->getData(['page', $childKey, 'disable']) === true
-                        and $this->isConnected() === true
-                        and $this->getUser('role') < self::ROLE_EDITOR
-                    )
+                    ($this->getData(['page', $childKey, 'disable']) === true and
+                            $this->isConnected() === false) or ($this->getData(['page', $childKey, 'disable']) === true and
+                        $this->isConnected() === true and
+                        $this->getUser('role') < self::ROLE_EDITOR)
                 ) {
                     $pageUrl = ($this->getData(['config', 'homePageId']) === $this->getUrl(0)) ? helper::baseUrl(false) : helper::baseUrl() . $this->getUrl(0);
                     $items .= '<a href="' . $pageUrl . '">';
@@ -744,14 +713,14 @@ class layout extends common
                         $items .= $this->getData(['page', $childKey, 'shortTitle']);
                         break;
                     case 'icon':
-                        if ($this->getData(['page', $childKey, 'iconUrl']) != "") {
+                        if ($this->getData(['page', $childKey, 'iconUrl']) != '') {
                             $items .= '<img alt="' . $this->getData(['page', $parentPageId, 'shortTitle']) . '" src="' . helper::baseUrl(false) . self::FILE_DIR . 'source/' . $this->getData(['page', $childKey, 'iconUrl']) . '" />';
                         } else {
                             $items .= $this->getData(['page', $parentPageId, 'shortTitle']);
                         }
                         break;
                     case 'icontitle':
-                        if ($this->getData(['page', $childKey, 'iconUrl']) != "") {
+                        if ($this->getData(['page', $childKey, 'iconUrl']) != '') {
                             $items .= '<img alt="' . $this->getData(['page', $parentPageId, 'shortTitle']) . '" src="' . helper::baseUrl(false) . self::FILE_DIR . 'source/' . $this->getData(['page', $childKey, 'iconUrl']) . '" data-tippy-content="';
                             $items .= $this->getData(['page', $childKey, 'shortTitle']) . '"/>';
                         } else {
@@ -759,7 +728,7 @@ class layout extends common
                         }
                         break;
                     case 'icontext':
-                        if ($this->getData(['page', $childKey, 'iconUrl']) != "") {
+                        if ($this->getData(['page', $childKey, 'iconUrl']) != '') {
                             $items .= '<img alt="' . $this->getData(['page', $parentPageId, 'shortTitle']) . '" src="' . helper::baseUrl(false) . self::FILE_DIR . 'source/' . $this->getData(['page', $childKey, 'iconUrl']) . '" />';
                             $items .= $this->getData(['page', $childKey, 'shortTitle']);
                         } else {
@@ -773,7 +742,6 @@ class layout extends common
         }
         return ($items);
     }
-
 
     /**
      * Générer un menu pour la barre latérale
@@ -818,8 +786,8 @@ class layout extends common
             if ($onlyChildren === false) {
                 $items .= '<li class="menuSideChild">';
                 if (
-                    $this->getData(['page', $parentPageId, 'disable']) === true
-                    and $this->isConnected() === false
+                    $this->getData(['page', $parentPageId, 'disable']) === true and
+                    $this->isConnected() === false
                 ) {
                     $items .= '<a href="' . $this->getUrl(1) . '">';
                 } else {
@@ -842,8 +810,8 @@ class layout extends common
                 $itemsChildren .= '<li class="menuSideChild">';
 
                 if (
-                    $this->getData(['page', $childKey, 'disable']) === true
-                    and $this->isConnected() === false
+                    $this->getData(['page', $childKey, 'disable']) === true and
+                    $this->isConnected() === false
                 ) {
                     $itemsChildren .= '<a href="' . $this->getUrl(1) . '">';
                 } else {
@@ -868,8 +836,6 @@ class layout extends common
         // Retourne les items du menu
         echo $items;
     }
-
-
 
     /**
      * Affiche le meta titre
@@ -911,8 +877,8 @@ class layout extends common
     {
         $imagePath = self::FILE_DIR . 'source/' . $this->getData(['config', 'seo', 'openGraphImage']);
         if (
-            $this->getData(['config', 'seo', 'openGraphImage'])
-            && file_exists($imagePath)
+            $this->getData(['config', 'seo', 'openGraphImage']) &&
+            file_exists($imagePath)
         ) {
             $typeMime = exif_imagetype($imagePath);
             switch ($typeMime) {
@@ -929,7 +895,7 @@ class layout extends common
             $imageSize = getimagesize($imagePath);
             $wide = $imageSize[0];
             $height = $imageSize[1];
-            //Sortie
+            // Sortie
             $items = '<meta property="og:image" content="' . helper::baseUrl(false) . self::FILE_DIR . 'source/' . $this->getData(['config', 'seo', 'openGraphImage']) . '" />';
             $items .= '<meta property="og:image:type" content="' . $typeMime . '" />';
             $items .= '<meta property="og:image:width" content="' . $wide . '" />';
@@ -983,10 +949,12 @@ class layout extends common
             // Items de gauche
             $leftItems = '';
             // Sélecteur de contenu
+
             /**
              * Les admins voient tous les contenus
              * Les enseignants les contenus dont ils sont auteurs
              */
+
             if ($this->getUser('role') >= self::ROLE_EDITOR) {
                 if (is_array($this->getCoursesByProfil())) {
                     $leftItems .= '<li><select id="barSelectCourse" >';
@@ -996,11 +964,13 @@ class layout extends common
                     }
                     $leftItems .= '</select></li>';
                 }
-
-                $leftItems .= '<li>' . template::ico('cubes', [
-                    'href' => helper::baseUrl() . 'course',
-                    'help' => 'Gérer les espaces'
-                ]) . '</li>';
+                // Peut gérer les espaces
+                if ($this->getUser('permission', 'course', 'index') === true) {
+                    $leftItems .= '<li>' . template::ico('cubes', [
+                        'href' => helper::baseUrl() . 'course',
+                        'help' => 'Gérer les espaces'
+                    ]) . '</li>';
+                }
             }
             if ($this->getUser('role') >= self::ROLE_ADMIN) {
                 $leftItems .= '<li>' . template::ico('brush', [
@@ -1010,8 +980,8 @@ class layout extends common
             }
             // Liste des pages et bouton de gestion interdit pour l'accueil sauf admin
             if (
-                ($this->getUser('role') === self::ROLE_EDITOR && self::$siteContent != 'home')
-                || $this->getUser('role') === self::ROLE_ADMIN
+                ($this->getUser('role') === self::ROLE_EDITOR && self::$siteContent != 'home') ||
+                $this->getUser('role') === self::ROLE_ADMIN
             ) {
                 $leftItems .= '<li><select id="barSelectPage">';
                 $leftItems .= '<option value="">' . helper::translate('Pages du site') . '</option>';
@@ -1028,27 +998,27 @@ class layout extends common
                     }
                     // Exclure les barres
                     if ($this->getData(['page', $parentPageId, 'block']) !== 'bar') {
-                        $leftItems .= '<option value="' .
-                            helper::baseUrl() .
-                            $parentPageId . '"' .
-                            ($parentPageId === $currentPageId ? ' selected' : false) .
-                            ' class="' .
-                            ($this->getData(['page', $parentPageId, 'disable']) === true ? 'pageInactive' : '') .
-                            ($this->getData(['page', $parentPageId, 'position']) === 0 ? ' pageHidden' : '') .
-                            '">' .
-                            $this->getData(['page', $parentPageId, 'shortTitle']) .
-                            '</option>';
+                        $leftItems .= '<option value="'
+                            . helper::baseUrl()
+                            . $parentPageId . '"'
+                            . ($parentPageId === $currentPageId ? ' selected' : false)
+                            . ' class="'
+                            . ($this->getData(['page', $parentPageId, 'disable']) === true ? 'pageInactive' : '')
+                            . ($this->getData(['page', $parentPageId, 'position']) === 0 ? ' pageHidden' : '')
+                            . '">'
+                            . $this->getData(['page', $parentPageId, 'shortTitle'])
+                            . '</option>';
                         foreach ($childrenPageIds as $childKey) {
-                            $leftItems .= '<option value="' .
-                                helper::baseUrl() .
-                                $childKey . '"' .
-                                ($childKey === $currentPageId ? ' selected' : false) .
-                                ' class="' .
-                                ($this->getData(['page', $childKey, 'disable']) === true ? 'pageInactive' : '') .
-                                ($this->getData(['page', $childKey, 'position']) === 0 ? ' pageHidden' : '') .
-                                '">&nbsp;&nbsp;&nbsp;&nbsp;' .
-                                $this->getData(['page', $childKey, 'shortTitle']) .
-                                '</option>';
+                            $leftItems .= '<option value="'
+                                . helper::baseUrl()
+                                . $childKey . '"'
+                                . ($childKey === $currentPageId ? ' selected' : false)
+                                . ' class="'
+                                . ($this->getData(['page', $childKey, 'disable']) === true ? 'pageInactive' : '')
+                                . ($this->getData(['page', $childKey, 'position']) === 0 ? ' pageHidden' : '')
+                                . '">&nbsp;&nbsp;&nbsp;&nbsp;'
+                                . $this->getData(['page', $childKey, 'shortTitle'])
+                                . '</option>';
                         }
                     }
                 }
@@ -1072,20 +1042,19 @@ class layout extends common
                 }
                 if (
                     // Sur un module de page qui autorise le bouton de modification de la page
-                    $this->core->output['showBarEditButton']
+                    $this->core->output['showBarEditButton'] or
                     // Sur une page sans module
-                    or $this->getData(['page', $this->getUrl(0), 'moduleId']) === ''
+                    $this->getData(['page', $this->getUrl(0), 'moduleId']) === '' or
                     // Sur une page avec un module invalide
-                    or (empty($this->getData(['page', $this->getUrl(0), 'moduleId'])) === false
-                        and class_exists($this->getData(['page', $this->getUrl(0), 'moduleId'])) === false
-                    )
+                    (empty($this->getData(['page', $this->getUrl(0), 'moduleId'])) === false and
+                        class_exists($this->getData(['page', $this->getUrl(0), 'moduleId'])) === false) or
                     // Sur une page d'accueil
-                    or $this->getUrl(0) === ''
+                    $this->getUrl(0) === ''
                 ) {
                     // Bouton Editer une page
                     if (
-                        $this->getUser('permission', 'page', 'edit')
-                        and $this->geturl(1) !== 'edit'
+                        $this->getUser('permission', 'page', 'edit') and
+                        $this->geturl(1) !== 'edit'
                     ) {
                         $leftItems .= '<li>' . template::ico('pencil', [
                             'href' => helper::baseUrl() . 'page/edit/' . $this->getUrl(0) . '/' . self::$siteContent,
@@ -1094,10 +1063,10 @@ class layout extends common
                     }
                     // Bouton Editer le module d'une page
                     if (
-                        $this->getUser('permission', 'page', 'module')
-                        and $this->geturl(1) !== 'edit'
-                        and $this->getData(['page', $this->getUrl(0), 'moduleId'])
-                        and class_exists($this->getData(['page', $this->getUrl(0), 'moduleId'])) === true
+                        $this->getUser('permission', 'page', 'module') and
+                        $this->geturl(1) !== 'edit' and
+                        $this->getData(['page', $this->getUrl(0), 'moduleId']) and
+                        class_exists($this->getData(['page', $this->getUrl(0), 'moduleId'])) === true
                     ) {
                         $leftItems .= '<li>' . template::ico('gear', [
                             'href' => helper::baseUrl() . $this->getUrl(0) . '/config',
@@ -1106,8 +1075,8 @@ class layout extends common
                     }
                     // Bouton dupliquer une page
                     if (
-                        $this->getUser('permission', 'page', 'duplicate')
-                        and $this->geturl(1) !== 'edit'
+                        $this->getUser('permission', 'page', 'duplicate') and
+                        $this->geturl(1) !== 'edit'
                     ) {
                         $leftItems .= '<li>' . template::ico('clone', [
                             'href' => helper::baseUrl() . 'page/duplicate/' . $this->getUrl(0) . '/' . self::$siteContent,
@@ -1117,9 +1086,8 @@ class layout extends common
                     }
                     // Bouton Effacer une page
                     if (
-                        $this->getUser('permission', 'page', 'delete')
-                        and $this->geturl(1) !== 'edit'
-
+                        $this->getUser('permission', 'page', 'delete') and
+                        $this->geturl(1) !== 'edit'
                     ) {
                         $leftItems .= '<li>' . template::ico('trash', [
                             'href' => helper::baseUrl() . 'page/delete/' . $this->getUrl(0) . '/' . self::$siteContent,
@@ -1134,25 +1102,25 @@ class layout extends common
             $rightItems = '';
             if (
                 (
-                    $this->getUser('role') >= self::ROLE_MEMBER
-                    && $this->getUser('permission', 'filemanager') === true
-                    && $this->getUser('permission', 'folder', (self::$siteContent === 'home' ? 'homePath' : 'coursePath')) !== 'none'
-                )
-                || $this->getUser('role') === self::ROLE_ADMIN
+                    $this->getUser('role') >= self::ROLE_MEMBER &&
+                    $this->getUser('permission', 'filemanager') === true &&
+                    $this->getUser('permission', 'folder', (self::$siteContent === 'home' ? 'homePath' : 'coursePath')) !== 'none'
+                ) ||
+                $this->getUser('role') === self::ROLE_ADMIN
             ) {
                 $rightItems .= '<li>' . template::ico('folder', [
                     'help' => 'Fichiers',
-                    'href' => helper::baseUrl(false) 
-                            . 'core/vendor/filemanager/dialog.php?type=0&akey=' 
-                            . md5_file(self::DATA_DIR . 'core.json') 
-                            . '&lang=' . $this->getData(['user', $this->getUser('id'), 'language']) 
-                            . '&fldr=' . self::$siteContent,
+                    'href' => helper::baseUrl(false)
+                        . 'core/vendor/filemanager/dialog.php?type=0&akey='
+                        . md5_file(self::DATA_DIR . 'core.json')
+                        . '&lang=' . $this->getData(['user', $this->getUser('id'), 'language'])
+                        . '&fldr=' . self::$siteContent,
                     'attr' => 'data-lity'
                 ]) . '</li>';
             }
             if (
-                self::$siteContent === 'home'
-                && $this->getUser('role') >= self::ROLE_ADMIN
+                self::$siteContent === 'home' &&
+                $this->getUser('role') >= self::ROLE_ADMIN
             ) {
                 $rightItems .= '<li>' . template::ico('flag', [
                     'help' => 'Langues',
@@ -1207,8 +1175,7 @@ class layout extends common
                                 // Mise à jour d'un module
                                 // Le module est installé et une mise à jour est en ligne
                                 if (
-                                    isset($infoModules[$key])
-                                    &&
+                                    isset($infoModules[$key]) &&
                                     version_compare($infoModules[$key]['version'], $value['version'], '<')
                                 ) {
                                     $this->setData(['core', 'updateModuleAvailable', true], false);
@@ -1226,14 +1193,13 @@ class layout extends common
             }
             // Boutons depuis le rôle éditeur
             if (
-                $this->getUser('role') >= self::ROLE_EDITOR
-                && $this->getUser('permission', 'user', 'edit')
-
+                $this->getUser('role') >= self::ROLE_EDITOR &&
+                $this->getUser('permission', 'user', 'edit')
             ) {
-                $rightItems .= '<li><a href="' . helper::baseUrl() . 'user/edit/' . $this->getUser('id') .
-                    '" data-tippy-content="' . helper::translate('Configurer mon compte') . '">' .
-                    template::ico('user', ['margin' => 'right']) . '<span id="displayUsername">' . $this->getUser('firstname') . ' ' . $this->getUser('lastname') .
-                    '</span></a></li>';
+                $rightItems .= '<li><a href="' . helper::baseUrl() . 'user/edit/' . $this->getUser('id')
+                    . '" data-tippy-content="' . helper::translate('Configurer mon compte') . '">'
+                    . template::ico('user', ['margin' => 'right']) . '<span id="displayUsername">' . $this->getUser('firstname') . ' ' . $this->getUser('lastname')
+                    . '</span></a></li>';
             }
             $rightItems .= '<li>' . template::ico('logout', [
                 'help' => 'Déconnecter',
@@ -1298,7 +1264,7 @@ class layout extends common
     {
         // Import des fontes liées au thème
         if (file_exists(self::DATA_DIR . 'font/font.html')) {
-            include_once(self::DATA_DIR . 'font/font.html');
+            include_once (self::DATA_DIR . 'font/font.html');
         }
     }
 
@@ -1311,8 +1277,8 @@ class layout extends common
         $vars = 'var baseUrl = ' . json_encode(helper::baseUrl(false)) . ';';
         $vars .= 'var baseUrlQs = ' . json_encode(helper::baseUrl()) . ';';
         if (
-            $this->isConnected() === true
-            and $this->getUser('role') >= self::ROLE_EDITOR
+            $this->isConnected() === true and
+            $this->getUser('role') >= self::ROLE_EDITOR
         ) {
             $vars .= 'var privateKey = ' . json_encode(md5_file(self::DATA_DIR . 'core.json')) . ';';
         }
@@ -1326,9 +1292,9 @@ class layout extends common
             }
             // Module
             elseif (
-                $moduleId
-                and in_array($moduleId, self::$coreModuleIds) === false
-                and file_exists(self::MODULE_DIR . $moduleId . '/vendor/' . $vendorName . '/inc.json')
+                $moduleId and
+                in_array($moduleId, self::$coreModuleIds) === false and
+                file_exists(self::MODULE_DIR . $moduleId . '/vendor/' . $vendorName . '/inc.json')
             ) {
                 $vendorPath = self::MODULE_DIR . $moduleId . '/vendor/' . $vendorName . '/';
             }

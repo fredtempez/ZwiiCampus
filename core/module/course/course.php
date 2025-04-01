@@ -18,18 +18,18 @@ class course extends common
         'swap' => self::ROLE_VISITOR,
         'suscribe' => self::ROLE_VISITOR,
         'unsuscribe' => self::ROLE_MEMBER,
-        'index' => self::ROLE_EDITOR,  // Fait
-        'edit' => self::ROLE_EDITOR,  // Fait
-        'manage' => self::ROLE_EDITOR,  // Fait
-        'users' => self::ROLE_EDITOR,  // fait
-        'usersAdd' => self::ROLE_EDITOR,  // Fait
-        'usersDelete' => self::ROLE_EDITOR,  // Fait
-        'usersReportExport' => self::ROLE_EDITOR,  // fait
-        'userDelete' => self::ROLE_EDITOR,  // Fait
-        'userReport' => self::ROLE_MEMBER,  // Fait
-        'userReportExport' => self::ROLE_EDITOR,  // Fait
-        'backup' => self::ROLE_EDITOR,  // Fait
-        'restore' => self::ROLE_EDITOR,  // Fait
+        'index' => self::ROLE_EDITOR,
+        'edit' => self::ROLE_EDITOR,
+        'manage' => self::ROLE_EDITOR,
+        'users' => self::ROLE_EDITOR,
+        'usersAdd' => self::ROLE_EDITOR,
+        'usersDelete' => self::ROLE_EDITOR,
+        'usersReportExport' => self::ROLE_EDITOR,
+        'userDelete' => self::ROLE_EDITOR,
+        'userReport' => self::ROLE_MEMBER,
+        'userReportExport' => self::ROLE_EDITOR,
+        'backup' => self::ROLE_EDITOR,
+        'restore' => self::ROLE_EDITOR,
         'reset' => self::ROLE_EDITOR,
         'clone' => self::ROLE_ADMIN,
         'add' => self::ROLE_ADMIN,
@@ -84,7 +84,7 @@ class course extends common
 
     public function index()
     {
-        // Tableau à transmettre à la fvue
+        // Tableau à transmettre à la vue
         self::$courses = array();
 
         // Pointer RFM sur le dossier de l'espace
@@ -101,6 +101,7 @@ class course extends common
                  * admin : tous les espaces
                  * editor : gère son espace son espace dans lequel il est inscrit
                  */
+ 
                 if (
                     $this->permissionControl(__FUNCTION__, $courseId)
                 ) {
@@ -134,8 +135,8 @@ class course extends common
                         $info,
                         $this->getData(['course', $courseId, 'description']),
                         $enrolment,
-                        $users .
-                            template::ico('sliders', [
+                        $users
+                            . template::ico('sliders', [
                                 'href' => helper::baseUrl() . 'course/manage/' . $courseId,
                                 'help' => 'Gérer cet espace',
                                 'value' => template::ico('pencil'),
@@ -821,9 +822,7 @@ class course extends common
                         continue;
                 }
 
-                /**
-                 * CONSTRUCTION DU TABLEAU
-                 */
+                /** CONSTRUCTION DU TABLEAU */
 
                 // Calcul de la progression
                 $report = '-';
@@ -834,10 +833,10 @@ class course extends common
                         : 0;
 
                     // Progression selon nouvelle méthode (valeurs stockées)
-                    $report =(array_key_exists('progress', $userValue) && $userValue['progress'])
+                    $report = (array_key_exists('progress', $userValue) && $userValue['progress'])
                         ? number_format($userValue['progress'], 1, ',') . ' %'
                         : ($viewPages ? number_format(min(round(($viewPages * 100) / $sumPages, 1), 100), 1, ',') . ' %' : '0%');
-                }   
+                }
 
                 // Les groupes sous forme de chaine
                 $group = $this->getData(['user', $userId, 'group']);
@@ -864,16 +863,16 @@ class course extends common
                         'id' => 'userReport' . $userId,
                         'fontSize' => '1.3em',
                         'margin' => 'all',
-                        'help' =>  $this->getdata(['course', $courseId, 'report']) ? 'Télémétrie' : 'Télémétrie désactivée',
-                        'href' =>  $this->getdata(['course', $courseId, 'report']) ? helper::baseUrl() . 'course/userReport/' . $courseId . '/' . $userId : ''
+                        'help' => $this->getdata(['course', $courseId, 'report']) ? 'Télémétrie' : 'Télémétrie désactivée',
+                        'href' => $this->getdata(['course', $courseId, 'report']) ? helper::baseUrl() . 'course/userReport/' . $courseId . '/' . $userId : ''
                     ])
-                    . template::ico('user-times', [
-                        'class' => 'userDelete icoTextRed',
-                        'href' => helper::baseUrl() . 'course/userDelete/' . $courseId . '/' . $userId,
-                        'fontSize' => '1.3em',
-                        'margin' => 'all',
-                        'help' => 'Désinscrire',
-                    ])
+                        . template::ico('user-times', [
+                            'class' => 'userDelete icoTextRed',
+                            'href' => helper::baseUrl() . 'course/userDelete/' . $courseId . '/' . $userId,
+                            'fontSize' => '1.3em',
+                            'margin' => 'all',
+                            'help' => 'Désinscrire',
+                        ])
                 ];
             }
         }
@@ -1273,7 +1272,7 @@ class course extends common
         ) {
             // Récupérer la dernière page visitée par cet utilisateur si elle existe
             $redirect = ($this->getData(['enrolment', $courseId, $userId, 'lastPageView']) !== null &&
-                array_key_exists($this->getData(['enrolment', $courseId, $userId, 'lastPageView']), $pages))
+                    array_key_exists($this->getData(['enrolment', $courseId, $userId, 'lastPageView']), $pages))
                 ? helper::baseUrl() . $this->getData(['enrolment', $courseId, $userId, 'lastPageView'])
                 : helper::baseUrl();
 
@@ -2127,14 +2126,13 @@ class course extends common
                 return (
                     $this->getUser('permission', __CLASS__, $function) &&
                     $this->getUser('role') === self::$actions[$function] &&
-                    // Permission d'accéder aux espaces dans lesquels le membre auteur
                     (
-                        $this->getData(['enrolment', $courseId]) && ($this->getUser('id') === $this->getData(['course', $courseId, 'author']))
-                    ) ||
-                    (  // Permission d'accéder aux espaces dans lesquels le membre est inscrit
-                        $this->getData(['enrolment', $courseId]) &&
-                        $this->getUser('permission', __CLASS__, 'tutor') === true &&
-                        array_key_exists($this->getUser('id'), $this->getData(['enrolment', $courseId]))
+                        // Permission d'accès aux espaces dans lesquels il est inscrit
+                        $this->getData(['enrolment', $courseId, $this->getUser('id')]) === true ||
+                        // Permission d'accéder à l'espace dans lesquels le membre est auteur
+                        $this->getData(['course', $courseId, 'author']) === $this->getUser('id') ||
+                        // Ou qu'il dispose des droits de tutorat sur tous les modules
+                        $this->getUser('permission', __CLASS__, 'tutor') === true
                     )
                 );
             default:
