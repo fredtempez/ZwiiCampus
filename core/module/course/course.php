@@ -328,6 +328,11 @@ class course extends common
                     file_put_contents(self::DATA_DIR . $oldCourseId . '/content/' . $filename, $html);
                 }
 
+                // Met à jour le contenu des données des modules
+                $modules = $this->getData(['module', $courseId]);
+                $modules = str_replace($oldCourseId, $courseId, $modules);
+                $this->setData(['module', $courseId, $modules]);
+
                 /** Copie des dossiers */
                 // Delete destination directory if it exists
                 if (is_dir(self::DATA_DIR . $courseId)) {
