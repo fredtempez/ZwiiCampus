@@ -55,7 +55,7 @@ class common
 	// Numéro de version
 	const ZWII_VERSION = '2.3.01';
 	// URL autoupdate
-	const ZWII_UPDATE_URL = 'https://forge.chapril.org/ZwiiCMS-Team/campus-update/raw/branch/master/';
+	const ZWII_UPDATE_URL = 'https://codeberg.org/fredtempez/campus-update/raw/branch/master/';
 	const ZWII_UPDATE_CHANNEL = 'v2';
 	// Valeurs possibles multiple de 10, 10 autorise 9 profils, 100 autorise 99 profils
 	const MAX_PROFILS = 10;

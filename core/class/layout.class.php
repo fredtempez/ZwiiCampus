@@ -353,8 +353,7 @@ class layout extends common
                     'href' => helper::baseUrl(false)
                         . 'core/vendor/filemanager/dialog.php?type=0&akey='
                         . md5_file(self::DATA_DIR . 'core.json')
-                        . '&lang=' . $this->getData(['user', $this->getUser('id'), 'language'])
-                        . '&fldr=' . self::$siteContent,
+                        . '&lang=' . $this->getData(['user', $this->getUser('id'), 'language']),
                     'margin' => 'all',
                     'attr' => 'data-lity',
                     'help' => 'Fichiers du site'
@@ -561,8 +560,7 @@ class layout extends common
                     'href' => helper::baseUrl(false)
                         . 'core/vendor/filemanager/dialog.php?type=0&akey='
                         . md5_file(self::DATA_DIR . 'core.json')
-                        . '&lang=' . $this->getData(['user', $this->getUser('id'), 'language'])
-                        . '&fldr=' . self::$siteContent,
+                        . '&lang=' . $this->getData(['user', $this->getUser('id'), 'language']),
                     'attr' => 'data-lity',
                     'help' => 'Fichiers du site'
                 ]) . '</li>';
@@ -1113,8 +1111,7 @@ class layout extends common
                     'href' => helper::baseUrl(false)
                         . 'core/vendor/filemanager/dialog.php?type=0&akey='
                         . md5_file(self::DATA_DIR . 'core.json')
-                        . '&lang=' . $this->getData(['user', $this->getUser('id'), 'language'])
-                        . '&fldr=' . self::$siteContent,
+                        . '&lang=' . $this->getData(['user', $this->getUser('id'), 'language']),
                     'attr' => 'data-lity'
                 ]) . '</li>';
             }

@@ -19,8 +19,14 @@ setlocale(LC_CTYPE, $lang);
 
 /* Lecture du rôle de l'utilisateur connecté pour attribuer les droits et les dossiers */
 $userId = $_COOKIE['ZWII_USER_ID'];
-$courseId = isset($_GET['fldr']) ? $_GET['fldr'] : '';
+
+// Données de l'utilisateur connecté
 $u = json_decode(file_get_contents('../../../site/data/user.json'), true);
+
+// Id de l'espace ouvert stocké dans le compte de l'utilisateur, sinon pointe sur "home"
+$courseId = array_key_exists('view', $u['user'][$userId]) && array_key_exists('course', $u['user'][$userId]['view']) ? $u['user'][$userId]['view']['course'] : 'home';
+;
+// Données du profil de l'utilisateur connecté
 $g = json_decode(file_get_contents('../../../site/data/profil.json'), true);
 
 // Lecture les droits
@@ -50,45 +56,45 @@ if (!is_null($u) && !is_null($g) && !is_null($userId)) {
 			break;
 		case 2:
 		case 1:
-            // Accès contrôlés par le profil
-            $profil = $u['user'][$userId]['profil'];
-            $file = $g['profil'][$role][$profil]['file'];
-            $folder = $g['profil'][$role][$profil]['folder'];
-            // Détermine la variable du dossier partagé dans le profil
-            $sharedPathKey = ($courseId === 'home') ? 'homePath' : 'coursePath';
+			// Accès contrôlés par le profil
+			$profil = $u['user'][$userId]['profil'];
+			$file = $g['profil'][$role][$profil]['file'];
+			$folder = $g['profil'][$role][$profil]['folder'];
+			// Détermine la variable du dossier partagé dans le profil
+			$sharedPathKey = ($courseId === 'home') ? 'homePath' : 'coursePath';
 
-            // Membre sans profil déclaré ou accès interdit, ou dossier invalide
-            if (
-                is_null($profil) ||
-                $g['profil'][$role][$profil]['filemanager'] === false ||
-                $folder[$sharedPathKey] === 'none'
-            ) {
-                exit("<h1 style='color: red'>Accès au gestionnaire de fichiers n'est pas autorisé !</h1>");
-            }
+			// Membre sans profil déclaré ou accès interdit, ou dossier invalide
+			if (
+				is_null($profil) ||
+				$g['profil'][$role][$profil]['filemanager'] === false ||
+				$folder[$sharedPathKey] === 'none'
+			) {
+				exit("<h1 style='color: red'>Accès au gestionnaire de fichiers n'est pas autorisé !</h1>");
+			}
 
-            // Confinement
-            // Si la clé est vide, utiliser le nom de l'espace (home ou courseId)
-            // Sinon utiliser la valeur spécifiée dans le profil
-            $sharedPath = ($folder[$sharedPathKey] === '')
-                ? $courseId . '/'
-                : $folder[$sharedPathKey] . '/';
+			// Confinement
+			// Si la clé est vide, utiliser le nom de l'espace (home ou courseId)
+			// Sinon utiliser la valeur spécifiée dans le profil
+			$sharedPath = ($folder[$sharedPathKey] === '')
+				? $courseId . '/'
+				: $folder[$sharedPathKey] . '/';
 
 			//Ajouter le chemin si inexistant
-            if (strpos($sharedPath, 'site/file/source/') === false) {
-                $sharedPath = 'site/file/source/' . $sharedPath;
-            }
-
-				// Vérifier l'existence du dossier partagé
-            if (!file_exists('../../../'. $sharedPath)) {
-				var_dump('../../../'. $sharedPath);
-                exit("<h1 style='color: red'>Le dossier partagé spécifié n'existe pas!</h1>");
-            }
+			if (strpos($sharedPath, 'site/file/source/') === false) {
+				$sharedPath = 'site/file/source/' . $sharedPath;
+			}
+			// Construisez le chemin final
+			$uploadDir = '/' . $sharedPath;
+			$currentPath = '../../../' . $sharedPath;
 
 
-            // Construisez le chemin final
-            $uploadDir = $sharedPath;
-            $currentPath = '../../../' . $sharedPath;
-            break;
+			// Vérifier l'existence du dossier partagé
+			if (!file_exists($currentPath)) {
+				exit("<h1 style='color: red'>Le dossier partagé spécifié n'existe pas!</h1>");
+			}
+
+			break;
+
 		default:
 			// Pas d'autorisation d'accès au gestionnaire de fichiers
 			exit("<h1 style='color: red'>Accès interdit au gestionnaire de fichiers !</h1>");
