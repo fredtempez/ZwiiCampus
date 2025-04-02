@@ -22,8 +22,10 @@ $userId = $_COOKIE['ZWII_USER_ID'];
 
 // Données de l'utilisateur connecté
 $u = json_decode(file_get_contents('../../../site/data/user.json'), true);
-// Id de l'espace ouvert
-$courseId = $u['user'][$userId]['view']['course'];
+
+// Id de l'espace ouvert stocké dans le compte de l'utilisateur, sinon pointe sur "home"
+$courseId = array_key_exists('view', $u['user'][$userId]) && array_key_exists('course', $u['user'][$userId]['view']) ? $u['user'][$userId]['view']['course'] : 'home';
+;
 // Données du profil de l'utilisateur connecté
 $g = json_decode(file_get_contents('../../../site/data/profil.json'), true);
 
