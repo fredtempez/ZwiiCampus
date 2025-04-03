@@ -2177,8 +2177,10 @@ class course extends common
             case self::COURSE_ACCESS_DATE:
                 return (
                     time() >= $this->getData(['course', $courseId, 'openingDate']) &&
-                    time() <= $this->getData(['course', $courseId, 'closingDate']) &&
-                    time() <= $this->getData(['course', $courseId, 'limitEnrolmentDate'])
+                    time() <= $this->getData(['course', $courseId, 'closingDate']) 
+                    ||
+                    ($this->getData(['course', $courseId, 'limitEnrolment']) === true &&
+                    time() <= $this->getData(['course', $courseId, 'limitEnrolmentDate']))
                 );
             case self::COURSE_ACCESS_CLOSE:
             default:
