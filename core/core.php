@@ -53,7 +53,7 @@ class common
 	// Contrôle d'édition temps maxi en secondes avant déconnexion 30 minutes
 	const ACCESS_TIMER = 1800;
 	// Numéro de version
-	const ZWII_VERSION = '2.3.01';
+	const ZWII_VERSION = '2.3.02';
 	// URL autoupdate
 	const ZWII_UPDATE_URL = 'https://codeberg.org/fredtempez/campus-update/raw/branch/master/';
 	const ZWII_UPDATE_CHANNEL = 'v2';
@@ -1611,7 +1611,7 @@ class common
 						// Le cours est ouvert
 						$this->getData(['course', $courseId, 'enrolment']) === self::COURSE_ENROLMENT_GUEST ||
 						// Ou qu'il dispose des droits de tutorat sur tous les modules
-						$this->getUser('permission', __CLASS__, 'tutor') === true
+						$this->getUser('permission', 'tutor') === true
 					) {
 						$filter[$courseId] = $courses[$courseId];
 					}
