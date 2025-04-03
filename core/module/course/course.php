@@ -1292,12 +1292,12 @@ class course extends common
             // Génération du message
             $message = helper::translate('Cet espace est fermé');
             $state = false;
-            if ($this->getData(['course', $courseId, 'access']) === self::COURSE_ACCESS_DATE) {                
+            if ($this->getData(['course', $courseId, 'access']) === self::COURSE_ACCESS_DATE) {
                 $from = helper::dateUTF8('%d %B %Y', $this->getData(['course', $courseId, 'openingDate']), self::$i18nUI) . helper::translate(' à ') . helper::dateUTF8('%H:%M', $this->getData(['course', $courseId, 'openingDate']), self::$i18nUI);
-                $to = helper::dateUTF8('%d %B %Y', $this->getData(['course', $courseId, 'closingDate']), self::$i18nUI) . helper::translate(' à ') . helper::dateUTF8('%H:%M', $this->getData(['course', $courseId, 'closingDate']), self::$i18nUI);                
+                $to = helper::dateUTF8('%d %B %Y', $this->getData(['course', $courseId, 'closingDate']), self::$i18nUI) . helper::translate(' à ') . helper::dateUTF8('%H:%M', $this->getData(['course', $courseId, 'closingDate']), self::$i18nUI);
                 $message = sprintf(helper::translate('Cet espace ouvre le <br>%s <br> et ferme le %s'), $from, $to);
-                if ($this->getData(['course', $courseId, 'limitEnrolment']) === true ) {
-                    $limit = helper::dateUTF8('%d %B %Y', $this->getData(['course', $courseId, 'limitEnrolmentDate']), self::$i18nUI). helper::translate(' à '). helper::dateUTF8('%H:%M', $this->getData(['course', $courseId, 'limitEnrolmentDate']), self::$i18nUI);
+                if ($this->getData(['course', $courseId, 'limitEnrolment']) === true) {
+                    $limit = helper::dateUTF8('%d %B %Y', $this->getData(['course', $courseId, 'limitEnrolmentDate']), self::$i18nUI) . helper::translate(' à ') . helper::dateUTF8('%H:%M', $this->getData(['course', $courseId, 'limitEnrolmentDate']), self::$i18nUI);
                     $message .= sprintf(helper::translate('<p>Date limite des inscriptions le %s'), $limit);
                 }
             }
@@ -2164,7 +2164,7 @@ class course extends common
         if (
             $this->isConnected() === true &&
             ($this->getUser('role') === self::ROLE_ADMIN ||
-            $this->getUser('id') === $this->getData(['course', $courseId, 'author'])) ||
+                $this->getUser('id') === $this->getData(['course', $courseId, 'author'])) ||
             $this->getUser('permission', 'tuto') === true
         ) {
             return true;
@@ -2177,10 +2177,12 @@ class course extends common
             case self::COURSE_ACCESS_DATE:
                 return (
                     time() >= $this->getData(['course', $courseId, 'openingDate']) &&
-                    time() <= $this->getData(['course', $courseId, 'closingDate']) 
-                    ||
-                    ($this->getData(['course', $courseId, 'limitEnrolment']) === true &&
-                    time() <= $this->getData(['course', $courseId, 'limitEnrolmentDate']))
+                    time() <= $this->getData(['course', $courseId, 'closingDate']) &&
+                    (
+                        $this->getData(['course', $courseId, 'limitEnrolment']) === false ||
+                        ($this->getData(['course', $courseId, 'limitEnrolment']) === true &&
+                        time() <= $this->getData(['course', $courseId, 'limitEnrolmentDate']))
+                    )
                 );
             case self::COURSE_ACCESS_CLOSE:
             default:
