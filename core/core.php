@@ -1611,7 +1611,7 @@ class common
 						// Le cours est ouvert
 						$this->getData(['course', $courseId, 'enrolment']) === self::COURSE_ENROLMENT_GUEST ||
 						// Ou qu'il dispose des droits de tutorat sur tous les modules
-						$this->getUser('permission', 'tutor') === true
+						$this->getData(['profil', $this->getUser('role'), $this->getUser('profil'), 'course', 'tutor']) === true
 					) {
 						$filter[$courseId] = $courses[$courseId];
 					}

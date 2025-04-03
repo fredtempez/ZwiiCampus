@@ -2141,7 +2141,7 @@ class course extends common
                         // Permission d'accéder à l'espace dans lesquels le membre est auteur
                         $this->getData(['course', $courseId, 'author']) === $this->getUser('id') ||
                         // Ou qu'il dispose des droits de tutorat sur tous les modules
-                        $this->getUser('permission', 'tutor') === true
+                        $this->getData(['profil', $this->getUser('role'), $this->getUser('profil'), 'course', 'tutor']) === true
                     )
                 );
             default:
