@@ -53,7 +53,7 @@ class common
 	// Contrôle d'édition temps maxi en secondes avant déconnexion 30 minutes
 	const ACCESS_TIMER = 1800;
 	// Numéro de version
-	const ZWII_VERSION = '2.3.02';
+	const ZWII_VERSION = '2.3.03';
 	// URL autoupdate
 	const ZWII_UPDATE_URL = 'https://codeberg.org/fredtempez/campus-update/raw/branch/master/';
 	const ZWII_UPDATE_CHANNEL = 'v2';

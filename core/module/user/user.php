@@ -920,7 +920,7 @@ class user extends common
 					'tutor' => $this->getInput('profilEditCourseTutor', helper::FILTER_BOOLEAN),
 					// Droit d'accéder à la fenêtre de gestion pour tous les éditeurs et plus
 					'index' =>
-						$this->getInput('profilEditCourseAdd', helper::FILTER_BOOLEAN) ||
+					$this->getInput('profilEditCourseAdd', helper::FILTER_BOOLEAN) ||
 						$this->getInput('profilEditCourseDelete', helper::FILTER_BOOLEAN) ||
 						$this->getInput('profilEditCourseUsers', helper::FILTER_BOOLEAN) ||
 						$this->getInput('profilEditCourseUserHistory', helper::FILTER_BOOLEAN) ||
@@ -935,7 +935,7 @@ class user extends common
 						$this->getInput('profilEditCourseRestore', helper::FILTER_BOOLEAN) ||
 						$this->getInput('profilEditCourseTutor', helper::FILTER_BOOLEAN),
 					'manage' =>
-						$this->getInput('profilEditCourseAdd', helper::FILTER_BOOLEAN) ||
+					$this->getInput('profilEditCourseAdd', helper::FILTER_BOOLEAN) ||
 						$this->getInput('profilEditCourseDelete', helper::FILTER_BOOLEAN) ||
 						$this->getInput('profilEditCourseUsers', helper::FILTER_BOOLEAN) ||
 						$this->getInput('profilEditCourseUserHistory', helper::FILTER_BOOLEAN) ||
@@ -973,7 +973,7 @@ class user extends common
 			if (is_array($dataModules)) {
 				foreach ($dataModules as $moduleId => $moduleValue) {
 					if (file_exists('module/' . $moduleId . '/profil/main/edit.inc.php')) {
-						include ('module/' . $moduleId . '/profil/main/edit.inc.php');
+						include('module/' . $moduleId . '/profil/main/edit.inc.php');
 						if (is_array($moduleData[$moduleId])) {
 							$data = array_merge($data, [$moduleId => $moduleData[$moduleId]]);
 						}
@@ -1006,6 +1006,8 @@ class user extends common
 
 		// Chemin vers les dossiers du gestionnaire de fichier
 		self::$sharePath = $this->getSubdirectories('site/file/source');
+		// Tri des dossiers sur la clé 
+		ksort(self::$sharePath);
 
 		// Exclure les espaces des cours
 		foreach (array_keys($this->getData(['course'])) as $courseId) {
@@ -1013,6 +1015,7 @@ class user extends common
 				return strpos($key, $courseId) === false;
 			});
 		}
+
 
 		self::$sharePath = array_flip(self::$sharePath);
 		self::$sharePath = array_merge(['none' => 'Aucun Accès'], self::$sharePath);
@@ -1138,7 +1141,7 @@ class user extends common
 					'course' => [
 						'tutor' => $this->getInput('profilAddCourseTutor', helper::FILTER_BOOLEAN),
 						'index' =>
-							$this->getInput('profilAddCourseAdd', helper::FILTER_BOOLEAN) ||
+						$this->getInput('profilAddCourseAdd', helper::FILTER_BOOLEAN) ||
 							$this->getInput('profilAddCourseDelete', helper::FILTER_BOOLEAN) ||
 							$this->getInput('profilAddCourseUserHistory', helper::FILTER_BOOLEAN) ||
 							$this->getInput('profilAddCourseUserExport', helper::FILTER_BOOLEAN) ||
@@ -1151,7 +1154,7 @@ class user extends common
 							$this->getInput('profilAddCourseBackup', helper::FILTER_BOOLEAN) ||
 							$this->getInput('profilAddCourseRestore', helper::FILTER_BOOLEAN),
 						'manage' =>
-							$this->getInput('profilAddCourseAdd', helper::FILTER_BOOLEAN) ||
+						$this->getInput('profilAddCourseAdd', helper::FILTER_BOOLEAN) ||
 							$this->getInput('profilAddCourseDelete', helper::FILTER_BOOLEAN) ||
 							$this->getInput('profilAddCourseUsers', helper::FILTER_BOOLEAN) ||
 							$this->getInput('profilAddCourseUserHistory', helper::FILTER_BOOLEAN) ||
@@ -1188,7 +1191,7 @@ class user extends common
 				if (is_array($dataModules)) {
 					foreach ($dataModules as $moduleId => $moduleValue) {
 						if (file_exists('module/' . $moduleId . '/profil/main/add.inc.php')) {
-							include ('module/' . $moduleId . '/profil/main/add.inc.php');
+							include('module/' . $moduleId . '/profil/main/add.inc.php');
 							if (is_array($moduleData[$moduleId])) {
 								$data = array_merge($data, [$moduleId => $moduleData[$moduleId]]);
 							}
@@ -1221,9 +1224,10 @@ class user extends common
 
 		// Chemin vers les dossiers du gestionnaire de fichier
 		self::$sharePath = $this->getSubdirectories('site/file/source');
+		// Tri des dossiers sur la clé 
+		ksort(self::$sharePath);
 
 		// Exclure les espaces des cours
-
 		self::$sharePath = array_flip(self::$sharePath);
 		self::$sharePath = array_merge(['none' => 'Aucun Accès'], self::$sharePath);
 		self::$sharePath = array_merge(['' => "Confiné dans le dossier de l'espace ouvert"], self::$sharePath);
@@ -1615,9 +1619,9 @@ class user extends common
 		) {
 			$this->saveLog(
 				' Erreur de réinitialisation de mot de passe ' . $this->getUrl(2)
-				. ' Compte : ' . $this->getData(['user', $this->getUrl(2)])
-				. ' Temps : ' . ($this->getData(['user', $this->getUrl(2), 'forgot']) + 86400 < time())
-				. ' Clé : ' . ($this->getUrl(3) !== md5(json_encode($this->getData(['user', $this->getUrl(2), 'forgot']))))
+					. ' Compte : ' . $this->getData(['user', $this->getUrl(2)])
+					. ' Temps : ' . ($this->getData(['user', $this->getUrl(2), 'forgot']) + 86400 < time())
+					. ' Clé : ' . ($this->getUrl(3) !== md5(json_encode($this->getData(['user', $this->getUrl(2), 'forgot']))))
 			);
 			// Message d'erreur en cas de problème de réinitialisation de mot de passe
 			$message = $this->getData(['user', $this->getUrl(2)]) === null
