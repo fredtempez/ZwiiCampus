@@ -1312,8 +1312,6 @@ class course extends common
             $this->courseIsAvailable($courseId) &&
             $this->courseIsUserEnroled($courseId, $userId) === false
         ) {
-            var_dump($this->courseIsAvailable($courseId));
-            die();
             // Gérer les modalités d'inscription
             switch ($this->getData(['course', $courseId, 'enrolment'])) {
                 // Anonyme
